@@ -1,154 +1,118 @@
-#
-# .SYNOPSIS
-#     Interactive installer for a **stand-alone Velociraptor client / offline collector**.
-#
-# .DESCRIPTION
-#     Guides an administrator through:
-#       1. Choosing (and optionally downloading) a Velociraptor Windows release.
-#       2. Selecting install & data directories (defaults to C:\tools and C:\VelociraptorData).
-#       3. Generating a minimal client configuration (vr.yaml) suitable for local GUI use.
-#       4. Launching Velociraptor in **stand-alone GUI** mode.
-#
-#     No service is installed and no connectivity to a Velociraptor server is required.
-#
-# .NOTES
-#     ▸ Requires PowerShell 7.5+ and Internet access if you choose to download.
-#     ▸ Run *as Administrator* so the data directory can be created under C:\.
-#     ▸ Logs a transcript to $Env:ProgramData\VelociraptorDeploy\deploy.log.
-#     ▸ You can re-run the script to update Velociraptor by selecting a newer version.
-#
-# .EXAMPLE
-#     PS> .\Deploy_Velociraptor_Standalone.ps1
-#
-[CmdletBinding()]
-param()
+<#
+    Deploy_Velociraptor_Standalone.ps1
+    ▸ Downloads latest Velociraptor EXE (or re-uses an existing one)
+    ▸ Creates C:\VelociraptorData as the GUI’s datastore
+    ▸ Adds an inbound firewall rule for TCP 8889 (netsh fallback)
+    ▸ Launches   velociraptor.exe gui --datastore C:\VelociraptorData
+    ▸ Waits until the port is listening, then exits
 
-function Test-Admin {
-    if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)) {
-        throw "This script must be run from an elevated PowerShell session.";
+    Logs → %ProgramData%\VelociraptorDeploy\standalone_deploy.log
+#>
+
+$ErrorActionPreference = 'Stop'
+
+############  helpers  ###################################################
+function Log {
+    param([string]$Msg)
+    $dir = Join-Path $Env:ProgramData VelociraptorDeploy
+    if (-not (Test-Path $dir)) { New-Item -Type Directory $dir -Force | Out-Null }
+    ("{0}`t{1}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $Msg) |
+        Out-File (Join-Path $dir standalone_deploy.log) -Append -Encoding utf8
+    Write-Host $Msg
+}
+
+function Require-Admin {
+    if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
+         ).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)) {
+        throw 'Run this script **as Administrator**.'
     }
 }
 
-function Write-Log {
-    param([string]$Message)
-    $logDir = Join-Path $Env:ProgramData 'VelociraptorDeploy'
-    if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
-    $logFile = Join-Path $logDir 'deploy.log'
-    $ts = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss')
-    "$ts`t$Message" | Out-File -FilePath $logFile -Encoding utf8 -Append
-    Write-Host $Message
+function Latest-WindowsAsset {
+    Log 'Querying GitHub for the latest Velociraptor release …'
+    $rel   = Invoke-RestMethod 'https://api.github.com/repos/Velocidex/velociraptor/releases/latest' `
+                               -Headers @{ 'User-Agent'='StandaloneVelo' }
+    $asset = $rel.assets | Where-Object { $_.name -like '*windows-amd64.exe' } | Select-Object -First 1
+    if (-not $asset) { throw 'Could not locate a Windows AMD64 asset in the latest release.' }
+    return $asset.browser_download_url
 }
 
-function Prompt-Path {
-    param(
-        [string]$Prompt,
-        [string]$Default
-    )
-    $resp = Read-Host "$Prompt [$Default]"
-    if ([string]::IsNullOrWhiteSpace($resp)) { return $Default }
-    return $resp
+function Download-EXE ($Url,$DestEXE) {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Log "Downloading $($Url.Split('/')[-1]) …"
+    Invoke-WebRequest -Uri $Url -OutFile "$DestEXE.download" -UseBasicParsing `
+                      -Headers @{ 'User-Agent'='Mozilla/5.0' }
+    Move-Item "$DestEXE.download" $DestEXE -Force
+    Log 'Download complete.'
 }
 
-function Get-LatestReleaseTag {
-    Write-Log 'Querying GitHub for latest Velociraptor release…'
-    try {
-        $api = 'https://api.github.com/repos/Velocidex/velociraptor/releases/latest'
-        $json = Invoke-RestMethod -Uri $api -Headers @{ 'User-Agent' = 'PS1' }
-        return $json.tag_name.TrimStart('v')
-    } catch {
-        Write-Warning "Could not retrieve latest version automatically: $_"
-        return $null
-    }
-}
+function Add-FirewallTCP ($Port) {
+    $rule = 'Velociraptor Standalone GUI'
 
-function Download-Release {
-    param(
-        [string]$Version,
-        [string]$DestinationDir
-    )
-    $fileName = "velociraptor-v$Version-windows-amd64.exe"
-    $url = "https://github.com/Velocidex/velociraptor/releases/download/v$Version/$fileName"
-    $destPath = Join-Path $DestinationDir 'velociraptor.exe'
-
-    Write-Log "Downloading $url …"
-    try {
-        if (-not (Test-Path $DestinationDir)) { New-Item -ItemType Directory -Path $DestinationDir -Force | Out-Null }
-        Invoke-WebRequest -Uri $url -OutFile $destPath -UseBasicParsing
-        Write-Log "Downloaded to $destPath"
-    } catch {
-        throw "Failed to download Velociraptor ${Version}: $_"
+    if (Get-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue) {
+        Log "Firewall rule '$rule' already exists – skipping."
+        return
     }
 
-    return $destPath
-}
+    if (Get-Command New-NetFirewallRule -ErrorAction SilentlyContinue) {
+        try {
+            New-NetFirewallRule -DisplayName $rule -Direction Inbound -Action Allow `
+                                -Protocol TCP -LocalPort $Port 2>$null
+            Log "Inbound rule added via New-NetFirewallRule (TCP $Port)."
+            return
+        } catch {}
+    }
 
-function Generate-Config {
-    param(
-        [string]$ExePath,
-        [string]$ConfigPath,
-        [string]$DataRoot
-    )
-    Write-Log "Generating client configuration…"
-    & $ExePath config generate -f $ConfigPath -- --client.mode=client --client.disablesigning=true --server.datastore_path=$DataRoot 2>&1 | Out-Null
-    Write-Log "Config written to $ConfigPath"
-}
-
-Test-Admin
-
-Write-Log '==== Velociraptor Stand-alone Client Deployment Started ===='
-
-# 1. Choose binary
-$defaultInstall = 'C:\tools'
-$binPath = Prompt-Path 'Enter Velociraptor install directory' $defaultInstall
-$binPath = Resolve-Path -Path $binPath | Select-Object -ExpandProperty Path
-
-$exePath = Join-Path $binPath 'velociraptor.exe'
-if (-not (Test-Path $exePath)) {
-    $latest = Get-LatestReleaseTag
-    $verPrompt = if ($latest) { "Enter version to download [$latest]" } else { 'Enter version to download (e.g., 0.7.2)' }
-    $chosenVer = Read-Host $verPrompt
-    if ([string]::IsNullOrWhiteSpace($chosenVer)) { $chosenVer = $latest }
-    $exePath = Download-Release -Version $chosenVer -DestinationDir $binPath
-} else {
-    Write-Log "Using existing binary at $exePath"
-}
-
-# 2. Choose data directory
-$defaultData = 'C:\VelociraptorData'
-$dataRootPrompt = Prompt-Path 'Enter Velociraptor data directory' $defaultData
-$dataRoot = Resolve-Path -LiteralPath $dataRootPrompt -ErrorAction SilentlyContinue
-if (-not $dataRoot) {
-    New-Item -ItemType Directory -Path $dataRootPrompt -Force | Out-Null
-    $dataRoot = $dataRootPrompt
-}
-
-# 3. Generate configuration
-$cfgPath = Join-Path $binPath 'vr.yaml'
-if (-not (Test-Path $cfgPath)) {
-    Generate-Config -ExePath $exePath -ConfigPath $cfgPath -DataRoot $dataRoot
-} else {
-    Write-Log "Config already exists at $cfgPath – skipping generation"
-}
-
-# 4. Launch GUI?
-$launch = Read-Host 'Launch Velociraptor GUI now? (y/N)'
-if ($launch -match '^[Yy]') {
-    Write-Log 'Launching Velociraptor GUI (instant mode)…'
-    # NOTE: Using plain `gui` without --config – Velociraptor will create its
-    # own temporary server & client configs and listen on 127.0.0.1:8889.
-    $p = Start-Process -FilePath $exePath -ArgumentList 'gui -v' -WorkingDirectory $binPath -PassThru
-    # Give the binary a few seconds to start and then check if it is still alive.
-    Start-Sleep -Seconds 3
-    if ($p.HasExited) {
-        Write-Warning 'Velociraptor exited unexpectedly – run it manually in the console to see errors:'
-        Write-Host "`n   $exePath gui -v`n"
+    # fallback (Server Core, LTSC IoT, Sandbox, etc.)
+    $out = netsh advfirewall firewall add rule name="$rule" dir=in action=allow `
+           protocol=TCP localport=$Port 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        Log "Inbound rule added via netsh (TCP $Port)."
     } else {
-        Write-Log 'Velociraptor GUI running. Navigate to http://127.0.0.1:8889 (user: admin / password)'
+        Log "Warning: netsh failed – add the rule manually if you need remote access.`n$out"
     }
-} else {
-    Write-Log 'You can start the GUI later with:'
-    Write-Host "`n   $exePath gui -v`n"
 }
 
-Write-Log '==== Deployment finished ===='
+function Wait-Port ($Port,$Seconds=10) {
+    1..$Seconds | ForEach-Object {
+        Start-Sleep 1
+        if (Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue) { return $true }
+    }
+    return $false
+}
+
+############  main  #######################################################
+Require-Admin
+Log '==== Velociraptor STAND-ALONE deploy started ===='
+
+$InstallDir = 'C:\tools'
+$DataStore  = 'C:\VelociraptorData'
+$GuiPort    = 8889
+
+foreach ($p in @($InstallDir,$DataStore)) {
+    if (-not (Test-Path $p)) { New-Item -Type Directory $p -Force | Out-Null }
+}
+
+$exe = Join-Path $InstallDir velociraptor.exe
+if (-not (Test-Path $exe)) {
+    $url = Latest-WindowsAsset
+    Download-EXE $url $exe
+} else {
+    Log "Using existing EXE at $exe"
+}
+
+# firewall
+Add-FirewallTCP $GuiPort
+
+# launch
+Start-Process $exe -ArgumentList "gui --datastore $DataStore" -WorkingDirectory $InstallDir
+
+if (Wait-Port $GuiPort 10) {
+    Log "Velociraptor GUI ready → https://127.0.0.1:${GuiPort}  (admin / password)"
+    Log '==== Deployment complete ===='
+} else {
+    Log "ERROR: Velociraptor did not open port ${GuiPort}. Run manually:`n" +
+        "    & `"$exe`" gui --datastore $DataStore -v`n" +
+        "and read the console output."
+}
 
