@@ -9,3 +9,9 @@ Stand Alone Scripts for Velociraptor
     ▸ Waits until the port is listening, then exits
 
     Logs → %ProgramData%\VelociraptorDeploy\standalone_deploy.log
+
+ Deploy_Velociraptor_Server.ps1
+    ▸ Binary + server.yaml →  C:\tools
+    ▸ Datastore           →  C:\VelociraptorServerData
+    ▸ Frontend / GUI      →  8000 / 8889 (HTTPS, self-signed)
+    ▸ Two optional Y/N branches:  DNS  •  SSO (Google / Azure / GitHub / Okta / OIDC)
