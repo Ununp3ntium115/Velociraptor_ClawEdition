@@ -1,0 +1,49 @@
+# Velociraptor Server Configuration Template
+# Environment: {{ENVIRONMENT}}
+# Generated: {{TIMESTAMP}}
+
+version:
+  name: VelociraptorServer
+  version: "0.7.0"
+  built_time: "{{TIMESTAMP}}"
+
+# Frontend Configuration - Client connections
+Frontend:
+  bind_address: {{BIND_ADDRESS}}
+  bind_port: 8000
+  certificate: ""
+  private_key: ""
+  
+# GUI Configuration - Web interface
+GUI:
+  bind_address: {{BIND_ADDRESS}}
+  bind_port: 8889
+  gw_certificate: ""
+  gw_private_key: ""
+  
+# Client Configuration
+Client:
+  server_urls:
+  - "https://localhost:8000/"
+  
+# Datastore Configuration
+Datastore:
+  implementation: FileBaseDataStore
+  location: "C:\\VelociraptorServerData"
+  filestore_directory: "C:\\VelociraptorServerData\\filestore"
+
+# Logging Configuration
+Logging:
+  output_directory: "C:\\VelociraptorServerData\\logs"
+  separate_logs_per_component: true
+  debug: {{ENABLE_DEBUG}}
+  
+# Security Settings
+autocert_domain: ""
+autocert_cert_cache: "C:\\VelociraptorServerData\\acme"
+
+# Environment-specific settings
+environment:
+  name: "{{ENVIRONMENT}}"
+  datastore_size: "{{DATASTORE_SIZE}}"
+  log_level: "{{LOG_LEVEL}}"

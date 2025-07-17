@@ -14,7 +14,7 @@ $guiPort = 8889                            # Port for web GUI access
 #─────────────── Helper Functions ───────────────#
 
 # Logging function - creates log directory and writes timestamped messages
-function Log ($message) {
+function Write-Log ($message) {
     $logDir = Join-Path $Env:ProgramData VelociraptorDeploy
     # Create log directory if it doesn't exist
     if (-not (Test-Path $logDir)) { 
@@ -28,8 +28,11 @@ function Log ($message) {
     Write-Host $message -ForegroundColor Green
 }
 
+# Backward compatibility alias
+Set-Alias -Name Log -Value Write-Log
+
 # Interactive prompt function with default value
-function Ask ($question, $defaultValue = 'n') { 
+function Read-UserInput ($question, $defaultValue = 'n') { 
     $response = Read-Host "$question [$defaultValue]"
     if ([string]::IsNullOrEmpty($response)) { 
         return $defaultValue 
@@ -39,8 +42,11 @@ function Ask ($question, $defaultValue = 'n') {
     } 
 }
 
+# Backward compatibility alias
+Set-Alias -Name Ask -Value Read-UserInput
+
 # Secure password input function - compatible with older PowerShell versions
-function AskSecret ($prompt) { 
+function Read-SecureInput ($prompt) { 
     $secureString = Read-Host $prompt -AsSecureString
     # Convert SecureString to plain text safely
     try {
@@ -54,6 +60,9 @@ function AskSecret ($prompt) {
         }
     }
 }
+
+# Backward compatibility alias
+Set-Alias -Name AskSecret -Value Read-SecureInput
 
 # Check if running as Administrator - required for service installation
 function Test-Administrator {

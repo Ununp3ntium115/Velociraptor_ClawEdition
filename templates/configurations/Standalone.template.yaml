@@ -1,0 +1,40 @@
+# Velociraptor Standalone Configuration Template
+# Environment: {{ENVIRONMENT}}
+# Generated: {{TIMESTAMP}}
+
+version:
+  name: VelociraptorStandalone
+  version: "0.7.0"
+  built_time: "{{TIMESTAMP}}"
+
+# GUI Configuration - Web interface for analysis
+GUI:
+  bind_address: {{BIND_ADDRESS}}
+  bind_port: 8889
+  gw_certificate: ""
+  gw_private_key: ""
+  
+# Client Configuration - Not used in standalone mode
+Client:
+  server_urls: []
+  
+# Datastore Configuration - Local storage
+Datastore:
+  implementation: FileBaseDataStore
+  location: "C:\\VelociraptorData"
+  filestore_directory: "C:\\VelociraptorData\\filestore"
+
+# Logging Configuration
+Logging:
+  output_directory: "C:\\VelociraptorData\\logs"
+  separate_logs_per_component: true
+  debug: {{ENABLE_DEBUG}}
+  
+# Security Settings
+autocert_domain: localhost
+
+# Environment-specific settings
+environment:
+  name: "{{ENVIRONMENT}}"
+  datastore_size: "{{DATASTORE_SIZE}}"
+  log_level: "{{LOG_LEVEL}}"

@@ -55,11 +55,14 @@ param(
     [switch]$Force
 )
 
-function Test-Admin {
+function Test-AdminPrivileges {
     if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)) {
         throw "This script must be run from an elevated PowerShell session.";
     }
 }
+
+# Backward compatibility alias
+Set-Alias -Name Test-Admin -Value Test-AdminPrivileges
 
 function Write-Log {
     param ([string]$Message)
@@ -81,7 +84,7 @@ function Confirm-Continue {
     }
 }
 
-Test-Admin
+Test-AdminPrivileges
 $ErrorActionPreference = 'Stop'
 
 Write-Log "Starting Velociraptor cleanup…"

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: velociraptor
+  labels:
+    name: velociraptor
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: namespace

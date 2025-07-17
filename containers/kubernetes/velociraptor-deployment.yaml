@@ -1,0 +1,323 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: velociraptor-server
+  namespace: velociraptor
+  labels:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: server
+    app.kubernetes.io/version: "0.7.0"
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: velociraptor
+      app.kubernetes.io/component: server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: velociraptor
+        app.kubernetes.io/component: server
+        app.kubernetes.io/version: "0.7.0"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8003"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: velociraptor-server
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: velociraptor-server
+        image: velociraptor/server:latest
+        imagePullPolicy: Always
+        ports:
+        - name: gui
+          containerPort: 8889
+          protocol: TCP
+        - name: api
+          containerPort: 8000
+          protocol: TCP
+        - name: frontend
+          containerPort: 8080
+          protocol: TCP
+        - name: monitoring
+          containerPort: 8003
+          protocol: TCP
+        env:
+        - name: VELOCIRAPTOR_GUI_BIND_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              name: velociraptor-config
+              key: VELOCIRAPTOR_GUI_BIND_ADDRESS
+        - name: VELOCIRAPTOR_GUI_BIND_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: velociraptor-config
+              key: VELOCIRAPTOR_GUI_BIND_PORT
+        - name: VELOCIRAPTOR_API_BIND_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              name: velociraptor-config
+              key: VELOCIRAPTOR_API_BIND_ADDRESS
+        - name: VELOCIRAPTOR_API_BIND_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: velociraptor-config
+              key: VELOCIRAPTOR_API_BIND_PORT
+        - name: VELOCIRAPTOR_FRONTEND_BIND_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: velociraptor-config
+              key: VELOCIRAPTOR_FRONTEND_BIND_PORT
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: velociraptor-config
+              key: LOG_LEVEL
+        - name: SECURITY_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: velociraptor-config
+              key: SECURITY_LEVEL
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /api/v1/GetVersion
+            port: gui
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/v1/GetVersion
+            port: gui
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /api/v1/GetVersion
+            port: gui
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+        volumeMounts:
+        - name: velociraptor-data
+          mountPath: /opt/velociraptor/data
+        - name: velociraptor-logs
+          mountPath: /opt/velociraptor/logs
+        - name: velociraptor-config-volume
+          mountPath: /opt/velociraptor/config
+        - name: velociraptor-secrets
+          mountPath: /opt/velociraptor/secrets
+          readOnly: true
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+            - ALL
+      volumes:
+      - name: velociraptor-data
+        persistentVolumeClaim:
+          claimName: velociraptor-data-pvc
+      - name: velociraptor-logs
+        persistentVolumeClaim:
+          claimName: velociraptor-logs-pvc
+      - name: velociraptor-config-volume
+        configMap:
+          name: velociraptor-config
+      - name: velociraptor-secrets
+        secret:
+          secretName: velociraptor-secrets
+          defaultMode: 0400
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        kubernetes.io/os: linux
+      tolerations:
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: velociraptor-server
+  namespace: velociraptor
+  labels:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: server
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: velociraptor-gui
+  namespace: velociraptor
+  labels:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: gui
+spec:
+  type: ClusterIP
+  ports:
+  - name: gui
+    port: 8889
+    targetPort: gui
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: server
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: velociraptor-api
+  namespace: velociraptor
+  labels:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: api
+spec:
+  type: ClusterIP
+  ports:
+  - name: api
+    port: 8000
+    targetPort: api
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: server
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: velociraptor-frontend
+  namespace: velociraptor
+  labels:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: frontend
+spec:
+  type: LoadBalancer
+  ports:
+  - name: frontend
+    port: 8080
+    targetPort: frontend
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: server
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: velociraptor-monitoring
+  namespace: velociraptor
+  labels:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: monitoring
+spec:
+  type: ClusterIP
+  ports:
+  - name: monitoring
+    port: 8003
+    targetPort: monitoring
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: server
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: velociraptor-data-pvc
+  namespace: velociraptor
+  labels:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: fast-ssd
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: velociraptor-logs-pvc
+  namespace: velociraptor
+  labels:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: velociraptor-ingress
+  namespace: velociraptor
+  labels:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - velociraptor.company.com
+    secretName: velociraptor-tls
+  rules:
+  - host: velociraptor.company.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: velociraptor-gui
+            port:
+              number: 8889

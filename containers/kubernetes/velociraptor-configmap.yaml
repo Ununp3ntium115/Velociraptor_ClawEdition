@@ -1,0 +1,136 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: velociraptor-config
+  namespace: velociraptor
+  labels:
+    app.kubernetes.io/name: velociraptor
+    app.kubernetes.io/component: config
+data:
+  # Environment-specific configuration
+  VELOCIRAPTOR_GUI_BIND_ADDRESS: "0.0.0.0"
+  VELOCIRAPTOR_GUI_BIND_PORT: "8889"
+  VELOCIRAPTOR_API_BIND_ADDRESS: "0.0.0.0"
+  VELOCIRAPTOR_API_BIND_PORT: "8000"
+  VELOCIRAPTOR_FRONTEND_BIND_PORT: "8080"
+  
+  # Logging configuration
+  LOG_LEVEL: "INFO"
+  LOG_RETENTION_DAYS: "90"
+  
+  # Security settings
+  SECURITY_LEVEL: "Standard"
+  ENABLE_TLS: "true"
+  
+  # Performance tuning
+  MAX_MEMORY: "2Gi"
+  MAX_CPU: "1000m"
+  
+  # Custom server configuration template
+  server-config-template.yaml: |
+    version:
+      name: velociraptor
+      version: "0.7.0"
+      commit: container-build
+      build_time: "2024-01-01T00:00:00Z"
+    
+    Client:
+      server_urls:
+        - https://velociraptor-frontend:8080/
+      ca_certificate: |
+        -----BEGIN CERTIFICATE-----
+        # CA Certificate will be injected here
+        -----END CERTIFICATE-----
+      nonce: "{{ .Nonce }}"
+      writeback_darwin: /opt/velociraptor/client.config.yaml
+      writeback_linux: /opt/velociraptor/client.config.yaml
+      writeback_windows: C:\Program Files\Velociraptor\client.config.yaml
+      max_poll: 60
+      max_poll_std: 5
+    
+    API:
+      bind_address: "{{ .APIBindAddress }}"
+      bind_port: {{ .APIBindPort }}
+      bind_scheme: https
+      pinned_gw_name: GRPC_GW
+    
+    GUI:
+      bind_address: "{{ .GUIBindAddress }}"
+      bind_port: {{ .GUIBindPort }}
+      gw_certificate: |
+        -----BEGIN CERTIFICATE-----
+        # GUI Certificate will be injected here
+        -----END CERTIFICATE-----
+      gw_private_key: |
+        -----BEGIN PRIVATE KEY-----
+        # GUI Private Key will be injected here
+        -----END PRIVATE KEY-----
+      internal_cidr:
+        - 127.0.0.1/32
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+      authenticator:
+        type: Basic
+        sub_authenticators:
+          - type: BasicAuthenticator
+    
+    CA:
+      private_key: |
+        -----BEGIN PRIVATE KEY-----
+        # CA Private Key will be injected here
+        -----END PRIVATE KEY-----
+    
+    Frontend:
+      bind_address: "0.0.0.0"
+      bind_port: {{ .FrontendBindPort }}
+      certificate: |
+        -----BEGIN CERTIFICATE-----
+        # Frontend Certificate will be injected here
+        -----END CERTIFICATE-----
+      private_key: |
+        -----BEGIN PRIVATE KEY-----
+        # Frontend Private Key will be injected here
+        -----END PRIVATE KEY-----
+      dyn_dns:
+        hostname: velociraptor-frontend
+      expected_clients: 10000
+      resources:
+        expected_clients: 10000
+        connections_per_second: 100
+        max_upload_size: 5242880
+    
+    Datastore:
+      implementation: FileBaseDataStore
+      location: /opt/velociraptor/data
+      filestore_directory: /opt/velociraptor/data/files
+    
+    Writeback:
+      private_key: |
+        -----BEGIN PRIVATE KEY-----
+        # Writeback Private Key will be injected here
+        -----END PRIVATE KEY-----
+    
+    Mail:
+      from: velociraptor@company.com
+      server: smtp.company.com
+      server_port: 587
+      auth_username: ""
+      auth_password: ""
+    
+    Logging:
+      output_directory: /opt/velociraptor/logs
+      separate_logs_per_component: true
+      rotation_time: 86400
+      max_age: 7776000  # 90 days
+    
+    Monitoring:
+      bind_address: "0.0.0.0"
+      bind_port: 8003
+    
+    api_config:
+      hostname: velociraptor-api
+    
+    defaults:
+      hunt_expiry_hours: 168  # 7 days
+      notebook_cell_timeout_min: 10

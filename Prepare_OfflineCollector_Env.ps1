@@ -31,13 +31,16 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-function Log {
+function Write-Log {
     param([string]$m)
     Write-Host "[$(Get-Date -Format u)] $m"
 }
 
+# Backward compatibility alias
+Set-Alias -Name Log -Value Write-Log
+
 # ─── 1) Fetch release metadata ─────────────────────────────────
-Log 'Fetching Velociraptor release info…'
+Write-Log 'Fetching Velociraptor release info…'
 if ($Version) {
     $rel = Invoke-RestMethod -Uri "https://api.github.com/repos/Velocidex/velociraptor/releases/tags/v$Version" `
                              -Headers @{ 'User-Agent' = 'OfflinePrepScript' }
@@ -46,7 +49,7 @@ if ($Version) {
                              -Headers @{ 'User-Agent' = 'OfflinePrepScript' }
 }
 $tag = $rel.tag_name.TrimStart('v')
-Log "Using release v$tag"
+Write-Log "Using release v$tag"
 
 # ─── 2) Prepare workspace ─────────────────────────
 $Root    = "C:\tools\offline_builder\v$tag"
@@ -54,7 +57,7 @@ $BinsDir = Join-Path $Root 'binaries'
 $ArtDir  = Join-Path $Root 'artifact_definitions'
 $ExtDir  = Join-Path $Root 'external_tools'
 New-Item -Path $BinsDir,$ArtDir,$ExtDir -ItemType Directory -Force | Out-Null
-Log "Workspace created at $Root"
+Write-Log "Workspace created at $Root"
 
 # ─── 3) Download Velociraptor binaries ─────────────────
 $assetMap = @{

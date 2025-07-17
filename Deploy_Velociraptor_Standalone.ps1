@@ -12,7 +12,7 @@
 $ErrorActionPreference = 'Stop'
 
 ############  helpers  ###################################################
-function Log {
+function Write-Log {
     param([string]$Msg)
     $dir = Join-Path $Env:ProgramData VelociraptorDeploy
     if (-not (Test-Path $dir)) { New-Item -Type Directory $dir -Force | Out-Null }
@@ -21,15 +21,21 @@ function Log {
     Write-Host $Msg
 }
 
-function Require-Admin {
+# Backward compatibility alias
+Set-Alias -Name Log -Value Write-Log
+
+function Test-AdminPrivileges {
     if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
          ).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)) {
         throw 'Run this script **as Administrator**.'
     }
 }
 
-function Latest-WindowsAsset {
-    Log 'Querying GitHub for the latest Velociraptor release …'
+# Backward compatibility alias
+Set-Alias -Name Require-Admin -Value Test-AdminPrivileges
+
+function Get-LatestWindowsAsset {
+    Write-Log 'Querying GitHub for the latest Velociraptor release …'
     $rel   = Invoke-RestMethod 'https://api.github.com/repos/Velocidex/velociraptor/releases/latest' `
                                -Headers @{ 'User-Agent'='StandaloneVelo' }
     $asset = $rel.assets | Where-Object { $_.name -like '*windows-amd64.exe' } | Select-Object -First 1
@@ -37,20 +43,26 @@ function Latest-WindowsAsset {
     return $asset.browser_download_url
 }
 
-function Download-EXE ($Url,$DestEXE) {
+# Backward compatibility alias
+Set-Alias -Name Latest-WindowsAsset -Value Get-LatestWindowsAsset
+
+function Invoke-FileDownload ($Url,$DestEXE) {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    Log "Downloading $($Url.Split('/')[-1]) …"
+    Write-Log "Downloading $($Url.Split('/')[-1]) …"
     Invoke-WebRequest -Uri $Url -OutFile "$DestEXE.download" -UseBasicParsing `
                       -Headers @{ 'User-Agent'='Mozilla/5.0' }
     Move-Item "$DestEXE.download" $DestEXE -Force
-    Log 'Download complete.'
+    Write-Log 'Download complete.'
 }
+
+# Backward compatibility alias
+Set-Alias -Name Download-EXE -Value Invoke-FileDownload
 
 function Add-FirewallTCP ($Port) {
     $rule = 'Velociraptor Standalone GUI'
 
     if (Get-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue) {
-        Log "Firewall rule '$rule' already exists – skipping."
+        Write-Log "Firewall rule '$rule' already exists – skipping."
         return
     }
 
@@ -58,7 +70,7 @@ function Add-FirewallTCP ($Port) {
         try {
             New-NetFirewallRule -DisplayName $rule -Direction Inbound -Action Allow `
                                 -Protocol TCP -LocalPort $Port 2>$null
-            Log "Inbound rule added via New-NetFirewallRule (TCP $Port)."
+            Write-Log "Inbound rule added via New-NetFirewallRule (TCP $Port)."
             return
         } catch {}
     }
@@ -67,13 +79,13 @@ function Add-FirewallTCP ($Port) {
     $out = netsh advfirewall firewall add rule name="$rule" dir=in action=allow `
            protocol=TCP localport=$Port 2>&1
     if ($LASTEXITCODE -eq 0) {
-        Log "Inbound rule added via netsh (TCP $Port)."
+        Write-Log "Inbound rule added via netsh (TCP $Port)."
     } else {
-        Log "Warning: netsh failed – add the rule manually if you need remote access.`n$out"
+        Write-Log "Warning: netsh failed – add the rule manually if you need remote access.`n$out"
     }
 }
 
-function Wait-Port ($Port,$Seconds=10) {
+function Wait-TcpPort ($Port,$Seconds=10) {
     1..$Seconds | ForEach-Object {
         Start-Sleep 1
         if (Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue) { return $true }
@@ -81,9 +93,12 @@ function Wait-Port ($Port,$Seconds=10) {
     return $false
 }
 
+# Backward compatibility alias
+Set-Alias -Name Wait-Port -Value Wait-TcpPort
+
 ############  main  #######################################################
-Require-Admin
-Log '==== Velociraptor STAND-ALONE deploy started ===='
+Test-AdminPrivileges
+Write-Log '==== Velociraptor STAND-ALONE deploy started ===='
 
 $InstallDir = 'C:\tools'
 $DataStore  = 'C:\VelociraptorData'
@@ -95,10 +110,10 @@ foreach ($p in @($InstallDir,$DataStore)) {
 
 $exe = Join-Path $InstallDir velociraptor.exe
 if (-not (Test-Path $exe)) {
-    $url = Latest-WindowsAsset
-    Download-EXE $url $exe
+    $url = Get-LatestWindowsAsset
+    Invoke-FileDownload $url $exe
 } else {
-    Log "Using existing EXE at $exe"
+    Write-Log "Using existing EXE at $exe"
 }
 
 # firewall
@@ -107,11 +122,11 @@ Add-FirewallTCP $GuiPort
 # launch
 Start-Process $exe -ArgumentList "gui --datastore $DataStore" -WorkingDirectory $InstallDir
 
-if (Wait-Port $GuiPort 10) {
-    Log "Velociraptor GUI ready → https://127.0.0.1:${GuiPort}  (admin / password)"
-    Log '==== Deployment complete ===='
+if (Wait-TcpPort $GuiPort 10) {
+    Write-Log "Velociraptor GUI ready → https://127.0.0.1:${GuiPort}  (admin / password)"
+    Write-Log '==== Deployment complete ===='
 } else {
-    Log "ERROR: Velociraptor did not open port ${GuiPort}. Run manually:`n" +
+    Write-Log "ERROR: Velociraptor did not open port ${GuiPort}. Run manually:`n" +
         "    & `"$exe`" gui --datastore $DataStore -v`n" +
         "and read the console output."
 }
