@@ -236,9 +236,8 @@ if (Ask 'Enable Single-Sign-On (OAuth2/OIDC)?' 'n' -match '^[Yy]') {
 authenticator:
   type: Google
   oauth_client_id: '$cid'
-  oauth_client_secret: '$sec'
-"@ 
-        }
+  oauth_client_secret: '$($sec.Password)'
+"@ }
         'azure' {
             $cid = Read-Host 'Azure client-ID'
             $sec = AskSecret 'Azure client-secret'
@@ -247,10 +246,9 @@ authenticator:
 authenticator:
   type: Azure
   oauth_client_id: '$cid'
-  oauth_client_secret: '$sec'
+  oauth_client_secret: '$($sec.Password)'
   tenant: '$ten'
-"@ 
-        }
+"@ }
         'github' {
             $cid = Read-Host 'GitHub client-ID'
             $sec = AskSecret 'GitHub client-secret'
@@ -258,9 +256,8 @@ authenticator:
 authenticator:
   type: GitHub
   oauth_client_id: '$cid'
-  oauth_client_secret: '$sec'
-"@ 
-        }
+  oauth_client_secret: '$($sec.Password)'
+"@ }
         'okta' {
             $cid = Read-Host 'Okta client-ID'
             $sec = AskSecret 'Okta client-secret'
@@ -270,10 +267,9 @@ authenticator:
   type: OIDC
   oidc_issuer_url: '$iss'
   client_id: '$cid'
-  client_secret: '$sec'
+  client_secret: '$($sec.Password)'
   scopes: ['openid','profile','email']
-"@ 
-        }
+"@ }
         'oidc' {
             $cid = Read-Host 'OIDC client-ID'
             $sec = AskSecret 'OIDC client-secret'
@@ -283,9 +279,8 @@ authenticator:
   type: OIDC
   oidc_issuer_url: '$iss'
   client_id: '$cid'
-  client_secret: '$sec'
-"@ 
-        }
+  client_secret: '$($sec.Password)'
+"@ }
         default { Log 'Unknown provider – skipping SSO.' }
     }
 }
