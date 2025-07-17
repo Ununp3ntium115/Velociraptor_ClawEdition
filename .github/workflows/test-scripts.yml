@@ -1,0 +1,123 @@
+name: Test PowerShell Scripts
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-powershell:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup PowerShell
+      shell: pwsh
+      run: |
+        $PSVersionTable
+        
+    - name: Test PowerShell Syntax
+      shell: pwsh
+      run: |
+        Write-Host "Testing PowerShell script syntax..."
+        $scripts = Get-ChildItem -Path "." -Filter "*.ps1" -Recurse
+        $errors = @()
+        
+        foreach ($script in $scripts) {
+          Write-Host "Testing: $($script.FullName)"
+          try {
+            $null = [System.Management.Automation.PSParser]::Tokenize((Get-Content $script.FullName -Raw), [ref]$null)
+            Write-Host "✓ $($script.Name) - Syntax OK" -ForegroundColor Green
+          }
+          catch {
+            $errors += "✗ $($script.Name) - Syntax Error: $($_.Exception.Message)"
+            Write-Host "✗ $($script.Name) - Syntax Error: $($_.Exception.Message)" -ForegroundColor Red
+          }
+        }
+        
+        if ($errors.Count -gt 0) {
+          Write-Host "`nSyntax Errors Found:" -ForegroundColor Red
+          $errors | ForEach-Object { Write-Host $_ -ForegroundColor Red }
+          exit 1
+        } else {
+          Write-Host "`nAll scripts passed syntax validation!" -ForegroundColor Green
+        }
+        
+    - name: Test Module Import
+      shell: pwsh
+      run: |
+        Write-Host "Testing PowerShell module import..."
+        try {
+          Import-Module "./VelociraptorDeployment/VelociraptorDeployment.psd1" -Force
+          Write-Host "✓ Module imported successfully" -ForegroundColor Green
+          
+          $commands = Get-Command -Module VelociraptorDeployment
+          Write-Host "Available commands:" -ForegroundColor Yellow
+          $commands | ForEach-Object { Write-Host "  - $($_.Name)" }
+          
+        } catch {
+          Write-Host "✗ Module import failed: $($_.Exception.Message)" -ForegroundColor Red
+          exit 1
+        }
+        
+    - name: Run PSScriptAnalyzer
+      shell: pwsh
+      run: |
+        Write-Host "Installing PSScriptAnalyzer..."
+        Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+        
+        Write-Host "Running PSScriptAnalyzer..."
+        $scripts = Get-ChildItem -Path "." -Filter "*.ps1" -Recurse
+        $allIssues = @()
+        
+        foreach ($script in $scripts) {
+          Write-Host "Analyzing: $($script.Name)"
+          $issues = Invoke-ScriptAnalyzer -Path $script.FullName -Severity Warning,Error
+          if ($issues) {
+            $allIssues += $issues
+            Write-Host "  Found $($issues.Count) issues" -ForegroundColor Yellow
+          } else {
+            Write-Host "  No issues found" -ForegroundColor Green
+          }
+        }
+        
+        if ($allIssues.Count -gt 0) {
+          Write-Host "`nPSScriptAnalyzer Issues:" -ForegroundColor Yellow
+          $allIssues | ForEach-Object {
+            Write-Host "  $($_.ScriptName):$($_.Line) - $($_.RuleName): $($_.Message)" -ForegroundColor Yellow
+          }
+          
+          $errors = $allIssues | Where-Object { $_.Severity -eq 'Error' }
+          if ($errors.Count -gt 0) {
+            Write-Host "`nFound $($errors.Count) error(s). Failing build." -ForegroundColor Red
+            exit 1
+          }
+        } else {
+          Write-Host "No PSScriptAnalyzer issues found!" -ForegroundColor Green
+        }
+
+  test-prerequisites:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Test Prerequisites Function
+      shell: pwsh
+      run: |
+        Import-Module "./VelociraptorDeployment/VelociraptorDeployment.psd1" -Force
+        
+        Write-Host "Testing prerequisites check..."
+        try {
+          $result = Test-VelociraptorPrerequisites -Ports @(9999, 9998)
+          Write-Host "Prerequisites test completed" -ForegroundColor Green
+          Write-Host "Results:" -ForegroundColor Yellow
+          $result | ConvertTo-Json -Depth 3 | Write-Host
+        } catch {
+          Write-Host "Prerequisites test failed: $($_.Exception.Message)" -ForegroundColor Red
+          exit 1
+        }
