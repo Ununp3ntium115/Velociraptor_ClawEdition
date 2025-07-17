@@ -1,0 +1,293 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "velociraptor.fullname" . }}
+  labels:
+    {{- include "velociraptor.labels" . | nindent 4 }}
+  annotations:
+    deployment.kubernetes.io/revision: "{{ .Values.image.tag }}"
+    {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      {{- include "velociraptor.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- if .Values.serviceMesh.enabled }}
+        {{- if eq .Values.serviceMesh.type "istio" }}
+        sidecar.istio.io/inject: "{{ .Values.serviceMesh.istio.injection }}"
+        {{- end }}
+        {{- end }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "velociraptor.selectorLabels" . | nindent 8 }}
+        version: {{ .Values.image.tag | quote }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "velociraptor.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 8 }}
+      {{- if .Values.highAvailability.enabled }}
+      {{- if .Values.highAvailability.leaderElection.enabled }}
+      initContainers:
+      - name: leader-election-init
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Waiting for leader election..."
+          sleep 10
+        securityContext:
+          {{- toYaml .Values.containerSecurityContext | nindent 10 }}
+      {{- end }}
+      {{- end }}
+      containers:
+      - name: {{ .Chart.Name }}
+        securityContext:
+          {{- toYaml .Values.containerSecurityContext | nindent 10 }}
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command:
+        - /opt/velociraptor/velociraptor
+        args:
+        - --config
+        - /etc/velociraptor/server.config.yaml
+        - frontend
+        - --verbose
+        {{- if .Values.development.debug }}
+        - --debug
+        {{- end }}
+        ports:
+        - name: frontend
+          containerPort: {{ .Values.service.ports.frontend }}
+          protocol: TCP
+        - name: gui
+          containerPort: {{ .Values.service.ports.gui }}
+          protocol: TCP
+        - name: monitoring
+          containerPort: {{ .Values.service.ports.monitoring }}
+          protocol: TCP
+        env:
+        - name: VELOCIRAPTOR_CONFIG
+          value: "/etc/velociraptor/server.config.yaml"
+        - name: VELOCIRAPTOR_DATASTORE
+          value: "/opt/velociraptor/datastore"
+        - name: VELOCIRAPTOR_LOGS
+          value: "/opt/velociraptor/logs"
+        {{- if .Values.postgresql.enabled }}
+        - name: POSTGRES_HOST
+          value: "{{ include "velociraptor.postgresql.fullname" . }}"
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_DB
+          value: "{{ .Values.postgresql.auth.database }}"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "velociraptor.postgresql.secretName" . }}
+              key: postgres-password
+        {{- end }}
+        {{- if .Values.redis.enabled }}
+        - name: REDIS_HOST
+          value: "{{ include "velociraptor.redis.fullname" . }}-master"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "velociraptor.redis.secretName" . }}
+              key: redis-password
+        {{- end }}
+        {{- if .Values.tracing.enabled }}
+        - name: JAEGER_AGENT_HOST
+          value: "{{ include "velociraptor.jaeger.agent.fullname" . }}"
+        - name: JAEGER_AGENT_PORT
+          value: "6831"
+        {{- end }}
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        {{- with .Values.extraEnvVars }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        livenessProbe:
+          httpGet:
+            path: /api/v1/GetVersion
+            port: frontend
+            scheme: HTTPS
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /api/v1/GetVersion
+            port: frontend
+            scheme: HTTPS
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+          successThreshold: 1
+        startupProbe:
+          httpGet:
+            path: /api/v1/GetVersion
+            port: frontend
+            scheme: HTTPS
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+          successThreshold: 1
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/velociraptor
+          readOnly: true
+        - name: data
+          mountPath: /opt/velociraptor/datastore
+        - name: filestore
+          mountPath: /opt/velociraptor/filestore
+        - name: logs
+          mountPath: /opt/velociraptor/logs
+        - name: tmp
+          mountPath: /tmp
+        {{- if .Values.persistence.enabled }}
+        - name: persistent-storage
+          mountPath: /opt/velociraptor/persistent
+        {{- end }}
+        {{- with .Values.extraVolumeMounts }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.monitoring.enabled }}
+      - name: metrics-exporter
+        image: prom/node-exporter:latest
+        ports:
+        - name: metrics
+          containerPort: 9100
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          {{- toYaml .Values.containerSecurityContext | nindent 10 }}
+      {{- end }}
+      {{- if .Values.tracing.enabled }}
+      - name: jaeger-agent
+        image: jaegertracing/jaeger-agent:latest
+        ports:
+        - name: jaeger-thrift
+          containerPort: 6831
+          protocol: UDP
+        - name: jaeger-binary
+          containerPort: 6832
+          protocol: UDP
+        - name: jaeger-configs
+          containerPort: 5778
+          protocol: TCP
+        env:
+        - name: REPORTER_GRPC_HOST_PORT
+          value: "{{ include "velociraptor.jaeger.collector.fullname" . }}:14250"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          {{- toYaml .Values.containerSecurityContext | nindent 10 }}
+      {{- end }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "velociraptor.fullname" . }}-config
+      - name: data
+        emptyDir:
+          sizeLimit: 10Gi
+      - name: filestore
+        emptyDir:
+          sizeLimit: 50Gi
+      - name: logs
+        emptyDir:
+          sizeLimit: 5Gi
+      - name: tmp
+        emptyDir:
+          sizeLimit: 1Gi
+      {{- if .Values.persistence.enabled }}
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: {{ include "velociraptor.fullname" . }}-pvc
+      {{- end }}
+      {{- with .Values.extraVolumes }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.highAvailability.enabled }}
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            {{- include "velociraptor.selectorLabels" . | nindent 12 }}
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            {{- include "velociraptor.selectorLabels" . | nindent 12 }}
+      {{- end }}
+      terminationGracePeriodSeconds: 60
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always

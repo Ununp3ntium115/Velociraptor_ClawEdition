@@ -1,0 +1,472 @@
+# Default values for velociraptor.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global configuration
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+  
+# Velociraptor image configuration
+image:
+  registry: docker.io
+  repository: velocidex/velociraptor
+  tag: "latest"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+# Deployment configuration
+replicaCount: 3
+
+# Service configuration
+service:
+  type: ClusterIP
+  ports:
+    frontend: 8000
+    gui: 8889
+    monitoring: 8003
+  annotations: {}
+  labels: {}
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: velociraptor.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+          port: 8889
+    - host: velociraptor-api.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+          port: 8000
+  tls:
+    - secretName: velociraptor-tls
+      hosts:
+        - velociraptor.example.com
+        - velociraptor-api.example.com
+
+# Resource configuration
+resources:
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+
+# Autoscaling configuration
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+
+# Pod Disruption Budget
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+
+# Security context
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+    - ALL
+
+# Node selection
+nodeSelector: {}
+tolerations: []
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - velociraptor
+        topologyKey: kubernetes.io/hostname
+
+# Persistence configuration
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 100Gi
+  annotations: {}
+
+# Configuration
+config:
+  # Velociraptor server configuration
+  server:
+    version:
+      name: "Velociraptor"
+      version: "0.7.0"
+      build_time: "2024-01-01T00:00:00Z"
+    
+    Client:
+      server_urls:
+        - "https://velociraptor-api.example.com/"
+      ca_certificate: ""
+      nonce: ""
+      writeback_darwin: "/etc/velociraptor.writeback.yaml"
+      writeback_linux: "/etc/velociraptor.writeback.yaml"
+      writeback_windows: "$ProgramFiles\\Velociraptor\\velociraptor.writeback.yaml"
+      max_poll: 60
+      max_poll_std: 30
+      
+    API:
+      bind_address: "0.0.0.0"
+      bind_port: 8000
+      bind_scheme: "tcp"
+      
+    GUI:
+      bind_address: "0.0.0.0"
+      bind_port: 8889
+      gw_certificate: ""
+      gw_private_key: ""
+      internal_cidr:
+        - "127.0.0.1/32"
+        - "192.168.0.0/16"
+        - "10.0.0.0/8"
+        - "172.16.0.0/12"
+      
+    Frontend:
+      bind_address: "0.0.0.0"
+      bind_port: 8000
+      certificate: ""
+      private_key: ""
+      dyn_dns: {}
+      
+    Datastore:
+      implementation: "FileBaseDataStore"
+      location: "/opt/velociraptor/datastore"
+      filestore_directory: "/opt/velociraptor/filestore"
+      
+    Monitoring:
+      bind_address: "0.0.0.0"
+      bind_port: 8003
+      
+    Logging:
+      output_directory: "/opt/velociraptor/logs"
+      separate_logs_per_component: true
+      rotation_time: 604800
+      max_age: 31536000
+      
+    # Cloud-native enhancements
+    CloudNative:
+      enabled: true
+      kubernetes:
+        namespace: "velociraptor"
+        service_account: "velociraptor"
+      scaling:
+        auto_scaling: true
+        min_replicas: 3
+        max_replicas: 10
+      storage:
+        persistent_volume: true
+        storage_class: "fast-ssd"
+      networking:
+        service_mesh: true
+        load_balancer: true
+      monitoring:
+        prometheus: true
+        jaeger: true
+        grafana: true
+
+# High Availability configuration
+highAvailability:
+  enabled: true
+  mode: "active-active"
+  
+  # Leader election
+  leaderElection:
+    enabled: true
+    leaseDuration: "15s"
+    renewDeadline: "10s"
+    retryPeriod: "2s"
+    
+  # Database clustering
+  database:
+    clustering: true
+    replication: true
+    backup:
+      enabled: true
+      schedule: "0 2 * * *"
+      retention: "30d"
+
+# Performance optimization
+performance:
+  # JVM tuning for better performance
+  jvm:
+    heapSize: "2g"
+    gcAlgorithm: "G1GC"
+    
+  # Connection pooling
+  connectionPool:
+    maxConnections: 100
+    minConnections: 10
+    connectionTimeout: "30s"
+    
+  # Caching
+  cache:
+    enabled: true
+    type: "redis"
+    ttl: "1h"
+    maxSize: "1g"
+
+# External dependencies
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "velociraptor"
+    database: "velociraptor"
+  primary:
+    persistence:
+      enabled: true
+      size: 50Gi
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 500m
+      limits:
+        memory: 2Gi
+        cpu: 1000m
+
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: "velociraptor"
+  master:
+    persistence:
+      enabled: true
+      size: 10Gi
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 250m
+      limits:
+        memory: 1Gi
+        cpu: 500m
+
+elasticsearch:
+  enabled: false
+  clusterName: "velociraptor-es"
+  nodeGroup: "master"
+  replicas: 3
+  minimumMasterNodes: 2
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+  volumeClaimTemplate:
+    accessModes: ["ReadWriteOnce"]
+    resources:
+      requests:
+        storage: 100Gi
+
+# Monitoring and observability
+monitoring:
+  enabled: true
+  
+  prometheus:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      interval: 30s
+      scrapeTimeout: 10s
+    rules:
+      enabled: true
+      
+  grafana:
+    enabled: true
+    adminPassword: "admin"
+    dashboards:
+      enabled: true
+      configMaps:
+        - velociraptor-dashboards
+    datasources:
+      enabled: true
+      
+  alerts:
+    enabled: true
+    rules:
+      - alert: VelociraptorDown
+        expr: up{job="velociraptor"} == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Velociraptor instance is down"
+          description: "Velociraptor instance {{ $labels.instance }} has been down for more than 5 minutes."
+
+# Tracing
+tracing:
+  enabled: true
+  jaeger:
+    enabled: true
+    agent:
+      enabled: true
+    collector:
+      enabled: true
+    query:
+      enabled: true
+
+# Service mesh integration
+serviceMesh:
+  enabled: false
+  type: "istio"  # istio, linkerd, consul
+  
+  istio:
+    injection: true
+    gateway:
+      enabled: true
+    virtualService:
+      enabled: true
+    destinationRule:
+      enabled: true
+      trafficPolicy:
+        tls:
+          mode: ISTIO_MUTUAL
+
+# Network policies
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: ingress-nginx
+      ports:
+      - protocol: TCP
+        port: 8000
+      - protocol: TCP
+        port: 8889
+  egress:
+    - to: []
+      ports:
+      - protocol: TCP
+        port: 53
+      - protocol: UDP
+        port: 53
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: kube-system
+      ports:
+      - protocol: TCP
+        port: 443
+
+# RBAC configuration
+rbac:
+  create: true
+  rules:
+    - apiGroups: [""]
+      resources: ["pods", "services", "endpoints"]
+      verbs: ["get", "list", "watch"]
+    - apiGroups: ["apps"]
+      resources: ["deployments", "replicasets"]
+      verbs: ["get", "list", "watch"]
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Pod Security Policy
+podSecurityPolicy:
+  enabled: false
+  annotations: {}
+
+# Backup and disaster recovery
+backup:
+  enabled: true
+  schedule: "0 2 * * *"
+  retention: "30d"
+  storage:
+    type: "s3"
+    bucket: "velociraptor-backups"
+    region: "us-west-2"
+  encryption:
+    enabled: true
+    kmsKeyId: ""
+
+# Multi-tenancy
+multiTenancy:
+  enabled: false
+  tenants: []
+  isolation:
+    level: "namespace"  # namespace, node, cluster
+    
+# Compliance and governance
+compliance:
+  enabled: true
+  frameworks:
+    - "SOC2"
+    - "HIPAA"
+    - "GDPR"
+    - "PCI-DSS"
+  auditLogging:
+    enabled: true
+    destination: "elasticsearch"
+  dataRetention:
+    enabled: true
+    policies:
+      - name: "default"
+        retention: "2y"
+        archival: "5y"
+
+# Development and testing
+development:
+  enabled: false
+  debug: false
+  mockData: false
+  testSuite:
+    enabled: false
+    
+# Feature flags
+features:
+  newUI: true
+  advancedAnalytics: true
+  machineLearning: true
+  cloudIntegration: true
+  apiV2: true
