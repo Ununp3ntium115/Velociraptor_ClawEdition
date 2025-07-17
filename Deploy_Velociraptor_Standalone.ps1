@@ -45,35 +45,61 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
+
+# Import our VelociraptorDeployment module if available
+$modulePath = Join-Path $PSScriptRoot 'VelociraptorDeployment\VelociraptorDeployment.psd1'
+if (Test-Path $modulePath) {
+    try {
+        Import-Module $modulePath -Force -ErrorAction SilentlyContinue
+        $moduleLoaded = $true
+        Write-Host "[INFO] VelociraptorDeployment module loaded successfully" -ForegroundColor Green
+    }
+    catch {
+        $moduleLoaded = $false
+        Write-Host "[WARNING] Could not load VelociraptorDeployment module, using built-in functions" -ForegroundColor Yellow
+    }
+}
+else {
+    $moduleLoaded = $false
+}
 
 ############  Helper Functions  ###################################################
 
-function Log {
-    param([string]$Message)
+function Write-Log {
+    param([string]$Message, [string]$Level = 'Info')
+    
     $logDir = Join-Path $env:ProgramData 'VelociraptorDeploy'
     if (-not (Test-Path $logDir)) { 
         New-Item -ItemType Directory $logDir -Force | Out-Null 
     }
+    
     $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-    $logEntry = "$timestamp`t$Message"
+    $logEntry = "$timestamp`t[$Level]`t$Message"
     $logFile = Join-Path $logDir 'standalone_deploy.log'
     $logEntry | Out-File $logFile -Append -Encoding UTF8
-    Write-Host $Message
+    
+    $color = switch ($Level) {
+        'Success' { 'Green' }
+        'Warning' { 'Yellow' }
+        'Error' { 'Red' }
+        default { 'White' }
+    }
+    
+    Write-Host "[$Level] $Message" -ForegroundColor $color
 }
 
 function Test-AdminPrivileges {
     $currentPrincipal = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
-    if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)) {
-        throw 'This script must be run as Administrator.'
-    }
+    return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 }
 
 function Get-LatestVelociraptorAsset {
-    Log 'Querying GitHub for the latest Velociraptor release...'
+    Write-Log 'Querying GitHub for the latest Velociraptor release...'
     try {
         $headers = @{ 
             'User-Agent' = 'VelociraptorStandaloneDeployer/1.0'
-            'Accept' = 'application/vnd.github.v3+json'
+            'Accept'     = 'application/vnd.github.v3+json'
         }
         $release = Invoke-RestMethod -Uri 'https://api.github.com/repos/Velocidex/velociraptor/releases/latest' -Headers $headers -TimeoutSec 30
         $asset = $release.assets | Where-Object { $_.name -like '*windows-amd64.exe' -and $_.name -notlike '*msi*' } | Select-Object -First 1
@@ -82,11 +108,11 @@ function Get-LatestVelociraptorAsset {
             throw 'Could not locate a Windows AMD64 asset in the latest release.' 
         }
         
-        Log "Found version: $($release.tag_name)"
+        Write-Log "Found version: $($release.tag_name)" -Level 'Success'
         return $asset.browser_download_url
     }
     catch {
-        Log "ERROR: Failed to query GitHub API - $($_.Exception.Message)"
+        Write-Log "Failed to query GitHub API - $($_.Exception.Message)" -Level 'Error'
         throw
     }
 }
@@ -95,7 +121,7 @@ function Install-VelociraptorExecutable {
     param([string]$Url, [string]$DestinationPath)
     
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    Log "Downloading $($Url.Split('/')[-1])..."
+    Write-Log "Downloading $($Url.Split('/')[-1])..."
     
     try {
         $tempFile = "$DestinationPath.download"
@@ -107,14 +133,14 @@ function Install-VelociraptorExecutable {
         }
         
         Move-Item $tempFile $DestinationPath -Force
-        Log 'Download completed successfully.'
+        Write-Log 'Download completed successfully.' -Level 'Success'
     }
     catch {
         # Cleanup on failure
         if (Test-Path "$DestinationPath.download") {
             Remove-Item "$DestinationPath.download" -Force -ErrorAction SilentlyContinue
         }
-        Log "ERROR: Download failed - $($_.Exception.Message)"
+        Write-Log "Download failed - $($_.Exception.Message)" -Level 'Error'
         throw
     }
 }
@@ -123,7 +149,7 @@ function Add-FirewallRule {
     param([int]$Port)
     
     if ($SkipFirewall) {
-        Log "Skipping firewall configuration as requested"
+        Write-Log "Skipping firewall configuration as requested"
         return
     }
     
@@ -131,7 +157,7 @@ function Add-FirewallRule {
     
     # Check if rule already exists
     if (Get-NetFirewallRule -DisplayName $ruleName -ErrorAction SilentlyContinue) {
-        Log "Firewall rule '$ruleName' already exists - skipping."
+        Write-Log "Firewall rule '$ruleName' already exists - skipping."
         return
     }
     
@@ -139,11 +165,11 @@ function Add-FirewallRule {
     if (Get-Command New-NetFirewallRule -ErrorAction SilentlyContinue) {
         try {
             New-NetFirewallRule -DisplayName $ruleName -Direction Inbound -Action Allow -Protocol TCP -LocalPort $Port -ErrorAction Stop | Out-Null
-            Log "Firewall rule added via PowerShell (TCP $Port)."
+            Write-Log "Firewall rule added via PowerShell (TCP $Port)." -Level 'Success'
             return
         }
         catch {
-            Log "Warning: PowerShell firewall cmdlet failed - $($_.Exception.Message)"
+            Write-Log "PowerShell firewall cmdlet failed - $($_.Exception.Message)" -Level 'Warning'
         }
     }
     
@@ -151,32 +177,33 @@ function Add-FirewallRule {
     try {
         $result = netsh advfirewall firewall add rule name="$ruleName" dir=in action=allow protocol=TCP localport=$Port 2>&1
         if ($LASTEXITCODE -eq 0) {
-            Log "Firewall rule added via netsh (TCP $Port)."
-        } else {
-            Log "Warning: netsh failed - add the rule manually if you need remote access."
-            Log "netsh output: $result"
+            Write-Log "Firewall rule added via netsh (TCP $Port)." -Level 'Success'
+        }
+        else {
+            Write-Log "netsh failed - add the rule manually if you need remote access." -Level 'Warning'
+            Write-Log "netsh output: $result" -Level 'Warning'
         }
     }
     catch {
-        Log "Warning: Failed to create firewall rule - $($_.Exception.Message)"
+        Write-Log "Failed to create firewall rule - $($_.Exception.Message)" -Level 'Warning'
     }
 }
 
 function Wait-ForPort {
     param([int]$Port, [int]$TimeoutSeconds = 15)
     
-    Log "Waiting for port $Port to become available..."
+    Write-Log "Waiting for port $Port to become available..."
     
     for ($i = 1; $i -le $TimeoutSeconds; $i++) {
         Start-Sleep -Seconds 1
         $connection = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
         if ($connection) { 
-            Log "Port $Port is now listening after $i seconds."
+            Write-Log "Port $Port is now listening after $i seconds." -Level 'Success'
             return $true 
         }
     }
     
-    Log "Timeout: Port $Port did not become available within $TimeoutSeconds seconds."
+    Write-Log "Timeout: Port $Port did not become available within $TimeoutSeconds seconds." -Level 'Warning'
     return $false
 }
 
@@ -197,21 +224,38 @@ function Test-PortAvailable {
 ############  Main Execution  #######################################################
 
 try {
-    Test-AdminPrivileges
-    Log '==== Velociraptor Standalone Deployment Started ===='
+    # Check admin privileges
+    if (-not (Test-AdminPrivileges)) {
+        throw "This script must be run as Administrator. Please restart PowerShell as Administrator and try again."
+    }
     
-    # Pre-flight checks
-    if (-not (Test-PortAvailable -Port $GuiPort)) {
-        throw "Port $GuiPort is already in use. Please stop the conflicting service or choose a different port."
+    Write-Log '==== Velociraptor Standalone Deployment Started ====' -Level 'Success'
+    
+    # Use module functions if available, otherwise use built-in functions
+    if ($moduleLoaded) {
+        Write-Log "Using VelociraptorDeployment module functions"
+        
+        # Run prerequisites check from module
+        $prereqs = Test-VelociraptorPrerequisites -Ports @($GuiPort)
+        if (-not $prereqs.Overall) {
+            throw "Prerequisites check failed. Please resolve the issues above."
+        }
+    }
+    else {
+        # Pre-flight checks using built-in functions
+        if (-not (Test-PortAvailable -Port $GuiPort)) {
+            throw "Port $GuiPort is already in use. Please stop the conflicting service or choose a different port."
+        }
     }
     
     # Create directories
     foreach ($directory in @($InstallDir, $DataStore)) {
         if (-not (Test-Path $directory)) { 
             New-Item -ItemType Directory $directory -Force | Out-Null 
-            Log "Created directory: $directory"
-        } else {
-            Log "Directory exists: $directory"
+            Write-Log "Created directory: $directory" -Level 'Success'
+        }
+        else {
+            Write-Log "Directory exists: $directory"
         }
     }
     
@@ -220,37 +264,40 @@ try {
     if (-not (Test-Path $executablePath) -or $Force) {
         $downloadUrl = Get-LatestVelociraptorAsset
         Install-VelociraptorExecutable -Url $downloadUrl -DestinationPath $executablePath
-    } else {
-        Log "Using existing executable: $executablePath"
+    }
+    else {
+        Write-Log "Using existing executable: $executablePath"
     }
     
     # Configure firewall
     Add-FirewallRule -Port $GuiPort
     
     # Launch Velociraptor
-    Log "Starting Velociraptor GUI service..."
+    Write-Log "Starting Velociraptor GUI service..."
     $arguments = "gui --datastore `"$DataStore`""
     $process = Start-Process $executablePath -ArgumentList $arguments -WorkingDirectory $InstallDir -PassThru
     
     if ($process) {
-        Log "Velociraptor process started (PID: $($process.Id))"
+        Write-Log "Velociraptor process started (PID: $($process.Id))" -Level 'Success'
         
         if (Wait-ForPort -Port $GuiPort -TimeoutSeconds 15) {
-            Log "==== Deployment Completed Successfully ===="
-            Log "Velociraptor GUI is ready at: https://127.0.0.1:$GuiPort"
-            Log "Default credentials: admin / password"
-            Log "Process ID: $($process.Id)"
-            Log "Data Store: $DataStore"
-        } else {
-            Log "WARNING: Velociraptor may not have started correctly on port $GuiPort."
-            Log "Check the process manually with: & `"$executablePath`" gui --datastore `"$DataStore`" -v"
+            Write-Log "==== Deployment Completed Successfully ====" -Level 'Success'
+            Write-Log "Velociraptor GUI is ready at: https://127.0.0.1:$GuiPort" -Level 'Success'
+            Write-Log "Default credentials: admin / password"
+            Write-Log "Process ID: $($process.Id)"
+            Write-Log "Data Store: $DataStore"
         }
-    } else {
+        else {
+            Write-Log "Velociraptor may not have started correctly on port $GuiPort." -Level 'Warning'
+            Write-Log "Check the process manually with: & `"$executablePath`" gui --datastore `"$DataStore`" -v" -Level 'Warning'
+        }
+    }
+    else {
         throw "Failed to start Velociraptor process"
     }
 }
 catch {
-    Log "ERROR: Deployment failed - $($_.Exception.Message)"
-    Log '==== Deployment FAILED ===='
+    Write-Log "Deployment failed - $($_.Exception.Message)" -Level 'Error'
+    Write-Log '==== Deployment FAILED ====' -Level 'Error'
     exit 1
 }
