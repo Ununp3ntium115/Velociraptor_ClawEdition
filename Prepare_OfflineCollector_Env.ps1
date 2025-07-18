@@ -39,7 +39,7 @@ function Write-Log {
 # Backward compatibility alias
 Set-Alias -Name Log -Value Write-Log
 
-# ─── 1) Fetch release metadata ─────────────────────────────────
+# --- 1) Fetch release metadata -----------------------------------
 Write-Log 'Fetching Velociraptor release info…'
 if ($Version) {
     $rel = Invoke-RestMethod -Uri "https://api.github.com/repos/Velocidex/velociraptor/releases/tags/v$Version" `
@@ -51,7 +51,7 @@ if ($Version) {
 $tag = $rel.tag_name.TrimStart('v')
 Write-Log "Using release v$tag"
 
-# ─── 2) Prepare workspace ─────────────────────────
+# --- 2) Prepare workspace ---------------------------------
 $Root    = "C:\tools\offline_builder\v$tag"
 $BinsDir = Join-Path $Root 'binaries'
 $ArtDir  = Join-Path $Root 'artifact_definitions'
@@ -59,7 +59,7 @@ $ExtDir  = Join-Path $Root 'external_tools'
 New-Item -Path $BinsDir,$ArtDir,$ExtDir -ItemType Directory -Force | Out-Null
 Write-Log "Workspace created at $Root"
 
-# ─── 3) Download Velociraptor binaries ─────────────────
+# --- 3) Download Velociraptor binaries -----------------
 $assetMap = @{
     'windows-amd64' = @{ Pattern='windows-amd64\.exe$'; Output='velociraptor.exe' }
     'linux-amd64'   = @{ Pattern='linux-amd64$';        Output='velociraptor'     }
@@ -84,7 +84,7 @@ foreach ($key in $assetMap.Keys) {
     Log "Saved → $dest"
 }
 
-# ─── 4) Download & extract artifact_pack.zip ──────────────
+# --- 4) Download & extract artifact_pack.zip --------------
 $artifactZip = $rel.assets |
     Where-Object { $_.name -match '^artifact_pack.*\.zip$' } |
     Select-Object -First 1
@@ -101,7 +101,7 @@ if ($artifactZip) {
     Log 'WARNING: artifact_pack.zip not found in assets.'
 }
 
-# ─── 5) Scan & download external tools ──────────────────
+# --- 5) Scan & download external tools --------------------
 Log 'Scanning artifact YAMLs for external tools…'
 $tools = @()
 Get-ChildItem -Path $ArtDir -Recurse -Filter '*.yaml' | ForEach-Object {
@@ -139,28 +139,28 @@ $manifest = foreach ($t in $tools) {
     }
 }
 
-# ─── 6) Write CSV manifest ─────────────
+# --- 6) Write CSV manifest -------------------------
 $manifest | Export-Csv -Path (Join-Path $Root 'external_tools_manifest.csv') `
            -NoTypeInformation -Encoding UTF8
 Log 'External tools manifest written.'
 
-# ─── 7) Copy this script into the workspace ────────────
+# --- 7) Copy this script into the workspace ------------
 Copy-Item $MyInvocation.MyCommand.Path `
           -Destination (Join-Path $Root (Split-Path $MyInvocation.MyCommand.Path -Leaf)) `
           -Force
 Log 'Script included in workspace.'
 
-# ─── 8) Zip up the entire workspace ─────────────
+# --- 8) Zip up the entire workspace ---------------
 $zipName   = "offline_builder_v${tag}.zip"
 $ArchiveDir = Split-Path $Root -Parent
 $zipPath   = Join-Path $ArchiveDir $zipName
 if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
-Log "Creating archive $zipName in $ArchiveDir… (this may take a moment)"
+Log "Creating archive $zipName in $ArchiveDir... (this may take a moment)"
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 [IO.Compression.ZipFile]::CreateFromDirectory($Root, $zipPath)
 Log "Archive created → $zipPath"
 
-# ─── done ────────────────────────────────────────
+# --- done ----------------------------------------
 Log "`n✔ Offline build environment ready!"
 Log "  Folder : $Root"
 Log "  Archive: $zipPath"
