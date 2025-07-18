@@ -17,7 +17,7 @@ if (Test-Path $ModulePath) {
 }
 
 # Define module variables
-$script:ModuleVersion = "5.0.1-alpha"
+$script:ModuleVersion = "5.0.1"
 $script:ModuleName = "VelociraptorSetupScripts"
 $script:Phase = 5
 $script:PhaseName = "Cloud-Native & Scalability"
@@ -283,3 +283,4 @@ Export-ModuleMember -Function @(
     'vr-info', 
     'vr-test'
 )
+
