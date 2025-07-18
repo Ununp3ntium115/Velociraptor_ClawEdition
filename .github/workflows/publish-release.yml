@@ -1,9 +1,6 @@
 name: Publish Release Package
 
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
     inputs:
       version:
@@ -12,6 +9,11 @@ on:
         default: '5.0.1-alpha'
       prerelease:
         description: 'Mark as pre-release'
+        required: true
+        default: true
+        type: boolean
+      create_tag:
+        description: 'Create and push git tag'
         required: true
         default: true
         type: boolean
