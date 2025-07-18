@@ -43,8 +43,9 @@ $script:StatusLabel = $null
 $script:ProgressBar = $null
 $script:LogTextBox = $null
 $script:CurrentConfig = $null
-$script:MonitoringTimer = $nullfunction I
-nitialize-VelociraptorGUI {
+$script:MonitoringTimer = $null
+
+function Initialize-VelociraptorGUI {
     Write-Host "Initializing Velociraptor Deployment GUI..." -ForegroundColor Cyan
     
     # Create main form
