@@ -610,4 +610,4 @@ Deploy-Velociraptor -DeploymentType Auto
 
 **Made with ❤️ by the Velociraptor Community**
 
-*Last Updated: January 2025 | Version: 5.0.1-alpha | Phase: 5 - Cloud-Native & Scalability*
+*Last Updated: July 2025 | Version: 5.0.1-alpha | Phase: 5 - Cloud-Native & Scalability*
