@@ -45,7 +45,7 @@ $script:LogTextBox = $null
 $script:CurrentConfig = $null
 $script:MonitoringTimer = $null
 
-function Initialize-VelociraptorGUI {
+function Start-VelociraptorGUI {
     Write-Host "Initializing Velociraptor Deployment GUI..." -ForegroundColor Cyan
     
     # Create main form
@@ -56,26 +56,26 @@ function Initialize-VelociraptorGUI {
     $script:MainForm.MinimumSize = New-Object System.Drawing.Size(1000, 600)
     
     # Create menu bar
-    Create-MenuBar
+    New-MenuBar
     
     # Create main tab control
-    Create-MainTabControl
+    New-MainTabControl
     
     # Create status bar
-    Create-StatusBar
+    New-StatusBar
     
     # Initialize event handlers
-    Initialize-EventHandlers
+    Start-EventHandlers
     
     # Load configuration if provided
     if ($ConfigPath -and (Test-Path $ConfigPath)) {
-        Load-Configuration -Path $ConfigPath
+        Import-Configuration -Path $ConfigPath
     }
     
     Write-Host "GUI initialization completed" -ForegroundColor Green
 }
 
-function Create-MenuBar {
+function New-MenuBar {
     $menuStrip = New-Object System.Windows.Forms.MenuStrip
     
     # File Menu
@@ -128,25 +128,25 @@ function Create-MenuBar {
     $script:MainForm.Controls.Add($menuStrip)
 }
 
-function Create-MainTabControl {
+function New-MainTabControl {
     $tabControl = New-Object System.Windows.Forms.TabControl
     $tabControl.Dock = [System.Windows.Forms.DockStyle]::Fill
     $tabControl.Padding = New-Object System.Drawing.Point(10, 5)
     
     # Dashboard Tab
-    Create-DashboardTab -TabControl $tabControl
+    New-DashboardTab -TabControl $tabControl
     
     # Configuration Tab
-    Create-ConfigurationTab -TabControl $tabControl
+    New-ConfigurationTab -TabControl $tabControl
     
     # Deployment Tab
-    Create-DeploymentTab -TabControl $tabControl
+    New-DeploymentTab -TabControl $tabControl
     
     # Collections Tab
-    Create-CollectionsTab -TabControl $tabControl
+    New-CollectionsTab -TabControl $tabControl
     
     # Logs Tab
-    Create-LogsTab -TabControl $tabControl
+    New-LogsTab -TabControl $tabControl
     
     $script:MainForm.Controls.Add($tabControl)
 }functi
@@ -206,7 +206,7 @@ on Create-DashboardTab {
     $TabControl.TabPages.Add($dashboardTab)
 }
 
-function Create-ConfigurationTab {
+function New-ConfigurationTab {
     param($TabControl)
     
     $configTab = New-Object System.Windows.Forms.TabPage
@@ -233,7 +233,7 @@ function Create-ConfigurationTab {
     $script:ConfigTextBox = $configTextBox
 }
 
-function Create-DeploymentTab {
+function New-DeploymentTab {
     param($TabControl)
     
     $deployTab = New-Object System.Windows.Forms.TabPage
@@ -353,7 +353,7 @@ unction Create-CollectionsTab {
     $script:CollectionsListView = $collectionsListView
 }
 
-function Create-LogsTab {
+function New-LogsTab {
     param($TabControl)
     
     $logsTab = New-Object System.Windows.Forms.TabPage
@@ -400,7 +400,7 @@ function Create-LogsTab {
     $TabControl.TabPages.Add($logsTab)
 }
 
-function Create-StatusBar {
+function New-StatusBar {
     $statusStrip = New-Object System.Windows.Forms.StatusStrip
     
     $script:StatusLabel = New-Object System.Windows.Forms.ToolStripStatusLabel
@@ -416,7 +416,7 @@ function Create-StatusBar {
     $script:MainForm.Controls.Add($statusStrip)
 }
 
-function Initialize-EventHandlers {
+function Start-EventHandlers {
     # Form closing event
     $script:MainForm.Add_FormClosing({
         param($sender, $e)
@@ -430,7 +430,7 @@ function Initialize-EventHandlers {
 }# Event ha
 ndler functions
 function Show-NewConfigurationWizard {
-    Update-Status "Opening configuration wizard..."
+    Set-Status "Opening configuration wizard..."
     Add-LogEntry "Info" "Configuration wizard opened"
 }
 
@@ -440,11 +440,11 @@ function Show-OpenConfigurationDialog {
     $openDialog.Title = "Open Velociraptor Configuration"
     
     if ($openDialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
-        Load-Configuration -Path $openDialog.FileName
+        Import-Configuration -Path $openDialog.FileName
     }
 }
 
-function Load-Configuration {
+function Import-Configuration {
     param([string]$Path)
     
     try {
@@ -463,7 +463,7 @@ function Load-Configuration {
     }
 }
 
-function Save-CurrentConfiguration {
+function Export-CurrentConfiguration {
     if ($script:CurrentConfig) {
         try {
             $script:ConfigTextBox.Text | Set-Content $script:CurrentConfig
@@ -490,7 +490,7 @@ function Save-CurrentConfiguration {
     }
 }
 
-function Validate-CurrentConfiguration {
+function Test-CurrentConfiguration {
     try {
         if ($script:ConfigTextBox.Text) {
             # Create temporary file for validation
@@ -818,11 +818,11 @@ function Start-SecurityBaselineTool {
 
 function Start-CollectionManager {
     Update-Status "Opening collection manager..."
-    Load-CollectionsList
+    Get-CollectionsList
     Add-LogEntry "Info" "Collection manager opened"
 }
 
-function Load-CollectionsList {
+function Get-CollectionsList {
     # Load available collections and their dependencies
     $script:CollectionsListView.Items.Clear()
     
@@ -866,7 +866,7 @@ function Start-CollectionValidation {
     [System.Windows.Forms.MessageBox]::Show("Collection validation feature coming soon!", "Info", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 }#
  Utility functions
-function Update-Status {
+function Set-Status {
     param([string]$Message)
     
     if ($script:StatusLabel) {

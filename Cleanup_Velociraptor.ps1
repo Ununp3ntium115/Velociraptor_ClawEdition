@@ -74,7 +74,7 @@ function Write-Log {
     Write-Host $Message
 }
 
-function Confirm-Continue {
+function Confirm-Action {
     param([switch]$Force)
     if ($Force) { return }
     $resp = Read-Host "!!! This will DELETE all Velociraptor data & configuration – continue? (y/N)"
@@ -88,7 +88,7 @@ Test-AdminPrivileges
 $ErrorActionPreference = 'Stop'
 
 Write-Log "Starting Velociraptor cleanup…"
-Confirm-Continue -Force:$Force
+Confirm-Action -Force:$Force
 
 # ───────────── 1. Stop & Remove Services ─────────────
 $serviceNames = Get-Service -ErrorAction SilentlyContinue |

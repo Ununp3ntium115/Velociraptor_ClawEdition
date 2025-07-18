@@ -119,16 +119,16 @@ function Test-VelociraptorConfiguration {
         }
         
         # Security validation
-        $this.ValidateSecuritySettings($configContent, $result, $ValidationLevel)
+        Test-SecuritySettings $configContent $result $ValidationLevel
         
         # Standard validation checks
         if ($ValidationLevel -in 'Standard', 'Comprehensive') {
-            $this.ValidateStandardSettings($configContent, $result)
+            Test-StandardSettings $configContent $result
         }
         
         # Comprehensive validation checks
         if ($ValidationLevel -eq 'Comprehensive') {
-            $this.ValidateComprehensiveSettings($configContent, $result)
+            Test-ComprehensiveSettings $configContent $result
         }
         
         # Determine overall validity
@@ -185,7 +185,7 @@ function Test-VelociraptorConfiguration {
 }
 
 # Helper method for security validation
-function ValidateSecuritySettings {
+function Test-SecuritySettings {
     param($configContent, $result, $validationLevel)
     
     # Check for insecure bind addresses
@@ -210,7 +210,7 @@ function ValidateSecuritySettings {
 }
 
 # Helper method for standard validation
-function ValidateStandardSettings {
+function Test-StandardSettings {
     param($configContent, $result)
     
     # Check for proper logging configuration
@@ -230,7 +230,7 @@ function ValidateStandardSettings {
 }
 
 # Helper method for comprehensive validation
-function ValidateComprehensiveSettings {
+function Test-ComprehensiveSettings {
     param($configContent, $result)
     
     # Check for proper certificate configuration

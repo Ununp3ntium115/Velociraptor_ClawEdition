@@ -32,7 +32,7 @@ function Write-Log ($message) {
 Set-Alias -Name Log -Value Write-Log
 
 # Interactive prompt function with default value
-function Read-UserInput ($question, $defaultValue = 'n') { 
+function Get-UserInput ($question, $defaultValue = 'n') { 
     $response = Read-Host "$question [$defaultValue]"
     if ([string]::IsNullOrEmpty($response)) { 
         return $defaultValue 
@@ -43,10 +43,10 @@ function Read-UserInput ($question, $defaultValue = 'n') {
 }
 
 # Backward compatibility alias
-Set-Alias -Name Ask -Value Read-UserInput
+Set-Alias -Name Ask -Value Get-UserInput
 
 # Secure password input function - compatible with older PowerShell versions
-function Read-SecureInput ($prompt) { 
+function Get-SecureInput ($prompt) { 
     $secureString = Read-Host $prompt -AsSecureString
     # Convert SecureString to plain text safely
     try {
@@ -62,7 +62,7 @@ function Read-SecureInput ($prompt) {
 }
 
 # Backward compatibility alias
-Set-Alias -Name AskSecret -Value Read-SecureInput
+Set-Alias -Name AskSecret -Value Get-SecureInput
 
 # Check if running as Administrator - required for service installation
 function Test-Administrator {
@@ -246,7 +246,8 @@ authenticator:
   type: Google
   oauth_client_id: '$cid'
   oauth_client_secret: '$($sec.Password)'
-"@ }
+"@ 
+        }
         'azure' {
             $cid = Read-Host 'Azure client-ID'
             $sec = AskSecret 'Azure client-secret'
@@ -257,7 +258,8 @@ authenticator:
   oauth_client_id: '$cid'
   oauth_client_secret: '$($sec.Password)'
   tenant: '$ten'
-"@ }
+"@ 
+        }
         'github' {
             $cid = Read-Host 'GitHub client-ID'
             $sec = AskSecret 'GitHub client-secret'
@@ -266,7 +268,8 @@ authenticator:
   type: GitHub
   oauth_client_id: '$cid'
   oauth_client_secret: '$($sec.Password)'
-"@ }
+"@ 
+        }
         'okta' {
             $cid = Read-Host 'Okta client-ID'
             $sec = AskSecret 'Okta client-secret'
@@ -278,7 +281,8 @@ authenticator:
   client_id: '$cid'
   client_secret: '$($sec.Password)'
   scopes: ['openid','profile','email']
-"@ }
+"@ 
+        }
         'oidc' {
             $cid = Read-Host 'OIDC client-ID'
             $sec = AskSecret 'OIDC client-secret'
@@ -289,7 +293,8 @@ authenticator:
   oidc_issuer_url: '$iss'
   client_id: '$cid'
   client_secret: '$($sec.Password)'
-"@ }
+"@ 
+        }
         default { Log 'Unknown provider – skipping SSO.' }
     }
 }

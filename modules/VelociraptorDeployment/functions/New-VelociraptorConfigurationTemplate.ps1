@@ -76,11 +76,11 @@ function New-VelociraptorConfigurationTemplate {
         
         # Get template content based on type
         $templateContent = switch ($TemplateName) {
-            'Standalone' { $this.GetStandaloneTemplate($CustomSettings, $IncludeComments) }
-            'Server' { $this.GetServerTemplate($CustomSettings, $IncludeComments) }
-            'Cluster' { $this.GetClusterTemplate($CustomSettings, $IncludeComments) }
-            'Forensics' { $this.GetForensicsTemplate($CustomSettings, $IncludeComments) }
-            'Enterprise' { $this.GetEnterpriseTemplate($CustomSettings, $IncludeComments) }
+            'Standalone' { Get-StandaloneTemplate $CustomSettings $IncludeComments }
+            'Server' { Get-ServerTemplate $CustomSettings $IncludeComments }
+            'Cluster' { Get-ClusterTemplate $CustomSettings $IncludeComments }
+            'Forensics' { Get-ForensicsTemplate $CustomSettings $IncludeComments }
+            'Enterprise' { Get-EnterpriseTemplate $CustomSettings $IncludeComments }
         }
         
         # Write template to file
@@ -122,7 +122,7 @@ function New-VelociraptorConfigurationTemplate {
 }
 
 # Helper method for Standalone template
-function GetStandaloneTemplate {
+function Get-StandaloneTemplate {
     param($customSettings, $includeComments)
     
     $guiPort = $customSettings.GuiPort ?? 8889
@@ -183,7 +183,7 @@ autocert_domain: localhost
 }
 
 # Helper method for Server template
-function GetServerTemplate {
+function Get-ServerTemplate {
     param($customSettings, $includeComments)
     
     $frontendPort = $customSettings.FrontendPort ?? 8000
@@ -254,6 +254,6 @@ GUI:
 }
 
 # Helper method for other templates (simplified for space)
-function GetClusterTemplate { param($customSettings, $includeComments); return "# Cluster template - Implementation needed" }
-function GetForensicsTemplate { param($customSettings, $includeComments); return "# Forensics template - Implementation needed" }
-function GetEnterpriseTemplate { param($customSettings, $includeComments); return "# Enterprise template - Implementation needed" }
+function Get-ClusterTemplate { param($customSettings, $includeComments); return "# Cluster template - Implementation needed" }
+function Get-ForensicsTemplate { param($customSettings, $includeComments); return "# Forensics template - Implementation needed" }
+function Get-EnterpriseTemplate { param($customSettings, $includeComments); return "# Enterprise template - Implementation needed" }

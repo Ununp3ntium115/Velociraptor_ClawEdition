@@ -62,7 +62,7 @@ function Start-PredictiveAnalytics {
     
     try {
         # Initialize analytics engine
-        $analyticsEngine = Initialize-PredictiveAnalyticsEngine -HistoricalDataPath $HistoricalDataPath
+        $analyticsEngine = New-PredictiveAnalyticsEngine -HistoricalDataPath $HistoricalDataPath
         
         # Execute analytics based on mode
         switch ($AnalyticsMode) {
@@ -98,7 +98,7 @@ function Start-PredictiveAnalytics {
     }
 }
 
-function Initialize-PredictiveAnalyticsEngine {
+function New-PredictiveAnalyticsEngine {
     param([string]$HistoricalDataPath)
     
     Write-VelociraptorLog -Message "Initializing predictive analytics engine" -Level Info

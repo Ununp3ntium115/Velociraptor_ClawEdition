@@ -58,7 +58,7 @@ function Invoke-FileDownload ($Url, $DestEXE) {
 # Backward compatibility alias
 Set-Alias -Name Download-EXE -Value Invoke-FileDownload
 
-function Add-FirewallTCP ($Port) {
+function Add-FirewallRule ($Port) {
     $rule = 'Velociraptor Standalone GUI'
 
     if (Get-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue) {
@@ -120,7 +120,7 @@ else {
 }
 
 # firewall
-Add-FirewallTCP $GuiPort
+Add-FirewallRule $GuiPort
 
 # launch
 Start-Process $exe -ArgumentList "gui --datastore $DataStore" -WorkingDirectory $InstallDir

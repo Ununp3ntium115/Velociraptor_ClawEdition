@@ -40,13 +40,13 @@ function Write-Log {
 Set-Alias -Name Log -Value Write-Log
 
 # --- 1) Fetch release metadata -----------------------------------
-Write-Log 'Fetching Velociraptor release info…'
+Write-Log 'Fetching Velociraptor release info...'
 if ($Version) {
-    $rel = Invoke-RestMethod -Uri "https://api.github.com/repos/Velocidex/velociraptor/releases/tags/v$Version" `
-                             -Headers @{ 'User-Agent' = 'OfflinePrepScript' }
+    $rel = Invoke-RestMethod -Uri "https://api.github.com/repos/Velocidx/velociraptor/releases/tags/v$Version" `
+    -Headers @{ 'User-Agent' = 'OfflinePrepScript' }
 } else {
-    $rel = Invoke-RestMethod -Uri 'https://api.github.com/repos/Velocidex/velociraptor/releases/latest' `
-                             -Headers @{ 'User-Agent' = 'OfflinePrepScript' }
+    $rel = Invoke-RestMethod -Uri 'https://api.github.com/repos/Velocidx/velociraptor/releases/latest' `
+    -Headers @{ 'User-Agent' = 'OfflinePrepScript' }
 }
 $tag = $rel.tag_name.TrimStart('v')
 Write-Log "Using release v$tag"
@@ -73,15 +73,15 @@ foreach ($key in $assetMap.Keys) {
         continue
     }
     $dest = Join-Path $BinsDir $info.Output
-    Log "Downloading $($asset.name)…"
+    Log "Downloading $($asset.name)..."
     Invoke-WebRequest -Uri $asset.browser_download_url `
-                      -OutFile "$dest.download" -UseBasicParsing `
-                      -Headers @{ 'User-Agent'='OfflinePrepScript' }
+                    -OutFile "$dest.download" -UseBasicParsing `
+                    -Headers @{ 'User-Agent'='OfflinePrepScript' }
     Move-Item "$dest.download" $dest -Force
     if ($key -ne 'windows-amd64') {
         icacls $dest /grant '*S-1-1-0:RX' | Out-Null
     }
-    Log "Saved → $dest"
+    Log "Saved -> $dest"
 }
 
 # --- 4) Download & extract artifact_pack.zip --------------
@@ -90,19 +90,19 @@ $artifactZip = $rel.assets |
     Select-Object -First 1
 if ($artifactZip) {
     $zipPath = Join-Path $Root 'artifact_pack.zip'
-    Log "Downloading $($artifactZip.name)…"
+    Log "Downloading $($artifactZip.name)..."
     Invoke-WebRequest -Uri $artifactZip.browser_download_url `
-                      -OutFile "$zipPath.download" -UseBasicParsing `
-                      -Headers @{ 'User-Agent'='OfflinePrepScript' }
+                -OutFile "$zipPath.download" -UseBasicParsing `
+                -Headers @{ 'User-Agent'='OfflinePrepScript' }
     Move-Item "$zipPath.download" $zipPath -Force
-    Log "Extracting YAMLs → $ArtDir"
+    Log "Extracting YAMLs -> $ArtDir"
     Expand-Archive -Path $zipPath -DestinationPath $ArtDir -Force
 } else {
     Log 'WARNING: artifact_pack.zip not found in assets.'
 }
 
 # --- 5) Scan & download external tools --------------------
-Log 'Scanning artifact YAMLs for external tools…'
+Log 'Scanning artifact YAMLs for external tools...'
 $tools = @()
 Get-ChildItem -Path $ArtDir -Recurse -Filter '*.yaml' | ForEach-Object {
     $name = $null
@@ -118,15 +118,15 @@ $tools = $tools | Sort-Object Url -Unique
 $manifest = foreach ($t in $tools) {
     $file = Split-Path $t.Url -Leaf
     $dest = Join-Path $ExtDir $file
-    Log "Downloading [$($t.Artifact)] → $file"
+    Log "Downloading [$($t.Artifact)] -> $file"
     Invoke-WebRequest -Uri $t.Url -OutFile "$dest.download" -UseBasicParsing `
-                      -Headers @{ 'User-Agent'='OfflinePrepScript' }
+                    -Headers @{ 'User-Agent'='OfflinePrepScript' }
     Move-Item "$dest.download" $dest -Force
 
     $extracted = ''
     if ($file -match '\.zip$') {
         $out = Join-Path $ExtDir $t.Artifact
-        Log "Extracting $file → $out"
+        Log "Extracting $file -> $out"
         Expand-Archive -Path $dest -DestinationPath $out -Force
         $extracted = $out
     }
@@ -141,13 +141,13 @@ $manifest = foreach ($t in $tools) {
 
 # --- 6) Write CSV manifest -------------------------
 $manifest | Export-Csv -Path (Join-Path $Root 'external_tools_manifest.csv') `
-           -NoTypeInformation -Encoding UTF8
+    -NoTypeInformation -Encoding UTF8
 Log 'External tools manifest written.'
 
 # --- 7) Copy this script into the workspace ------------
 Copy-Item $MyInvocation.MyCommand.Path `
-          -Destination (Join-Path $Root (Split-Path $MyInvocation.MyCommand.Path -Leaf)) `
-          -Force
+    -Destination (Join-Path $Root (Split-Path $MyInvocation.MyCommand.Path -Leaf)) `
+    -Force
 Log 'Script included in workspace.'
 
 # --- 8) Zip up the entire workspace ---------------
@@ -158,7 +158,7 @@ if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
 Log "Creating archive $zipName in $ArchiveDir... (this may take a moment)"
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 [IO.Compression.ZipFile]::CreateFromDirectory($Root, $zipPath)
-Log "Archive created → $zipPath"
+Log "Archive created -> $zipPath"
 
 # --- done ----------------------------------------
 Log "`n✔ Offline build environment ready!"
