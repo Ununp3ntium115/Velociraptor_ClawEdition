@@ -390,26 +390,127 @@ High-availability cluster with load balancing:
 
 ## 📊 **Management & Monitoring**
 
-### **GUI Management Interface**
-Comprehensive Windows Forms-based interface:
+### **🎯 Step-by-Step Configuration Wizard**
+**NEW!** Professional wizard-style GUI for creating Velociraptor configurations:
 
 ```powershell
-# Launch GUI
+# Launch the configuration wizard
 .\gui\VelociraptorGUI.ps1
-
-# With AI tools
-.\gui\VelociraptorGUI.ps1 -EnableAITools
 
 # Start minimized
 .\gui\VelociraptorGUI.ps1 -StartMinimized
 ```
 
-**GUI Features:**
+**✨ Wizard Features:**
+- **🎨 Professional Interface**: Velociraptor-branded UI with resizable windows
+- **📋 9-Step Process**: Guided configuration from start to finish
+- **🔄 Next/Back Navigation**: Easy step-by-step progression
+- **✅ Input Validation**: Real-time validation at each step
+- **📊 Progress Tracking**: Visual progress indicator
+- **🔧 One-Click Deployment**: Generate and deploy configurations instantly
+
+**📝 Configuration Steps:**
+
+| Step | Description | Features |
+|------|-------------|----------|
+| **1. Welcome** | Introduction and overview | Feature explanation, getting started guide |
+| **2. Deployment Type** | Choose deployment model | Server, Standalone, or Client configuration |
+| **3. Storage Configuration** | Configure data locations | Datastore directory, logs directory, disk space validation |
+| **4. Certificate Settings** | SSL certificate configuration | 1 Year, 2 Years, or 10 Years expiration options |
+| **5. Security Settings** | Access and security controls | VQL restrictions, registry usage, security policies |
+| **6. Network Configuration** | Network and port settings | Frontend/GUI bind addresses, ports, organization name |
+| **7. Authentication** | Admin credentials setup | Username/password, secure password generation |
+| **8. Review & Generate** | Configuration review | Complete settings overview, YAML generation |
+| **9. Complete** | Deployment ready | Success confirmation, next steps, deployment options |
+
+**🎛️ Advanced Features:**
+- **🔐 Secure Password Generator**: Cryptographically secure password creation
+- **📁 Directory Browser**: Visual folder selection dialogs
+- **⚙️ Configuration Templates**: Pre-built templates for common scenarios
+- **🚀 Integrated Deployment**: Launch deployment scripts directly from wizard
+- **📄 Configuration Export**: Save generated YAML files for later use
+- **🔍 Real-time Validation**: Immediate feedback on configuration issues
+
+**💡 Usage Examples:**
+```powershell
+# Quick server setup
+.\gui\VelociraptorGUI.ps1
+# 1. Select "Server Deployment"
+# 2. Configure storage paths
+# 3. Set certificate expiration
+# 4. Configure security settings
+# 5. Set network bindings
+# 6. Create admin account
+# 7. Review and generate
+# 8. Deploy with one click!
+
+# Standalone forensic workstation
+.\gui\VelociraptorGUI.ps1
+# Follow wizard for standalone configuration
+# Optimized for single-user scenarios
+```
+
+### **🖥️ Legacy GUI Management Interface**
+*Note: The tabbed interface has been replaced with the new step-by-step wizard above*
+
+**Previous GUI Features (for reference):**
 - **📊 Dashboard**: Real-time status and metrics
 - **⚙️ Configuration**: Visual YAML editor with validation
-- **🚀 Deployment Wizard**: Step-by-step deployment guidance
+- **🚀 Deployment Tools**: Various deployment options
 - **🤖 AI Tools**: Intelligent configuration and troubleshooting
 - **📈 Monitoring**: Performance metrics and health status
+
+### **🔧 Artifact Tool Manager**
+**NEW!** Automated artifact and tool dependency management system:
+
+```powershell
+# Scan artifacts for tool dependencies
+New-ArtifactToolManager -Action Scan -ArtifactPath ".\content\exchange\artifacts" -OutputPath ".\tool-mapping.json"
+
+# Download all required tools automatically
+New-ArtifactToolManager -Action Download -ArtifactPath ".\content\exchange\artifacts" -ToolCachePath ".\tools" -ValidateTools
+
+# Create offline collector packages
+New-ArtifactToolManager -Action Package -ArtifactPath ".\content\exchange\artifacts" -OutputPath ".\packages" -OfflineMode
+
+# Complete workflow (scan, download, package)
+New-ArtifactToolManager -Action All -ArtifactPath ".\content\exchange\artifacts" -OfflineMode -ValidateTools
+
+# Build comprehensive artifact packages
+.\scripts\Build-VelociraptorArtifactPackage.ps1 -ArtifactSource "artifact_exchange_v2.zip" -PackageType All -CreateZipPackage
+```
+
+**🎯 Artifact Tool Manager Features:**
+- **📦 284 Artifacts Supported**: Complete artifact_exchange_v2.zip processing
+- **🔧 Automatic Tool Discovery**: Scans artifacts for tool dependencies
+- **⬇️ Concurrent Downloads**: Downloads all required tools with hash validation
+- **📋 Tool Mapping**: Creates comprehensive tool-to-artifact mappings
+- **🎁 Offline Packages**: Builds complete offline collector packages
+- **🔍 Dependency Resolution**: Handles complex tool dependency chains
+- **✅ Hash Validation**: Ensures tool integrity with SHA256 verification
+- **📊 Progress Tracking**: Real-time download and processing progress
+
+**📋 Supported Tool Categories:**
+- **🔍 Forensics Tools**: FTK Imager, Volatility, Autopsy, Timeline tools
+- **🔬 Analysis Tools**: YARA, Capa, DIE, Hash utilities, Entropy analysis
+- **📥 Collection Tools**: Collectors, Gatherers, Dump utilities, Export tools
+- **📜 Scripts**: PowerShell, Python, Bash automation scripts
+- **🛠️ Utilities**: System tools, Network utilities, File processors
+
+**💡 Usage Examples:**
+```powershell
+# Quick artifact processing
+.\Test-ArtifactToolManager.ps1 -QuickTest -SkipDownloads
+
+# Full offline deployment preparation
+New-ArtifactToolManager -Action All -ArtifactPath ".\content\exchange\artifacts" -ToolCachePath ".\tools" -OutputPath ".\offline-deployment" -OfflineMode -ValidateTools -MaxConcurrentDownloads 10
+
+# Server-side tool packaging
+.\scripts\Build-VelociraptorArtifactPackage.ps1 -ArtifactSource ".\content\exchange\artifacts" -PackageType Server -UpstreamPackaging -CreateZipPackage
+
+# Client-side lightweight packages
+.\scripts\Build-VelociraptorArtifactPackage.ps1 -ArtifactSource ".\content\exchange\artifacts" -PackageType Client -DownstreamPackaging
+```
 
 ### **PowerShell Module**
 Comprehensive automation cmdlets:
@@ -426,6 +527,9 @@ Manage-VelociraptorCollections -Action List -CollectionPath ".\collections"
 
 # Security baseline
 Set-VelociraptorSecurityHardening -SecurityLevel Maximum
+
+# Artifact tool management
+New-ArtifactToolManager -Action All -ArtifactPath ".\artifacts" -OfflineMode
 ```
 
 ---
