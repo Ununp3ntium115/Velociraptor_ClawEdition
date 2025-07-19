@@ -869,7 +869,7 @@ function Start-CollectionValidation {
 function Set-Status {
     param([string]$Message)
     
-    if ($script:StatusLabel) {
+    if ($script:StatusLabel -and $script:MainForm) {
         $script:StatusLabel.Text = $Message
         $script:MainForm.Refresh()
     }
@@ -898,7 +898,7 @@ function Add-LogEntry {
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     $logEntry = "[$timestamp] [$Level] $Message"
     
-    if ($script:LogTextBox) {
+    if ($script:LogTextBox -and $script:LogTextBox.Text -ne $null) {
         $script:LogTextBox.AppendText("$logEntry`r`n")
         $script:LogTextBox.SelectionStart = $script:LogTextBox.Text.Length
         $script:LogTextBox.ScrollToCaret()

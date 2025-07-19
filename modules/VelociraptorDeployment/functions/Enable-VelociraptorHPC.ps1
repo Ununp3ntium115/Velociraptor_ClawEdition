@@ -173,7 +173,7 @@ function Enable-VelociraptorHPC {
     }
 }
 
-function Initialize-HPCDeployment {
+function New-HPCDeployment {
     $context = @{
         DeploymentId = (Get-Date).ToString('yyyyMMddHHmmss')
         ClusterName = "velociraptor-hpc-$((Get-Date).ToString('yyyyMMddHHmmss'))"

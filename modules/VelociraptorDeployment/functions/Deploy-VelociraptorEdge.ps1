@@ -189,7 +189,7 @@ function Deploy-VelociraptorEdge {
     }
 }
 
-function Initialize-EdgeDeployment {
+function New-EdgeDeployment {
     $context = @{
         DeploymentId = (Get-Date).ToString('yyyyMMddHHmmss')
         EdgeClusterName = "velociraptor-edge-$((Get-Date).ToString('yyyyMMddHHmmss'))"
@@ -472,7 +472,7 @@ function Configure-EdgeAgents {
     Write-Host "Edge agents configuration completed" -ForegroundColor Green
 }
 
-function Generate-EdgeConfiguration {
+function New-EdgeConfiguration {
     param([hashtable]$Node, [hashtable]$Profile)
 
     $config = @{

@@ -92,7 +92,7 @@ function Start-AutomatedTroubleshooting {
     }
 }
 
-function Initialize-TroubleshootingEngine {
+function New-TroubleshootingEngine {
     param([string]$KnowledgeBasePath)
     
     Write-VelociraptorLog -Message "Initializing troubleshooting engine" -Level Info
@@ -126,7 +126,7 @@ function Initialize-TroubleshootingEngine {
     return $engine
 }
 
-function Load-DiagnosticRules {
+function Import-DiagnosticRules {
     param([string]$Path)
     
     $rules = @{
@@ -217,7 +217,7 @@ function Load-DiagnosticRules {
     return $rules
 }
 
-function Load-SolutionDatabase {
+function Import-SolutionDatabase {
     param([string]$Path)
     
     $solutions = @{
@@ -286,7 +286,7 @@ function Load-SolutionDatabase {
     return $solutions
 }
 
-function Initialize-PatternRecognition {
+function New-PatternRecognition {
     return @{
         LogPatterns = @{}
         ErrorPatterns = @{}
@@ -295,7 +295,7 @@ function Initialize-PatternRecognition {
     }
 }
 
-function Initialize-ExpertSystem {
+function New-ExpertSystem {
     return @{
         Rules = @()
         Facts = @()
@@ -303,7 +303,7 @@ function Initialize-ExpertSystem {
     }
 }
 
-function Initialize-RemediationActions {
+function New-RemediationActions {
     return @{
         ServiceActions = @(
             "Restart-Service",
@@ -606,7 +606,7 @@ function Start-InteractiveTroubleshooting {
 }
 
 # Helper functions for troubleshooting operations
-function Collect-DiagnosticData {
+function Get-DiagnosticData {
     param($ConfigPath, $LogAnalysisDepth)
     
     $data = @{
@@ -679,9 +679,9 @@ function Get-ResourceDiagnosticInfo {
 }
 
 # Additional helper functions would be implemented here
-function Analyze-LogsForIssues { param($Engine, $DiagnosticData); return @() }
-function Analyze-SystemState { param($Engine, $ConfigPath); return @() }
-function Analyze-ConfigurationIssues { param($Engine, $ConfigPath); return @() }
+function Test-LogsForIssues { param($Engine, $DiagnosticData); return @() }
+function Test-SystemState { param($Engine, $ConfigPath); return @() }
+function Test-ConfigurationIssues { param($Engine, $ConfigPath); return @() }
 function Apply-ExpertSystemRules { param($Engine, $DiagnosticData, $IssueDescription); return @() }
 function Consolidate-IdentifiedIssues { param($DiagnosisResults); return @() }
 function Generate-SolutionRecommendations { param($Engine, $IdentifiedIssues); return @() }

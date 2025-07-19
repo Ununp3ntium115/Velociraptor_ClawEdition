@@ -111,10 +111,10 @@ function New-IntelligentConfiguration {
     }
 }
 
-function Initialize-ConfigurationEngine {
+function New-ConfigurationEngine {
     return @{
         Version = "1.0.0"
-        KnowledgeBase = Load-ConfigurationKnowledgeBase
+        KnowledgeBase = Import-ConfigurationKnowledgeBase
         OptimizationRules = Load-OptimizationRules
         SecurityProfiles = Load-SecurityProfiles
         PerformanceProfiles = Load-PerformanceProfiles
@@ -359,7 +359,7 @@ function Get-SecurityContextAnalysis {
     return $analysis
 }
 
-function Analyze-ExistingConfiguration {
+function Test-ExistingConfiguration {
     param([string]$ConfigPath)
     
     Write-VelociraptorLog -Message "Analyzing existing configuration: $ConfigPath" -Level Info
@@ -389,7 +389,7 @@ function Analyze-ExistingConfiguration {
     }
 }
 
-function Analyze-ConfigurationSecurity {
+function Test-ConfigurationSecurity {
     param($Config, $Analysis)
     
     # Check SSL/TLS configuration
@@ -413,7 +413,7 @@ function Analyze-ConfigurationSecurity {
     }
 }
 
-function Analyze-ConfigurationPerformance {
+function Test-ConfigurationPerformance {
     param($Config, $Analysis)
     
     # Check datastore configuration
@@ -432,7 +432,7 @@ function Analyze-ConfigurationPerformance {
     }
 }
 
-function Analyze-ConfigurationCompliance {
+function Test-ConfigurationCompliance {
     param($Config, $Analysis)
     
     # Check compliance-related configurations
@@ -601,7 +601,7 @@ function Get-BaseConfigurationTemplate {
     }
 }
 
-function Apply-PerformanceOptimizations {
+function Set-PerformanceOptimizations {
     param($Config, $Profile, $Recommendations)
     
     # Apply performance profile settings
@@ -633,7 +633,7 @@ function Apply-PerformanceOptimizations {
     }
 }
 
-function Apply-SecurityConfigurations {
+function Set-SecurityConfigurations {
     param($Config, $Recommendations)
     
     # Apply security recommendations
@@ -658,7 +658,7 @@ function Apply-SecurityConfigurations {
     }
 }
 
-function Apply-ComplianceConfigurations {
+function Set-ComplianceConfigurations {
     param($Config, $Frameworks)
     
     foreach ($framework in $Frameworks) {
@@ -679,7 +679,7 @@ function Apply-ComplianceConfigurations {
     }
 }
 
-function Apply-OperationalConfigurations {
+function Set-OperationalConfigurations {
     param($Config, $Recommendations)
     
     # Configure logging
@@ -757,7 +757,7 @@ function Test-GeneratedConfiguration {
     return $validation
 }
 
-function Apply-FinalOptimizations {
+function Set-FinalOptimizations {
     param($Config, $Validation)
     
     # Apply any final optimizations based on validation results
@@ -798,7 +798,7 @@ function New-ConfigurationReport {
     return $report
 }
 
-function Load-ConfigurationKnowledgeBase {
+function Import-ConfigurationKnowledgeBase {
     # This would load from a comprehensive knowledge base
     return @{
         BestPractices = @()
@@ -808,17 +808,17 @@ function Load-ConfigurationKnowledgeBase {
     }
 }
 
-function Load-OptimizationRules {
+function Import-OptimizationRules {
     # This would load optimization rules
     return @{}
 }
 
-function Load-SecurityProfiles {
+function Import-SecurityProfiles {
     # This would load security profiles
     return @{}
 }
 
-function Load-PerformanceProfiles {
+function Import-PerformanceProfiles {
     # This would load performance profiles
     return @{}
 }

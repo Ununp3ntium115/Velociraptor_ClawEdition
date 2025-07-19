@@ -38,8 +38,14 @@ function Get-LatestWindowsAsset {
     Write-Log 'Querying GitHub for the latest Velociraptor release …'
     $rel = Invoke-RestMethod 'https://api.github.com/repos/Velocidex/velociraptor/releases/latest' `
         -Headers @{ 'User-Agent' = 'StandaloneVelo' }
+    
+    if (-not $rel -or -not $rel.assets) {
+        throw 'Failed to retrieve release information from GitHub API'
+    }
+    
     $asset = $rel.assets | Where-Object { $_.name -like '*windows-amd64.exe' } | Select-Object -First 1
     if (-not $asset) { throw 'Could not locate a Windows AMD64 asset in the latest release.' }
+    if (-not $asset.browser_download_url) { throw 'Asset download URL is not available.' }
     return $asset.browser_download_url
 }
 

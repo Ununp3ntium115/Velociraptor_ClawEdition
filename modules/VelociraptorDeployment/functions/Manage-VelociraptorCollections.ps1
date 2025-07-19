@@ -97,7 +97,7 @@ function Manage-VelociraptorCollections {
     }
 }
 
-function Initialize-CollectionManager {
+function New-CollectionManager {
     param(
         [string]$CollectionPath,
         [string]$ToolsRepository
@@ -126,7 +126,7 @@ function Initialize-CollectionManager {
     return $manager
 }
 
-function Load-CollectionDefinitions {
+function Import-CollectionDefinitions {
     param($Manager)
     
     Write-VelociraptorLog -Message "Loading collection definitions from: $($Manager.CollectionPath)" -Level Info
@@ -221,7 +221,7 @@ function Extract-ToolReferencesFromVQL {
     return $tools
 }
 
-function Load-ToolMappings {
+function Import-ToolMappings {
     param($Manager)
     
     # Default tool mappings for common forensic tools
@@ -473,7 +473,7 @@ function Start-CollectionDependencyDownload {
     }
 }
 
-function Download-ToolDependency {
+function Get-ToolDependency {
     param($Manager, $Dependency)
     
     Write-VelociraptorLog -Message "Downloading dependency: $($Dependency.Name)" -Level Info
@@ -625,7 +625,7 @@ function Build-OfflineCollector {
     }
 }
 
-function Generate-CollectorDeploymentScript {
+function New-CollectorDeploymentScript {
     param($Config)
     
     return @"

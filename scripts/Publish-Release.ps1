@@ -114,7 +114,7 @@ function Test-Prerequisites {
     return $true
 }
 
-function Update-ModuleVersion {
+function Set-ModuleVersion {
     param([string]$NewVersion)
     
     Write-Host "📝 Updating module version to $NewVersion..." -ForegroundColor Cyan
@@ -453,7 +453,7 @@ try {
     }
     
     # Update version
-    Update-ModuleVersion -NewVersion $Version
+    Set-ModuleVersion -NewVersion $Version
     
     # Test module manifest
     if (-not (Test-ModuleManifest)) {

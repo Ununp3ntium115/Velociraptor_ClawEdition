@@ -65,13 +65,29 @@ $assetMap = @{
     'linux-amd64'   = @{ Pattern='linux-amd64$';        Output='velociraptor'     }
     'darwin-amd64'  = @{ Pattern='darwin-amd64$';       Output='velociraptor'     }
 }
+if (-not $rel -or -not $rel.assets) {
+    Log "ERROR: Failed to retrieve release information from GitHub API"
+    exit 1
+}
+
 foreach ($key in $assetMap.Keys) {
     $info  = $assetMap[$key]
+    if (-not $info -or -not $info.Pattern) {
+        Log "WARNING: Invalid asset info for $key"
+        continue
+    }
+    
     $asset = $rel.assets | Where-Object { $_.name -match $info.Pattern } | Select-Object -First 1
     if (-not $asset) {
         Log "WARNING: no $key asset in v$tag"
         continue
     }
+    
+    if (-not $asset.browser_download_url -or -not $asset.name) {
+        Log "WARNING: Asset information incomplete for $key"
+        continue
+    }
+    
     $dest = Join-Path $BinsDir $info.Output
     Log "Downloading $($asset.name)..."
     Invoke-WebRequest -Uri $asset.browser_download_url `
@@ -85,10 +101,13 @@ foreach ($key in $assetMap.Keys) {
 }
 
 # --- 4) Download & extract artifact_pack.zip --------------
-$artifactZip = $rel.assets |
-    Where-Object { $_.name -match '^artifact_pack.*\.zip$' } |
-    Select-Object -First 1
-if ($artifactZip) {
+$artifactZip = $null
+if ($rel.assets) {
+    $artifactZip = $rel.assets |
+        Where-Object { $_ -and $_.name -and $_.name -match '^artifact_pack.*\.zip$' } |
+        Select-Object -First 1
+}
+if ($artifactZip -and $artifactZip.browser_download_url) {
     $zipPath = Join-Path $Root 'artifact_pack.zip'
     Log "Downloading $($artifactZip.name)..."
     Invoke-WebRequest -Uri $artifactZip.browser_download_url `

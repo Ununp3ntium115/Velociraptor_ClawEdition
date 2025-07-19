@@ -146,11 +146,20 @@ if (-not (Test-Path $exe)) {
         $headers = @{ 'User-Agent' = 'VelociraptorDeploy/1.0' }
         $releaseInfo = Invoke-RestMethod -Uri 'https://api.github.com/repos/Velocidex/velociraptor/releases/latest' -Headers $headers
         
+        # Validate release information
+        if (-not $releaseInfo -or -not $releaseInfo.assets) {
+            throw "Failed to retrieve valid release information from GitHub API"
+        }
+        
         # Find Windows AMD64 executable asset
         $asset = $releaseInfo.assets | Where-Object { $_.name -like '*windows-amd64.exe' } | Select-Object -First 1
         
         if (-not $asset) {
             throw "Windows AMD64 executable not found in latest release"
+        }
+        
+        if (-not $asset.browser_download_url -or -not $asset.name -or -not $asset.size) {
+            throw "Asset information is incomplete or corrupted"
         }
         
         Log "Downloading $($asset.name) (Size: $([math]::Round($asset.size/1MB, 2)) MB)..."
@@ -615,8 +624,10 @@ try {
     # Verify service is running
     Start-Sleep -Seconds 3
     $service = Get-Service -Name "Velociraptor" -ErrorAction Stop
-    if ($service.Status -eq "Running") {
+    if ($service -and $service.Status -eq "Running") {
         Log "Velociraptor service installed and started successfully"
+    } else {
+        Log "WARNING: Service status could not be verified or service is not running"
     }
     else {
         throw "Service installed but not running (Status: $($service.Status))"

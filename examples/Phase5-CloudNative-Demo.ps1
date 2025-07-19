@@ -54,7 +54,7 @@ function Show-Phase5Banner {
     Write-Host ""
 }
 
-function Demo-MultiCloudDeployment {
+function Show-MultiCloudDeployment {
     Write-Host "=== MULTI-CLOUD DEPLOYMENT DEMONSTRATION ===" -ForegroundColor Cyan
     Write-Host ""
     
@@ -129,7 +129,7 @@ function Demo-MultiCloudDeployment {
     Write-Host ""
 }
 
-function Demo-ServerlessDeployment {
+function Show-ServerlessDeployment {
     Write-Host "=== SERVERLESS DEPLOYMENT DEMONSTRATION ===" -ForegroundColor Cyan
     Write-Host ""
     
@@ -194,7 +194,7 @@ function Demo-ServerlessDeployment {
     Write-Host ""
 }
 
-function Demo-HPCCluster {
+function Show-HPCCluster {
     Write-Host "=== HIGH-PERFORMANCE COMPUTING DEMONSTRATION ===" -ForegroundColor Cyan
     Write-Host ""
     
@@ -266,7 +266,7 @@ function Demo-HPCCluster {
     Write-Host ""
 }
 
-function Demo-EdgeComputing {
+function Show-EdgeComputing {
     Write-Host "=== EDGE COMPUTING DEMONSTRATION ===" -ForegroundColor Cyan
     Write-Host ""
     
@@ -348,7 +348,7 @@ function Demo-EdgeComputing {
     Write-Host ""
 }
 
-function Demo-ContainerOrchestration {
+function Show-ContainerOrchestration {
     Write-Host "=== CONTAINER ORCHESTRATION DEMONSTRATION ===" -ForegroundColor Cyan
     Write-Host ""
     
@@ -447,7 +447,7 @@ function Demo-ContainerOrchestration {
     Write-Host ""
 }
 
-function Demo-FullStack {
+function Show-FullStack {
     Write-Host "=== FULL STACK CLOUD-NATIVE DEMONSTRATION ===" -ForegroundColor Cyan
     Write-Host ""
     
@@ -474,35 +474,35 @@ function Demo-FullStack {
     
     Write-Host ""
     Write-Host "Phase 1: Core Infrastructure" -ForegroundColor Cyan
-    Demo-MultiCloudDeployment
+    Show-MultiCloudDeployment
     
     if ($Interactive) {
         Read-Host "Press Enter to continue to Phase 2..."
     }
     
     Write-Host "Phase 2: Serverless Components" -ForegroundColor Cyan
-    Demo-ServerlessDeployment
+    Show-ServerlessDeployment
     
     if ($Interactive) {
         Read-Host "Press Enter to continue to Phase 3..."
     }
     
     Write-Host "Phase 3: HPC Cluster" -ForegroundColor Cyan
-    Demo-HPCCluster
+    Show-HPCCluster
     
     if ($Interactive) {
         Read-Host "Press Enter to continue to Phase 4..."
     }
     
     Write-Host "Phase 4: Edge Computing" -ForegroundColor Cyan
-    Demo-EdgeComputing
+    Show-EdgeComputing
     
     if ($Interactive) {
         Read-Host "Press Enter to continue to Phase 5..."
     }
     
     Write-Host "Phase 5: Container Orchestration" -ForegroundColor Cyan
-    Demo-ContainerOrchestration
+    Show-ContainerOrchestration
     
     # Final Integration
     Write-Host ""
@@ -573,22 +573,22 @@ try {
     
     switch ($DemoScenario) {
         'MultiCloud' {
-            Demo-MultiCloudDeployment
+            Show-MultiCloudDeployment
         }
         'ServerlessDeployment' {
-            Demo-ServerlessDeployment
+            Show-ServerlessDeployment
         }
         'HPCCluster' {
-            Demo-HPCCluster
+            Show-HPCCluster
         }
         'EdgeComputing' {
-            Demo-EdgeComputing
+            Show-EdgeComputing
         }
         'ContainerOrchestration' {
-            Demo-ContainerOrchestration
+            Show-ContainerOrchestration
         }
         'FullStack' {
-            Demo-FullStack
+            Show-FullStack
         }
     }
     

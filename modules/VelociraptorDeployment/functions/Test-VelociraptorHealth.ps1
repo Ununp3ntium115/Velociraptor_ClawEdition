@@ -120,7 +120,7 @@ function Test-VelociraptorHealth {
                 return $healthResults | ConvertTo-Xml -NoTypeInformation
             }
             default { 
-                return Format-VelociraptorHealthReport -HealthResults $healthResults
+                return ConvertTo-VelociraptorHealthReport -HealthResults $healthResults
             }
         }
     }
@@ -380,7 +380,7 @@ function Get-VelociraptorPerformanceMetrics {
     return $metrics
 }
 
-function Format-VelociraptorHealthReport {
+function ConvertTo-VelociraptorHealthReport {
     param($HealthResults)
     
     $report = @"

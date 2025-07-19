@@ -145,7 +145,7 @@ function Deploy-VelociraptorServerless {
     }
 }
 
-function Initialize-ServerlessDeployment {
+function New-ServerlessDeployment {
     param(
         [string]$CloudProvider,
         [string]$Region
@@ -363,7 +363,7 @@ function Deploy-GCPServerless {
     Write-Host "GCP Serverless deployment completed" -ForegroundColor Green
 }
 
-function Create-AWSDynamoDBTables {
+function New-AWSDynamoDBTables {
     param([hashtable]$Context)
 
     Write-Host "Creating DynamoDB tables..." -ForegroundColor Yellow

@@ -52,15 +52,15 @@ function Start-Phase4Demo {
     
     switch ($DemoMode) {
         'All' {
-            Demo-IntelligentConfiguration
-            Demo-PredictiveAnalytics
-            Demo-AutomatedTroubleshooting
-            Demo-RealWorldScenarios
+            Show-IntelligentConfiguration
+            Show-PredictiveAnalytics
+            Show-AutomatedTroubleshooting
+            Show-RealWorldScenarios
         }
-        'IntelligentConfig' { Demo-IntelligentConfiguration }
-        'PredictiveAnalytics' { Demo-PredictiveAnalytics }
-        'AutoTroubleshooting' { Demo-AutomatedTroubleshooting }
-        'RealWorld' { Demo-RealWorldScenarios }
+        'IntelligentConfig' { Show-IntelligentConfiguration }
+        'PredictiveAnalytics' { Show-PredictiveAnalytics }
+        'AutoTroubleshooting' { Show-AutomatedTroubleshooting }
+        'RealWorld' { Show-RealWorldScenarios }
     }
     
     Write-Host ""
@@ -68,7 +68,7 @@ function Start-Phase4Demo {
     Write-Host "Thank you for exploring the future of DFIR automation!" -ForegroundColor Cyan
 }
 
-function Demo-IntelligentConfiguration {
+function Show-IntelligentConfiguration {
     Write-Host "🧠 INTELLIGENT CONFIGURATION GENERATION" -ForegroundColor Cyan
     Write-Host "=========================================" -ForegroundColor Cyan
     Write-Host ""
@@ -114,6 +114,9 @@ function Demo-IntelligentConfiguration {
         Write-Host "📋 Compliance Frameworks:" -ForegroundColor Cyan
         Write-Host "   • SOX: 30-day minimum log retention" -ForegroundColor White
         Write-Host "   • HIPAA: 90-day log retention, SAML authentication" -ForegroundColor White
+        
+        # Use the config2 variable to avoid unused variable warning
+        Write-Host "📊 Configuration Score: $($config2.ValidationResults.Score)/$($config2.ValidationResults.MaxScore)" -ForegroundColor Green
     }
     catch {
         Write-Host "❌ Demo error: $($_.Exception.Message)" -ForegroundColor Red
@@ -128,7 +131,7 @@ function Demo-IntelligentConfiguration {
     }
 }
 
-function Demo-PredictiveAnalytics {
+function Show-PredictiveAnalytics {
     Write-Host ""
     Write-Host "📊 PREDICTIVE ANALYTICS & FORECASTING" -ForegroundColor Cyan
     Write-Host "======================================" -ForegroundColor Cyan
@@ -241,7 +244,7 @@ function Demo-PredictiveAnalytics {
     }
 }
 
-function Demo-AutomatedTroubleshooting {
+function Show-AutomatedTroubleshooting {
     Write-Host ""
     Write-Host "🔧 AUTOMATED TROUBLESHOOTING & SELF-HEALING" -ForegroundColor Cyan
     Write-Host "===========================================" -ForegroundColor Cyan
@@ -365,7 +368,7 @@ function Demo-AutomatedTroubleshooting {
     }
 }
 
-function Demo-RealWorldScenarios {
+function Show-RealWorldScenarios {
     Write-Host ""
     Write-Host "🎯 REAL-WORLD ENTERPRISE SCENARIOS" -ForegroundColor Cyan
     Write-Host "==================================" -ForegroundColor Cyan

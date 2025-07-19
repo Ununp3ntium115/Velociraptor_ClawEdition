@@ -91,9 +91,13 @@ Write-Log "Starting Velociraptor cleanup…"
 Confirm-Action -Force:$Force
 
 # ───────────── 1. Stop & Remove Services ─────────────
-$serviceNames = Get-Service -ErrorAction SilentlyContinue |
-    Where-Object { $_.Name -match '^Velociraptor' -or $_.Name -eq 'vrserver' } |
-    Select-Object -ExpandProperty Name -Unique
+$services = Get-Service -ErrorAction SilentlyContinue
+$serviceNames = @()
+if ($services) {
+    $serviceNames = $services | 
+        Where-Object { $_ -and $_.Name -and ($_.Name -match '^Velociraptor' -or $_.Name -eq 'vrserver') } |
+        Select-Object -ExpandProperty Name -Unique
+}
 
 foreach ($svc in $serviceNames) {
     try {
@@ -110,17 +114,29 @@ foreach ($svc in $serviceNames) {
 }
 
 # ───────────── 2. Kill Residual Processes ─────────────
-$procs = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Name -match 'velociraptor' }
+$processes = Get-Process -ErrorAction SilentlyContinue
+$procs = @()
+if ($processes) {
+    $procs = $processes | Where-Object { $_ -and $_.Name -and $_.Name -match 'velociraptor' }
+}
 foreach ($p in $procs) {
-    Write-Log "Killing process $($p.Name) (PID=$($p.Id))"
-    Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
+    if ($p -and $p.Name -and $p.Id) {
+        Write-Log "Killing process $($p.Name) (PID=$($p.Id))"
+        Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
+    }
 }
 
 # ───────────── 3. Remove Scheduled Tasks ─────────────
-$tasks = Get-ScheduledTask -ErrorAction SilentlyContinue | Where-Object { $_.TaskName -match 'Velociraptor' -or $_.TaskName -eq 'Velociraptor_Audit_Runner' }
+$allTasks = Get-ScheduledTask -ErrorAction SilentlyContinue
+$tasks = @()
+if ($allTasks) {
+    $tasks = $allTasks | Where-Object { $_ -and $_.TaskName -and ($_.TaskName -match 'Velociraptor' -or $_.TaskName -eq 'Velociraptor_Audit_Runner') }
+}
 foreach ($t in $tasks) {
-    Write-Log "Removing scheduled task: $($t.TaskName)"
-    Unregister-ScheduledTask -TaskName $t.TaskName -Confirm:$false
+    if ($t -and $t.TaskName) {
+        Write-Log "Removing scheduled task: $($t.TaskName)"
+        Unregister-ScheduledTask -TaskName $t.TaskName -Confirm:$false
+    }
 }
 
 # ───────────── 4. Remove Firewall Rules ─────────────
