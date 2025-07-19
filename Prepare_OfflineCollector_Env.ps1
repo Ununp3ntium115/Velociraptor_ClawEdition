@@ -101,23 +101,49 @@ foreach ($key in $assetMap.Keys) {
 }
 
 # --- 4) Download & extract artifact_pack.zip --------------
-$artifactZip = $null
-if ($rel.assets) {
-    $artifactZip = $rel.assets |
-        Where-Object { $_ -and $_.name -and $_.name -match '^artifact_pack.*\.zip$' } |
-        Select-Object -First 1
-}
-if ($artifactZip -and $artifactZip.browser_download_url) {
-    $zipPath = Join-Path $Root 'artifact_pack.zip'
-    Log "Downloading $($artifactZip.name)..."
-    Invoke-WebRequest -Uri $artifactZip.browser_download_url `
-                -OutFile "$zipPath.download" -UseBasicParsing `
-                -Headers @{ 'User-Agent'='OfflinePrepScript' }
-    Move-Item "$zipPath.download" $zipPath -Force
+$zipPath = Join-Path $Root 'artifact_pack.zip'
+
+# Check for local artifact pack first
+$localArtifactPack = Join-Path $PSScriptRoot 'artifact_pack.zip'
+if (Test-Path $localArtifactPack) {
+    Log "Using local artifact_pack.zip from script directory"
+    Copy-Item $localArtifactPack $zipPath -Force
     Log "Extracting YAMLs -> $ArtDir"
     Expand-Archive -Path $zipPath -DestinationPath $ArtDir -Force
 } else {
-    Log 'WARNING: artifact_pack.zip not found in assets.'
+    # Fall back to downloading from GitHub release assets
+    $artifactZip = $null
+    if ($rel.assets) {
+        $artifactZip = $rel.assets |
+            Where-Object { $_ -and $_.name -and $_.name -match '^artifact_pack.*\.zip$' } |
+            Select-Object -First 1
+    }
+    if ($artifactZip -and $artifactZip.browser_download_url) {
+        Log "Downloading $($artifactZip.name)..."
+        Invoke-WebRequest -Uri $artifactZip.browser_download_url `
+                    -OutFile "$zipPath.download" -UseBasicParsing `
+                    -Headers @{ 'User-Agent'='OfflinePrepScript' }
+        Move-Item "$zipPath.download" $zipPath -Force
+        Log "Extracting YAMLs -> $ArtDir"
+        Expand-Archive -Path $zipPath -DestinationPath $ArtDir -Force
+    } else {
+        Log 'WARNING: artifact_pack.zip not found in assets or local directory.'
+        Log 'INFO: Will use enhanced artifact scanning from content/exchange/artifacts if available.'
+        
+        # Enhanced fallback: Use our improved artifact discovery
+        $exchangeArtifacts = Join-Path $PSScriptRoot 'content\exchange\artifacts'
+        if (Test-Path $exchangeArtifacts) {
+            Log "Using enhanced artifact discovery from $exchangeArtifacts"
+            # Copy artifacts from our enhanced collection
+            if (-not (Test-Path $ArtDir)) {
+                New-Item -ItemType Directory -Path $ArtDir -Force | Out-Null
+            }
+            Get-ChildItem $exchangeArtifacts -Filter '*.yaml' | ForEach-Object {
+                Copy-Item $_.FullName $ArtDir -Force
+            }
+            Log "Copied $((Get-ChildItem $ArtDir -Filter '*.yaml').Count) artifact files"
+        }
+    }
 }
 
 # --- 5) Scan & download external tools --------------------
