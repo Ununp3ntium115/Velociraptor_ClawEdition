@@ -60,16 +60,25 @@ function Write-VelociraptorLog {
         [string]$Component
     )
     
-    # Determine log file path
+    # Determine log file path with cross-platform support
     if (-not $LogPath) {
-        $logDir = Join-Path $env:ProgramData 'VelociraptorDeploy'
+        # Cross-platform log directory selection
+        if ($IsWindows -or $env:OS -eq "Windows_NT") {
+            $logDir = Join-Path $env:ProgramData 'VelociraptorDeploy'
+        } elseif ($IsMacOS -or $env:HOME) {
+            $logDir = Join-Path $env:HOME '.velociraptor'
+        } else {
+            $logDir = Join-Path '/tmp' 'velociraptor'
+        }
+        
         if (-not (Test-Path $logDir)) {
             try {
                 New-Item -ItemType Directory -Path $logDir -Force | Out-Null
             }
             catch {
                 Write-Warning "Could not create log directory: $logDir"
-                $logDir = $env:TEMP
+                # Fallback to temp directory
+                $logDir = if ($env:TEMP) { $env:TEMP } elseif ($env:TMPDIR) { $env:TMPDIR } else { '/tmp' }
             }
         }
         $LogPath = Join-Path $logDir 'velociraptor_deployment.log'

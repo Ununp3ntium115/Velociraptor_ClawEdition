@@ -1,4 +1,4 @@
-function Manage-VelociraptorCollections {
+function Invoke-VelociraptorCollections {
     <#
     .SYNOPSIS
         Manages Velociraptor collections, dependencies, and offline collector packages.
@@ -33,10 +33,10 @@ function Manage-VelociraptorCollections {
         Only validate collections without downloading or building.
     
     .EXAMPLE
-        Manage-VelociraptorCollections -Action List -CollectionPath ".\collections"
+        Invoke-VelociraptorCollections -Action List -CollectionPath ".\collections"
     
     .EXAMPLE
-        Manage-VelociraptorCollections -Action Build -CollectionPath ".\collections" -OutputPath ".\offline-collector" -OfflineMode
+        Invoke-VelociraptorCollections -Action Build -CollectionPath ".\collections" -OutputPath ".\offline-collector" -OfflineMode
     #>
     [CmdletBinding()]
     param(

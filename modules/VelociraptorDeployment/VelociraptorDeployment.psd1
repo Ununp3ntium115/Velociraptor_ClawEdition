@@ -67,7 +67,7 @@
         'Get-VelociraptorLatestRelease',
         'Invoke-VelociraptorDownload',
         'Invoke-VelociraptorAPI',
-        'Manage-VelociraptorCollections',
+        'Invoke-VelociraptorCollections',
         'New-IntelligentConfiguration',
         'Start-PredictiveAnalytics',
         'Start-AutomatedTroubleshooting',
@@ -103,7 +103,8 @@
         'Download-EXE',
         'Ask',
         'AskSecret',
-        'Wait-Port'
+        'Wait-Port',
+        'Manage-VelociraptorCollections'
     )
 
     # DSC resources to export from this module

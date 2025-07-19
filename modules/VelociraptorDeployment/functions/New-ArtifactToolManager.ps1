@@ -652,52 +652,339 @@ function Clear-ToolCache {
     Write-VelociraptorLog "Tool cache cleared" -Level Info
 }
 
-# Helper function to convert YAML (simplified)
+# Enhanced YAML parser with robust error handling
 function ConvertFrom-Yaml {
     param($Content)
     
-    # This is a simplified YAML parser for basic artifact parsing
-    # In production, you'd want to use a proper YAML library like powershell-yaml
+    # Enhanced YAML parser for artifact parsing with graceful error handling
+    # Handles missing properties and malformed YAML gracefully
     
-    $result = @{}
-    $lines = $Content -split "`n"
-    $currentSection = $null
-    $tools = @()
-    $currentTool = @{}
+    $result = @{
+        name = ""
+        description = ""
+        author = ""
+        type = ""
+        tools = @()
+    }
     
-    foreach ($line in $lines) {
-        $line = $line.Trim()
-        if ($line -match "^(\w+):\s*(.*)$") {
-            $key = $matches[1]
-            $value = $matches[2]
-            
-            if ($key -eq "tools") {
-                $currentSection = "tools"
+    if ([string]::IsNullOrWhiteSpace($Content)) {
+        return $result
+    }
+    
+    try {
+        $lines = $Content -split "`r?`n"
+        $currentSection = $null
+        $tools = @()
+        $currentTool = @{}
+        $indentLevel = 0
+        
+        foreach ($line in $lines) {
+            # Skip empty lines and comments
+            if ([string]::IsNullOrWhiteSpace($line) -or $line.TrimStart().StartsWith('#')) {
+                continue
             }
-            elseif ($currentSection -ne "tools") {
+            
+            $trimmedLine = $line.Trim()
+            $leadingSpaces = $line.Length - $line.TrimStart().Length
+            
+            # Handle top-level properties
+            if ($line -match "^(\w+):\s*(.*)$") {
+                $key = $matches[1].ToLower()
+                $value = $matches[2].Trim()
+                
+                # Remove quotes if present
+                if ($value.StartsWith('"') -and $value.EndsWith('"')) {
+                    $value = $value.Substring(1, $value.Length - 2)
+                }
+                if ($value.StartsWith("'") -and $value.EndsWith("'")) {
+                    $value = $value.Substring(1, $value.Length - 2)
+                }
+                
+                switch ($key) {
+                    "name" { $result.name = $value }
+                    "description" { $result.description = $value }
+                    "author" { $result.author = $value }
+                    "type" { $result.type = $value }
+                    "tools" { 
+                        $currentSection = "tools"
+                        $indentLevel = $leadingSpaces
+                    }
+                    default {
+                        # Store other properties
+                        $result[$key] = $value
+                    }
+                }
+            }
+            # Handle tools section
+            elseif ($currentSection -eq "tools") {
+                # New tool entry
+                if ($line -match "^\s*-\s*name:\s*(.+)$") {
+                    # Save previous tool if exists
+                    if ($currentTool.Count -gt 0) {
+                        $tools += [PSCustomObject]$currentTool
+                    }
+                    
+                    $toolName = $matches[1].Trim()
+                    # Remove quotes if present
+                    if ($toolName.StartsWith('"') -and $toolName.EndsWith('"')) {
+                        $toolName = $toolName.Substring(1, $toolName.Length - 2)
+                    }
+                    if ($toolName.StartsWith("'") -and $toolName.EndsWith("'")) {
+                        $toolName = $toolName.Substring(1, $toolName.Length - 2)
+                    }
+                    
+                    $currentTool = @{ 
+                        name = $toolName
+                        url = ""
+                        version = ""
+                        expected_hash = ""
+                        serve_locally = $false
+                        IsExecutable = $true
+                    }
+                }
+                # Tool properties
+                elseif ($line -match "^\s+(\w+):\s*(.*)$" -and $currentTool.Count -gt 0) {
+                    $propName = $matches[1].ToLower()
+                    $propValue = $matches[2].Trim()
+                    
+                    # Remove quotes if present
+                    if ($propValue.StartsWith('"') -and $propValue.EndsWith('"')) {
+                        $propValue = $propValue.Substring(1, $propValue.Length - 2)
+                    }
+                    if ($propValue.StartsWith("'") -and $propValue.EndsWith("'")) {
+                        $propValue = $propValue.Substring(1, $propValue.Length - 2)
+                    }
+                    
+                    # Handle boolean values
+                    if ($propValue -match "^(true|false)$") {
+                        $propValue = [bool]::Parse($propValue)
+                    }
+                    
+                    $currentTool[$propName] = $propValue
+                }
+                # Check if we're leaving the tools section
+                elseif ($leadingSpaces -le $indentLevel -and $line -match "^(\w+):") {
+                    # Save last tool and exit tools section
+                    if ($currentTool.Count -gt 0) {
+                        $tools += [PSCustomObject]$currentTool
+                        $currentTool = @{}
+                    }
+                    $currentSection = $null
+                    
+                    # Process this line as a top-level property
+                    $key = $matches[1].ToLower()
+                    $value = $matches[2].Trim() -replace "^\s*", ""
+                    $result[$key] = $value
+                }
+            }
+            # Handle other sections or properties
+            elseif ($line -match "^(\w+):\s*(.*)$") {
+                $key = $matches[1].ToLower()
+                $value = $matches[2].Trim()
+                
+                # Remove quotes if present
+                if ($value.StartsWith('"') -and $value.EndsWith('"')) {
+                    $value = $value.Substring(1, $value.Length - 2)
+                }
+                if ($value.StartsWith("'") -and $value.EndsWith("'")) {
+                    $value = $value.Substring(1, $value.Length - 2)
+                }
+                
                 $result[$key] = $value
             }
         }
-        elseif ($line -match "^\s*-\s*name:\s*(.+)$" -and $currentSection -eq "tools") {
-            if ($currentTool.Count -gt 0) {
-                $tools += $currentTool
+        
+        # Save last tool if exists
+        if ($currentTool.Count -gt 0) {
+            $tools += [PSCustomObject]$currentTool
+        }
+        
+        # Only add tools if we found any
+        if ($tools.Count -gt 0) {
+            $result.tools = $tools
+        }
+        
+        return $result
+    }
+    catch {
+        Write-VelociraptorLog "YAML parsing error: $($_.Exception.Message)" -Level Warning
+        # Return basic structure even on parse failure
+        return @{
+            name = "Unknown"
+            description = "Parse error"
+            author = "Unknown"
+            type = "Unknown"
+            tools = @()
+            parse_error = $_.Exception.Message
+        }
+    }
+}
+
+# Export tool mapping results to various formats
+function Export-ToolMapping {
+    param(
+        [Parameter(Mandatory = $true)]
+        $Results,
+        
+        [Parameter(Mandatory = $true)]
+        [string]$OutputPath
+    )
+    
+    Write-VelociraptorLog "Exporting tool mapping results..." -Level Info
+    
+    try {
+        Write-VelociraptorLog "Export-ToolMapping: Starting export process" -Level Debug
+        
+        # Ensure output directory exists
+        $outputDir = Split-Path $OutputPath -Parent
+        if ($outputDir -and -not (Test-Path $outputDir)) {
+            New-Item -Path $outputDir -ItemType Directory -Force | Out-Null
+        }
+        
+        # Ensure we have valid collections with debug info
+        Write-VelociraptorLog "Export-ToolMapping: Validating input data" -Level Debug
+        $artifactList = if ($Results.Artifacts) { @($Results.Artifacts) } else { @() }
+        $toolDatabase = if ($Results.ToolDatabase) { $Results.ToolDatabase } else { @{} }
+        Write-VelociraptorLog "Export-ToolMapping: Found $($artifactList.Count) artifacts and $($toolDatabase.Count) tools" -Level Debug
+        
+        # Create comprehensive mapping report
+        $mappingReport = @{
+            GeneratedAt = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+            ScanTime = $Results.ScanTime
+            Summary = @{
+                TotalArtifacts = $artifactList.Count
+                TotalTools = $toolDatabase.Count
+                ArtifactsWithTools = ($artifactList | Where-Object { $_.Tools -and $_.Tools.Count -gt 0 }).Count
+                ArtifactsWithoutTools = ($artifactList | Where-Object { -not $_.Tools -or $_.Tools.Count -eq 0 }).Count
             }
-            $currentTool = @{ name = $matches[1] }
+            Artifacts = @()
+            Tools = @()
+            ToolsByArtifact = @{}
+            ArtifactsByTool = @{}
         }
-        elseif ($line -match "^\s+(\w+):\s*(.+)$" -and $currentSection -eq "tools") {
-            $currentTool[$matches[1]] = $matches[2]
+        
+        # Process artifacts
+        foreach ($artifact in $artifactList) {
+            $toolList = if ($artifact.Tools) { @($artifact.Tools) } else { @() }
+            $artifactInfo = @{
+                Name = $artifact.Name
+                Path = $artifact.Path
+                Type = $artifact.Type
+                Author = $artifact.Author
+                Description = $artifact.Description
+                ToolCount = $toolList.Count
+                Tools = $toolList | ForEach-Object { $_.Name }
+            }
+            $mappingReport.Artifacts += $artifactInfo
+            $mappingReport.ToolsByArtifact[$artifact.Name] = $toolList | ForEach-Object { $_.Name }
+        }
+        
+        # Process tools
+        foreach ($toolName in $toolDatabase.Keys) {
+            $tool = $toolDatabase[$toolName]
+            $usedByList = if ($tool.UsedByArtifacts) { @($tool.UsedByArtifacts) } else { @() }
+            $toolInfo = @{
+                Name = $tool.Name
+                Url = $tool.Url
+                Version = $tool.Version
+                ExpectedHash = $tool.ExpectedHash
+                UsedByArtifacts = $usedByList
+                ArtifactCount = $usedByList.Count
+                DownloadStatus = $tool.DownloadStatus
+                LocalPath = $tool.LocalPath
+            }
+            $mappingReport.Tools += $toolInfo
+            $mappingReport.ArtifactsByTool[$toolName] = $usedByList
+        }
+        
+        # Export to JSON
+        $jsonPath = if ($OutputPath -like "*.json") { $OutputPath } else { "$OutputPath.json" }
+        $mappingReport | ConvertTo-Json -Depth 10 | Set-Content $jsonPath -Encoding UTF8
+        Write-VelociraptorLog "Tool mapping exported to JSON: $jsonPath" -Level Info
+        
+        # Export to CSV for easy analysis
+        $csvPath = $jsonPath -replace "\.json$", ".csv"
+        $csvData = @()
+        foreach ($artifact in $artifactList) {
+            $toolList = if ($artifact.Tools) { @($artifact.Tools) } else { @() }
+            if ($toolList.Count -eq 0) {
+                $csvData += [PSCustomObject]@{
+                    ArtifactName = $artifact.Name
+                    ArtifactType = $artifact.Type
+                    ArtifactAuthor = $artifact.Author
+                    ToolName = "None"
+                    ToolUrl = ""
+                    ToolVersion = ""
+                    ToolStatus = "No tools required"
+                }
+            } else {
+                foreach ($tool in $toolList) {
+                    $toolStatus = if ($toolDatabase.ContainsKey($tool.Name)) { 
+                        $toolDatabase[$tool.Name].DownloadStatus 
+                    } else { 
+                        "Unknown" 
+                    }
+                    $csvData += [PSCustomObject]@{
+                        ArtifactName = $artifact.Name
+                        ArtifactType = $artifact.Type
+                        ArtifactAuthor = $artifact.Author
+                        ToolName = $tool.Name
+                        ToolUrl = $tool.Url
+                        ToolVersion = $tool.Version
+                        ToolStatus = $toolStatus
+                    }
+                }
+            }
+        }
+        $csvData | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8
+        Write-VelociraptorLog "Tool mapping exported to CSV: $csvPath" -Level Info
+        
+        # Export summary report
+        $summaryPath = $jsonPath -replace "\.json$", "_summary.txt"
+        $summaryContent = @"
+Velociraptor Artifact Tool Mapping Report
+Generated: $($mappingReport.GeneratedAt)
+Scan Time: $($Results.ScanTime)
+
+SUMMARY:
+========
+Total Artifacts Scanned: $($mappingReport.Summary.TotalArtifacts)
+Artifacts with Tools: $($mappingReport.Summary.ArtifactsWithTools)
+Artifacts without Tools: $($mappingReport.Summary.ArtifactsWithoutTools)
+Total Unique Tools: $($mappingReport.Summary.TotalTools)
+
+TOP TOOLS BY USAGE:
+==================
+$((($mappingReport.Tools | Sort-Object ArtifactCount -Descending | Select-Object -First 10) | ForEach-Object { "- $($_.Name): Used by $($_.ArtifactCount) artifacts" }) -join "`n")
+
+ARTIFACTS WITHOUT TOOLS:
+=======================
+$(($artifactList | Where-Object { -not $_.Tools -or $_.Tools.Count -eq 0 } | ForEach-Object { "- $($_.Name)" }) -join "`n")
+
+FILES GENERATED:
+===============
+- JSON Report: $jsonPath
+- CSV Export: $csvPath
+- Summary Report: $summaryPath
+"@
+        
+        Set-Content -Path $summaryPath -Value $summaryContent -Encoding UTF8
+        Write-VelociraptorLog "Summary report exported: $summaryPath" -Level Info
+        
+        return @{
+            Success = $true
+            JsonPath = $jsonPath
+            CsvPath = $csvPath
+            SummaryPath = $summaryPath
+            ArtifactCount = $mappingReport.Summary.TotalArtifacts
+            ToolCount = $mappingReport.Summary.TotalTools
         }
     }
-    
-    if ($currentTool.Count -gt 0) {
-        $tools += $currentTool
+    catch {
+        $errorMsg = "Failed to export tool mapping: $($_.Exception.Message)"
+        Write-VelociraptorLog $errorMsg -Level Error
+        throw $errorMsg
     }
-    
-    if ($tools.Count -gt 0) {
-        $result.tools = $tools
-    }
-    
-    return $result
 }
 
 # Export the main function

@@ -49,6 +49,7 @@ $aliases = @{
     'Ask' = 'Read-VelociraptorUserInput'
     'AskSecret' = 'Read-VelociraptorSecureInput'
     'Wait-Port' = 'Wait-VelociraptorTcpPort'
+    'Manage-VelociraptorCollections' = 'Invoke-VelociraptorCollections'
 }
 
 foreach ($alias in $aliases.GetEnumerator()) {
