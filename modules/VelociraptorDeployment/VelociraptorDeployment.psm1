@@ -26,13 +26,14 @@ $script:VerboseLogging = $false
 # Import all function files
 $functionPath = Join-Path $script:ModuleRoot 'functions'
 if (Test-Path $functionPath) {
-    Get-ChildItem -Path $functionPath -Filter '*.ps1' -Recurse | ForEach-Object {
+    $functionFiles = Get-ChildItem -Path $functionPath -Filter '*.ps1' -Recurse
+    foreach ($file in $functionFiles) {
         try {
-            . $_.FullName
-            Write-Verbose "Imported function file: $($_.Name)"
+            . $file.FullName
+            Write-Verbose "Imported function file: $($file.Name)"
         }
         catch {
-            Write-Error "Failed to import function file $($_.Name): $($_.Exception.Message)"
+            Write-Error "Failed to import function file $($file.Name): $($_.Exception.Message)"
         }
     }
 }

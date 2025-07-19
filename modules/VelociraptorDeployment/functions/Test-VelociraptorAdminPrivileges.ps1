@@ -219,12 +219,12 @@ function Test-SpecificPrivilege {
             }
         }
         
-        Write-VelociraptorLog -Message "Specific privilege test for $PrivilegeName: $($test.HasPrivilege)" -Level Info
+        Write-VelociraptorLog -Message "Specific privilege test for ${PrivilegeName}: $($test.HasPrivilege)" -Level Info
     }
     catch {
         $test.Error = $_.Exception.Message
-        $test.Details = "Error testing privilege $PrivilegeName: $($_.Exception.Message)"
-        Write-VelociraptorLog -Message "Specific privilege test failed for $PrivilegeName: $($_.Exception.Message)" -Level Warning
+        $test.Details = "Error testing privilege ${PrivilegeName}: $($_.Exception.Message)"
+        Write-VelociraptorLog -Message "Specific privilege test failed for ${PrivilegeName}: $($_.Exception.Message)" -Level Warning
     }
     
     return $test

@@ -295,13 +295,13 @@ function Import-ToolMappings {
         }
         
         # macOS tools
-        'ps' = @{
+        'ps_macos' = @{
             Platform = 'macOS'
             Source = 'System'
             Path = '/bin/ps'
             Description = 'Process Status'
         }
-        'lsof' = @{
+        'lsof_macos' = @{
             Platform = 'macOS'
             Source = 'System'
             Path = '/usr/sbin/lsof'

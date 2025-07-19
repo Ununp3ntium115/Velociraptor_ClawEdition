@@ -194,7 +194,7 @@ function Test-SecuritySettings {
     }
     
     # Check for default credentials
-    if ($configContent -match '(password|secret):\s*["\']?(admin|password|changeme|secret)["\']?') {
+    if ($configContent -match '(password|secret):\s*["`'']?(admin|password|changeme|secret)["`'']?') {
         $result.SecurityIssues += "Default or weak credentials detected"
     }
     
@@ -219,7 +219,7 @@ function Test-StandardSettings {
     }
     
     # Check for datastore path
-    if ($configContent -match 'location:\s*["\']?(.+?)["\']?\s*$') {
+    if ($configContent -match 'location:\s*["`'']?(.+?)["`'']?\s*$') {
         $datastorePath = $Matches[1].Trim()
         $result.ConfigInfo.DatastorePath = $datastorePath
         
