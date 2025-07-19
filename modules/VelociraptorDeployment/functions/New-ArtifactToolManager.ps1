@@ -841,11 +841,15 @@ function Export-ToolMapping {
             New-Item -Path $outputDir -ItemType Directory -Force | Out-Null
         }
         
-        # Ensure we have valid collections with debug info
-        Write-VelociraptorLog "Export-ToolMapping: Validating input data" -Level Debug
+        # Ensure we have valid collections - simplified approach
         $artifactList = if ($Results.Artifacts) { @($Results.Artifacts) } else { @() }
         $toolDatabase = if ($Results.ToolDatabase) { $Results.ToolDatabase } else { @{} }
-        Write-VelociraptorLog "Export-ToolMapping: Found $($artifactList.Count) artifacts and $($toolDatabase.Count) tools" -Level Debug
+        
+        # Safe counting
+        $artifactCount = if ($artifactList) { $artifactList.Count } else { 0 }
+        $toolCount = if ($toolDatabase -and $toolDatabase.Keys) { $toolDatabase.Keys.Count } else { 0 }
+        
+        Write-VelociraptorLog "Export-ToolMapping: Processing $artifactCount artifacts and $toolCount tools" -Level Info
         
         # Create comprehensive mapping report
         $mappingReport = @{
@@ -854,8 +858,12 @@ function Export-ToolMapping {
             Summary = @{
                 TotalArtifacts = $artifactList.Count
                 TotalTools = $toolDatabase.Count
-                ArtifactsWithTools = ($artifactList | Where-Object { $_.Tools -and $_.Tools.Count -gt 0 }).Count
-                ArtifactsWithoutTools = ($artifactList | Where-Object { -not $_.Tools -or $_.Tools.Count -eq 0 }).Count
+                ArtifactsWithTools = ($artifactList | Where-Object { 
+                    $_.Tools -and (@($_.Tools)).Count -gt 0 
+                }).Count
+                ArtifactsWithoutTools = ($artifactList | Where-Object { 
+                    -not $_.Tools -or (@($_.Tools)).Count -eq 0 
+                }).Count
             }
             Artifacts = @()
             Tools = @()

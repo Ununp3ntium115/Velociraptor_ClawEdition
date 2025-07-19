@@ -1,0 +1,1960 @@
+{
+  "TCGLogToolsExecution": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "TCGLogToolsExecution",
+    "Version": "",
+    "UsedByArtifacts": [
+      "BootApplication"
+    ],
+    "Url": "https://gist.githubusercontent.com/mgreen27/d7bd2480069f714f31296d5f38fe7f0c/raw/708002dd858a38e8e8885e926c3016f80057a7d4/Run-TCGLogTools.ps1"
+  },
+  "TargetDir": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "TargetDir",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Generic.Forensics.CyLR"
+    ],
+    "Url": ""
+  },
+  "WonkaVision": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "WonkaVision",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Detection.WonkaVision"
+    ],
+    "Url": "https://github.com/weslambert/WonkaVision/releases/download/testing/WonkaVision.exe"
+  },
+  "Results": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Results",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "Chainsaw": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "9f809ea14b71e7c53fde8ebef7f3a82881f4dcacec97566b29cc914324667eda",
+    "Name": "Chainsaw",
+    "Version": "2.9.0",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Chainsaw"
+    ],
+    "Url": "https://github.com/WithSecureLabs/chainsaw/releases/download/v2.9.0/chainsaw_all_platforms+rules+examples.zip"
+  },
+  "localPath": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "localPath",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Applications.LECmd",
+      "Windows.Forensics.Jumplists_JLECmd"
+    ],
+    "Url": ""
+  },
+  "Browser Extensions": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Browser Extensions",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "DeviceControl": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "DeviceControl",
+    "Version": "",
+    "UsedByArtifacts": [
+      "ESETLogs"
+    ],
+    "Url": ""
+  },
+  "Spotlight Importers": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Spotlight Importers",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "ESETLogCollector": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "c5c9b4ec7feca3f3ac43c71454e7e51f13f19ce52a0583d34b32f7df4bbea5db",
+    "Name": "ESETLogCollector",
+    "Version": "",
+    "UsedByArtifacts": [
+      "ESETLogs"
+    ],
+    "Url": "https://download.eset.com/com/eset/tools/diagnosis/log_collector/latest/esetlogcollector.exe"
+  },
+  "OutfilePrefix": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "OutfilePrefix",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.Collection.CatScale"
+    ],
+    "Url": ""
+  },
+  "Hayabusa-2.14.0": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "de8abff4f6ed35f28e1e2897659e4f7adcca13ef84d2764afa786ca3f60224ec",
+    "Name": "Hayabusa-2.14.0",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Exchange.Windows.EventLogs.Hayabusa.Takajo"
+    ],
+    "Url": "https://github.com/Yamato-Security/hayabusa/releases/download/v2.14.0/hayabusa-2.14.0-win-x64.zip"
+  },
+  "Audit_PolicyChanges": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Audit_PolicyChanges",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "TimelineEnd": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "TimelineEnd",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "WinRM": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "WinRM",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar",
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "Antivirus_WindowsDefender": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Antivirus_WindowsDefender",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "EvtxHussar17": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "EvtxHussar17",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": "https://github.com/yarox24/EvtxHussar/releases/download/1.7/EvtxHussar1.7_windows_amd64.zip"
+  },
+  "Trawler": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "efade9e0e6d228c118c4c28de2e45c37ae2fa4973283d5f851e6c62c7b72f53b",
+    "Name": "Trawler",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Trawler"
+    ],
+    "Url": "https://github.com/joeavanzato/Trawler/releases/download/1_0_0/trawler_release_v1_0_0.zip"
+  },
+  "TimelineStart": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "TimelineStart",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "Periodic Scripts": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Periodic Scripts",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "ExecLength": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ExecLength",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.LogAnalysis.ChopChopGo",
+      "Windows.EventLogs.Chainsaw"
+    ],
+    "Url": ""
+  },
+  "OutputProfile": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "OutputProfile",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "Mappings": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Mappings",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Zircolite"
+    ],
+    "Url": ""
+  },
+  "CommandLineOptions": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "CommandLineOptions",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Generic.Collection.UAC"
+    ],
+    "Url": ""
+  },
+  "File": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "File",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Exchange.Server.Enrichment.Gimphash",
+      "Windows.Analysis.Capa"
+    ],
+    "Url": ""
+  },
+  "Run Deployer Script": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Run Deployer Script",
+    "Version": "",
+    "UsedByArtifacts": [
+      "CyberTriageCollector"
+    ],
+    "Url": ""
+  },
+  "ThreadLimit": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ThreadLimit",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Detection.Yara.Yara64"
+    ],
+    "Url": ""
+  },
+  "sourceFile": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "sourceFile",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Applications.LECmd",
+      "Windows.Forensics.Jumplists_JLECmd"
+    ],
+    "Url": ""
+  },
+  "KnockKnock": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "1ba31195a8312b97c40955db3c554947b261a82c319d29cface4619fa50f3daa",
+    "Name": "KnockKnock",
+    "Version": "2.5.0",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": "https://github.com/objective-see/KnockKnock/releases/download/v2.5.0/KnockKnock_2.5.0.zip"
+  },
+  "TargetGlob": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "TargetGlob",
+    "Version": "",
+    "UsedByArtifacts": [
+      "DIEC"
+    ],
+    "Url": ""
+  },
+  "Background Managed Tasks": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Background Managed Tasks",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "ScheduledTasks_CreationModification": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ScheduledTasks_CreationModification",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "ScheduledTasksExecution": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ScheduledTasksExecution",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "Target": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Target",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.LogAnalysis.ChopChopGo"
+    ],
+    "Url": ""
+  },
+  "Extensions and Widgets": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Extensions and Widgets",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "OutputFormat": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "OutputFormat",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "Upload": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Upload",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Exchange.Windows.EventLogs.Hayabusa.Takajo",
+      "Windows.EventLogs.Hayabusa",
+      "Windows.Nirsoft.LastActivityView"
+    ],
+    "Url": ""
+  },
+  "Firewall": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Firewall",
+    "Version": "",
+    "UsedByArtifacts": [
+      "ESETLogs"
+    ],
+    "Url": ""
+  },
+  "UnifiedLogParser": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "UnifiedLogParser",
+    "Version": "",
+    "UsedByArtifacts": [
+      "MacOS.UnifiedLogParser"
+    ],
+    "Url": "https://github.com/mandiant/macos-UnifiedLogs/releases/download/v1.0.0/unifiedlog_parser"
+  },
+  "EvtxDirectory": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "EvtxDirectory",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Exchange.Windows.EventLogs.Hayabusa.Takajo",
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "Summary": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Summary",
+    "Version": "",
+    "UsedByArtifacts": [
+      "HollowsHunter"
+    ],
+    "Url": ""
+  },
+  "Powershell_Events": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Powershell_Events",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "Output": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Output",
+    "Version": "",
+    "UsedByArtifacts": [
+      "HollowsHunter"
+    ],
+    "Url": ""
+  },
+  "Zipname": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Zipname",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Volatility_profile"
+    ],
+    "Url": ""
+  },
+  "RunWonkaVison": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "RunWonkaVison",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Detection.WonkaVision"
+    ],
+    "Url": ""
+  },
+  "FileToScan": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "FileToScan",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Server.Enrichment.Strelka.FileScan"
+    ],
+    "Url": ""
+  },
+  "ScheduledTasksCreationModification": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ScheduledTasksCreationModification",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "BootupRestartShutdown": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "BootupRestartShutdown",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar",
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "Gimphash": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Gimphash",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Exchange.Server.Enrichment.Gimphash"
+    ],
+    "Url": "https://github.com/NextronSystems/gimphash/releases/download/0.2.0/go_gimphash_windows.exe"
+  },
+  "Authorization Plugins": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Authorization Plugins",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "ScanType": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ScanType",
+    "Version": "",
+    "UsedByArtifacts": [
+      "InjectedThreadEx",
+      "Windows.Detection.Yara.Yara64"
+    ],
+    "Url": ""
+  },
+  "deploy_cyber_triage_collector": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "deploy_cyber_triage_collector",
+    "Version": "",
+    "UsedByArtifacts": [
+      "CyberTriageCollector"
+    ],
+    "Url": ""
+  },
+  "AllParsed": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "AllParsed",
+    "Version": "",
+    "UsedByArtifacts": [
+      "BootApplication"
+    ],
+    "Url": ""
+  },
+  "LogsPath": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "LogsPath",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "Audit_LogCleared": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Audit_LogCleared",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "RDP": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "RDP",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar",
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "ScheduledTasks_Execution": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ScheduledTasks_Execution",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "System Extensions": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "System Extensions",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "SMBServerModifications": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "SMBServerModifications",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "Login Items": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Login Items",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "WindowsFirewall": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "WindowsFirewall",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar",
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "TCGLogTools": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "TCGLogTools",
+    "Version": "",
+    "UsedByArtifacts": [
+      "BootApplication"
+    ],
+    "Url": "https://raw.githubusercontent.com/mattifestation/TCGLogTools/master/TCGLogTools.psm1"
+  },
+  "StrelkaTimeout": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "StrelkaTimeout",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Server.Enrichment.Strelka.FileScan"
+    ],
+    "Url": ""
+  },
+  "wtmp.logs": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "wtmp.logs",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.Detection.BruteForce"
+    ],
+    "Url": ""
+  },
+  "SMB_ServerAccessAudit": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "SMB_ServerAccessAudit",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "Dir. Services Plugins": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Dir. Services Plugins",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "LogTargets": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "LogTargets",
+    "Version": "",
+    "UsedByArtifacts": [
+      "ESETLogs"
+    ],
+    "Url": ""
+  },
+  "CISCat_Lite": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "CISCat_Lite",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Audit.CISCat_Lite"
+    ],
+    "Url": "https://workbench.cisecurity.org/api/vendor/v1/cis-cat/lite/latest"
+  },
+  "Outfile": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Outfile",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.Collection.CatScale"
+    ],
+    "Url": ""
+  },
+  "Startup Scripts": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Startup Scripts",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "EIDFilter": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "EIDFilter",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "Quicklook Plugins": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Quicklook Plugins",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "PowerShellEvents": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "PowerShellEvents",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "uac": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "uac",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Generic.Collection.UAC"
+    ],
+    "Url": ""
+  },
+  "FilteredWebsites": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "FilteredWebsites",
+    "Version": "",
+    "UsedByArtifacts": [
+      "ESETLogs"
+    ],
+    "Url": ""
+  },
+  "Processes": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Processes",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar",
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "ExcludeEID": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ExcludeEID",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "btmp.logs": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "btmp.logs",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.Detection.BruteForce"
+    ],
+    "Url": ""
+  },
+  "EVTXPath": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "EVTXPath",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Chainsaw",
+      "Windows.EventLogs.Zircolite"
+    ],
+    "Url": ""
+  },
+  "DeepBlueCLI": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "DeepBlueCLI",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.DeepBlueCLI"
+    ],
+    "Url": "https://github.com/sans-blue-team/DeepBlueCLI/archive/refs/heads/master.zip"
+  },
+  "ZipPassword": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ZipPassword",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Generic.Forensics.CyLR"
+    ],
+    "Url": ""
+  },
+  "StrelkaCerticatePath": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "StrelkaCerticatePath",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Server.Enrichment.Strelka.FileScan"
+    ],
+    "Url": ""
+  },
+  "CapaWindows": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "070923d5ca225ef29a670af9cc66a8d648fcaaff7e283cb1ddc73de6e3610f0f",
+    "Name": "CapaWindows",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Analysis.Capa"
+    ],
+    "Url": "https://github.com/mandiant/capa/releases/download/v6.1.0/capa-v6.1.0-windows.zip"
+  },
+  "SMB_ServerModifications": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "SMB_ServerModifications",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "OutputPath": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "OutputPath",
+    "Version": "",
+    "UsedByArtifacts": [
+      "FTKImager"
+    ],
+    "Url": ""
+  },
+  "ExcludeTag": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ExcludeTag",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "DiffCSVUrl": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "DiffCSVUrl",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Forensics.PersistenceSniper"
+    ],
+    "Url": "https://raw.githubusercontent.com/ablescia/Windows.PersistenceSniper/main/false_positives.csv"
+  },
+  "Cron Jobs": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Cron Jobs",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "Dock Tiles Plugins": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Dock Tiles Plugins",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "ExcludeCategory": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ExcludeCategory",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "DetectionHistoryPath": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "DetectionHistoryPath",
+    "Version": "",
+    "UsedByArtifacts": [
+      "DefenderDHParser"
+    ],
+    "Url": ""
+  },
+  "JSONLength": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "JSONLength",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Chainsaw"
+    ],
+    "Url": ""
+  },
+  "ProcessLogonSessionStartTime": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ProcessLogonSessionStartTime",
+    "Version": "",
+    "UsedByArtifacts": [
+      "InjectedThreadEx"
+    ],
+    "Url": ""
+  },
+  "Threads": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Threads",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "Zircolite": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Zircolite",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Zircolite"
+    ],
+    "Url": "https://github.com/wagga40/Zircolite/releases/download/2.8.1/zircolite_win10.exe"
+  },
+  "dateAfter": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "dateAfter",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Applications.LECmd",
+      "Windows.Forensics.Jumplists_JLECmd"
+    ],
+    "Url": ""
+  },
+  "IncludeCategory": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "IncludeCategory",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "AntivirusSymantec": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "AntivirusSymantec",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "LECmd": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "LECmd",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Applications.LECmd"
+    ],
+    "Url": "https://download.mikestammer.com/net6/LECmd.zip"
+  },
+  "StrelkaURL": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "StrelkaURL",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Server.Enrichment.Strelka.FileScan"
+    ],
+    "Url": ""
+  },
+  "IncludeTag": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "IncludeTag",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "NoisyRules": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "NoisyRules",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "HIPS": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "HIPS",
+    "Version": "",
+    "UsedByArtifacts": [
+      "ESETLogs"
+    ],
+    "Url": ""
+  },
+  "Powershell_ScriptblocksSummary": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Powershell_ScriptblocksSummary",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "ExcludeStatus": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ExcludeStatus",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "StrelkaOneshot": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "StrelkaOneshot",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Server.Enrichment.Strelka.FileScan"
+    ],
+    "Url": "https://github.com/target/strelka/releases/download/0.21.5.17/strelka-oneshot-linux"
+  },
+  "avml": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "avml",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.Memory.AVML"
+    ],
+    "Url": ""
+  },
+  "IncludeAppleItems": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "IncludeAppleItems",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "TCGLogLocationGlob": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "TCGLogLocationGlob",
+    "Version": "",
+    "UsedByArtifacts": [
+      "BootApplication"
+    ],
+    "Url": ""
+  },
+  "PowerShellScriptBlocksReconstructAndUpload": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "PowerShellScriptBlocksReconstructAndUpload",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "Get-InjectedThreadEx": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Get-InjectedThreadEx",
+    "Version": "",
+    "UsedByArtifacts": [
+      "InjectedThreadEx"
+    ],
+    "Url": "https://gist.githubusercontent.com/mgreen27/b37467aa725e0445d966c9589c90381a/raw/a3f8ac05fead58f5ba9465da67ae5881576b1762/Get-InjectedThreadEx.ps1"
+  },
+  "log4shell_linux_amd64": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "log4shell_linux_amd64",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Generic.Detection.LunasecLog4shell"
+    ],
+    "Url": ""
+  },
+  "Kernel Extensions": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Kernel Extensions",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "AuditPolicyChanges": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "AuditPolicyChanges",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "ChopChopGo": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ChopChopGo",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.LogAnalysis.ChopChopGo"
+    ],
+    "Url": "https://github.com/M00NLIG7/ChopChopGo/releases/download/v1.0.0-beta-3/ChopChopGo_v1.0.0-beta-3.zip"
+  },
+  "Hayabusa-3.3.0": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "acac87725334a09ebe2eb4a7cc467a844878434d403e353def52aacbb020c4d6",
+    "Name": "Hayabusa-3.3.0",
+    "Version": "3.3.0",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": "https://github.com/Yamato-Security/hayabusa/releases/download/v3.3.0/hayabusa-3.3.0-win-x64-live-response.zip"
+  },
+  "Cylr_amd64": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Cylr_amd64",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Generic.Forensics.CyLR"
+    ],
+    "Url": ""
+  },
+  "ToolInfo": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ToolInfo",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Generic.Detection.LunasecLog4shell",
+      "Generic.Forensics.CyLR"
+    ],
+    "Url": ""
+  },
+  "Library Proxies": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Library Proxies",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "Accounts_UsersRelatedOperations": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Accounts_UsersRelatedOperations",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "MinimalLevel": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "MinimalLevel",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "Uploads": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Uploads",
+    "Version": "",
+    "UsedByArtifacts": [
+      "HollowsHunter"
+    ],
+    "Url": ""
+  },
+  "Aftermath": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Aftermath",
+    "Version": "",
+    "UsedByArtifacts": [
+      "MacOS.Collection.Aftermath"
+    ],
+    "Url": "https://github.com/Velocidex/Tools/raw/main/Aftermath/aftermath"
+  },
+  "AuditLogCleared": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "AuditLogCleared",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "RawResults": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "RawResults",
+    "Version": "",
+    "UsedByArtifacts": [
+      "InjectedThreadEx"
+    ],
+    "Url": ""
+  },
+  "SourceDriveToImage": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "SourceDriveToImage",
+    "Version": "",
+    "UsedByArtifacts": [
+      "FTKImager"
+    ],
+    "Url": ""
+  },
+  "QueryVT": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "QueryVT",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "BootApplication count": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "BootApplication count",
+    "Version": "",
+    "UsedByArtifacts": [
+      "BootApplication"
+    ],
+    "Url": ""
+  },
+  "red_zone_attempts.log": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "red_zone_attempts.log",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.Detection.BruteForce"
+    ],
+    "Url": ""
+  },
+  "lastactivityview": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "lastactivityview",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Nirsoft.LastActivityView"
+    ],
+    "Url": "https://www.nirsoft.net/utils/lastactivityview.zip"
+  },
+  "UpdateRules": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "UpdateRules",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "OutDir": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "OutDir",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.Collection.CatScale"
+    ],
+    "Url": ""
+  },
+  "linforce": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "998f65cc9f9eef746c38a165e86317e502a0915161df824ad935613e0ad74b0d",
+    "Name": "linforce",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.Detection.BruteForce"
+    ],
+    "Url": "https://raw.githubusercontent.com/RCarras/linforce/main/linforce.sh"
+  },
+  "Login/Logout Hooks": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Login/Logout Hooks",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "SMB_ClientDestinations": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "SMB_ClientDestinations",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "IncludeEID": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "IncludeEID",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "DIEC": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "DIEC",
+    "Version": "",
+    "UsedByArtifacts": [
+      "DIEC"
+    ],
+    "Url": "https://github.com/horsicq/DIE-engine/releases/download/3.03b/die_win64_portable_3.03.zip"
+  },
+  "Rules": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Rules",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.LogAnalysis.ChopChopGo",
+      "Windows.EventLogs.Zircolite"
+    ],
+    "Url": ""
+  },
+  "CatScale": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "CatScale",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.Collection.CatScale"
+    ],
+    "Url": "https://raw.githubusercontent.com/FSecureLABS/LinuxCatScale/master/Cat-Scale.sh"
+  },
+  "Volatility": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Volatility",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Volatility_profile"
+    ],
+    "Url": "https://github.com/volatilityfoundation/volatility/archive/master.zip"
+  },
+  "OutputTimeFormat": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "OutputTimeFormat",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "brute_force_attempts.log": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "brute_force_attempts.log",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.Detection.BruteForce"
+    ],
+    "Url": ""
+  },
+  "Event Rules": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Event Rules",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "TimeOffset": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "TimeOffset",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "AccountsUserRelatedOperations": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "AccountsUserRelatedOperations",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "DHParser": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "DHParser",
+    "Version": "",
+    "UsedByArtifacts": [
+      "DefenderDHParser"
+    ],
+    "Url": "https://github.com/jklepsercyber/defender-detectionhistory-parser/archive/refs/tags/v1.0.zip"
+  },
+  "dateBefore": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "dateBefore",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Applications.LECmd",
+      "Windows.Forensics.Jumplists_JLECmd"
+    ],
+    "Url": ""
+  },
+  "Launch Items": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Launch Items",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "Get Collector File Metadata and Upload": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Get Collector File Metadata and Upload",
+    "Version": "",
+    "UsedByArtifacts": [
+      "CyberTriageCollector"
+    ],
+    "Url": ""
+  },
+  "log4shell_windows_amd64": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "log4shell_windows_amd64",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Generic.Detection.LunasecLog4shell"
+    ],
+    "Url": ""
+  },
+  "TargetPid": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "TargetPid",
+    "Version": "",
+    "UsedByArtifacts": [
+      "InjectedThreadEx"
+    ],
+    "Url": ""
+  },
+  "hits_login": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "hits_login",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Linux.Detection.BruteForce"
+    ],
+    "Url": ""
+  },
+  "Analyze": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Analyze",
+    "Version": "",
+    "UsedByArtifacts": [
+      "MacOS.Collection.Aftermath"
+    ],
+    "Url": ""
+  },
+  "arguments": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "arguments",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Applications.LECmd",
+      "Windows.Forensics.Jumplists_JLECmd"
+    ],
+    "Url": ""
+  },
+  "AntivirusWindowsDefender": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "AntivirusWindowsDefender",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "log4shell_windows_x86": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "log4shell_windows_x86",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Generic.Detection.LunasecLog4shell"
+    ],
+    "Url": ""
+  },
+  "SMBServerAccessAudit": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "SMBServerAccessAudit",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "Sort": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Sort",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.Hayabusa"
+    ],
+    "Url": ""
+  },
+  "Antivirus_Symantec": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Antivirus_Symantec",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "Logons": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Logons",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar",
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "Option_PowerShellScriptBlocksXorApply": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Option_PowerShellScriptBlocksXorApply",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "log4shell_linux_x86": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "log4shell_linux_x86",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Generic.Detection.LunasecLog4shell"
+    ],
+    "Url": ""
+  },
+  "Library Inserts": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Library Inserts",
+    "Version": "",
+    "UsedByArtifacts": [
+      "KnockKnock",
+      "KnockKnock"
+    ],
+    "Url": ""
+  },
+  "BlockedFiles": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "BlockedFiles",
+    "Version": "",
+    "UsedByArtifacts": [
+      "ESETLogs"
+    ],
+    "Url": ""
+  },
+  "PSShutdown64": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "PSShutdown64",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Sysinternals.PSShutdown"
+    ],
+    "Url": "https://live.sysinternals.com/tools/psshutdown64.exe"
+  },
+  "FTKImager": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "FTKImager",
+    "Version": "",
+    "UsedByArtifacts": [
+      "FTKImager"
+    ],
+    "Url": "https://ad-zip.s3.amazonaws.com/FTKImager.3.1.1_win32.zip"
+  },
+  "EntropyScan": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "EntropyScan",
+    "Version": "",
+    "UsedByArtifacts": [
+      "DIEC"
+    ],
+    "Url": ""
+  },
+  "Antivirus": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Antivirus",
+    "Version": "",
+    "UsedByArtifacts": [
+      "ESETLogs"
+    ],
+    "Url": ""
+  },
+  "Takajo-2.5.0": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "bba76ce84484c53145f7df368560cfeae267729df9c404e570ee7fb544c86b01",
+    "Name": "Takajo-2.5.0",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Exchange.Windows.EventLogs.Hayabusa.Takajo"
+    ],
+    "Url": "https://github.com/Yamato-Security/takajo/releases/download/v2.5.0/takajo-2.5.0-win.zip"
+  },
+  "yaraexecutable": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "yaraexecutable",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Detection.Yara.Yara64"
+    ],
+    "Url": "https://github.com/VirusTotal/yara/releases/download/v4.3.2/yara-4.3.2-2150-win64.zip"
+  },
+  "ThreadStartTime": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "ThreadStartTime",
+    "Version": "",
+    "UsedByArtifacts": [
+      "InjectedThreadEx"
+    ],
+    "Url": ""
+  },
+  "SMBClientDestinations": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "SMBClientDestinations",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "hollows_hunter": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "hollows_hunter",
+    "Version": "",
+    "UsedByArtifacts": [
+      "HollowsHunter"
+    ],
+    "Url": ""
+  },
+  "PSniper": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "PSniper",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.Forensics.PersistenceSniper"
+    ],
+    "Url": "https://github.com/last-byte/PersistenceSniper/releases/download/v1.16.1/PersistenceSniper.zip"
+  },
+  "Services": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "Services",
+    "Version": "",
+    "UsedByArtifacts": [
+      "Windows.EventLogs.EvtxHussar",
+      "Windows.EventLogs.EvtxHussar"
+    ],
+    "Url": ""
+  },
+  "JLECmd": {
+    "LocalPath": null,
+    "DownloadStatus": "Pending",
+    "ExpectedHash": "",
+    "Name": "JLECmd",
+    "Version": "1.5.0",
+    "UsedByArtifacts": [
+      "Windows.Forensics.Jumplists_JLECmd"
+    ],
+    "Url": "https://download.mikestammer.com/net6/JLECmd.zip"
+  }
+}
