@@ -22,7 +22,8 @@ try {
     Add-Type -AssemblyName System.Drawing
     [System.Windows.Forms.Application]::EnableVisualStyles()
     [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
-} catch {
+}
+catch {
     Write-Error "Failed to load Windows Forms: $($_.Exception.Message)"
     exit 1
 }
@@ -33,41 +34,42 @@ try {
     if (Test-Path "$ModulePath\VelociraptorDeployment") {
         Import-Module "$ModulePath\VelociraptorDeployment" -Force -ErrorAction SilentlyContinue
     }
-} catch {
+}
+catch {
     Write-Warning "Could not load VelociraptorDeployment module: $($_.Exception.Message)"
 }
 
 # Dark theme color palette
 $script:Colors = @{
-    Background = [System.Drawing.Color]::FromArgb(32, 32, 32)
-    Surface = [System.Drawing.Color]::FromArgb(48, 48, 48)
-    Primary = [System.Drawing.Color]::FromArgb(0, 150, 136)
-    Secondary = [System.Drawing.Color]::FromArgb(255, 87, 34)
-    Text = [System.Drawing.Color]::FromArgb(255, 255, 255)
+    Background    = [System.Drawing.Color]::FromArgb(32, 32, 32)
+    Surface       = [System.Drawing.Color]::FromArgb(48, 48, 48)
+    Primary       = [System.Drawing.Color]::FromArgb(0, 150, 136)
+    Secondary     = [System.Drawing.Color]::FromArgb(255, 87, 34)
+    Text          = [System.Drawing.Color]::FromArgb(255, 255, 255)
     TextSecondary = [System.Drawing.Color]::FromArgb(200, 200, 200)
-    Accent = [System.Drawing.Color]::FromArgb(76, 175, 80)
-    Warning = [System.Drawing.Color]::FromArgb(255, 193, 7)
-    Error = [System.Drawing.Color]::FromArgb(244, 67, 54)
-    Success = [System.Drawing.Color]::FromArgb(76, 175, 80)
+    Accent        = [System.Drawing.Color]::FromArgb(76, 175, 80)
+    Warning       = [System.Drawing.Color]::FromArgb(255, 193, 7)
+    Error         = [System.Drawing.Color]::FromArgb(244, 67, 54)
+    Success       = [System.Drawing.Color]::FromArgb(76, 175, 80)
 }
 
 # Global variables for wizard state
 $script:CurrentStep = 0
 $script:ConfigData = @{
-    DeploymentType = ""
-    DatastoreDirectory = "C:\VelociraptorData"
-    LogsDirectory = "logs"
+    DeploymentType        = ""
+    DatastoreDirectory    = "C:\VelociraptorData"
+    LogsDirectory         = "logs"
     CertificateExpiration = "1 Year"
-    RestrictVQL = $false
-    UseRegistry = $false
-    RegistryPath = "HKLM\SOFTWARE\Velocidex\Velociraptor"
-    BindAddress = "0.0.0.0"
-    BindPort = "8000"
-    GUIBindAddress = "127.0.0.1"
-    GUIBindPort = "8889"
-    OrganizationName = "VelociraptorOrg"
-    AdminUsername = "admin"
-    AdminPassword = ""
+    RestrictVQL           = $false
+    UseRegistry           = $false
+    RegistryPath          = "HKLM\SOFTWARE\Velocidex\Velociraptor"
+    BindAddress           = "0.0.0.0"
+    BindPort              = "8000"
+    GUIBindAddress        = "127.0.0.1"
+    GUIBindPort           = "8889"
+    OrganizationName      = "VelociraptorOrg"
+    AdminUsername         = "admin"
+    AdminPassword         = ""
 }
 
 $script:WizardSteps = @(
@@ -114,7 +116,8 @@ function New-RaptorWizardForm {
     # Set form icon (using built-in icon for now)
     try {
         $form.Icon = [System.Drawing.SystemIcons]::Shield
-    } catch {
+    }
+    catch {
         Write-Verbose "Could not set form icon"
     }
     
@@ -127,35 +130,36 @@ function New-RaptorWizardForm {
     
     # Add subtle raptor silhouette to background
     $backgroundPanel.Add_Paint({
-        param($sender, $e)
-        try {
-            $graphics = $e.Graphics
-            $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+            param($sender, $e)
+            try {
+                $graphics = $e.Graphics
+                $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
             
-            # Create subtle raptor silhouette
-            $raptorBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(20, 0, 150, 136))
-            $raptorPath = New-Object System.Drawing.Drawing2D.GraphicsPath
+                # Create subtle raptor silhouette
+                $raptorBrush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(20, 0, 150, 136))
+                $raptorPath = New-Object System.Drawing.Drawing2D.GraphicsPath
             
-            # Simple raptor head outline (simplified for performance)
-            $raptorPoints = @(
-                [System.Drawing.Point]::new(800, 400),
-                [System.Drawing.Point]::new(850, 350),
-                [System.Drawing.Point]::new(900, 380),
-                [System.Drawing.Point]::new(920, 420),
-                [System.Drawing.Point]::new(900, 460),
-                [System.Drawing.Point]::new(850, 480),
-                [System.Drawing.Point]::new(800, 450)
-            )
+                # Simple raptor head outline (simplified for performance)
+                $raptorPoints = @(
+                    [System.Drawing.Point]::new(800, 400),
+                    [System.Drawing.Point]::new(850, 350),
+                    [System.Drawing.Point]::new(900, 380),
+                    [System.Drawing.Point]::new(920, 420),
+                    [System.Drawing.Point]::new(900, 460),
+                    [System.Drawing.Point]::new(850, 480),
+                    [System.Drawing.Point]::new(800, 450)
+                )
             
-            $raptorPath.AddPolygon($raptorPoints)
-            $graphics.FillPath($raptorBrush, $raptorPath)
+                $raptorPath.AddPolygon($raptorPoints)
+                $graphics.FillPath($raptorBrush, $raptorPath)
             
-            $raptorBrush.Dispose()
-            $raptorPath.Dispose()
-        } catch {
-            # Silently handle any drawing errors
-        }
-    })
+                $raptorBrush.Dispose()
+                $raptorPath.Dispose()
+            }
+            catch {
+                # Silently handle any drawing errors
+            }
+        })
     
     $form.Controls.Add($backgroundPanel)
     
@@ -168,24 +172,25 @@ function New-RaptorWizardForm {
     
     # Add gradient effect to header
     $headerPanel.Add_Paint({
-        param($sender, $e)
-        try {
-            $rect = New-Object System.Drawing.Rectangle(0, 0, $sender.Width, $sender.Height)
-            $brush = New-Object System.Drawing.Drawing2D.LinearGradientBrush(
-                $rect,
-                $script:Colors.Primary,
-                [System.Drawing.Color]::FromArgb(0, 100, 90),
-                [System.Drawing.Drawing2D.LinearGradientMode]::Horizontal
-            )
-            $e.Graphics.FillRectangle($brush, $rect)
-            $brush.Dispose()
-        } catch {
-            # Fallback to solid color
-            $brush = New-Object System.Drawing.SolidBrush($script:Colors.Primary)
-            $e.Graphics.FillRectangle($brush, 0, 0, $sender.Width, $sender.Height)
-            $brush.Dispose()
-        }
-    })
+            param($sender, $e)
+            try {
+                $rect = New-Object System.Drawing.Rectangle(0, 0, $sender.Width, $sender.Height)
+                $brush = New-Object System.Drawing.Drawing2D.LinearGradientBrush(
+                    $rect,
+                    $script:Colors.Primary,
+                    [System.Drawing.Color]::FromArgb(0, 100, 90),
+                    [System.Drawing.Drawing2D.LinearGradientMode]::Horizontal
+                )
+                $e.Graphics.FillRectangle($brush, $rect)
+                $brush.Dispose()
+            }
+            catch {
+                # Fallback to solid color
+                $brush = New-Object System.Drawing.SolidBrush($script:Colors.Primary)
+                $e.Graphics.FillRectangle($brush, 0, 0, $sender.Width, $sender.Height)
+                $brush.Dispose()
+            }
+        })
     
     # Raptor logo and title
     $logoLabel = New-Object System.Windows.Forms.Label
@@ -222,7 +227,7 @@ function New-RaptorWizardForm {
     
     return $form, $backgroundPanel
 }#
- Create modern progress panel
+Create modern progress panel
 function New-ProgressPanel {
     param($ParentPanel)
     
@@ -234,11 +239,11 @@ function New-ProgressPanel {
     
     # Add subtle border
     $progressPanel.Add_Paint({
-        param($sender, $e)
-        $pen = New-Object System.Drawing.Pen($script:Colors.Primary, 2)
-        $e.Graphics.DrawLine($pen, 0, $sender.Height - 2, $sender.Width, $sender.Height - 2)
-        $pen.Dispose()
-    })
+            param($sender, $e)
+            $pen = New-Object System.Drawing.Pen($script:Colors.Primary, 2)
+            $e.Graphics.DrawLine($pen, 0, $sender.Height - 2, $sender.Width, $sender.Height - 2)
+            $pen.Dispose()
+        })
     
     # Progress bar
     $script:ProgressBar = New-Object System.Windows.Forms.ProgressBar
@@ -286,41 +291,42 @@ function New-ContentPanel {
     
     # Add rounded corners effect
     $script:ContentPanel.Add_Paint({
-        param($sender, $e)
-        try {
-            $graphics = $e.Graphics
-            $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
+            param($sender, $e)
+            try {
+                $graphics = $e.Graphics
+                $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
             
-            # Create rounded rectangle
-            $rect = New-Object System.Drawing.Rectangle(0, 0, $sender.Width - 1, $sender.Height - 1)
-            $path = New-Object System.Drawing.Drawing2D.GraphicsPath
-            $radius = 8
+                # Create rounded rectangle
+                $rect = New-Object System.Drawing.Rectangle(0, 0, $sender.Width - 1, $sender.Height - 1)
+                $path = New-Object System.Drawing.Drawing2D.GraphicsPath
+                $radius = 8
             
-            # Add rounded rectangle to path
-            $path.AddArc($rect.X, $rect.Y, $radius * 2, $radius * 2, 180, 90)
-            $path.AddArc($rect.Right - $radius * 2, $rect.Y, $radius * 2, $radius * 2, 270, 90)
-            $path.AddArc($rect.Right - $radius * 2, $rect.Bottom - $radius * 2, $radius * 2, $radius * 2, 0, 90)
-            $path.AddArc($rect.X, $rect.Bottom - $radius * 2, $radius * 2, $radius * 2, 90, 90)
-            $path.CloseFigure()
+                # Add rounded rectangle to path
+                $path.AddArc($rect.X, $rect.Y, $radius * 2, $radius * 2, 180, 90)
+                $path.AddArc($rect.Right - $radius * 2, $rect.Y, $radius * 2, $radius * 2, 270, 90)
+                $path.AddArc($rect.Right - $radius * 2, $rect.Bottom - $radius * 2, $radius * 2, $radius * 2, 0, 90)
+                $path.AddArc($rect.X, $rect.Bottom - $radius * 2, $radius * 2, $radius * 2, 90, 90)
+                $path.CloseFigure()
             
-            # Fill with surface color
-            $brush = New-Object System.Drawing.SolidBrush($script:Colors.Surface)
-            $graphics.FillPath($brush, $path)
+                # Fill with surface color
+                $brush = New-Object System.Drawing.SolidBrush($script:Colors.Surface)
+                $graphics.FillPath($brush, $path)
             
-            # Draw border
-            $pen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(100, 100, 100), 1)
-            $graphics.DrawPath($pen, $path)
+                # Draw border
+                $pen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(100, 100, 100), 1)
+                $graphics.DrawPath($pen, $path)
             
-            $brush.Dispose()
-            $pen.Dispose()
-            $path.Dispose()
-        } catch {
-            # Fallback to simple rectangle
-            $brush = New-Object System.Drawing.SolidBrush($script:Colors.Surface)
-            $e.Graphics.FillRectangle($brush, 0, 0, $sender.Width, $sender.Height)
-            $brush.Dispose()
-        }
-    })
+                $brush.Dispose()
+                $pen.Dispose()
+                $path.Dispose()
+            }
+            catch {
+                # Fallback to simple rectangle
+                $brush = New-Object System.Drawing.SolidBrush($script:Colors.Surface)
+                $e.Graphics.FillRectangle($brush, 0, 0, $sender.Width, $sender.Height)
+                $brush.Dispose()
+            }
+        })
     
     $ParentPanel.Controls.Add($script:ContentPanel)
     return $script:ContentPanel
@@ -332,17 +338,17 @@ function New-ButtonPanel {
     
     $buttonPanel = New-Object System.Windows.Forms.Panel
     $buttonPanel.Size = New-Object System.Drawing.Size(1000, 80)
-    $buttonPanel.Location = New-Object System.Drawing.Point(0, 690)
+    $buttonPanel.Location = New-Object System.Drawing.Point(0, ($ParentPanel.Height - 80))
     $buttonPanel.Anchor = "Bottom,Left,Right"
     $buttonPanel.BackColor = $script:Colors.Surface
     
     # Add top border
     $buttonPanel.Add_Paint({
-        param($sender, $e)
-        $pen = New-Object System.Drawing.Pen($script:Colors.Primary, 1)
-        $e.Graphics.DrawLine($pen, 0, 0, $sender.Width, 0)
-        $pen.Dispose()
-    })
+            param($sender, $e)
+            $pen = New-Object System.Drawing.Pen($script:Colors.Primary, 1)
+            $e.Graphics.DrawLine($pen, 0, 0, $sender.Width, 0)
+            $pen.Dispose()
+        })
     
     # Create modern buttons with hover effects
     $script:BackButton = New-ModernButton -Text "◀ Back" -Location (New-Object System.Drawing.Point(650, 20)) -Size (New-Object System.Drawing.Size(100, 40)) -ButtonType "Secondary"
@@ -356,16 +362,16 @@ function New-ButtonPanel {
     
     $cancelButton = New-ModernButton -Text "Cancel" -Location (New-Object System.Drawing.Point(870, 20)) -Size (New-Object System.Drawing.Size(100, 40)) -ButtonType "Danger"
     $cancelButton.Add_Click({ 
-        if ([System.Windows.Forms.MessageBox]::Show("Are you sure you want to cancel the configuration wizard?", "Cancel Configuration", "YesNo", "Question") -eq "Yes") {
-            $script:MainForm.Close()
-        }
-    })
+            if ([System.Windows.Forms.MessageBox]::Show("Are you sure you want to cancel the configuration wizard?", "Cancel Configuration", "YesNo", "Question") -eq "Yes") {
+                $script:MainForm.Close()
+            }
+        })
     $buttonPanel.Controls.Add($cancelButton)
     
     $ParentPanel.Controls.Add($buttonPanel)
     return $buttonPanel
 }#
- Create modern styled buttons with hover effects
+Create modern styled buttons with hover effects
 function New-ModernButton {
     param(
         [string]$Text,
@@ -417,16 +423,16 @@ function New-ModernButton {
     # Add hover effects
     $originalBackColor = $button.BackColor
     $button.Add_MouseEnter({
-        $this.BackColor = [System.Drawing.Color]::FromArgb(
-            [Math]::Min(255, $originalBackColor.R + 30),
-            [Math]::Min(255, $originalBackColor.G + 30),
-            [Math]::Min(255, $originalBackColor.B + 30)
-        )
-    })
+            $this.BackColor = [System.Drawing.Color]::FromArgb(
+                [Math]::Min(255, $originalBackColor.R + 30),
+                [Math]::Min(255, $originalBackColor.G + 30),
+                [Math]::Min(255, $originalBackColor.B + 30)
+            )
+        })
     
     $button.Add_MouseLeave({
-        $this.BackColor = $originalBackColor
-    })
+            $this.BackColor = $originalBackColor
+        })
     
     return $button
 }
@@ -437,37 +443,38 @@ function Initialize-SafeEventHandling {
     
     # Proper form closing with resource cleanup
     $Form.Add_FormClosing({
-        param($sender, $e)
-        try {
-            # Clean up any background operations
-            if ($script:BackgroundWorker) {
-                $script:BackgroundWorker.CancelAsync()
-                $script:BackgroundWorker.Dispose()
-            }
+            param($sender, $e)
+            try {
+                # Clean up any background operations
+                if ($script:BackgroundWorker) {
+                    $script:BackgroundWorker.CancelAsync()
+                    $script:BackgroundWorker.Dispose()
+                }
             
-            # Clean up timers
-            if ($script:UpdateTimer) {
-                $script:UpdateTimer.Stop()
-                $script:UpdateTimer.Dispose()
-            }
+                # Clean up timers
+                if ($script:UpdateTimer) {
+                    $script:UpdateTimer.Stop()
+                    $script:UpdateTimer.Dispose()
+                }
             
-            # Force garbage collection
-            [System.GC]::Collect()
-            [System.GC]::WaitForPendingFinalizers()
-        } catch {
-            # Silently handle cleanup errors
-        }
-    })
+                # Force garbage collection
+                [System.GC]::Collect()
+                [System.GC]::WaitForPendingFinalizers()
+            }
+            catch {
+                # Silently handle cleanup errors
+            }
+        })
     
     # Global exception handler
     $Form.Add_Load({
-        [System.Windows.Forms.Application]::SetUnhandledExceptionMode([System.Windows.Forms.UnhandledExceptionMode]::CatchException)
-        [System.Windows.Forms.Application]::add_ThreadException({
-            param($sender, $e)
-            $errorMsg = "An error occurred: $($e.Exception.Message)"
-            [System.Windows.Forms.MessageBox]::Show($errorMsg, "Error", "OK", "Error")
+            [System.Windows.Forms.Application]::SetUnhandledExceptionMode([System.Windows.Forms.UnhandledExceptionMode]::CatchException)
+            [System.Windows.Forms.Application]::add_ThreadException({
+                    param($sender, $e)
+                    $errorMsg = "An error occurred: $($e.Exception.Message)"
+                    [System.Windows.Forms.MessageBox]::Show($errorMsg, "Error", "OK", "Error")
+                })
         })
-    })
 }
 
 # Update progress display with modern styling
@@ -487,13 +494,16 @@ function Update-Progress {
             
             if ($script:CurrentStep -eq ($script:WizardSteps.Count - 1)) {
                 $script:NextButton.Text = "Finish"
-            } elseif ($script:CurrentStep -eq ($script:WizardSteps.Count - 2)) {
+            }
+            elseif ($script:CurrentStep -eq ($script:WizardSteps.Count - 2)) {
                 $script:NextButton.Text = "Generate"
-            } else {
+            }
+            else {
                 $script:NextButton.Text = "Next ▶"
             }
         }
-    } catch {
+    }
+    catch {
         Write-Verbose "Error updating progress: $($_.Exception.Message)"
     }
 }
@@ -510,12 +520,14 @@ function Move-ToNextStep {
             if ($script:CurrentStep -lt ($script:WizardSteps.Count - 1)) {
                 $script:CurrentStep++
                 Show-CurrentStep
-            } else {
+            }
+            else {
                 # Finish wizard
                 $script:MainForm.Close()
             }
         }
-    } catch {
+    }
+    catch {
         [System.Windows.Forms.MessageBox]::Show("Error navigating to next step: $($_.Exception.Message)", "Navigation Error", "OK", "Error")
     }
 }
@@ -526,7 +538,8 @@ function Move-ToPreviousStep {
             $script:CurrentStep--
             Show-CurrentStep
         }
-    } catch {
+    }
+    catch {
         [System.Windows.Forms.MessageBox]::Show("Error navigating to previous step: $($_.Exception.Message)", "Navigation Error", "OK", "Error")
     }
 }# Val
@@ -534,19 +547,22 @@ idate current step with enhanced error handling
 function Confirm-CurrentStep {
     try {
         switch ($script:CurrentStep) {
-            1 { # Deployment Type
+            1 {
+                # Deployment Type
                 if (-not $script:ConfigData.DeploymentType) {
                     [System.Windows.Forms.MessageBox]::Show("Please select a deployment type.", "Validation Error", "OK", "Warning")
                     return $false
                 }
             }
-            2 { # Storage Configuration
+            2 {
+                # Storage Configuration
                 if (-not $script:ConfigData.DatastoreDirectory -or -not (Test-Path (Split-Path $script:ConfigData.DatastoreDirectory -Parent) -ErrorAction SilentlyContinue)) {
                     [System.Windows.Forms.MessageBox]::Show("Please specify a valid datastore directory.", "Validation Error", "OK", "Warning")
                     return $false
                 }
             }
-            6 { # Authentication
+            6 {
+                # Authentication
                 if (-not $script:ConfigData.AdminPassword -or $script:ConfigData.AdminPassword.Length -lt 8) {
                     [System.Windows.Forms.MessageBox]::Show("Please set an admin password (minimum 8 characters).", "Validation Error", "OK", "Warning")
                     return $false
@@ -554,7 +570,8 @@ function Confirm-CurrentStep {
             }
         }
         return $true
-    } catch {
+    }
+    catch {
         [System.Windows.Forms.MessageBox]::Show("Validation error: $($_.Exception.Message)", "Validation Error", "OK", "Error")
         return $false
     }
@@ -578,7 +595,8 @@ function Show-CurrentStep {
             8 { Show-CompleteStep }
             default { Show-WelcomeStep }
         }
-    } catch {
+    }
+    catch {
         [System.Windows.Forms.MessageBox]::Show("Error displaying step: $($_.Exception.Message)", "Display Error", "OK", "Error")
     }
 }
@@ -643,6 +661,285 @@ Click Next to begin the configuration process and deploy your Velociraptor DFIR 
     $script:ContentPanel.Controls.Add($raptorLabel)
 }
 
+# Storage Configuration Step
+function Show-StorageConfigurationStep {
+    $titleLabel = New-Object System.Windows.Forms.Label
+    $titleLabel.Text = "Storage Configuration"
+    $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
+    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
+    $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
+    $titleLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($titleLabel)
+    
+    # Datastore directory
+    $datastoreLabel = New-Object System.Windows.Forms.Label
+    $datastoreLabel.Text = "Datastore Directory:"
+    $datastoreLabel.Location = New-Object System.Drawing.Point(40, 80)
+    $datastoreLabel.Size = New-Object System.Drawing.Size(150, 25)
+    $datastoreLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
+    $datastoreLabel.ForeColor = $script:Colors.Text
+    $datastoreLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($datastoreLabel)
+    
+    $script:DatastoreTextBox = New-Object System.Windows.Forms.TextBox
+    $script:DatastoreTextBox.Text = $script:ConfigData.DatastoreDirectory
+    $script:DatastoreTextBox.Location = New-Object System.Drawing.Point(40, 110)
+    $script:DatastoreTextBox.Size = New-Object System.Drawing.Size(400, 25)
+    $script:DatastoreTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $script:DatastoreTextBox.BackColor = $script:Colors.Surface
+    $script:DatastoreTextBox.ForeColor = $script:Colors.Text
+    $script:DatastoreTextBox.Add_TextChanged({
+        $script:ConfigData.DatastoreDirectory = $script:DatastoreTextBox.Text
+    })
+    $script:ContentPanel.Controls.Add($script:DatastoreTextBox)
+    
+    # Browse button
+    $browseButton = New-ModernButton -Text "Browse..." -Location (New-Object System.Drawing.Point(450, 110)) -Size (New-Object System.Drawing.Size(80, 25)) -ButtonType "Secondary"
+    $browseButton.Add_Click({
+        $folderDialog = New-Object System.Windows.Forms.FolderBrowserDialog
+        $folderDialog.Description = "Select Datastore Directory"
+        $folderDialog.SelectedPath = $script:ConfigData.DatastoreDirectory
+        if ($folderDialog.ShowDialog() -eq "OK") {
+            $script:DatastoreTextBox.Text = $folderDialog.SelectedPath
+            $script:ConfigData.DatastoreDirectory = $folderDialog.SelectedPath
+        }
+    })
+    $script:ContentPanel.Controls.Add($browseButton)
+    
+    # Logs directory
+    $logsLabel = New-Object System.Windows.Forms.Label
+    $logsLabel.Text = "Logs Directory:"
+    $logsLabel.Location = New-Object System.Drawing.Point(40, 160)
+    $logsLabel.Size = New-Object System.Drawing.Size(150, 25)
+    $logsLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
+    $logsLabel.ForeColor = $script:Colors.Text
+    $logsLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($logsLabel)
+    
+    $script:LogsTextBox = New-Object System.Windows.Forms.TextBox
+    $script:LogsTextBox.Text = $script:ConfigData.LogsDirectory
+    $script:LogsTextBox.Location = New-Object System.Drawing.Point(40, 190)
+    $script:LogsTextBox.Size = New-Object System.Drawing.Size(400, 25)
+    $script:LogsTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $script:LogsTextBox.BackColor = $script:Colors.Surface
+    $script:LogsTextBox.ForeColor = $script:Colors.Text
+    $script:LogsTextBox.Add_TextChanged({
+        $script:ConfigData.LogsDirectory = $script:LogsTextBox.Text
+    })
+    $script:ContentPanel.Controls.Add($script:LogsTextBox)
+}
+
+# Certificate Settings Step
+function Show-CertificateSettingsStep {
+    $titleLabel = New-Object System.Windows.Forms.Label
+    $titleLabel.Text = "Certificate Settings"
+    $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
+    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
+    $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
+    $titleLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($titleLabel)
+    
+    # Certificate expiration
+    $expirationLabel = New-Object System.Windows.Forms.Label
+    $expirationLabel.Text = "Certificate Expiration:"
+    $expirationLabel.Location = New-Object System.Drawing.Point(40, 80)
+    $expirationLabel.Size = New-Object System.Drawing.Size(150, 25)
+    $expirationLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
+    $expirationLabel.ForeColor = $script:Colors.Text
+    $expirationLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($expirationLabel)
+    
+    $script:ExpirationComboBox = New-Object System.Windows.Forms.ComboBox
+    $script:ExpirationComboBox.Items.AddRange(@("1 Year", "2 Years", "5 Years", "10 Years"))
+    $script:ExpirationComboBox.Text = $script:ConfigData.CertificateExpiration
+    $script:ExpirationComboBox.Location = New-Object System.Drawing.Point(40, 110)
+    $script:ExpirationComboBox.Size = New-Object System.Drawing.Size(200, 25)
+    $script:ExpirationComboBox.DropDownStyle = "DropDownList"
+    $script:ExpirationComboBox.BackColor = $script:Colors.Surface
+    $script:ExpirationComboBox.ForeColor = $script:Colors.Text
+    $script:ExpirationComboBox.Add_SelectedIndexChanged({
+        $script:ConfigData.CertificateExpiration = $script:ExpirationComboBox.Text
+    })
+    $script:ContentPanel.Controls.Add($script:ExpirationComboBox)
+}
+
+# Security Settings Step
+function Show-SecuritySettingsStep {
+    $titleLabel = New-Object System.Windows.Forms.Label
+    $titleLabel.Text = "Security Settings"
+    $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
+    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
+    $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
+    $titleLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($titleLabel)
+    
+    # Restrict VQL checkbox
+    $script:RestrictVQLCheckBox = New-Object System.Windows.Forms.CheckBox
+    $script:RestrictVQLCheckBox.Text = "Restrict VQL queries for enhanced security"
+    $script:RestrictVQLCheckBox.Checked = $script:ConfigData.RestrictVQL
+    $script:RestrictVQLCheckBox.Location = New-Object System.Drawing.Point(40, 80)
+    $script:RestrictVQLCheckBox.Size = New-Object System.Drawing.Size(400, 25)
+    $script:RestrictVQLCheckBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $script:RestrictVQLCheckBox.ForeColor = $script:Colors.Text
+    $script:RestrictVQLCheckBox.BackColor = [System.Drawing.Color]::Transparent
+    $script:RestrictVQLCheckBox.Add_CheckedChanged({
+        $script:ConfigData.RestrictVQL = $script:RestrictVQLCheckBox.Checked
+    })
+    $script:ContentPanel.Controls.Add($script:RestrictVQLCheckBox)
+    
+    # Use registry checkbox
+    $script:UseRegistryCheckBox = New-Object System.Windows.Forms.CheckBox
+    $script:UseRegistryCheckBox.Text = "Store configuration in Windows Registry"
+    $script:UseRegistryCheckBox.Checked = $script:ConfigData.UseRegistry
+    $script:UseRegistryCheckBox.Location = New-Object System.Drawing.Point(40, 120)
+    $script:UseRegistryCheckBox.Size = New-Object System.Drawing.Size(400, 25)
+    $script:UseRegistryCheckBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $script:UseRegistryCheckBox.ForeColor = $script:Colors.Text
+    $script:UseRegistryCheckBox.BackColor = [System.Drawing.Color]::Transparent
+    $script:UseRegistryCheckBox.Add_CheckedChanged({
+        $script:ConfigData.UseRegistry = $script:UseRegistryCheckBox.Checked
+    })
+    $script:ContentPanel.Controls.Add($script:UseRegistryCheckBox)
+}
+
+# Network Configuration Step
+function Show-NetworkConfigurationStep {
+    $titleLabel = New-Object System.Windows.Forms.Label
+    $titleLabel.Text = "Network Configuration"
+    $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
+    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
+    $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
+    $titleLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($titleLabel)
+    
+    # Bind address
+    $bindLabel = New-Object System.Windows.Forms.Label
+    $bindLabel.Text = "Bind Address:"
+    $bindLabel.Location = New-Object System.Drawing.Point(40, 80)
+    $bindLabel.Size = New-Object System.Drawing.Size(100, 25)
+    $bindLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $bindLabel.ForeColor = $script:Colors.Text
+    $bindLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($bindLabel)
+    
+    $script:BindAddressTextBox = New-Object System.Windows.Forms.TextBox
+    $script:BindAddressTextBox.Text = $script:ConfigData.BindAddress
+    $script:BindAddressTextBox.Location = New-Object System.Drawing.Point(150, 80)
+    $script:BindAddressTextBox.Size = New-Object System.Drawing.Size(150, 25)
+    $script:BindAddressTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $script:BindAddressTextBox.BackColor = $script:Colors.Surface
+    $script:BindAddressTextBox.ForeColor = $script:Colors.Text
+    $script:BindAddressTextBox.Add_TextChanged({
+        $script:ConfigData.BindAddress = $script:BindAddressTextBox.Text
+    })
+    $script:ContentPanel.Controls.Add($script:BindAddressTextBox)
+    
+    # Bind port
+    $portLabel = New-Object System.Windows.Forms.Label
+    $portLabel.Text = "Port:"
+    $portLabel.Location = New-Object System.Drawing.Point(320, 80)
+    $portLabel.Size = New-Object System.Drawing.Size(50, 25)
+    $portLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $portLabel.ForeColor = $script:Colors.Text
+    $portLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($portLabel)
+    
+    $script:BindPortTextBox = New-Object System.Windows.Forms.TextBox
+    $script:BindPortTextBox.Text = $script:ConfigData.BindPort
+    $script:BindPortTextBox.Location = New-Object System.Drawing.Point(370, 80)
+    $script:BindPortTextBox.Size = New-Object System.Drawing.Size(80, 25)
+    $script:BindPortTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $script:BindPortTextBox.BackColor = $script:Colors.Surface
+    $script:BindPortTextBox.ForeColor = $script:Colors.Text
+    $script:BindPortTextBox.Add_TextChanged({
+        $script:ConfigData.BindPort = $script:BindPortTextBox.Text
+    })
+    $script:ContentPanel.Controls.Add($script:BindPortTextBox)
+    
+    # GUI bind address
+    $guiBindLabel = New-Object System.Windows.Forms.Label
+    $guiBindLabel.Text = "GUI Address:"
+    $guiBindLabel.Location = New-Object System.Drawing.Point(40, 130)
+    $guiBindLabel.Size = New-Object System.Drawing.Size(100, 25)
+    $guiBindLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $guiBindLabel.ForeColor = $script:Colors.Text
+    $guiBindLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($guiBindLabel)
+    
+    $script:GUIBindAddressTextBox = New-Object System.Windows.Forms.TextBox
+    $script:GUIBindAddressTextBox.Text = $script:ConfigData.GUIBindAddress
+    $script:GUIBindAddressTextBox.Location = New-Object System.Drawing.Point(150, 130)
+    $script:GUIBindAddressTextBox.Size = New-Object System.Drawing.Size(150, 25)
+    $script:GUIBindAddressTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $script:GUIBindAddressTextBox.BackColor = $script:Colors.Surface
+    $script:GUIBindAddressTextBox.ForeColor = $script:Colors.Text
+    $script:GUIBindAddressTextBox.Add_TextChanged({
+        $script:ConfigData.GUIBindAddress = $script:GUIBindAddressTextBox.Text
+    })
+    $script:ContentPanel.Controls.Add($script:GUIBindAddressTextBox)
+    
+    # GUI port
+    $guiPortLabel = New-Object System.Windows.Forms.Label
+    $guiPortLabel.Text = "GUI Port:"
+    $guiPortLabel.Location = New-Object System.Drawing.Point(320, 130)
+    $guiPortLabel.Size = New-Object System.Drawing.Size(50, 25)
+    $guiPortLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $guiPortLabel.ForeColor = $script:Colors.Text
+    $guiPortLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($guiPortLabel)
+    
+    $script:GUIBindPortTextBox = New-Object System.Windows.Forms.TextBox
+    $script:GUIBindPortTextBox.Text = $script:ConfigData.GUIBindPort
+    $script:GUIBindPortTextBox.Location = New-Object System.Drawing.Point(370, 130)
+    $script:GUIBindPortTextBox.Size = New-Object System.Drawing.Size(80, 25)
+    $script:GUIBindPortTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
+    $script:GUIBindPortTextBox.BackColor = $script:Colors.Surface
+    $script:GUIBindPortTextBox.ForeColor = $script:Colors.Text
+    $script:GUIBindPortTextBox.Add_TextChanged({
+        $script:ConfigData.GUIBindPort = $script:GUIBindPortTextBox.Text
+    })
+    $script:ContentPanel.Controls.Add($script:GUIBindPortTextBox)
+}
+
+# Review Step
+function Show-ReviewStep {
+    $titleLabel = New-Object System.Windows.Forms.Label
+    $titleLabel.Text = "Review Configuration"
+    $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
+    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
+    $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
+    $titleLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($titleLabel)
+    
+    # Review text
+    $reviewText = @"
+Deployment Type: $($script:ConfigData.DeploymentType)
+Datastore Directory: $($script:ConfigData.DatastoreDirectory)
+Logs Directory: $($script:ConfigData.LogsDirectory)
+Certificate Expiration: $($script:ConfigData.CertificateExpiration)
+Restrict VQL: $($script:ConfigData.RestrictVQL)
+Use Registry: $($script:ConfigData.UseRegistry)
+Bind Address: $($script:ConfigData.BindAddress):$($script:ConfigData.BindPort)
+GUI Address: $($script:ConfigData.GUIBindAddress):$($script:ConfigData.GUIBindPort)
+Organization: $($script:ConfigData.OrganizationName)
+Admin Username: $($script:ConfigData.AdminUsername)
+"@
+    
+    $reviewLabel = New-Object System.Windows.Forms.Label
+    $reviewLabel.Text = $reviewText
+    $reviewLabel.Location = New-Object System.Drawing.Point(40, 80)
+    $reviewLabel.Size = New-Object System.Drawing.Size(800, 300)
+    $reviewLabel.Font = New-Object System.Drawing.Font("Consolas", 10)
+    $reviewLabel.ForeColor = $script:Colors.Text
+    $reviewLabel.BackColor = [System.Drawing.Color]::Transparent
+    $script:ContentPanel.Controls.Add($reviewLabel)
+}
+
 # Generate secure password
 function New-SecurePassword {
     $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*"
@@ -697,7 +994,8 @@ authentication:
         Set-Content -Path $script:ConfigData.OutputPath -Value $yamlContent -Encoding UTF8
         [System.Windows.Forms.MessageBox]::Show("Configuration generated successfully!`nSaved to: $($script:ConfigData.OutputPath)", "Success", "OK", "Information")
         
-    } catch {
+    }
+    catch {
         [System.Windows.Forms.MessageBox]::Show("Failed to generate configuration: $($_.Exception.Message)", "Error", "OK", "Error")
     }
 }
@@ -718,6 +1016,17 @@ try {
     # Initialize safe event handling
     Initialize-SafeEventHandling -Form $script:MainForm
     
+    # Add resize event handler to keep button panel at bottom
+    $script:MainForm.Add_Resize({
+            try {
+                # Reposition button panel to stay at bottom
+                $buttonPanel.Location = New-Object System.Drawing.Point(0, ($backgroundPanel.Height - 80))
+            }
+            catch {
+                # Silently handle resize errors
+            }
+        })
+    
     # Show initial step
     Show-CurrentStep
     
@@ -730,19 +1039,22 @@ try {
     
     Write-Host "Velociraptor Configuration Wizard completed." -ForegroundColor Green
     
-} catch {
+}
+catch {
     $errorMsg = "GUI initialization failed: $($_.Exception.Message)"
     Write-Host $errorMsg -ForegroundColor Red
     [System.Windows.Forms.MessageBox]::Show($errorMsg, "Critical Error", "OK", "Error")
     exit 1
-} finally {
+}
+finally {
     # Cleanup
     try {
         if ($script:MainForm) {
             $script:MainForm.Dispose()
         }
         [System.GC]::Collect()
-    } catch {
+    }
+    catch {
         # Silently handle cleanup errors
     }
 }# 
@@ -767,8 +1079,8 @@ function Show-DeploymentTypeStep {
     $script:ServerRadio.BackColor = [System.Drawing.Color]::Transparent
     $script:ServerRadio.Checked = ($script:ConfigData.DeploymentType -eq "Server")
     $script:ServerRadio.Add_CheckedChanged({ 
-        if ($script:ServerRadio.Checked) { $script:ConfigData.DeploymentType = "Server" }
-    })
+            if ($script:ServerRadio.Checked) { $script:ConfigData.DeploymentType = "Server" }
+        })
     $script:ContentPanel.Controls.Add($script:ServerRadio)
     
     $serverDesc = New-Object System.Windows.Forms.Label
@@ -790,8 +1102,8 @@ function Show-DeploymentTypeStep {
     $script:StandaloneRadio.BackColor = [System.Drawing.Color]::Transparent
     $script:StandaloneRadio.Checked = ($script:ConfigData.DeploymentType -eq "Standalone")
     $script:StandaloneRadio.Add_CheckedChanged({ 
-        if ($script:StandaloneRadio.Checked) { $script:ConfigData.DeploymentType = "Standalone" }
-    })
+            if ($script:StandaloneRadio.Checked) { $script:ConfigData.DeploymentType = "Standalone" }
+        })
     $script:ContentPanel.Controls.Add($script:StandaloneRadio)
     
     $standaloneDesc = New-Object System.Windows.Forms.Label
@@ -813,8 +1125,8 @@ function Show-DeploymentTypeStep {
     $script:ClientRadio.BackColor = [System.Drawing.Color]::Transparent
     $script:ClientRadio.Checked = ($script:ConfigData.DeploymentType -eq "Client")
     $script:ClientRadio.Add_CheckedChanged({ 
-        if ($script:ClientRadio.Checked) { $script:ConfigData.DeploymentType = "Client" }
-    })
+            if ($script:ClientRadio.Checked) { $script:ConfigData.DeploymentType = "Client" }
+        })
     $script:ContentPanel.Controls.Add($script:ClientRadio)
     
     $clientDesc = New-Object System.Windows.Forms.Label
@@ -857,8 +1169,8 @@ function Show-AuthenticationStep {
     $script:AdminUsernameTextBox.ForeColor = $script:Colors.Text
     $script:AdminUsernameTextBox.BorderStyle = "FixedSingle"
     $script:AdminUsernameTextBox.Add_TextChanged({ 
-        $script:ConfigData.AdminUsername = $script:AdminUsernameTextBox.Text 
-    })
+            $script:ConfigData.AdminUsername = $script:AdminUsernameTextBox.Text 
+        })
     $script:ContentPanel.Controls.Add($script:AdminUsernameTextBox)
     
     # Admin password
@@ -881,18 +1193,18 @@ function Show-AuthenticationStep {
     $script:AdminPasswordTextBox.BorderStyle = "FixedSingle"
     $script:AdminPasswordTextBox.UseSystemPasswordChar = $true
     $script:AdminPasswordTextBox.Add_TextChanged({ 
-        $script:ConfigData.AdminPassword = $script:AdminPasswordTextBox.Text 
-    })
+            $script:ConfigData.AdminPassword = $script:AdminPasswordTextBox.Text 
+        })
     $script:ContentPanel.Controls.Add($script:AdminPasswordTextBox)
     
     # Generate password button
     $generateButton = New-ModernButton -Text "🔐 Generate Secure Password" -Location (New-Object System.Drawing.Point(320, 210)) -Size (New-Object System.Drawing.Size(200, 25)) -ButtonType "Success"
     $generateButton.Add_Click({
-        $password = New-SecurePassword
-        $script:AdminPasswordTextBox.Text = $password
-        $script:ConfigData.AdminPassword = $password
-        [System.Windows.Forms.MessageBox]::Show("Generated secure password: $password`n`nPlease save this password securely!", "Generated Password", "OK", "Information")
-    })
+            $password = New-SecurePassword
+            $script:AdminPasswordTextBox.Text = $password
+            $script:ConfigData.AdminPassword = $password
+            [System.Windows.Forms.MessageBox]::Show("Generated secure password: $password`n`nPlease save this password securely!", "Generated Password", "OK", "Information")
+        })
     $script:ContentPanel.Controls.Add($generateButton)
 }
 
@@ -939,33 +1251,92 @@ Click Finish to close the wizard.
     # Open config button
     $openConfigButton = New-ModernButton -Text "📄 Open Configuration File" -Location (New-Object System.Drawing.Point(40, 400)) -Size (New-Object System.Drawing.Size(200, 35)) -ButtonType "Primary"
     $openConfigButton.Add_Click({
-        if (Test-Path $script:ConfigData.OutputPath) {
-            Start-Process "notepad.exe" -ArgumentList $script:ConfigData.OutputPath
-        }
-    })
+            if (Test-Path $script:ConfigData.OutputPath) {
+                Start-Process "notepad.exe" -ArgumentList $script:ConfigData.OutputPath
+            }
+        })
     $script:ContentPanel.Controls.Add($openConfigButton)
     
     # Deploy button
     $deployButton = New-ModernButton -Text "🚀 Deploy Now" -Location (New-Object System.Drawing.Point(260, 400)) -Size (New-Object System.Drawing.Size(150, 35)) -ButtonType "Success"
     $deployButton.Add_Click({
-        $result = [System.Windows.Forms.MessageBox]::Show("This will start Velociraptor deployment using the generated configuration.`n`nContinue?", "Deploy Velociraptor", "YesNo", "Question")
-        if ($result -eq "Yes") {
-            try {
-                switch ($script:ConfigData.DeploymentType) {
-                    "Server" {
-                        Start-Process "powershell.exe" -ArgumentList "-ExecutionPolicy Bypass -File `"$PSScriptRoot\..\Deploy_Velociraptor_Server.ps1`" -ConfigPath `"$($script:ConfigData.OutputPath)`""
-                    }
-                    "Standalone" {
-                        Start-Process "powershell.exe" -ArgumentList "-ExecutionPolicy Bypass -File `"$PSScriptRoot\..\Deploy_Velociraptor_Standalone.ps1`""
-                    }
-                    "Client" {
-                        [System.Windows.Forms.MessageBox]::Show("Client configuration generated. Use this file to configure Velociraptor clients.", "Client Configuration", "OK", "Information")
+            $result = [System.Windows.Forms.MessageBox]::Show("This will start Velociraptor deployment using the generated configuration.`n`nContinue?", "Deploy Velociraptor", "YesNo", "Question")
+            if ($result -eq "Yes") {
+                try {
+                    switch ($script:ConfigData.DeploymentType) {
+                        "Server" {
+                            Start-Process "powershell.exe" -ArgumentList "-ExecutionPolicy Bypass -File `"$PSScriptRoot\..\Deploy_Velociraptor_Server.ps1`" -ConfigPath `"$($script:ConfigData.OutputPath)`""
+                        }
+                        "Standalone" {
+                            Start-Process "powershell.exe" -ArgumentList "-ExecutionPolicy Bypass -File `"$PSScriptRoot\..\Deploy_Velociraptor_Standalone.ps1`""
+                        }
+                        "Client" {
+                            [System.Windows.Forms.MessageBox]::Show("Client configuration generated. Use this file to configure Velociraptor clients.", "Client Configuration", "OK", "Information")
+                        }
                     }
                 }
-            } catch {
-                [System.Windows.Forms.MessageBox]::Show("Failed to start deployment: $($_.Exception.Message)", "Deployment Error", "OK", "Error")
+                catch {
+                    [System.Windows.Forms.MessageBox]::Show("Failed to start deployment: $($_.Exception.Message)", "Deployment Error", "OK", "Error")
+                }
             }
+        })
+    $script:ContentPanel.Controls.Add($deployButton)
+}
+# Main
+ execution with comprehensive error handling
+try {
+    Write-Host $script:RaptorArt -ForegroundColor Green
+    Write-Host "Starting Velociraptor Configuration Wizard..." -ForegroundColor Cyan
+    
+    # Create the main form
+    $script:MainForm, $backgroundPanel = New-RaptorWizardForm
+    
+    # Initialize components
+    $progressPanel = New-ProgressPanel -ParentPanel $backgroundPanel
+    $contentPanel = New-ContentPanel -ParentPanel $backgroundPanel
+    $buttonPanel = New-ButtonPanel -ParentPanel $backgroundPanel
+    
+    # Initialize safe event handling
+    Initialize-SafeEventHandling -Form $script:MainForm
+    
+    # Store button panel reference for resize handler
+    $script:ButtonPanel = $buttonPanel
+    
+    # Add resize event handler to keep button panel at bottom
+    $script:MainForm.Add_Resize({
+        try {
+            # Reposition button panel to stay at bottom
+            $script:ButtonPanel.Location = New-Object System.Drawing.Point(0, ($backgroundPanel.Height - 80))
+        } catch {
+            # Silently handle resize errors
         }
     })
-    $script:ContentPanel.Controls.Add($deployButton)
+    
+    # Show initial step
+    Show-CurrentStep
+    
+    if ($StartMinimized) {
+        $script:MainForm.WindowState = "Minimized"
+    }
+    
+    # Run the application
+    [System.Windows.Forms.Application]::Run($script:MainForm)
+    
+    Write-Host "Velociraptor Configuration Wizard completed." -ForegroundColor Green
+    
+} catch {
+    $errorMsg = "GUI initialization failed: $($_.Exception.Message)"
+    Write-Host $errorMsg -ForegroundColor Red
+    [System.Windows.Forms.MessageBox]::Show($errorMsg, "Critical Error", "OK", "Error")
+    exit 1
+} finally {
+    # Cleanup
+    try {
+        if ($script:MainForm) {
+            $script:MainForm.Dispose()
+        }
+        [System.GC]::Collect()
+    } catch {
+        # Silently handle cleanup errors
+    }
 }
