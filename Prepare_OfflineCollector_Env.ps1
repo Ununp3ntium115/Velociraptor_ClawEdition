@@ -42,10 +42,10 @@ Set-Alias -Name Log -Value Write-Log
 # --- 1) Fetch release metadata -----------------------------------
 Write-Log 'Fetching Velociraptor release info...'
 if ($Version) {
-    $rel = Invoke-RestMethod -Uri "https://api.github.com/repos/Velocidx/velociraptor/releases/tags/v$Version" `
+    $rel = Invoke-RestMethod -Uri "https://api.github.com/repos/Velocidex/velociraptor/releases/tags/v$Version" `
     -Headers @{ 'User-Agent' = 'OfflinePrepScript' }
 } else {
-    $rel = Invoke-RestMethod -Uri 'https://api.github.com/repos/Velocidx/velociraptor/releases/latest' `
+    $rel = Invoke-RestMethod -Uri 'https://api.github.com/repos/Velocidex/velociraptor/releases/latest' `
     -Headers @{ 'User-Agent' = 'OfflinePrepScript' }
 }
 $tag = $rel.tag_name.TrimStart('v')

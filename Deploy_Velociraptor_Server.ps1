@@ -545,7 +545,7 @@ try {
     
     # Build the MSI package
     Log "This may take a few minutes for large deployments..."
-    $msiResult = & $exe package windows msi --msi_out $msi --config $config 2>&1
+    $msiResult = & $exe config generate --config $config --msi_out $msi 2>&1
     
     if ($LASTEXITCODE -ne 0) {
         throw "MSI creation failed with exit code $LASTEXITCODE`: $msiResult"
@@ -627,9 +627,6 @@ try {
     if ($service -and $service.Status -eq "Running") {
         Log "Velociraptor service installed and started successfully"
     } else {
-        Log "WARNING: Service status could not be verified or service is not running"
-    }
-    else {
         throw "Service installed but not running (Status: $($service.Status))"
     }
     

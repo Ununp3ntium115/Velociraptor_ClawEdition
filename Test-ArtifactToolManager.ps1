@@ -14,8 +14,14 @@ param(
     [switch]$QuickTest
 )
 
-# Import the module
-Import-Module ".\modules\VelociraptorDeployment\VelociraptorDeployment.psd1" -Force
+# Import the module with full path
+$ModulePath = Join-Path $PSScriptRoot "modules\VelociraptorDeployment\VelociraptorDeployment.psd1"
+if (Test-Path $ModulePath) {
+    Import-Module $ModulePath -Force -Verbose
+} else {
+    Write-Error "Module not found at: $ModulePath"
+    exit 1
+}
 
 Write-Host "=== Velociraptor Artifact Tool Manager Test ===" -ForegroundColor Green
 

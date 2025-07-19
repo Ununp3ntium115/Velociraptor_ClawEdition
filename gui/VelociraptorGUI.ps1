@@ -68,17 +68,19 @@ $script:WizardSteps = @(
 function New-WizardForm {
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "Velociraptor Configuration Wizard"
-    $form.Size = New-Object System.Drawing.Size(800, 600)
+    $form.Size = New-Object System.Drawing.Size(900, 700)
+    $form.MinimumSize = New-Object System.Drawing.Size(800, 600)
     $form.StartPosition = "CenterScreen"
-    $form.FormBorderStyle = "FixedDialog"
-    $form.MaximizeBox = $false
+    $form.FormBorderStyle = "Sizable"
+    $form.MaximizeBox = $true
     $form.MinimizeBox = $true
     $form.BackColor = [System.Drawing.Color]::White
     
     # Add Velociraptor logo/header
     $headerPanel = New-Object System.Windows.Forms.Panel
-    $headerPanel.Size = New-Object System.Drawing.Size(800, 80)
+    $headerPanel.Size = New-Object System.Drawing.Size(900, 80)
     $headerPanel.Location = New-Object System.Drawing.Point(0, 0)
+    $headerPanel.Anchor = "Top,Left,Right"
     $headerPanel.BackColor = [System.Drawing.Color]::FromArgb(41, 128, 185)
     
     $logoLabel = New-Object System.Windows.Forms.Label
@@ -101,8 +103,9 @@ function New-WizardForm {
     
     # Progress indicator
     $progressPanel = New-Object System.Windows.Forms.Panel
-    $progressPanel.Size = New-Object System.Drawing.Size(800, 40)
+    $progressPanel.Size = New-Object System.Drawing.Size(900, 40)
     $progressPanel.Location = New-Object System.Drawing.Point(0, 80)
+    $progressPanel.Anchor = "Top,Left,Right"
     $progressPanel.BackColor = [System.Drawing.Color]::FromArgb(236, 240, 241)
     
     $script:ProgressLabel = New-Object System.Windows.Forms.Label
@@ -122,15 +125,17 @@ function New-WizardForm {
     
     # Main content area
     $script:ContentPanel = New-Object System.Windows.Forms.Panel
-    $script:ContentPanel.Size = New-Object System.Drawing.Size(760, 400)
+    $script:ContentPanel.Size = New-Object System.Drawing.Size(860, 480)
     $script:ContentPanel.Location = New-Object System.Drawing.Point(20, 140)
+    $script:ContentPanel.Anchor = "Top,Left,Right,Bottom"
     $script:ContentPanel.BackColor = [System.Drawing.Color]::White
     $form.Controls.Add($script:ContentPanel)
     
     # Button panel
     $buttonPanel = New-Object System.Windows.Forms.Panel
-    $buttonPanel.Size = New-Object System.Drawing.Size(800, 60)
-    $buttonPanel.Location = New-Object System.Drawing.Point(0, 540)
+    $buttonPanel.Size = New-Object System.Drawing.Size(900, 60)
+    $buttonPanel.Location = New-Object System.Drawing.Point(0, 640)
+    $buttonPanel.Anchor = "Bottom,Left,Right"
     $buttonPanel.BackColor = [System.Drawing.Color]::FromArgb(236, 240, 241)
     
     # Back button
