@@ -9,7 +9,7 @@
     CompatiblePSEditions = @('Desktop', 'Core')
 
     # ID used to uniquely identify this module
-    GUID = 'b2c3d4e5-f6g7-8901-bcde-f23456789012'
+    GUID = 'b2c3d4e5-f6a7-4901-bcde-f23456789012'
 
     # Author of this module
     Author = 'Velociraptor Community'
