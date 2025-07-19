@@ -58,7 +58,7 @@ function Start-AutomatedTroubleshooting {
     
     try {
         # Initialize troubleshooting engine
-        $troubleshootingEngine = Initialize-TroubleshootingEngine -KnowledgeBasePath $KnowledgeBasePath
+        $troubleshootingEngine = New-TroubleshootingEngine -KnowledgeBasePath $KnowledgeBasePath
         
         # Execute troubleshooting based on mode
         switch ($TroubleshootingMode) {

@@ -65,7 +65,7 @@ function New-IntelligentConfiguration {
     
     try {
         # Initialize AI configuration engine
-        $configEngine = Initialize-ConfigurationEngine
+        $configEngine = New-ConfigurationEngine
         
         # Analyze environment
         $environmentAnalysis = Get-EnvironmentAnalysis -SystemSpecs $SystemSpecs

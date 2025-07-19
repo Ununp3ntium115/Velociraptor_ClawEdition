@@ -64,7 +64,7 @@ function Manage-VelociraptorCollections {
     
     try {
         # Initialize collection management
-        $collectionManager = Initialize-CollectionManager -CollectionPath $CollectionPath -ToolsRepository $ToolsRepository
+        $collectionManager = New-CollectionManager -CollectionPath $CollectionPath -ToolsRepository $ToolsRepository
         
         # Execute requested action
         switch ($Action) {

@@ -162,7 +162,7 @@ function Deploy-VelociraptorEdge {
 
     try {
         # Initialize edge deployment context
-        $edgeContext = Initialize-EdgeDeployment
+        $edgeContext = New-EdgeDeployment
 
         # Select deployment profile based on type
         $deploymentProfile = Get-EdgeDeploymentProfile -Type $EdgeDeploymentType

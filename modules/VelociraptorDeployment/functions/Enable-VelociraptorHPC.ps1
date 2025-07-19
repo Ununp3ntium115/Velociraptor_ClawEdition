@@ -142,7 +142,7 @@ function Enable-VelociraptorHPC {
 
     try {
         # Initialize HPC deployment context
-        $hpcContext = Initialize-HPCDeployment
+        $hpcContext = New-HPCDeployment
 
         # Deploy HPC infrastructure based on type
         switch ($HPCType) {

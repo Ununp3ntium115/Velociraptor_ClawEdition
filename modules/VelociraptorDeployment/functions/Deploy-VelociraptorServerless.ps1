@@ -120,7 +120,7 @@ function Deploy-VelociraptorServerless {
 
     try {
         # Initialize deployment context
-        $deploymentContext = Initialize-ServerlessDeployment -CloudProvider $CloudProvider -Region $Region
+        $deploymentContext = New-ServerlessDeployment -CloudProvider $CloudProvider -Region $Region
 
         # Deploy based on cloud provider
         switch ($CloudProvider) {
