@@ -78,42 +78,95 @@ function Export-ToolMapping {
         
         # Process artifacts safely
         foreach ($artifact in $artifactList) {
-            $toolList = if ($artifact.Tools) { @($artifact.Tools) } else { @() }
-            $toolNames = @()
-            if ($toolList.Count -gt 0) {
-                $toolNames = $toolList | ForEach-Object { 
-                    if ($_ -and $_.Name) { $_.Name } else { $_ }
+            try {
+                $toolList = if ($artifact.Tools) { @($artifact.Tools) } else { @() }
+                $toolNames = @()
+                
+                # Safe count check
+                $toolListCount = 0
+                if ($toolList -is [array]) {
+                    $toolListCount = $toolList.Count
+                } elseif ($toolList) {
+                    $toolListCount = 1
+                    $toolList = @($toolList)
                 }
+                
+                if ($toolListCount -gt 0) {
+                    $toolNames = $toolList | ForEach-Object { 
+                        if ($_ -and $_.Name) { $_.Name } else { $_ }
+                    }
+                }
+                
+                $artifactInfo = @{
+                    Name = if ($artifact.Name) { $artifact.Name } else { "Unknown" }
+                    Path = if ($artifact.Path) { $artifact.Path } else { "" }
+                    Type = if ($artifact.Type) { $artifact.Type } else { "CLIENT" }
+                    Author = if ($artifact.Author) { $artifact.Author } else { "Unknown" }
+                    Description = if ($artifact.Description) { $artifact.Description } else { "" }
+                    ToolCount = $toolListCount
+                    Tools = $toolNames
+                }
+                $mappingReport.Artifacts += $artifactInfo
             }
-            
-            $artifactInfo = @{
-                Name = if ($artifact.Name) { $artifact.Name } else { "Unknown" }
-                Path = if ($artifact.Path) { $artifact.Path } else { "" }
-                Type = if ($artifact.Type) { $artifact.Type } else { "CLIENT" }
-                Author = if ($artifact.Author) { $artifact.Author } else { "Unknown" }
-                Description = if ($artifact.Description) { $artifact.Description } else { "" }
-                ToolCount = $toolList.Count
-                Tools = $toolNames
+            catch {
+                Write-VelociraptorLog "Error processing artifact: $($_.Exception.Message)" -Level Warning
+                # Add minimal artifact info even on error
+                $artifactInfo = @{
+                    Name = if ($artifact.Name) { $artifact.Name } else { "Unknown" }
+                    Path = if ($artifact.Path) { $artifact.Path } else { "" }
+                    Type = "CLIENT"
+                    Author = "Unknown"
+                    Description = "Error processing artifact"
+                    ToolCount = 0
+                    Tools = @()
+                }
+                $mappingReport.Artifacts += $artifactInfo
             }
-            $mappingReport.Artifacts += $artifactInfo
         }
         
         # Process tools safely
         $keys = @($toolDatabase.Keys)
         foreach ($toolName in $keys) {
-            $tool = $toolDatabase[$toolName]
-            $usedByList = if ($tool.UsedByArtifacts) { @($tool.UsedByArtifacts) } else { @() }
-            $toolInfo = @{
-                Name = if ($tool.Name) { $tool.Name } else { $toolName }
-                Url = if ($tool.Url) { $tool.Url } else { "" }
-                Version = if ($tool.Version) { $tool.Version } else { "Unknown" }
-                ExpectedHash = if ($tool.ExpectedHash) { $tool.ExpectedHash } else { "" }
-                UsedByArtifacts = $usedByList
-                ArtifactCount = $usedByList.Count
-                DownloadStatus = if ($tool.DownloadStatus) { $tool.DownloadStatus } else { "Pending" }
-                LocalPath = if ($tool.LocalPath) { $tool.LocalPath } else { "" }
+            try {
+                $tool = $toolDatabase[$toolName]
+                $usedByList = if ($tool.UsedByArtifacts) { @($tool.UsedByArtifacts) } else { @() }
+                
+                # Safe count check for used by list
+                $usedByCount = 0
+                if ($usedByList -is [array]) {
+                    $usedByCount = $usedByList.Count
+                } elseif ($usedByList) {
+                    $usedByCount = 1
+                    $usedByList = @($usedByList)
+                }
+                
+                $toolInfo = @{
+                    Name = if ($tool.Name) { $tool.Name } else { $toolName }
+                    Url = if ($tool.Url) { $tool.Url } else { "" }
+                    Version = if ($tool.Version) { $tool.Version } else { "Unknown" }
+                    ExpectedHash = if ($tool.ExpectedHash) { $tool.ExpectedHash } else { "" }
+                    UsedByArtifacts = $usedByList
+                    ArtifactCount = $usedByCount
+                    DownloadStatus = if ($tool.DownloadStatus) { $tool.DownloadStatus } else { "Pending" }
+                    LocalPath = if ($tool.LocalPath) { $tool.LocalPath } else { "" }
+                }
+                $mappingReport.Tools += $toolInfo
             }
-            $mappingReport.Tools += $toolInfo
+            catch {
+                Write-VelociraptorLog "Error processing tool $toolName`: $($_.Exception.Message)" -Level Warning
+                # Add minimal tool info even on error
+                $toolInfo = @{
+                    Name = $toolName
+                    Url = ""
+                    Version = "Unknown"
+                    ExpectedHash = ""
+                    UsedByArtifacts = @()
+                    ArtifactCount = 0
+                    DownloadStatus = "Error"
+                    LocalPath = ""
+                }
+                $mappingReport.Tools += $toolInfo
+            }
         }
         
         # Export to JSON
