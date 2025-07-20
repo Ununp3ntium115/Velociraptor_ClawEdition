@@ -106,7 +106,7 @@ $script:VelociraptorBanner = @"
 ╔══════════════════════════════════════════════════════════════╗
 ║                🦖 VELOCIRAPTOR DFIR FRAMEWORK 🦖              ║
 ║                   Configuration Wizard v5.0.1                ║
-║                      Professional Edition                     ║
+║                  Free For All First Responders               ║
 ╚══════════════════════════════════════════════════════════════╝
 "@
 
@@ -223,7 +223,7 @@ function New-RaptorWizardForm {
     
     # Version info
     $versionLabel = New-Object System.Windows.Forms.Label
-    $versionLabel.Text = "v5.0.1 | Professional Edition"
+    $versionLabel.Text = "v5.0.1 | Free For All First Responders"
     $versionLabel.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Regular)
     $versionLabel.ForeColor = [System.Drawing.Color]::FromArgb(180, 180, 180)
     $versionLabel.Location = New-Object System.Drawing.Point(750, 70)
@@ -236,8 +236,9 @@ function New-RaptorWizardForm {
     $backgroundPanel.Controls.Add($headerPanel)
     
     return $form, $backgroundPanel
-}#
-Create modern progress panel
+}
+
+# Create modern progress panel
 function New-ProgressPanel {
     param($ParentPanel)
     
@@ -381,8 +382,9 @@ function New-ButtonPanel {
     
     $ParentPanel.Controls.Add($buttonPanel)
     return $buttonPanel
-}#
-Create modern styled buttons with hover effects
+}
+
+# Create modern styled buttons with hover effects
 function New-ModernButton {
     param(
         [string]$Text,
@@ -559,8 +561,9 @@ function Move-ToPreviousStep {
     catch {
         [System.Windows.Forms.MessageBox]::Show("Error navigating to previous step: $($_.Exception.Message)", "Navigation Error", "OK", "Error")
     }
-}# Val
-idate current step with enhanced error handling
+}
+
+# Validate current step with enhanced error handling
 function Confirm-CurrentStep {
     try {
         switch ($script:CurrentStep) {
@@ -1074,8 +1077,9 @@ finally {
     catch {
         # Silently handle cleanup errors
     }
-}# 
-Deployment Type Step
+}
+
+# Deployment Type Step
 function Show-DeploymentTypeStep {
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Text = "Select Deployment Type"
