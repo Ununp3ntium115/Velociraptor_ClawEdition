@@ -47,6 +47,12 @@ cd velociraptor-setup-scripts-5.0.1
 pwsh -ExecutionPolicy Bypass -File Deploy_Velociraptor_Standalone.ps1
 ```
 
+### **Configuration Wizard GUI**
+```powershell
+# Launch the professional configuration wizard
+powershell.exe -ExecutionPolicy Bypass -File "gui\VelociraptorGUI-Fixed.ps1"
+```
+
 ### **Git Clone**
 ```bash
 git clone https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts.git
