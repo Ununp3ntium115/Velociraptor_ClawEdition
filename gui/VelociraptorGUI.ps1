@@ -39,18 +39,35 @@ catch {
     Write-Warning "Could not load VelociraptorDeployment module: $($_.Exception.Message)"
 }
 
-# Dark theme color palette
-$script:Colors = @{
-    Background    = [System.Drawing.Color]::FromArgb(32, 32, 32)
-    Surface       = [System.Drawing.Color]::FromArgb(48, 48, 48)
-    Primary       = [System.Drawing.Color]::FromArgb(0, 150, 136)
-    Secondary     = [System.Drawing.Color]::FromArgb(255, 87, 34)
-    Text          = [System.Drawing.Color]::FromArgb(255, 255, 255)
-    TextSecondary = [System.Drawing.Color]::FromArgb(200, 200, 200)
-    Accent        = [System.Drawing.Color]::FromArgb(76, 175, 80)
-    Warning       = [System.Drawing.Color]::FromArgb(255, 193, 7)
-    Error         = [System.Drawing.Color]::FromArgb(244, 67, 54)
-    Success       = [System.Drawing.Color]::FromArgb(76, 175, 80)
+# Dark theme color palette with error handling
+try {
+    $script:Colors = @{
+        Background    = [System.Drawing.Color]::FromArgb(32, 32, 32)
+        Surface       = [System.Drawing.Color]::FromArgb(48, 48, 48)
+        Primary       = [System.Drawing.Color]::FromArgb(0, 150, 136)
+        Secondary     = [System.Drawing.Color]::FromArgb(255, 87, 34)
+        Text          = [System.Drawing.Color]::FromArgb(255, 255, 255)
+        TextSecondary = [System.Drawing.Color]::FromArgb(200, 200, 200)
+        Accent        = [System.Drawing.Color]::FromArgb(76, 175, 80)
+        Warning       = [System.Drawing.Color]::FromArgb(255, 193, 7)
+        Error         = [System.Drawing.Color]::FromArgb(244, 67, 54)
+        Success       = [System.Drawing.Color]::FromArgb(76, 175, 80)
+    }
+}
+catch {
+    # Fallback colors if there's an issue
+    $script:Colors = @{
+        Background    = [System.Drawing.Color]::Black
+        Surface       = [System.Drawing.Color]::DarkGray
+        Primary       = [System.Drawing.Color]::Blue
+        Secondary     = [System.Drawing.Color]::Orange
+        Text          = [System.Drawing.Color]::White
+        TextSecondary = [System.Drawing.Color]::LightGray
+        Accent        = [System.Drawing.Color]::Green
+        Warning       = [System.Drawing.Color]::Yellow
+        Error         = [System.Drawing.Color]::Red
+        Success       = [System.Drawing.Color]::Green
+    }
 }
 
 # Global variables for wizard state
@@ -82,22 +99,15 @@ $script:WizardSteps = @(
     @{ Title = "Authentication"; Description = "Configure admin credentials" }
     @{ Title = "Review & Generate"; Description = "Review settings and generate configuration" }
     @{ Title = "Complete"; Description = "Configuration generated successfully" }
-)# C
-reate ASCII art raptor for console display
-$script:RaptorArt = @"
-    🦖 VELOCIRAPTOR DFIR FRAMEWORK 🦖
-    ═══════════════════════════════════
-         ░░░░░░░░░░░░░░░░░░░░░░░░░░░
-        ░░    ████████████████    ░░
-       ░░   ██              ██   ░░
-      ░░   ██   ████    ████   ██   ░░
-     ░░   ██   ██  ██  ██  ██   ██   ░░
-    ░░   ██     ████    ████     ██   ░░
-   ░░   ██        ████████        ██   ░░
-  ░░   ██          ████          ██   ░░
- ░░   ██            ██            ██   ░░
-░░   ██              ██              ██   ░░
-    ████████████████████████████████
+)
+
+# Create professional banner for console display
+$script:VelociraptorBanner = @"
+╔══════════════════════════════════════════════════════════════╗
+║                🦖 VELOCIRAPTOR DFIR FRAMEWORK 🦖              ║
+║                   Configuration Wizard v5.0.1                ║
+║                      Professional Edition                     ║
+╚══════════════════════════════════════════════════════════════╝
 "@
 
 # Create raptor-themed form with dark design
@@ -467,14 +477,20 @@ function Initialize-SafeEventHandling {
             }
         })
     
-    # Global exception handler
+    # Global exception handler - simplified to avoid SetUnhandledExceptionMode issues
     $Form.Add_Load({
-            [System.Windows.Forms.Application]::SetUnhandledExceptionMode([System.Windows.Forms.UnhandledExceptionMode]::CatchException)
-            [System.Windows.Forms.Application]::add_ThreadException({
-                    param($sender, $e)
-                    $errorMsg = "An error occurred: $($e.Exception.Message)"
-                    [System.Windows.Forms.MessageBox]::Show($errorMsg, "Error", "OK", "Error")
-                })
+            try {
+                # Only add thread exception handler without changing exception mode
+                [System.Windows.Forms.Application]::add_ThreadException({
+                        param($sender, $e)
+                        $errorMsg = "An error occurred: $($e.Exception.Message)"
+                        [System.Windows.Forms.MessageBox]::Show($errorMsg, "Error", "OK", "Error")
+                    })
+            }
+            catch {
+                # Silently handle any exception handler setup errors
+                Write-Verbose "Could not set up exception handler: $($_.Exception.Message)"
+            }
         })
 }
 
@@ -1003,8 +1019,8 @@ authentication:
 
 # Main execution with comprehensive error handling
 try {
-    Write-Host $script:RaptorArt -ForegroundColor Green
-    Write-Host "Starting Velociraptor Configuration Wizard..." -ForegroundColor Cyan
+    Write-Host $script:VelociraptorBanner -ForegroundColor Cyan
+    Write-Host "Starting Velociraptor Configuration Wizard..." -ForegroundColor White
     
     # Create the main form
     $script:MainForm, $backgroundPanel = New-RaptorWizardForm
@@ -1067,6 +1083,7 @@ function Show-DeploymentTypeStep {
     $titleLabel.ForeColor = $script:Colors.Primary
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 35)
+    $titleLabel.BackColor = [System.Drawing.Color]::Transparent
     $script:ContentPanel.Controls.Add($titleLabel)
     
     # Server option
@@ -1074,6 +1091,7 @@ function Show-DeploymentTypeStep {
     $script:ServerRadio.Text = "🖥️ Server Deployment"
     $script:ServerRadio.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
     $script:ServerRadio.ForeColor = $script:Colors.Text
+    $script:ServerRadio.BackColor = [System.Drawing.Color]::Transparent
     $script:ServerRadio.Location = New-Object System.Drawing.Point(60, 100)
     $script:ServerRadio.Size = New-Object System.Drawing.Size(300, 25)
     $script:ServerRadio.Checked = ($script:ConfigData.DeploymentType -eq "Server")
@@ -1088,6 +1106,7 @@ function Show-DeploymentTypeStep {
     $serverDesc.Size = New-Object System.Drawing.Size(700, 20)
     $serverDesc.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $serverDesc.ForeColor = $script:Colors.TextSecondary
+    $serverDesc.BackColor = [System.Drawing.Color]::Transparent
     $script:ContentPanel.Controls.Add($serverDesc)
     
     # Standalone option
@@ -1095,6 +1114,7 @@ function Show-DeploymentTypeStep {
     $script:StandaloneRadio.Text = "💻 Standalone Deployment"
     $script:StandaloneRadio.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
     $script:StandaloneRadio.ForeColor = $script:Colors.Text
+    $script:StandaloneRadio.BackColor = [System.Drawing.Color]::Transparent
     $script:StandaloneRadio.Location = New-Object System.Drawing.Point(60, 180)
     $script:StandaloneRadio.Size = New-Object System.Drawing.Size(300, 25)
     $script:StandaloneRadio.Checked = ($script:ConfigData.DeploymentType -eq "Standalone")
@@ -1109,6 +1129,7 @@ function Show-DeploymentTypeStep {
     $standaloneDesc.Size = New-Object System.Drawing.Size(700, 20)
     $standaloneDesc.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $standaloneDesc.ForeColor = $script:Colors.TextSecondary
+    $standaloneDesc.BackColor = [System.Drawing.Color]::Transparent
     $script:ContentPanel.Controls.Add($standaloneDesc)
     
     # Client option
@@ -1116,6 +1137,7 @@ function Show-DeploymentTypeStep {
     $script:ClientRadio.Text = "📱 Client Configuration"
     $script:ClientRadio.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
     $script:ClientRadio.ForeColor = $script:Colors.Text
+    $script:ClientRadio.BackColor = [System.Drawing.Color]::Transparent
     $script:ClientRadio.Location = New-Object System.Drawing.Point(60, 260)
     $script:ClientRadio.Size = New-Object System.Drawing.Size(300, 25)
     $script:ClientRadio.Checked = ($script:ConfigData.DeploymentType -eq "Client")
@@ -1130,6 +1152,7 @@ function Show-DeploymentTypeStep {
     $clientDesc.Size = New-Object System.Drawing.Size(700, 20)
     $clientDesc.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $clientDesc.ForeColor = $script:Colors.TextSecondary
+    $clientDesc.BackColor = [System.Drawing.Color]::Transparent
     $script:ContentPanel.Controls.Add($clientDesc)
 }
 
