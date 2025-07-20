@@ -16,16 +16,30 @@ param(
     [switch]$StartMinimized
 )
 
-# Add Windows Forms assembly with error handling
+# Initialize Windows Forms FIRST - before any other code
 try {
-    Add-Type -AssemblyName System.Windows.Forms
-    Add-Type -AssemblyName System.Drawing
-    [System.Windows.Forms.Application]::EnableVisualStyles()
-    [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
+    # Check if already initialized to prevent multiple calls
+    if (-not [System.Windows.Forms.Application]::RenderWithVisualStyles) {
+        Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
+        Add-Type -AssemblyName System.Drawing -ErrorAction Stop
+        [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
+        [System.Windows.Forms.Application]::EnableVisualStyles()
+    }
 }
 catch {
-    Write-Error "Failed to load Windows Forms: $($_.Exception.Message)"
-    exit 1
+    Write-Error "Failed to initialize Windows Forms: $($_.Exception.Message)"
+    Write-Host "This may be due to Windows Forms already being initialized elsewhere." -ForegroundColor Yellow
+    Write-Host "Attempting to continue without re-initialization..." -ForegroundColor Yellow
+    
+    # Try to load assemblies without the problematic calls
+    try {
+        Add-Type -AssemblyName System.Windows.Forms -ErrorAction SilentlyContinue
+        Add-Type -AssemblyName System.Drawing -ErrorAction SilentlyContinue
+    }
+    catch {
+        Write-Error "Critical error: Cannot load Windows Forms assemblies: $($_.Exception.Message)"
+        exit 1
+    }
 }
 
 # Import required modules with error handling
@@ -1020,10 +1034,31 @@ authentication:
     }
 }
 
+# Ensure Windows Forms is properly initialized
+function Initialize-WindowsForms {
+    try {
+        # Only initialize if not already done
+        if (-not [System.Windows.Forms.Application]::RenderWithVisualStyles) {
+            [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
+            [System.Windows.Forms.Application]::EnableVisualStyles()
+        }
+        return $true
+    }
+    catch {
+        Write-Warning "Windows Forms initialization issue: $($_.Exception.Message)"
+        return $false
+    }
+}
+
 # Main execution with comprehensive error handling
 try {
     Write-Host $script:VelociraptorBanner -ForegroundColor Cyan
     Write-Host "Starting Velociraptor Configuration Wizard..." -ForegroundColor White
+    
+    # Ensure Windows Forms is ready
+    if (-not (Initialize-WindowsForms)) {
+        Write-Warning "Windows Forms initialization had issues, but continuing..."
+    }
     
     # Create the main form
     $script:MainForm, $backgroundPanel = New-RaptorWizardForm
