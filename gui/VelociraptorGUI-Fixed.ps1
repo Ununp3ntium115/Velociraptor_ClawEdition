@@ -446,6 +446,313 @@ function Show-DeploymentTypeStep {
     }
 }
 
+# Show storage configuration step
+function Show-StorageConfigurationStep {
+    param($ContentPanel)
+    
+    try {
+        $ContentPanel.Controls.Clear()
+        
+        # Title
+        $titleLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = "Storage Configuration"
+            Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
+            Location = New-Object System.Drawing.Point(40, 30)
+            Size = New-Object System.Drawing.Size(400, 35)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $PRIMARY_TEAL
+        
+        if ($titleLabel -ne $null) {
+            $ContentPanel.Controls.Add($titleLabel)
+        }
+        
+        # Datastore directory
+        $datastoreLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = "Datastore Directory:"
+            Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
+            Location = New-Object System.Drawing.Point(40, 80)
+            Size = New-Object System.Drawing.Size(150, 25)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
+        
+        if ($datastoreLabel -ne $null) {
+            $ContentPanel.Controls.Add($datastoreLabel)
+        }
+        
+        $script:DatastoreTextBox = New-SafeControl -ControlType "System.Windows.Forms.TextBox" -Properties @{
+            Text = $script:ConfigData.DatastoreDirectory
+            Location = New-Object System.Drawing.Point(40, 110)
+            Size = New-Object System.Drawing.Size(400, 25)
+            Font = New-Object System.Drawing.Font("Segoe UI", 10)
+        } -BackColor $DARK_SURFACE -ForeColor $WHITE_TEXT
+        
+        if ($script:DatastoreTextBox -ne $null) {
+            $script:DatastoreTextBox.Add_TextChanged({
+                $script:ConfigData.DatastoreDirectory = $script:DatastoreTextBox.Text
+            })
+            $ContentPanel.Controls.Add($script:DatastoreTextBox)
+        }
+        
+    }
+    catch {
+        Write-Error "Failed to show storage configuration step: $($_.Exception.Message)"
+    }
+}
+
+# Show network configuration step
+function Show-NetworkConfigurationStep {
+    param($ContentPanel)
+    
+    try {
+        $ContentPanel.Controls.Clear()
+        
+        # Title
+        $titleLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = "Network Configuration"
+            Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
+            Location = New-Object System.Drawing.Point(40, 30)
+            Size = New-Object System.Drawing.Size(400, 35)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $PRIMARY_TEAL
+        
+        if ($titleLabel -ne $null) {
+            $ContentPanel.Controls.Add($titleLabel)
+        }
+        
+        # Bind address
+        $bindLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = "Bind Address:"
+            Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
+            Location = New-Object System.Drawing.Point(40, 80)
+            Size = New-Object System.Drawing.Size(100, 25)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
+        
+        if ($bindLabel -ne $null) {
+            $ContentPanel.Controls.Add($bindLabel)
+        }
+        
+        $script:BindAddressTextBox = New-SafeControl -ControlType "System.Windows.Forms.TextBox" -Properties @{
+            Text = $script:ConfigData.BindAddress
+            Location = New-Object System.Drawing.Point(150, 80)
+            Size = New-Object System.Drawing.Size(150, 25)
+            Font = New-Object System.Drawing.Font("Segoe UI", 10)
+        } -BackColor $DARK_SURFACE -ForeColor $WHITE_TEXT
+        
+        if ($script:BindAddressTextBox -ne $null) {
+            $script:BindAddressTextBox.Add_TextChanged({
+                $script:ConfigData.BindAddress = $script:BindAddressTextBox.Text
+            })
+            $ContentPanel.Controls.Add($script:BindAddressTextBox)
+        }
+        
+        # Port
+        $portLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = "Port:"
+            Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
+            Location = New-Object System.Drawing.Point(320, 80)
+            Size = New-Object System.Drawing.Size(50, 25)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
+        
+        if ($portLabel -ne $null) {
+            $ContentPanel.Controls.Add($portLabel)
+        }
+        
+        $script:BindPortTextBox = New-SafeControl -ControlType "System.Windows.Forms.TextBox" -Properties @{
+            Text = $script:ConfigData.BindPort
+            Location = New-Object System.Drawing.Point(370, 80)
+            Size = New-Object System.Drawing.Size(80, 25)
+            Font = New-Object System.Drawing.Font("Segoe UI", 10)
+        } -BackColor $DARK_SURFACE -ForeColor $WHITE_TEXT
+        
+        if ($script:BindPortTextBox -ne $null) {
+            $script:BindPortTextBox.Add_TextChanged({
+                $script:ConfigData.BindPort = $script:BindPortTextBox.Text
+            })
+            $ContentPanel.Controls.Add($script:BindPortTextBox)
+        }
+        
+    }
+    catch {
+        Write-Error "Failed to show network configuration step: $($_.Exception.Message)"
+    }
+}
+
+# Show authentication step
+function Show-AuthenticationStep {
+    param($ContentPanel)
+    
+    try {
+        $ContentPanel.Controls.Clear()
+        
+        # Title
+        $titleLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = "Authentication Configuration"
+            Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
+            Location = New-Object System.Drawing.Point(40, 30)
+            Size = New-Object System.Drawing.Size(400, 35)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $PRIMARY_TEAL
+        
+        if ($titleLabel -ne $null) {
+            $ContentPanel.Controls.Add($titleLabel)
+        }
+        
+        # Admin username
+        $usernameLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = "Admin Username:"
+            Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
+            Location = New-Object System.Drawing.Point(40, 80)
+            Size = New-Object System.Drawing.Size(150, 25)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
+        
+        if ($usernameLabel -ne $null) {
+            $ContentPanel.Controls.Add($usernameLabel)
+        }
+        
+        $script:AdminUsernameTextBox = New-SafeControl -ControlType "System.Windows.Forms.TextBox" -Properties @{
+            Text = $script:ConfigData.AdminUsername
+            Location = New-Object System.Drawing.Point(40, 110)
+            Size = New-Object System.Drawing.Size(250, 25)
+            Font = New-Object System.Drawing.Font("Segoe UI", 10)
+        } -BackColor $DARK_SURFACE -ForeColor $WHITE_TEXT
+        
+        if ($script:AdminUsernameTextBox -ne $null) {
+            $script:AdminUsernameTextBox.Add_TextChanged({
+                $script:ConfigData.AdminUsername = $script:AdminUsernameTextBox.Text
+            })
+            $ContentPanel.Controls.Add($script:AdminUsernameTextBox)
+        }
+        
+        # Admin password
+        $passwordLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = "Admin Password:"
+            Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
+            Location = New-Object System.Drawing.Point(40, 150)
+            Size = New-Object System.Drawing.Size(150, 25)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
+        
+        if ($passwordLabel -ne $null) {
+            $ContentPanel.Controls.Add($passwordLabel)
+        }
+        
+        $script:AdminPasswordTextBox = New-SafeControl -ControlType "System.Windows.Forms.TextBox" -Properties @{
+            Text = $script:ConfigData.AdminPassword
+            Location = New-Object System.Drawing.Point(40, 180)
+            Size = New-Object System.Drawing.Size(250, 25)
+            Font = New-Object System.Drawing.Font("Segoe UI", 10)
+            UseSystemPasswordChar = $true
+        } -BackColor $DARK_SURFACE -ForeColor $WHITE_TEXT
+        
+        if ($script:AdminPasswordTextBox -ne $null) {
+            $script:AdminPasswordTextBox.Add_TextChanged({
+                $script:ConfigData.AdminPassword = $script:AdminPasswordTextBox.Text
+            })
+            $ContentPanel.Controls.Add($script:AdminPasswordTextBox)
+        }
+        
+    }
+    catch {
+        Write-Error "Failed to show authentication step: $($_.Exception.Message)"
+    }
+}
+
+# Show review step
+function Show-ReviewStep {
+    param($ContentPanel)
+    
+    try {
+        $ContentPanel.Controls.Clear()
+        
+        # Title
+        $titleLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = "Review Configuration"
+            Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
+            Location = New-Object System.Drawing.Point(40, 30)
+            Size = New-Object System.Drawing.Size(400, 35)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $PRIMARY_TEAL
+        
+        if ($titleLabel -ne $null) {
+            $ContentPanel.Controls.Add($titleLabel)
+        }
+        
+        # Review content
+        $reviewText = @"
+Configuration Summary:
+
+Deployment Type: $($script:ConfigData.DeploymentType)
+Datastore Directory: $($script:ConfigData.DatastoreDirectory)
+Bind Address: $($script:ConfigData.BindAddress)
+Bind Port: $($script:ConfigData.BindPort)
+Admin Username: $($script:ConfigData.AdminUsername)
+Organization: $($script:ConfigData.OrganizationName)
+
+Click Next to generate the configuration file.
+"@
+        
+        $reviewLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = $reviewText
+            Location = New-Object System.Drawing.Point(40, 80)
+            Size = New-Object System.Drawing.Size(800, 300)
+            Font = New-Object System.Drawing.Font("Consolas", 10, [System.Drawing.FontStyle]::Regular)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
+        
+        if ($reviewLabel -ne $null) {
+            $ContentPanel.Controls.Add($reviewLabel)
+        }
+        
+    }
+    catch {
+        Write-Error "Failed to show review step: $($_.Exception.Message)"
+    }
+}
+
+# Show complete step
+function Show-CompleteStep {
+    param($ContentPanel)
+    
+    try {
+        $ContentPanel.Controls.Clear()
+        
+        # Title
+        $titleLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = "Configuration Complete!"
+            Font = New-Object System.Drawing.Font("Segoe UI", 18, [System.Drawing.FontStyle]::Bold)
+            Location = New-Object System.Drawing.Point(40, 30)
+            Size = New-Object System.Drawing.Size(600, 40)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $SUCCESS_GREEN
+        
+        if ($titleLabel -ne $null) {
+            $ContentPanel.Controls.Add($titleLabel)
+        }
+        
+        # Success message
+        $successText = @"
+Your Velociraptor configuration has been generated successfully!
+
+Configuration file would be saved to: velociraptor-config.yaml
+
+Next steps:
+1. Review the generated configuration file
+2. Deploy Velociraptor using the configuration
+3. Access the web interface
+4. Login with your admin credentials
+
+Click Finish to close the wizard.
+"@
+        
+        $successLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
+            Text = $successText
+            Location = New-Object System.Drawing.Point(40, 90)
+            Size = New-Object System.Drawing.Size(800, 300)
+            Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Regular)
+        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
+        
+        if ($successLabel -ne $null) {
+            $ContentPanel.Controls.Add($successLabel)
+        }
+        
+    }
+    catch {
+        Write-Error "Failed to show complete step: $($_.Exception.Message)"
+    }
+}
+
 # Navigation functions
 function Move-ToNextStep {
     try {
@@ -495,8 +802,13 @@ function Update-CurrentStep {
         switch ($script:CurrentStep) {
             0 { Show-WelcomeStep -ContentPanel $script:ContentPanel }
             1 { Show-DeploymentTypeStep -ContentPanel $script:ContentPanel }
+            2 { Show-StorageConfigurationStep -ContentPanel $script:ContentPanel }
+            3 { Show-NetworkConfigurationStep -ContentPanel $script:ContentPanel }
+            4 { Show-AuthenticationStep -ContentPanel $script:ContentPanel }
+            5 { Show-ReviewStep -ContentPanel $script:ContentPanel }
+            6 { Show-CompleteStep -ContentPanel $script:ContentPanel }
             default { 
-                # Simple placeholder for other steps
+                # Fallback for any undefined steps
                 $script:ContentPanel.Controls.Clear()
                 $label = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
                     Text = "Step $($script:CurrentStep + 1): $($script:WizardSteps[$script:CurrentStep].Title)"
