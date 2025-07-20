@@ -652,19 +652,20 @@ function Clear-ToolCache {
     Write-VelociraptorLog "Tool cache cleared" -Level Info
 }
 
-# Enhanced YAML parser with robust error handling
+# Enhanced YAML parser for Velociraptor artifacts
 function ConvertFrom-Yaml {
     param($Content)
     
-    # Enhanced YAML parser for artifact parsing with graceful error handling
-    # Handles missing properties and malformed YAML gracefully
-    
+    # Parse Velociraptor artifact YAML and extract tool references from VQL queries
     $result = @{
         name = ""
         description = ""
         author = ""
         type = ""
         tools = @()
+        sources = @()
+        parameters = @()
+        precondition = ""
     }
     
     if ([string]::IsNullOrWhiteSpace($Content)) {
@@ -674,150 +675,218 @@ function ConvertFrom-Yaml {
     try {
         $lines = $Content -split "`r?`n"
         $currentSection = $null
-        $tools = @()
-        $currentTool = @{}
-        $indentLevel = 0
+        $currentQuery = ""
+        $inMultilineString = $false
+        $multilineDelimiter = ""
         
         foreach ($line in $lines) {
-            # Skip empty lines and comments
-            if ([string]::IsNullOrWhiteSpace($line) -or $line.TrimStart().StartsWith('#')) {
+            # Skip empty lines and comments (but not in multiline strings)
+            if (-not $inMultilineString -and ([string]::IsNullOrWhiteSpace($line) -or $line.TrimStart().StartsWith('#'))) {
                 continue
             }
             
             $trimmedLine = $line.Trim()
-            $leadingSpaces = $line.Length - $line.TrimStart().Length
+            
+            # Handle multiline strings
+            if ($inMultilineString) {
+                if ($line.Trim() -eq $multilineDelimiter) {
+                    $inMultilineString = $false
+                    $multilineDelimiter = ""
+                } else {
+                    $currentQuery += "`n$line"
+                }
+                continue
+            }
+            
+            # Check for multiline string start
+            if ($line -match "^\s*\|" -or $line -match "^\s*>") {
+                $inMultilineString = $true
+                $multilineDelimiter = ""  # YAML multiline strings end with dedent
+                continue
+            }
             
             # Handle top-level properties
             if ($line -match "^(\w+):\s*(.*)$") {
                 $key = $matches[1].ToLower()
                 $value = $matches[2].Trim()
                 
-                # Remove quotes if present
-                if ($value.StartsWith('"') -and $value.EndsWith('"')) {
-                    $value = $value.Substring(1, $value.Length - 2)
-                }
-                if ($value.StartsWith("'") -and $value.EndsWith("'")) {
-                    $value = $value.Substring(1, $value.Length - 2)
-                }
+                # Clean up value
+                $value = $value -replace '^["\''](.*)["\'']\s*$', '$1'
                 
                 switch ($key) {
                     "name" { $result.name = $value }
-                    "description" { $result.description = $value }
+                    "description" { 
+                        if ($value -eq "|" -or $value -eq ">") {
+                            $inMultilineString = $true
+                            $currentQuery = ""
+                        } else {
+                            $result.description = $value
+                        }
+                    }
                     "author" { $result.author = $value }
                     "type" { $result.type = $value }
-                    "tools" { 
-                        $currentSection = "tools"
-                        $indentLevel = $leadingSpaces
-                    }
+                    "precondition" { $result.precondition = $value }
+                    "sources" { $currentSection = "sources" }
+                    "parameters" { $currentSection = "parameters" }
                     default {
-                        # Store other properties
                         $result[$key] = $value
                     }
                 }
             }
-            # Handle tools section
-            elseif ($currentSection -eq "tools") {
-                # New tool entry
-                if ($line -match "^\s*-\s*name:\s*(.+)$") {
-                    # Save previous tool if exists
-                    if ($currentTool.Count -gt 0) {
-                        $tools += [PSCustomObject]$currentTool
-                    }
-                    
-                    $toolName = $matches[1].Trim()
-                    # Remove quotes if present
-                    if ($toolName.StartsWith('"') -and $toolName.EndsWith('"')) {
-                        $toolName = $toolName.Substring(1, $toolName.Length - 2)
-                    }
-                    if ($toolName.StartsWith("'") -and $toolName.EndsWith("'")) {
-                        $toolName = $toolName.Substring(1, $toolName.Length - 2)
-                    }
-                    
-                    $currentTool = @{ 
-                        name = $toolName
-                        url = ""
-                        version = ""
-                        expected_hash = ""
-                        serve_locally = $false
-                        IsExecutable = $true
-                    }
-                }
-                # Tool properties
-                elseif ($line -match "^\s+(\w+):\s*(.*)$" -and $currentTool.Count -gt 0) {
-                    $propName = $matches[1].ToLower()
-                    $propValue = $matches[2].Trim()
-                    
-                    # Remove quotes if present
-                    if ($propValue.StartsWith('"') -and $propValue.EndsWith('"')) {
-                        $propValue = $propValue.Substring(1, $propValue.Length - 2)
-                    }
-                    if ($propValue.StartsWith("'") -and $propValue.EndsWith("'")) {
-                        $propValue = $propValue.Substring(1, $propValue.Length - 2)
-                    }
-                    
-                    # Handle boolean values
-                    if ($propValue -match "^(true|false)$") {
-                        $propValue = [bool]::Parse($propValue)
-                    }
-                    
-                    $currentTool[$propName] = $propValue
-                }
-                # Check if we're leaving the tools section
-                elseif ($leadingSpaces -le $indentLevel -and $line -match "^(\w+):") {
-                    # Save last tool and exit tools section
-                    if ($currentTool.Count -gt 0) {
-                        $tools += [PSCustomObject]$currentTool
-                        $currentTool = @{}
-                    }
-                    $currentSection = $null
-                    
-                    # Process this line as a top-level property
-                    $key = $matches[1].ToLower()
-                    $value = $matches[2].Trim() -replace "^\s*", ""
-                    $result[$key] = $value
-                }
+            # Handle query content (look for tool references)
+            elseif ($line -match "query:\s*\|" -or $line -match "^\s*-\s*\|") {
+                $inMultilineString = $true
+                $currentQuery = ""
             }
-            # Handle other sections or properties
-            elseif ($line -match "^(\w+):\s*(.*)$") {
-                $key = $matches[1].ToLower()
-                $value = $matches[2].Trim()
-                
-                # Remove quotes if present
-                if ($value.StartsWith('"') -and $value.EndsWith('"')) {
-                    $value = $value.Substring(1, $value.Length - 2)
+            # Process completed queries for tool extraction
+            elseif ($currentQuery -and -not $inMultilineString) {
+                $extractedTools = Extract-ToolsFromVQL -VQLQuery $currentQuery
+                foreach ($tool in $extractedTools) {
+                    $result.tools += $tool
                 }
-                if ($value.StartsWith("'") -and $value.EndsWith("'")) {
-                    $value = $value.Substring(1, $value.Length - 2)
-                }
-                
-                $result[$key] = $value
+                $currentQuery = ""
             }
         }
         
-        # Save last tool if exists
-        if ($currentTool.Count -gt 0) {
-            $tools += [PSCustomObject]$currentTool
+        # Process any remaining query
+        if ($currentQuery) {
+            $extractedTools = Extract-ToolsFromVQL -VQLQuery $currentQuery
+            foreach ($tool in $extractedTools) {
+                $result.tools += $tool
+            }
         }
         
-        # Only add tools if we found any
-        if ($tools.Count -gt 0) {
-            $result.tools = $tools
-        }
+        # Ensure we have basic required properties
+        if (-not $result.name) { $result.name = "Unknown" }
+        if (-not $result.author) { $result.author = "Unknown" }
+        if (-not $result.type) { $result.type = "CLIENT" }
         
         return $result
     }
     catch {
-        Write-VelociraptorLog "YAML parsing error: $($_.Exception.Message)" -Level Warning
-        # Return basic structure even on parse failure
+        Write-VelociraptorLog "YAML parsing error for artifact: $($_.Exception.Message)" -Level Warning
         return @{
-            name = "Unknown"
-            description = "Parse error"
+            name = "Parse_Error_$(Get-Random)"
+            description = "Failed to parse artifact YAML"
             author = "Unknown"
-            type = "Unknown"
+            type = "CLIENT"
             tools = @()
             parse_error = $_.Exception.Message
         }
     }
+}
+
+# Extract tool references from VQL queries
+function Extract-ToolsFromVQL {
+    param($VQLQuery)
+    
+    $tools = @()
+    
+    if ([string]::IsNullOrWhiteSpace($VQLQuery)) {
+        return $tools
+    }
+    
+    # Common tool patterns in VQL queries
+    $toolPatterns = @{
+        # External executables
+        'execve\(' = @{ name = 'execve'; type = 'system_call' }
+        'powershell\.exe' = @{ name = 'powershell'; type = 'interpreter' }
+        'cmd\.exe' = @{ name = 'cmd'; type = 'interpreter' }
+        'python\.exe' = @{ name = 'python'; type = 'interpreter' }
+        'python3' = @{ name = 'python3'; type = 'interpreter' }
+        'bash' = @{ name = 'bash'; type = 'shell' }
+        'sh\s' = @{ name = 'sh'; type = 'shell' }
+        
+        # Forensic tools
+        'volatility' = @{ name = 'volatility'; type = 'memory_analysis' }
+        'yara' = @{ name = 'yara'; type = 'pattern_matching' }
+        'sigcheck' = @{ name = 'sigcheck'; type = 'signature_verification' }
+        'strings' = @{ name = 'strings'; type = 'text_extraction' }
+        'file\s+command' = @{ name = 'file'; type = 'file_identification' }
+        'xxd' = @{ name = 'xxd'; type = 'hex_dump' }
+        'hexdump' = @{ name = 'hexdump'; type = 'hex_dump' }
+        
+        # Network tools
+        'netstat' = @{ name = 'netstat'; type = 'network_analysis' }
+        'ss\s' = @{ name = 'ss'; type = 'network_analysis' }
+        'lsof' = @{ name = 'lsof'; type = 'file_analysis' }
+        'tcpdump' = @{ name = 'tcpdump'; type = 'network_capture' }
+        'wireshark' = @{ name = 'wireshark'; type = 'network_analysis' }
+        
+        # System tools
+        'ps\s' = @{ name = 'ps'; type = 'process_listing' }
+        'tasklist' = @{ name = 'tasklist'; type = 'process_listing' }
+        'wmic' = @{ name = 'wmic'; type = 'wmi_query' }
+        'reg\s+query' = @{ name = 'reg'; type = 'registry_query' }
+        'regedit' = @{ name = 'regedit'; type = 'registry_editor' }
+        
+        # Log analysis
+        'grep' = @{ name = 'grep'; type = 'text_search' }
+        'awk' = @{ name = 'awk'; type = 'text_processing' }
+        'sed' = @{ name = 'sed'; type = 'text_processing' }
+        'cut' = @{ name = 'cut'; type = 'text_processing' }
+        'sort' = @{ name = 'sort'; type = 'text_processing' }
+        'uniq' = @{ name = 'uniq'; type = 'text_processing' }
+        
+        # Compression/Archive
+        'zip' = @{ name = 'zip'; type = 'compression' }
+        'unzip' = @{ name = 'unzip'; type = 'compression' }
+        'tar' = @{ name = 'tar'; type = 'archive' }
+        'gzip' = @{ name = 'gzip'; type = 'compression' }
+        '7z' = @{ name = '7zip'; type = 'compression' }
+    }
+    
+    # Search for tool patterns in the VQL query
+    foreach ($pattern in $toolPatterns.Keys) {
+        if ($VQLQuery -match $pattern) {
+            $toolInfo = $toolPatterns[$pattern]
+            $tools += @{
+                name = $toolInfo.name
+                type = $toolInfo.type
+                pattern_matched = $pattern
+                context = "VQL_Query"
+                url = ""
+                version = "Unknown"
+                expected_hash = ""
+                serve_locally = $false
+                IsExecutable = $true
+            }
+        }
+    }
+    
+    # Look for specific executable calls
+    $executableMatches = [regex]::Matches($VQLQuery, '(?i)(?:execve|exec|run|execute|call)\s*\(\s*["\''](.*?)["\'']\s*\)', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    foreach ($match in $executableMatches) {
+        $executable = $match.Groups[1].Value
+        if ($executable -and $executable -notmatch '^\$' -and $executable -notmatch '^%') {
+            $toolName = Split-Path $executable -Leaf
+            $tools += @{
+                name = $toolName
+                type = "executable"
+                pattern_matched = "execve_call"
+                context = "VQL_Executable_Call"
+                full_path = $executable
+                url = ""
+                version = "Unknown"
+                expected_hash = ""
+                serve_locally = $false
+                IsExecutable = $true
+            }
+        }
+    }
+    
+    # Remove duplicates
+    $uniqueTools = @()
+    $seenTools = @{}
+    foreach ($tool in $tools) {
+        $key = "$($tool.name)_$($tool.type)"
+        if (-not $seenTools.ContainsKey($key)) {
+            $seenTools[$key] = $true
+            $uniqueTools += $tool
+        }
+    }
+    
+    return $uniqueTools
 }
 
 # Export tool mapping results to various formats

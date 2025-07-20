@@ -16,9 +16,16 @@ function Export-ToolMapping {
             New-Item -Path $outputDir -ItemType Directory -Force | Out-Null
         }
         
+        # Debug logging
+        Write-VelociraptorLog "Export-ToolMapping: Results type: $($Results.GetType().Name)" -Level Debug
+        Write-VelociraptorLog "Export-ToolMapping: Results properties: $($Results.PSObject.Properties.Name -join ', ')" -Level Debug
+        
         # Safe collection handling
         $artifactList = if ($Results.Artifacts) { @($Results.Artifacts) } else { @() }
         $toolDatabase = if ($Results.ToolDatabase) { $Results.ToolDatabase } else { @{} }
+        
+        Write-VelociraptorLog "Export-ToolMapping: Artifact list type: $($artifactList.GetType().Name), Count: $($artifactList.Count)" -Level Debug
+        Write-VelociraptorLog "Export-ToolMapping: Tool database type: $($toolDatabase.GetType().Name)" -Level Debug
         
         # Safe counting with explicit checks
         $artifactCount = 0
@@ -27,10 +34,22 @@ function Export-ToolMapping {
         $artifactsWithoutTools = 0
         
         if ($artifactList) {
-            $artifactCount = $artifactList.Count
+            # Handle both single objects and arrays
+            if ($artifactList -is [array]) {
+                $artifactCount = $artifactList.Count
+            } else {
+                $artifactCount = 1
+                $artifactList = @($artifactList)
+            }
+            
             foreach ($artifact in $artifactList) {
-                if ($artifact.Tools -and $artifact.Tools.Count -gt 0) {
-                    $artifactsWithTools++
+                if ($artifact.Tools) {
+                    $toolList = @($artifact.Tools)
+                    if ($toolList.Count -gt 0) {
+                        $artifactsWithTools++
+                    } else {
+                        $artifactsWithoutTools++
+                    }
                 } else {
                     $artifactsWithoutTools++
                 }
@@ -38,7 +57,9 @@ function Export-ToolMapping {
         }
         
         if ($toolDatabase -and $toolDatabase.Keys) {
-            $toolCount = $toolDatabase.Keys.Count
+            # Handle hashtable keys collection
+            $keys = @($toolDatabase.Keys)
+            $toolCount = $keys.Count
         }
         
         # Create simplified mapping report
@@ -58,31 +79,39 @@ function Export-ToolMapping {
         # Process artifacts safely
         foreach ($artifact in $artifactList) {
             $toolList = if ($artifact.Tools) { @($artifact.Tools) } else { @() }
+            $toolNames = @()
+            if ($toolList.Count -gt 0) {
+                $toolNames = $toolList | ForEach-Object { 
+                    if ($_ -and $_.Name) { $_.Name } else { $_ }
+                }
+            }
+            
             $artifactInfo = @{
-                Name = $artifact.Name
-                Path = $artifact.Path
-                Type = $artifact.Type
-                Author = $artifact.Author
-                Description = $artifact.Description
+                Name = if ($artifact.Name) { $artifact.Name } else { "Unknown" }
+                Path = if ($artifact.Path) { $artifact.Path } else { "" }
+                Type = if ($artifact.Type) { $artifact.Type } else { "CLIENT" }
+                Author = if ($artifact.Author) { $artifact.Author } else { "Unknown" }
+                Description = if ($artifact.Description) { $artifact.Description } else { "" }
                 ToolCount = $toolList.Count
-                Tools = $toolList | ForEach-Object { $_.Name }
+                Tools = $toolNames
             }
             $mappingReport.Artifacts += $artifactInfo
         }
         
         # Process tools safely
-        foreach ($toolName in $toolDatabase.Keys) {
+        $keys = @($toolDatabase.Keys)
+        foreach ($toolName in $keys) {
             $tool = $toolDatabase[$toolName]
             $usedByList = if ($tool.UsedByArtifacts) { @($tool.UsedByArtifacts) } else { @() }
             $toolInfo = @{
-                Name = $tool.Name
-                Url = $tool.Url
-                Version = $tool.Version
-                ExpectedHash = $tool.ExpectedHash
+                Name = if ($tool.Name) { $tool.Name } else { $toolName }
+                Url = if ($tool.Url) { $tool.Url } else { "" }
+                Version = if ($tool.Version) { $tool.Version } else { "Unknown" }
+                ExpectedHash = if ($tool.ExpectedHash) { $tool.ExpectedHash } else { "" }
                 UsedByArtifacts = $usedByList
                 ArtifactCount = $usedByList.Count
-                DownloadStatus = $tool.DownloadStatus
-                LocalPath = $tool.LocalPath
+                DownloadStatus = if ($tool.DownloadStatus) { $tool.DownloadStatus } else { "Pending" }
+                LocalPath = if ($tool.LocalPath) { $tool.LocalPath } else { "" }
             }
             $mappingReport.Tools += $toolInfo
         }

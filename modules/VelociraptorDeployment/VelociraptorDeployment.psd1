@@ -82,6 +82,7 @@
         'New-VelociraptorConfigurationTemplate',
         'Set-VelociraptorSecurityHardening',
         'New-ArtifactToolManager',
+        'Export-ToolMapping',
         'Deploy-VelociraptorEdge',
         'Deploy-VelociraptorServerless',
         'Enable-VelociraptorHPC'
