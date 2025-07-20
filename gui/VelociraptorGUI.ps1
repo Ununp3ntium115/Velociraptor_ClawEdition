@@ -105,7 +105,7 @@ function New-RaptorWizardForm {
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "🦖 Velociraptor Configuration Wizard"
     $form.Size = New-Object System.Drawing.Size(1000, 750)
-    $form.MinimumSize = New-Object System.Drawing.Size(900, 650)
+    $form.MinimumSize = New-Object System.Drawing.Size(900, 700)
     $form.StartPosition = "CenterScreen"
     $form.FormBorderStyle = "Sizable"
     $form.MaximizeBox = $true
@@ -283,7 +283,7 @@ function New-ContentPanel {
     param($ParentPanel)
     
     $script:ContentPanel = New-Object System.Windows.Forms.Panel
-    $script:ContentPanel.Size = New-Object System.Drawing.Size(940, 500)
+    $script:ContentPanel.Size = New-Object System.Drawing.Size(940, 450)
     $script:ContentPanel.Location = New-Object System.Drawing.Point(30, 180)
     $script:ContentPanel.Anchor = "Top,Left,Right,Bottom"
     $script:ContentPanel.BackColor = $script:Colors.Surface
@@ -338,7 +338,8 @@ function New-ButtonPanel {
     
     $buttonPanel = New-Object System.Windows.Forms.Panel
     $buttonPanel.Size = New-Object System.Drawing.Size(1000, 80)
-    $buttonPanel.Location = New-Object System.Drawing.Point(0, ($ParentPanel.Height - 80))
+    # Position button panel with margin from bottom to ensure visibility
+    $buttonPanel.Location = New-Object System.Drawing.Point(0, ($ParentPanel.Height - 100))
     $buttonPanel.Anchor = "Bottom,Left,Right"
     $buttonPanel.BackColor = $script:Colors.Surface
     
@@ -1019,8 +1020,8 @@ try {
     # Add resize event handler to keep button panel at bottom
     $script:MainForm.Add_Resize({
             try {
-                # Reposition button panel to stay at bottom
-                $buttonPanel.Location = New-Object System.Drawing.Point(0, ($backgroundPanel.Height - 80))
+                # Reposition button panel to stay at bottom with margin
+                $buttonPanel.Location = New-Object System.Drawing.Point(0, ($backgroundPanel.Height - 100))
             }
             catch {
                 # Silently handle resize errors
@@ -1305,8 +1306,8 @@ try {
     # Add resize event handler to keep button panel at bottom
     $script:MainForm.Add_Resize({
         try {
-            # Reposition button panel to stay at bottom
-            $script:ButtonPanel.Location = New-Object System.Drawing.Point(0, ($backgroundPanel.Height - 80))
+            # Reposition button panel to stay at bottom with margin
+            $script:ButtonPanel.Location = New-Object System.Drawing.Point(0, ($backgroundPanel.Height - 100))
         } catch {
             # Silently handle resize errors
         }
