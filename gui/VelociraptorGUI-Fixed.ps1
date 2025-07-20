@@ -22,10 +22,10 @@ try {
     Add-Type -AssemblyName System.Drawing -ErrorAction Stop
     [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
     [System.Windows.Forms.Application]::EnableVisualStyles()
-    Write-Host "✅ Windows Forms initialized successfully" -ForegroundColor Green
+    Write-Host "Windows Forms initialized successfully" -ForegroundColor Green
 }
 catch {
-    Write-Error "❌ Failed to initialize Windows Forms: $($_.Exception.Message)"
+    Write-Error "Failed to initialize Windows Forms: $($_.Exception.Message)"
     exit 1
 }
 
@@ -41,7 +41,7 @@ $ERROR_RED = [System.Drawing.Color]::FromArgb(244, 67, 54)
 # Professional banner
 $VelociraptorBanner = @"
 ╔══════════════════════════════════════════════════════════════╗
-║                🦖 VELOCIRAPTOR DFIR FRAMEWORK 🦖              ║
+║                VELOCIRAPTOR DFIR FRAMEWORK                   ║
 ║                   Configuration Wizard v5.0.1                ║
 ║                  Free For All First Responders               ║
 ╚══════════════════════════════════════════════════════════════╝
@@ -132,7 +132,7 @@ $script:WizardSteps = @(
 function New-MainForm {
     try {
         $form = New-SafeControl -ControlType "System.Windows.Forms.Form" -Properties @{
-            Text = "🦖 Velociraptor Configuration Wizard"
+            Text = "Velociraptor Configuration Wizard"
             Size = New-Object System.Drawing.Size(1000, 750)
             MinimumSize = New-Object System.Drawing.Size(900, 700)
             StartPosition = "CenterScreen"
@@ -178,7 +178,7 @@ function New-HeaderPanel {
         
         # Add title label
         $titleLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
-            Text = "🦖 VELOCIRAPTOR"
+            Text = "VELOCIRAPTOR"
             Font = New-Object System.Drawing.Font("Segoe UI", 24, [System.Drawing.FontStyle]::Bold)
             Location = New-Object System.Drawing.Point(30, 20)
             Size = New-Object System.Drawing.Size(400, 40)
@@ -265,7 +265,7 @@ function New-ButtonPanel {
         
         # Create buttons with safe creation
         $script:BackButton = New-SafeControl -ControlType "System.Windows.Forms.Button" -Properties @{
-            Text = "◀ Back"
+            Text = "< Back"
             Location = New-Object System.Drawing.Point(650, 20)
             Size = New-Object System.Drawing.Size(100, 40)
             FlatStyle = "Flat"
@@ -274,7 +274,7 @@ function New-ButtonPanel {
         } -BackColor $DARK_SURFACE -ForeColor $WHITE_TEXT
         
         $script:NextButton = New-SafeControl -ControlType "System.Windows.Forms.Button" -Properties @{
-            Text = "Next ▶"
+            Text = "Next >"
             Location = New-Object System.Drawing.Point(760, 20)
             Size = New-Object System.Drawing.Size(100, 40)
             FlatStyle = "Flat"
@@ -341,13 +341,13 @@ function Show-WelcomeStep {
         $welcomeText = @"
 This professional wizard will guide you through creating a complete Velociraptor configuration file optimized for your environment.
 
-🎯 Configuration Steps:
+Configuration Steps:
    • Deployment type selection (Server, Standalone, or Client)
    • Storage locations for data and logs
    • Network configuration with port management
    • Administrative credentials setup
 
-🚀 Features:
+Features:
    • Real-time input validation
    • Professional YAML configuration generation
    • Cross-platform compatibility
@@ -394,7 +394,7 @@ function Show-DeploymentTypeStep {
         
         # Server option
         $script:ServerRadio = New-SafeControl -ControlType "System.Windows.Forms.RadioButton" -Properties @{
-            Text = "🖥️ Server Deployment"
+            Text = "Server Deployment"
             Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
             Location = New-Object System.Drawing.Point(60, 100)
             Size = New-Object System.Drawing.Size(300, 25)
@@ -410,7 +410,7 @@ function Show-DeploymentTypeStep {
         
         # Standalone option
         $script:StandaloneRadio = New-SafeControl -ControlType "System.Windows.Forms.RadioButton" -Properties @{
-            Text = "💻 Standalone Deployment"
+            Text = "Standalone Deployment"
             Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
             Location = New-Object System.Drawing.Point(60, 180)
             Size = New-Object System.Drawing.Size(300, 25)
@@ -426,7 +426,7 @@ function Show-DeploymentTypeStep {
         
         # Client option
         $script:ClientRadio = New-SafeControl -ControlType "System.Windows.Forms.RadioButton" -Properties @{
-            Text = "📱 Client Configuration"
+            Text = "Client Configuration"
             Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
             Location = New-Object System.Drawing.Point(60, 260)
             Size = New-Object System.Drawing.Size(300, 25)
@@ -487,7 +487,7 @@ function Update-CurrentStep {
                 $script:NextButton.Text = "Finish"
             }
             else {
-                $script:NextButton.Text = "Next ▶"
+                $script:NextButton.Text = "Next >"
             }
         }
         
@@ -540,7 +540,7 @@ try {
     }
     
     # Run the application
-    Write-Host "✅ GUI created successfully, launching..." -ForegroundColor Green
+    Write-Host "GUI created successfully, launching..." -ForegroundColor Green
     [System.Windows.Forms.Application]::Run($script:MainForm)
     
     Write-Host "Velociraptor Configuration Wizard completed." -ForegroundColor Green
