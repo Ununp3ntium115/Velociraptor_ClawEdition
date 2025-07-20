@@ -135,7 +135,7 @@ function New-RaptorWizardForm {
     $form.MaximizeBox = $true
     $form.MinimizeBox = $true
     $form.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
-    $form.ForeColor = $script:Colors.Text
+    $form.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     
     # Set form icon (using built-in icon for now)
     try {
@@ -192,7 +192,7 @@ function New-RaptorWizardForm {
     $headerPanel.Size = New-Object System.Drawing.Size(1000, 100)
     $headerPanel.Location = New-Object System.Drawing.Point(0, 0)
     $headerPanel.Anchor = "Top,Left,Right"
-    $headerPanel.BackColor = $script:Colors.Primary
+    $headerPanel.BackColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
     
     # Add gradient effect to header
     $headerPanel.Add_Paint({
@@ -201,7 +201,7 @@ function New-RaptorWizardForm {
                 $rect = New-Object System.Drawing.Rectangle(0, 0, $sender.Width, $sender.Height)
                 $brush = New-Object System.Drawing.Drawing2D.LinearGradientBrush(
                     $rect,
-                    $script:Colors.Primary,
+                    [System.Drawing.Color]::FromArgb(0, 150, 136),
                     [System.Drawing.Color]::FromArgb(0, 100, 90),
                     [System.Drawing.Drawing2D.LinearGradientMode]::Horizontal
                 )
@@ -210,7 +210,7 @@ function New-RaptorWizardForm {
             }
             catch {
                 # Fallback to solid color
-                $brush = New-Object System.Drawing.SolidBrush($script:Colors.Primary)
+                $brush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(0, 150, 136))
                 $e.Graphics.FillRectangle($brush, 0, 0, $sender.Width, $sender.Height)
                 $brush.Dispose()
             }
@@ -260,12 +260,12 @@ function New-ProgressPanel {
     $progressPanel.Size = New-Object System.Drawing.Size(1000, 60)
     $progressPanel.Location = New-Object System.Drawing.Point(0, 100)
     $progressPanel.Anchor = "Top,Left,Right"
-    $progressPanel.BackColor = $script:Colors.Surface
+    $progressPanel.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
     
     # Add subtle border
     $progressPanel.Add_Paint({
             param($sender, $e)
-            $pen = New-Object System.Drawing.Pen($script:Colors.Primary, 2)
+            $pen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(0, 150, 136), 2)
             $e.Graphics.DrawLine($pen, 0, $sender.Height - 2, $sender.Width, $sender.Height - 2)
             $pen.Dispose()
         })
@@ -275,7 +275,7 @@ function New-ProgressPanel {
     $script:ProgressBar.Location = New-Object System.Drawing.Point(30, 15)
     $script:ProgressBar.Size = New-Object System.Drawing.Size(300, 8)
     $script:ProgressBar.Style = "Continuous"
-    $script:ProgressBar.ForeColor = $script:Colors.Accent
+    $script:ProgressBar.ForeColor = [System.Drawing.Color]::FromArgb(76, 175, 80)
     $script:ProgressBar.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $progressPanel.Controls.Add($script:ProgressBar)
     
@@ -284,7 +284,7 @@ function New-ProgressPanel {
     $script:ProgressLabel.Location = New-Object System.Drawing.Point(30, 30)
     $script:ProgressLabel.Size = New-Object System.Drawing.Size(600, 25)
     $script:ProgressLabel.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Regular)
-    $script:ProgressLabel.ForeColor = $script:Colors.Text
+    $script:ProgressLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:ProgressLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $progressPanel.Controls.Add($script:ProgressLabel)
     
@@ -293,7 +293,7 @@ function New-ProgressPanel {
     $script:StepLabel.Location = New-Object System.Drawing.Point(750, 25)
     $script:StepLabel.Size = New-Object System.Drawing.Size(200, 25)
     $script:StepLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-    $script:StepLabel.ForeColor = $script:Colors.Primary
+    $script:StepLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
     $script:StepLabel.TextAlign = "MiddleRight"
     $script:StepLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:StepLabel.Anchor = "Top,Right"
@@ -311,7 +311,7 @@ function New-ContentPanel {
     $script:ContentPanel.Size = New-Object System.Drawing.Size(940, 450)
     $script:ContentPanel.Location = New-Object System.Drawing.Point(30, 180)
     $script:ContentPanel.Anchor = "Top,Left,Right,Bottom"
-    $script:ContentPanel.BackColor = $script:Colors.Surface
+    $script:ContentPanel.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
     $script:ContentPanel.BorderStyle = "None"
     
     # Add rounded corners effect
@@ -334,7 +334,7 @@ function New-ContentPanel {
                 $path.CloseFigure()
             
                 # Fill with surface color
-                $brush = New-Object System.Drawing.SolidBrush($script:Colors.Surface)
+                $brush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(48, 48, 48))
                 $graphics.FillPath($brush, $path)
             
                 # Draw border
@@ -347,7 +347,7 @@ function New-ContentPanel {
             }
             catch {
                 # Fallback to simple rectangle
-                $brush = New-Object System.Drawing.SolidBrush($script:Colors.Surface)
+                $brush = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::FromArgb(48, 48, 48))
                 $e.Graphics.FillRectangle($brush, 0, 0, $sender.Width, $sender.Height)
                 $brush.Dispose()
             }
@@ -366,12 +366,12 @@ function New-ButtonPanel {
     # Position button panel with margin from bottom to ensure visibility
     $buttonPanel.Location = New-Object System.Drawing.Point(0, ($ParentPanel.Height - 100))
     $buttonPanel.Anchor = "Bottom,Left,Right"
-    $buttonPanel.BackColor = $script:Colors.Surface
+    $buttonPanel.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
     
     # Add top border
     $buttonPanel.Add_Paint({
             param($sender, $e)
-            $pen = New-Object System.Drawing.Pen($script:Colors.Primary, 1)
+            $pen = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(0, 150, 136), 1)
             $e.Graphics.DrawLine($pen, 0, 0, $sender.Width, 0)
             $pen.Dispose()
         })
@@ -419,29 +419,29 @@ function New-ModernButton {
     # Set colors based on button type
     switch ($ButtonType) {
         "Primary" {
-            $button.BackColor = $script:Colors.Primary
+            $button.BackColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
             $button.ForeColor = [System.Drawing.Color]::White
-            $button.FlatAppearance.BorderColor = $script:Colors.Primary
+            $button.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
         }
         "Secondary" {
-            $button.BackColor = $script:Colors.Surface
-            $button.ForeColor = $script:Colors.Text
+            $button.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
+            $button.ForeColor = [System.Drawing.Color]::White
             $button.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(100, 100, 100)
         }
         "Success" {
-            $button.BackColor = $script:Colors.Success
+            $button.BackColor = [System.Drawing.Color]::FromArgb(76, 175, 80)
             $button.ForeColor = [System.Drawing.Color]::White
-            $button.FlatAppearance.BorderColor = $script:Colors.Success
+            $button.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(76, 175, 80)
         }
         "Warning" {
-            $button.BackColor = $script:Colors.Warning
+            $button.BackColor = [System.Drawing.Color]::FromArgb(255, 193, 7)
             $button.ForeColor = [System.Drawing.Color]::Black
-            $button.FlatAppearance.BorderColor = $script:Colors.Warning
+            $button.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(255, 193, 7)
         }
         "Danger" {
-            $button.BackColor = $script:Colors.Error
+            $button.BackColor = [System.Drawing.Color]::FromArgb(244, 67, 54)
             $button.ForeColor = [System.Drawing.Color]::White
-            $button.FlatAppearance.BorderColor = $script:Colors.Error
+            $button.FlatAppearance.BorderColor = [System.Drawing.Color]::FromArgb(244, 67, 54)
         }
     }
     
@@ -641,7 +641,7 @@ function Show-WelcomeStep {
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Text = "Welcome to Velociraptor Configuration Wizard!"
     $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 18, [System.Drawing.FontStyle]::Bold)
-    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(800, 40)
     $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
@@ -680,7 +680,7 @@ Click Next to begin the configuration process and deploy your Velociraptor DFIR 
     $welcomeLabel.Location = New-Object System.Drawing.Point(40, 90)
     $welcomeLabel.Size = New-Object System.Drawing.Size(850, 350)
     $welcomeLabel.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Regular)
-    $welcomeLabel.ForeColor = $script:Colors.Text
+    $welcomeLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $welcomeLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($welcomeLabel)
     
@@ -700,7 +700,7 @@ function Show-StorageConfigurationStep {
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Text = "Storage Configuration"
     $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
-    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
     $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
@@ -712,7 +712,7 @@ function Show-StorageConfigurationStep {
     $datastoreLabel.Location = New-Object System.Drawing.Point(40, 80)
     $datastoreLabel.Size = New-Object System.Drawing.Size(150, 25)
     $datastoreLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
-    $datastoreLabel.ForeColor = $script:Colors.Text
+    $datastoreLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $datastoreLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($datastoreLabel)
     
@@ -721,8 +721,8 @@ function Show-StorageConfigurationStep {
     $script:DatastoreTextBox.Location = New-Object System.Drawing.Point(40, 110)
     $script:DatastoreTextBox.Size = New-Object System.Drawing.Size(400, 25)
     $script:DatastoreTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $script:DatastoreTextBox.BackColor = $script:Colors.Surface
-    $script:DatastoreTextBox.ForeColor = $script:Colors.Text
+    $script:DatastoreTextBox.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
+    $script:DatastoreTextBox.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:DatastoreTextBox.Add_TextChanged({
         $script:ConfigData.DatastoreDirectory = $script:DatastoreTextBox.Text
     })
@@ -747,7 +747,7 @@ function Show-StorageConfigurationStep {
     $logsLabel.Location = New-Object System.Drawing.Point(40, 160)
     $logsLabel.Size = New-Object System.Drawing.Size(150, 25)
     $logsLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
-    $logsLabel.ForeColor = $script:Colors.Text
+    $logsLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $logsLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($logsLabel)
     
@@ -756,8 +756,8 @@ function Show-StorageConfigurationStep {
     $script:LogsTextBox.Location = New-Object System.Drawing.Point(40, 190)
     $script:LogsTextBox.Size = New-Object System.Drawing.Size(400, 25)
     $script:LogsTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $script:LogsTextBox.BackColor = $script:Colors.Surface
-    $script:LogsTextBox.ForeColor = $script:Colors.Text
+    $script:LogsTextBox.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
+    $script:LogsTextBox.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:LogsTextBox.Add_TextChanged({
         $script:ConfigData.LogsDirectory = $script:LogsTextBox.Text
     })
@@ -769,7 +769,7 @@ function Show-CertificateSettingsStep {
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Text = "Certificate Settings"
     $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
-    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
     $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
@@ -781,7 +781,7 @@ function Show-CertificateSettingsStep {
     $expirationLabel.Location = New-Object System.Drawing.Point(40, 80)
     $expirationLabel.Size = New-Object System.Drawing.Size(150, 25)
     $expirationLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
-    $expirationLabel.ForeColor = $script:Colors.Text
+    $expirationLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $expirationLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($expirationLabel)
     
@@ -791,8 +791,8 @@ function Show-CertificateSettingsStep {
     $script:ExpirationComboBox.Location = New-Object System.Drawing.Point(40, 110)
     $script:ExpirationComboBox.Size = New-Object System.Drawing.Size(200, 25)
     $script:ExpirationComboBox.DropDownStyle = "DropDownList"
-    $script:ExpirationComboBox.BackColor = $script:Colors.Surface
-    $script:ExpirationComboBox.ForeColor = $script:Colors.Text
+    $script:ExpirationComboBox.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
+    $script:ExpirationComboBox.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:ExpirationComboBox.Add_SelectedIndexChanged({
         $script:ConfigData.CertificateExpiration = $script:ExpirationComboBox.Text
     })
@@ -804,7 +804,7 @@ function Show-SecuritySettingsStep {
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Text = "Security Settings"
     $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
-    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
     $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
@@ -817,7 +817,7 @@ function Show-SecuritySettingsStep {
     $script:RestrictVQLCheckBox.Location = New-Object System.Drawing.Point(40, 80)
     $script:RestrictVQLCheckBox.Size = New-Object System.Drawing.Size(400, 25)
     $script:RestrictVQLCheckBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $script:RestrictVQLCheckBox.ForeColor = $script:Colors.Text
+    $script:RestrictVQLCheckBox.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:RestrictVQLCheckBox.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:RestrictVQLCheckBox.Add_CheckedChanged({
         $script:ConfigData.RestrictVQL = $script:RestrictVQLCheckBox.Checked
@@ -831,7 +831,7 @@ function Show-SecuritySettingsStep {
     $script:UseRegistryCheckBox.Location = New-Object System.Drawing.Point(40, 120)
     $script:UseRegistryCheckBox.Size = New-Object System.Drawing.Size(400, 25)
     $script:UseRegistryCheckBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $script:UseRegistryCheckBox.ForeColor = $script:Colors.Text
+    $script:UseRegistryCheckBox.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:UseRegistryCheckBox.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:UseRegistryCheckBox.Add_CheckedChanged({
         $script:ConfigData.UseRegistry = $script:UseRegistryCheckBox.Checked
@@ -844,7 +844,7 @@ function Show-NetworkConfigurationStep {
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Text = "Network Configuration"
     $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
-    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
     $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
@@ -856,7 +856,7 @@ function Show-NetworkConfigurationStep {
     $bindLabel.Location = New-Object System.Drawing.Point(40, 80)
     $bindLabel.Size = New-Object System.Drawing.Size(100, 25)
     $bindLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $bindLabel.ForeColor = $script:Colors.Text
+    $bindLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $bindLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($bindLabel)
     
@@ -865,8 +865,8 @@ function Show-NetworkConfigurationStep {
     $script:BindAddressTextBox.Location = New-Object System.Drawing.Point(150, 80)
     $script:BindAddressTextBox.Size = New-Object System.Drawing.Size(150, 25)
     $script:BindAddressTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $script:BindAddressTextBox.BackColor = $script:Colors.Surface
-    $script:BindAddressTextBox.ForeColor = $script:Colors.Text
+    $script:BindAddressTextBox.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
+    $script:BindAddressTextBox.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:BindAddressTextBox.Add_TextChanged({
         $script:ConfigData.BindAddress = $script:BindAddressTextBox.Text
     })
@@ -878,7 +878,7 @@ function Show-NetworkConfigurationStep {
     $portLabel.Location = New-Object System.Drawing.Point(320, 80)
     $portLabel.Size = New-Object System.Drawing.Size(50, 25)
     $portLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $portLabel.ForeColor = $script:Colors.Text
+    $portLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $portLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($portLabel)
     
@@ -887,8 +887,8 @@ function Show-NetworkConfigurationStep {
     $script:BindPortTextBox.Location = New-Object System.Drawing.Point(370, 80)
     $script:BindPortTextBox.Size = New-Object System.Drawing.Size(80, 25)
     $script:BindPortTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $script:BindPortTextBox.BackColor = $script:Colors.Surface
-    $script:BindPortTextBox.ForeColor = $script:Colors.Text
+    $script:BindPortTextBox.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
+    $script:BindPortTextBox.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:BindPortTextBox.Add_TextChanged({
         $script:ConfigData.BindPort = $script:BindPortTextBox.Text
     })
@@ -900,7 +900,7 @@ function Show-NetworkConfigurationStep {
     $guiBindLabel.Location = New-Object System.Drawing.Point(40, 130)
     $guiBindLabel.Size = New-Object System.Drawing.Size(100, 25)
     $guiBindLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $guiBindLabel.ForeColor = $script:Colors.Text
+    $guiBindLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $guiBindLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($guiBindLabel)
     
@@ -909,8 +909,8 @@ function Show-NetworkConfigurationStep {
     $script:GUIBindAddressTextBox.Location = New-Object System.Drawing.Point(150, 130)
     $script:GUIBindAddressTextBox.Size = New-Object System.Drawing.Size(150, 25)
     $script:GUIBindAddressTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $script:GUIBindAddressTextBox.BackColor = $script:Colors.Surface
-    $script:GUIBindAddressTextBox.ForeColor = $script:Colors.Text
+    $script:GUIBindAddressTextBox.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
+    $script:GUIBindAddressTextBox.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:GUIBindAddressTextBox.Add_TextChanged({
         $script:ConfigData.GUIBindAddress = $script:GUIBindAddressTextBox.Text
     })
@@ -922,7 +922,7 @@ function Show-NetworkConfigurationStep {
     $guiPortLabel.Location = New-Object System.Drawing.Point(320, 130)
     $guiPortLabel.Size = New-Object System.Drawing.Size(50, 25)
     $guiPortLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $guiPortLabel.ForeColor = $script:Colors.Text
+    $guiPortLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $guiPortLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($guiPortLabel)
     
@@ -931,8 +931,8 @@ function Show-NetworkConfigurationStep {
     $script:GUIBindPortTextBox.Location = New-Object System.Drawing.Point(370, 130)
     $script:GUIBindPortTextBox.Size = New-Object System.Drawing.Size(80, 25)
     $script:GUIBindPortTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $script:GUIBindPortTextBox.BackColor = $script:Colors.Surface
-    $script:GUIBindPortTextBox.ForeColor = $script:Colors.Text
+    $script:GUIBindPortTextBox.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
+    $script:GUIBindPortTextBox.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:GUIBindPortTextBox.Add_TextChanged({
         $script:ConfigData.GUIBindPort = $script:GUIBindPortTextBox.Text
     })
@@ -944,7 +944,7 @@ function Show-ReviewStep {
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Text = "Review Configuration"
     $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
-    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
     $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
@@ -969,7 +969,7 @@ Admin Username: $($script:ConfigData.AdminUsername)
     $reviewLabel.Location = New-Object System.Drawing.Point(40, 80)
     $reviewLabel.Size = New-Object System.Drawing.Size(800, 300)
     $reviewLabel.Font = New-Object System.Drawing.Font("Consolas", 10)
-    $reviewLabel.ForeColor = $script:Colors.Text
+    $reviewLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $reviewLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($reviewLabel)
 }
@@ -1055,7 +1055,7 @@ function Show-DeploymentTypeStep {
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Text = "Select Deployment Type"
     $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
-    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 35)
     $titleLabel.BackColor = [System.Drawing.Color]::Transparent
@@ -1065,7 +1065,7 @@ function Show-DeploymentTypeStep {
     $script:ServerRadio = New-Object System.Windows.Forms.RadioButton
     $script:ServerRadio.Text = "🖥️ Server Deployment"
     $script:ServerRadio.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
-    $script:ServerRadio.ForeColor = $script:Colors.Text
+    $script:ServerRadio.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:ServerRadio.BackColor = [System.Drawing.Color]::Transparent
     $script:ServerRadio.Location = New-Object System.Drawing.Point(60, 100)
     $script:ServerRadio.Size = New-Object System.Drawing.Size(300, 25)
@@ -1080,7 +1080,7 @@ function Show-DeploymentTypeStep {
     $serverDesc.Location = New-Object System.Drawing.Point(80, 130)
     $serverDesc.Size = New-Object System.Drawing.Size(700, 20)
     $serverDesc.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $serverDesc.ForeColor = $script:Colors.TextSecondary
+    $serverDesc.ForeColor = [System.Drawing.Color]::FromArgb(200, 200, 200)
     $serverDesc.BackColor = [System.Drawing.Color]::Transparent
     $script:ContentPanel.Controls.Add($serverDesc)
     
@@ -1088,7 +1088,7 @@ function Show-DeploymentTypeStep {
     $script:StandaloneRadio = New-Object System.Windows.Forms.RadioButton
     $script:StandaloneRadio.Text = "💻 Standalone Deployment"
     $script:StandaloneRadio.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
-    $script:StandaloneRadio.ForeColor = $script:Colors.Text
+    $script:StandaloneRadio.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:StandaloneRadio.BackColor = [System.Drawing.Color]::Transparent
     $script:StandaloneRadio.Location = New-Object System.Drawing.Point(60, 180)
     $script:StandaloneRadio.Size = New-Object System.Drawing.Size(300, 25)
@@ -1103,7 +1103,7 @@ function Show-DeploymentTypeStep {
     $standaloneDesc.Location = New-Object System.Drawing.Point(80, 210)
     $standaloneDesc.Size = New-Object System.Drawing.Size(700, 20)
     $standaloneDesc.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $standaloneDesc.ForeColor = $script:Colors.TextSecondary
+    $standaloneDesc.ForeColor = [System.Drawing.Color]::FromArgb(200, 200, 200)
     $standaloneDesc.BackColor = [System.Drawing.Color]::Transparent
     $script:ContentPanel.Controls.Add($standaloneDesc)
     
@@ -1111,7 +1111,7 @@ function Show-DeploymentTypeStep {
     $script:ClientRadio = New-Object System.Windows.Forms.RadioButton
     $script:ClientRadio.Text = "📱 Client Configuration"
     $script:ClientRadio.Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
-    $script:ClientRadio.ForeColor = $script:Colors.Text
+    $script:ClientRadio.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:ClientRadio.BackColor = [System.Drawing.Color]::Transparent
     $script:ClientRadio.Location = New-Object System.Drawing.Point(60, 260)
     $script:ClientRadio.Size = New-Object System.Drawing.Size(300, 25)
@@ -1126,7 +1126,7 @@ function Show-DeploymentTypeStep {
     $clientDesc.Location = New-Object System.Drawing.Point(80, 290)
     $clientDesc.Size = New-Object System.Drawing.Size(700, 20)
     $clientDesc.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $clientDesc.ForeColor = $script:Colors.TextSecondary
+    $clientDesc.ForeColor = [System.Drawing.Color]::FromArgb(200, 200, 200)
     $clientDesc.BackColor = [System.Drawing.Color]::Transparent
     $script:ContentPanel.Controls.Add($clientDesc)
 }
@@ -1200,7 +1200,7 @@ function Show-AuthenticationStep {
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Text = "Authentication Configuration"
     $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
-    $titleLabel.ForeColor = $script:Colors.Primary
+    $titleLabel.ForeColor = [System.Drawing.Color]::FromArgb(0, 150, 136)
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 35)
     $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
@@ -1210,7 +1210,7 @@ function Show-AuthenticationStep {
     $usernameLabel = New-Object System.Windows.Forms.Label
     $usernameLabel.Text = "Admin Username:"
     $usernameLabel.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Regular)
-    $usernameLabel.ForeColor = $script:Colors.Text
+    $usernameLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $usernameLabel.Location = New-Object System.Drawing.Point(40, 100)
     $usernameLabel.Size = New-Object System.Drawing.Size(150, 25)
     $usernameLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
@@ -1221,8 +1221,8 @@ function Show-AuthenticationStep {
     $script:AdminUsernameTextBox.Location = New-Object System.Drawing.Point(40, 130)
     $script:AdminUsernameTextBox.Size = New-Object System.Drawing.Size(250, 25)
     $script:AdminUsernameTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $script:AdminUsernameTextBox.BackColor = $script:Colors.Surface
-    $script:AdminUsernameTextBox.ForeColor = $script:Colors.Text
+    $script:AdminUsernameTextBox.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
+    $script:AdminUsernameTextBox.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:AdminUsernameTextBox.BorderStyle = "FixedSingle"
     $script:AdminUsernameTextBox.Add_TextChanged({ 
             $script:ConfigData.AdminUsername = $script:AdminUsernameTextBox.Text 
@@ -1233,7 +1233,7 @@ function Show-AuthenticationStep {
     $passwordLabel = New-Object System.Windows.Forms.Label
     $passwordLabel.Text = "Admin Password:"
     $passwordLabel.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Regular)
-    $passwordLabel.ForeColor = $script:Colors.Text
+    $passwordLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $passwordLabel.Location = New-Object System.Drawing.Point(40, 180)
     $passwordLabel.Size = New-Object System.Drawing.Size(150, 25)
     $passwordLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
@@ -1244,8 +1244,8 @@ function Show-AuthenticationStep {
     $script:AdminPasswordTextBox.Location = New-Object System.Drawing.Point(40, 210)
     $script:AdminPasswordTextBox.Size = New-Object System.Drawing.Size(250, 25)
     $script:AdminPasswordTextBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $script:AdminPasswordTextBox.BackColor = $script:Colors.Surface
-    $script:AdminPasswordTextBox.ForeColor = $script:Colors.Text
+    $script:AdminPasswordTextBox.BackColor = [System.Drawing.Color]::FromArgb(48, 48, 48)
+    $script:AdminPasswordTextBox.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $script:AdminPasswordTextBox.BorderStyle = "FixedSingle"
     $script:AdminPasswordTextBox.UseSystemPasswordChar = $true
     $script:AdminPasswordTextBox.Add_TextChanged({ 
@@ -1269,7 +1269,7 @@ function Show-CompleteStep {
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Text = "🎉 Configuration Complete!"
     $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 20, [System.Drawing.FontStyle]::Bold)
-    $titleLabel.ForeColor = $script:Colors.Success
+    $titleLabel.ForeColor = [System.Drawing.Color]::FromArgb(76, 175, 80)
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(600, 40)
     $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
@@ -1300,7 +1300,7 @@ Click Finish to close the wizard.
     $successLabel.Location = New-Object System.Drawing.Point(40, 90)
     $successLabel.Size = New-Object System.Drawing.Size(800, 300)
     $successLabel.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Regular)
-    $successLabel.ForeColor = $script:Colors.Text
+    $successLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 255, 255)
     $successLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($successLabel)
     
@@ -1396,5 +1396,6 @@ try {
         # Silently handle cleanup errors
     }
 }
+
 
 
