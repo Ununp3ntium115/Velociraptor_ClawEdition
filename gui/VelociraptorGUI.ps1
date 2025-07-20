@@ -134,7 +134,7 @@ function New-RaptorWizardForm {
     $form.FormBorderStyle = "Sizable"
     $form.MaximizeBox = $true
     $form.MinimizeBox = $true
-    $form.BackColor = $script:Colors.Background
+    $form.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $form.ForeColor = $script:Colors.Text
     
     # Set form icon (using built-in icon for now)
@@ -150,7 +150,7 @@ function New-RaptorWizardForm {
     $backgroundPanel.Size = $form.Size
     $backgroundPanel.Location = New-Object System.Drawing.Point(0, 0)
     $backgroundPanel.Anchor = "Top,Left,Right,Bottom"
-    $backgroundPanel.BackColor = $script:Colors.Background
+    $backgroundPanel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     
     # Add subtle raptor silhouette to background
     $backgroundPanel.Add_Paint({
@@ -223,7 +223,7 @@ function New-RaptorWizardForm {
     $logoLabel.ForeColor = [System.Drawing.Color]::White
     $logoLabel.Location = New-Object System.Drawing.Point(30, 20)
     $logoLabel.Size = New-Object System.Drawing.Size(400, 40)
-    $logoLabel.BackColor = $script:Colors.Background
+    $logoLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $headerPanel.Controls.Add($logoLabel)
     
     $subtitleLabel = New-Object System.Windows.Forms.Label
@@ -232,7 +232,7 @@ function New-RaptorWizardForm {
     $subtitleLabel.ForeColor = [System.Drawing.Color]::FromArgb(220, 220, 220)
     $subtitleLabel.Location = New-Object System.Drawing.Point(30, 60)
     $subtitleLabel.Size = New-Object System.Drawing.Size(400, 25)
-    $subtitleLabel.BackColor = $script:Colors.Background
+    $subtitleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $headerPanel.Controls.Add($subtitleLabel)
     
     # Version info
@@ -243,7 +243,7 @@ function New-RaptorWizardForm {
     $versionLabel.Location = New-Object System.Drawing.Point(750, 70)
     $versionLabel.Size = New-Object System.Drawing.Size(200, 20)
     $versionLabel.TextAlign = "MiddleRight"
-    $versionLabel.BackColor = $script:Colors.Background
+    $versionLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $versionLabel.Anchor = "Top,Right"
     $headerPanel.Controls.Add($versionLabel)
     
@@ -276,7 +276,7 @@ function New-ProgressPanel {
     $script:ProgressBar.Size = New-Object System.Drawing.Size(300, 8)
     $script:ProgressBar.Style = "Continuous"
     $script:ProgressBar.ForeColor = $script:Colors.Accent
-    $script:ProgressBar.BackColor = $script:Colors.Background
+    $script:ProgressBar.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $progressPanel.Controls.Add($script:ProgressBar)
     
     # Progress label
@@ -285,7 +285,7 @@ function New-ProgressPanel {
     $script:ProgressLabel.Size = New-Object System.Drawing.Size(600, 25)
     $script:ProgressLabel.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Regular)
     $script:ProgressLabel.ForeColor = $script:Colors.Text
-    $script:ProgressLabel.BackColor = $script:Colors.Background
+    $script:ProgressLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $progressPanel.Controls.Add($script:ProgressLabel)
     
     # Step counter
@@ -295,7 +295,7 @@ function New-ProgressPanel {
     $script:StepLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
     $script:StepLabel.ForeColor = $script:Colors.Primary
     $script:StepLabel.TextAlign = "MiddleRight"
-    $script:StepLabel.BackColor = $script:Colors.Background
+    $script:StepLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:StepLabel.Anchor = "Top,Right"
     $progressPanel.Controls.Add($script:StepLabel)
     
@@ -644,7 +644,7 @@ function Show-WelcomeStep {
     $titleLabel.ForeColor = $script:Colors.Primary
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(800, 40)
-    $titleLabel.BackColor = $script:Colors.Background
+    $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($titleLabel)
     
     # Welcome content
@@ -681,7 +681,7 @@ Click Next to begin the configuration process and deploy your Velociraptor DFIR 
     $welcomeLabel.Size = New-Object System.Drawing.Size(850, 350)
     $welcomeLabel.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Regular)
     $welcomeLabel.ForeColor = $script:Colors.Text
-    $welcomeLabel.BackColor = $script:Colors.Background
+    $welcomeLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($welcomeLabel)
     
     # Add raptor emoji decoration
@@ -691,7 +691,7 @@ Click Next to begin the configuration process and deploy your Velociraptor DFIR 
     $raptorLabel.Location = New-Object System.Drawing.Point(750, 350)
     $raptorLabel.Size = New-Object System.Drawing.Size(100, 100)
     $raptorLabel.TextAlign = "MiddleCenter"
-    $raptorLabel.BackColor = $script:Colors.Background
+    $raptorLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($raptorLabel)
 }
 
@@ -703,7 +703,7 @@ function Show-StorageConfigurationStep {
     $titleLabel.ForeColor = $script:Colors.Primary
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
-    $titleLabel.BackColor = $script:Colors.Background
+    $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($titleLabel)
     
     # Datastore directory
@@ -713,7 +713,7 @@ function Show-StorageConfigurationStep {
     $datastoreLabel.Size = New-Object System.Drawing.Size(150, 25)
     $datastoreLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
     $datastoreLabel.ForeColor = $script:Colors.Text
-    $datastoreLabel.BackColor = $script:Colors.Background
+    $datastoreLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($datastoreLabel)
     
     $script:DatastoreTextBox = New-Object System.Windows.Forms.TextBox
@@ -748,7 +748,7 @@ function Show-StorageConfigurationStep {
     $logsLabel.Size = New-Object System.Drawing.Size(150, 25)
     $logsLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
     $logsLabel.ForeColor = $script:Colors.Text
-    $logsLabel.BackColor = $script:Colors.Background
+    $logsLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($logsLabel)
     
     $script:LogsTextBox = New-Object System.Windows.Forms.TextBox
@@ -772,7 +772,7 @@ function Show-CertificateSettingsStep {
     $titleLabel.ForeColor = $script:Colors.Primary
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
-    $titleLabel.BackColor = $script:Colors.Background
+    $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($titleLabel)
     
     # Certificate expiration
@@ -782,7 +782,7 @@ function Show-CertificateSettingsStep {
     $expirationLabel.Size = New-Object System.Drawing.Size(150, 25)
     $expirationLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Regular)
     $expirationLabel.ForeColor = $script:Colors.Text
-    $expirationLabel.BackColor = $script:Colors.Background
+    $expirationLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($expirationLabel)
     
     $script:ExpirationComboBox = New-Object System.Windows.Forms.ComboBox
@@ -807,7 +807,7 @@ function Show-SecuritySettingsStep {
     $titleLabel.ForeColor = $script:Colors.Primary
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
-    $titleLabel.BackColor = $script:Colors.Background
+    $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($titleLabel)
     
     # Restrict VQL checkbox
@@ -818,7 +818,7 @@ function Show-SecuritySettingsStep {
     $script:RestrictVQLCheckBox.Size = New-Object System.Drawing.Size(400, 25)
     $script:RestrictVQLCheckBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $script:RestrictVQLCheckBox.ForeColor = $script:Colors.Text
-    $script:RestrictVQLCheckBox.BackColor = $script:Colors.Background
+    $script:RestrictVQLCheckBox.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:RestrictVQLCheckBox.Add_CheckedChanged({
         $script:ConfigData.RestrictVQL = $script:RestrictVQLCheckBox.Checked
     })
@@ -832,7 +832,7 @@ function Show-SecuritySettingsStep {
     $script:UseRegistryCheckBox.Size = New-Object System.Drawing.Size(400, 25)
     $script:UseRegistryCheckBox.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $script:UseRegistryCheckBox.ForeColor = $script:Colors.Text
-    $script:UseRegistryCheckBox.BackColor = $script:Colors.Background
+    $script:UseRegistryCheckBox.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:UseRegistryCheckBox.Add_CheckedChanged({
         $script:ConfigData.UseRegistry = $script:UseRegistryCheckBox.Checked
     })
@@ -847,7 +847,7 @@ function Show-NetworkConfigurationStep {
     $titleLabel.ForeColor = $script:Colors.Primary
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
-    $titleLabel.BackColor = $script:Colors.Background
+    $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($titleLabel)
     
     # Bind address
@@ -857,7 +857,7 @@ function Show-NetworkConfigurationStep {
     $bindLabel.Size = New-Object System.Drawing.Size(100, 25)
     $bindLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $bindLabel.ForeColor = $script:Colors.Text
-    $bindLabel.BackColor = $script:Colors.Background
+    $bindLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($bindLabel)
     
     $script:BindAddressTextBox = New-Object System.Windows.Forms.TextBox
@@ -879,7 +879,7 @@ function Show-NetworkConfigurationStep {
     $portLabel.Size = New-Object System.Drawing.Size(50, 25)
     $portLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $portLabel.ForeColor = $script:Colors.Text
-    $portLabel.BackColor = $script:Colors.Background
+    $portLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($portLabel)
     
     $script:BindPortTextBox = New-Object System.Windows.Forms.TextBox
@@ -901,7 +901,7 @@ function Show-NetworkConfigurationStep {
     $guiBindLabel.Size = New-Object System.Drawing.Size(100, 25)
     $guiBindLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $guiBindLabel.ForeColor = $script:Colors.Text
-    $guiBindLabel.BackColor = $script:Colors.Background
+    $guiBindLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($guiBindLabel)
     
     $script:GUIBindAddressTextBox = New-Object System.Windows.Forms.TextBox
@@ -923,7 +923,7 @@ function Show-NetworkConfigurationStep {
     $guiPortLabel.Size = New-Object System.Drawing.Size(50, 25)
     $guiPortLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $guiPortLabel.ForeColor = $script:Colors.Text
-    $guiPortLabel.BackColor = $script:Colors.Background
+    $guiPortLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($guiPortLabel)
     
     $script:GUIBindPortTextBox = New-Object System.Windows.Forms.TextBox
@@ -947,7 +947,7 @@ function Show-ReviewStep {
     $titleLabel.ForeColor = $script:Colors.Primary
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 30)
-    $titleLabel.BackColor = $script:Colors.Background
+    $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($titleLabel)
     
     # Review text
@@ -970,7 +970,7 @@ Admin Username: $($script:ConfigData.AdminUsername)
     $reviewLabel.Size = New-Object System.Drawing.Size(800, 300)
     $reviewLabel.Font = New-Object System.Drawing.Font("Consolas", 10)
     $reviewLabel.ForeColor = $script:Colors.Text
-    $reviewLabel.BackColor = $script:Colors.Background
+    $reviewLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($reviewLabel)
 }
 
@@ -1047,70 +1047,6 @@ function Initialize-WindowsForms {
     catch {
         Write-Warning "Windows Forms initialization issue: $($_.Exception.Message)"
         return $false
-    }
-}
-
-# Main execution with comprehensive error handling
-try {
-    Write-Host $script:VelociraptorBanner -ForegroundColor Cyan
-    Write-Host "Starting Velociraptor Configuration Wizard..." -ForegroundColor White
-    
-    # Ensure Windows Forms is ready
-    if (-not (Initialize-WindowsForms)) {
-        Write-Warning "Windows Forms initialization had issues, but continuing..."
-    }
-    
-    # Create the main form
-    $script:MainForm, $backgroundPanel = New-RaptorWizardForm
-    
-    # Initialize components
-    $progressPanel = New-ProgressPanel -ParentPanel $backgroundPanel
-    $contentPanel = New-ContentPanel -ParentPanel $backgroundPanel
-    $buttonPanel = New-ButtonPanel -ParentPanel $backgroundPanel
-    
-    # Initialize safe event handling
-    Initialize-SafeEventHandling -Form $script:MainForm
-    
-    # Add resize event handler to keep button panel at bottom
-    $script:MainForm.Add_Resize({
-            try {
-                # Reposition button panel to stay at bottom with margin
-                $buttonPanel.Location = New-Object System.Drawing.Point(0, ($backgroundPanel.Height - 100))
-            }
-            catch {
-                # Silently handle resize errors
-            }
-        })
-    
-    # Show initial step
-    Show-CurrentStep
-    
-    if ($StartMinimized) {
-        $script:MainForm.WindowState = "Minimized"
-    }
-    
-    # Run the application
-    [System.Windows.Forms.Application]::Run($script:MainForm)
-    
-    Write-Host "Velociraptor Configuration Wizard completed." -ForegroundColor Green
-    
-}
-catch {
-    $errorMsg = "GUI initialization failed: $($_.Exception.Message)"
-    Write-Host $errorMsg -ForegroundColor Red
-    [System.Windows.Forms.MessageBox]::Show($errorMsg, "Critical Error", "OK", "Error")
-    exit 1
-}
-finally {
-    # Cleanup
-    try {
-        if ($script:MainForm) {
-            $script:MainForm.Dispose()
-        }
-        [System.GC]::Collect()
-    }
-    catch {
-        # Silently handle cleanup errors
     }
 }
 
@@ -1195,6 +1131,70 @@ function Show-DeploymentTypeStep {
     $script:ContentPanel.Controls.Add($clientDesc)
 }
 
+# Main execution with comprehensive error handling
+try {
+    Write-Host $script:VelociraptorBanner -ForegroundColor Cyan
+    Write-Host "Starting Velociraptor Configuration Wizard..." -ForegroundColor White
+    
+    # Ensure Windows Forms is ready
+    if (-not (Initialize-WindowsForms)) {
+        Write-Warning "Windows Forms initialization had issues, but continuing..."
+    }
+    
+    # Create the main form
+    $script:MainForm, $backgroundPanel = New-RaptorWizardForm
+    
+    # Initialize components
+    $progressPanel = New-ProgressPanel -ParentPanel $backgroundPanel
+    $contentPanel = New-ContentPanel -ParentPanel $backgroundPanel
+    $buttonPanel = New-ButtonPanel -ParentPanel $backgroundPanel
+    
+    # Initialize safe event handling
+    Initialize-SafeEventHandling -Form $script:MainForm
+    
+    # Add resize event handler to keep button panel at bottom
+    $script:MainForm.Add_Resize({
+            try {
+                # Reposition button panel to stay at bottom with margin
+                $buttonPanel.Location = New-Object System.Drawing.Point(0, ($backgroundPanel.Height - 100))
+            }
+            catch {
+                # Silently handle resize errors
+            }
+        })
+    
+    # Show initial step
+    Show-CurrentStep
+    
+    if ($StartMinimized) {
+        $script:MainForm.WindowState = "Minimized"
+    }
+    
+    # Run the application
+    [System.Windows.Forms.Application]::Run($script:MainForm)
+    
+    Write-Host "Velociraptor Configuration Wizard completed." -ForegroundColor Green
+    
+}
+catch {
+    $errorMsg = "GUI initialization failed: $($_.Exception.Message)"
+    Write-Host $errorMsg -ForegroundColor Red
+    [System.Windows.Forms.MessageBox]::Show($errorMsg, "Critical Error", "OK", "Error")
+    exit 1
+}
+finally {
+    # Cleanup
+    try {
+        if ($script:MainForm) {
+            $script:MainForm.Dispose()
+        }
+        [System.GC]::Collect()
+    }
+    catch {
+        # Silently handle cleanup errors
+    }
+}
+
 # Authentication Step
 function Show-AuthenticationStep {
     $titleLabel = New-Object System.Windows.Forms.Label
@@ -1203,7 +1203,7 @@ function Show-AuthenticationStep {
     $titleLabel.ForeColor = $script:Colors.Primary
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 35)
-    $titleLabel.BackColor = $script:Colors.Background
+    $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($titleLabel)
     
     # Admin username
@@ -1213,7 +1213,7 @@ function Show-AuthenticationStep {
     $usernameLabel.ForeColor = $script:Colors.Text
     $usernameLabel.Location = New-Object System.Drawing.Point(40, 100)
     $usernameLabel.Size = New-Object System.Drawing.Size(150, 25)
-    $usernameLabel.BackColor = $script:Colors.Background
+    $usernameLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($usernameLabel)
     
     $script:AdminUsernameTextBox = New-Object System.Windows.Forms.TextBox
@@ -1236,7 +1236,7 @@ function Show-AuthenticationStep {
     $passwordLabel.ForeColor = $script:Colors.Text
     $passwordLabel.Location = New-Object System.Drawing.Point(40, 180)
     $passwordLabel.Size = New-Object System.Drawing.Size(150, 25)
-    $passwordLabel.BackColor = $script:Colors.Background
+    $passwordLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($passwordLabel)
     
     $script:AdminPasswordTextBox = New-Object System.Windows.Forms.TextBox
@@ -1272,7 +1272,7 @@ function Show-CompleteStep {
     $titleLabel.ForeColor = $script:Colors.Success
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(600, 40)
-    $titleLabel.BackColor = $script:Colors.Background
+    $titleLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($titleLabel)
     
     $successText = @"
@@ -1301,7 +1301,7 @@ Click Finish to close the wizard.
     $successLabel.Size = New-Object System.Drawing.Size(800, 300)
     $successLabel.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Regular)
     $successLabel.ForeColor = $script:Colors.Text
-    $successLabel.BackColor = $script:Colors.Background
+    $successLabel.BackColor = [System.Drawing.Color]::FromArgb(32, 32, 32)
     $script:ContentPanel.Controls.Add($successLabel)
     
     # Open config button
@@ -1396,4 +1396,5 @@ try {
         # Silently handle cleanup errors
     }
 }
+
 
