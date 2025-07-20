@@ -1067,7 +1067,6 @@ function Show-DeploymentTypeStep {
     $titleLabel.ForeColor = $script:Colors.Primary
     $titleLabel.Location = New-Object System.Drawing.Point(40, 30)
     $titleLabel.Size = New-Object System.Drawing.Size(400, 35)
-    $titleLabel.BackColor = $script:Colors.Background
     $script:ContentPanel.Controls.Add($titleLabel)
     
     # Server option
@@ -1077,7 +1076,6 @@ function Show-DeploymentTypeStep {
     $script:ServerRadio.ForeColor = $script:Colors.Text
     $script:ServerRadio.Location = New-Object System.Drawing.Point(60, 100)
     $script:ServerRadio.Size = New-Object System.Drawing.Size(300, 25)
-    $script:ServerRadio.BackColor = $script:Colors.Background
     $script:ServerRadio.Checked = ($script:ConfigData.DeploymentType -eq "Server")
     $script:ServerRadio.Add_CheckedChanged({ 
             if ($script:ServerRadio.Checked) { $script:ConfigData.DeploymentType = "Server" }
@@ -1090,7 +1088,6 @@ function Show-DeploymentTypeStep {
     $serverDesc.Size = New-Object System.Drawing.Size(700, 20)
     $serverDesc.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $serverDesc.ForeColor = $script:Colors.TextSecondary
-    $serverDesc.BackColor = $script:Colors.Background
     $script:ContentPanel.Controls.Add($serverDesc)
     
     # Standalone option
@@ -1100,7 +1097,6 @@ function Show-DeploymentTypeStep {
     $script:StandaloneRadio.ForeColor = $script:Colors.Text
     $script:StandaloneRadio.Location = New-Object System.Drawing.Point(60, 180)
     $script:StandaloneRadio.Size = New-Object System.Drawing.Size(300, 25)
-    $script:StandaloneRadio.BackColor = $script:Colors.Background
     $script:StandaloneRadio.Checked = ($script:ConfigData.DeploymentType -eq "Standalone")
     $script:StandaloneRadio.Add_CheckedChanged({ 
             if ($script:StandaloneRadio.Checked) { $script:ConfigData.DeploymentType = "Standalone" }
@@ -1113,7 +1109,6 @@ function Show-DeploymentTypeStep {
     $standaloneDesc.Size = New-Object System.Drawing.Size(700, 20)
     $standaloneDesc.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $standaloneDesc.ForeColor = $script:Colors.TextSecondary
-    $standaloneDesc.BackColor = $script:Colors.Background
     $script:ContentPanel.Controls.Add($standaloneDesc)
     
     # Client option
@@ -1123,7 +1118,6 @@ function Show-DeploymentTypeStep {
     $script:ClientRadio.ForeColor = $script:Colors.Text
     $script:ClientRadio.Location = New-Object System.Drawing.Point(60, 260)
     $script:ClientRadio.Size = New-Object System.Drawing.Size(300, 25)
-    $script:ClientRadio.BackColor = $script:Colors.Background
     $script:ClientRadio.Checked = ($script:ConfigData.DeploymentType -eq "Client")
     $script:ClientRadio.Add_CheckedChanged({ 
             if ($script:ClientRadio.Checked) { $script:ConfigData.DeploymentType = "Client" }
@@ -1136,7 +1130,6 @@ function Show-DeploymentTypeStep {
     $clientDesc.Size = New-Object System.Drawing.Size(700, 20)
     $clientDesc.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $clientDesc.ForeColor = $script:Colors.TextSecondary
-    $clientDesc.BackColor = $script:Colors.Background
     $script:ContentPanel.Controls.Add($clientDesc)
 }
 
@@ -1341,3 +1334,4 @@ try {
         # Silently handle cleanup errors
     }
 }
+
