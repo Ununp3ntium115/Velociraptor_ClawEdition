@@ -21,7 +21,7 @@ Transform your DFIR infrastructure with cutting-edge cloud-native capabilities:
 - 📱 **Edge Computing** - IoT devices, offline capabilities, global scale
 - 🐳 **Container Orchestration** - Production Kubernetes with Helm charts
 - 🤖 **AI Integration** - Intelligent configuration, predictive analytics
-<img width="986" height="741" alt="Screenshot 2025-07-21 at 5 36 47 PM" src="https://github.com/user-attachments/assets/9716acdc-40ab-4c45-bec6-0621d162cd2c" />
+
 
 ---
 ## 🚀 **GUI Screenshots**
