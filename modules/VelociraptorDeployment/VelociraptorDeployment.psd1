@@ -60,17 +60,13 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
+    # NOTE: Only functions that are fully implemented are exported for beta release
     FunctionsToExport = @(
         'Write-VelociraptorLog',
         'Test-VelociraptorAdminPrivileges',
         'Test-VelociraptorHealth',
         'Get-VelociraptorLatestRelease',
         'Invoke-VelociraptorDownload',
-        'Invoke-VelociraptorAPI',
-        'Invoke-VelociraptorCollections',
-        'New-IntelligentConfiguration',
-        'Start-PredictiveAnalytics',
-        'Start-AutomatedTroubleshooting',
         'Add-VelociraptorFirewallRule',
         'Wait-VelociraptorTcpPort',
         'Test-VelociraptorInternetConnection',
@@ -83,9 +79,7 @@
         'Set-VelociraptorSecurityHardening',
         'New-ArtifactToolManager',
         'Export-ToolMapping',
-        'Deploy-VelociraptorEdge',
-        'Deploy-VelociraptorServerless',
-        'Enable-VelociraptorHPC'
+        'Deploy-VelociraptorEdge'
     )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -95,6 +89,7 @@
     VariablesToExport = @()
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
+    # NOTE: Only aliases for implemented functions are exported for beta release
     AliasesToExport = @(
         'Log',
         'Write-Log',
@@ -104,8 +99,7 @@
         'Download-EXE',
         'Ask',
         'AskSecret',
-        'Wait-Port',
-        'Manage-VelociraptorCollections'
+        'Wait-Port'
     )
 
     # DSC resources to export from this module
