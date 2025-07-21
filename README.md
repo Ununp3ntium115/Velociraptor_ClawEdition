@@ -21,8 +21,15 @@ Transform your DFIR infrastructure with cutting-edge cloud-native capabilities:
 - 📱 **Edge Computing** - IoT devices, offline capabilities, global scale
 - 🐳 **Container Orchestration** - Production Kubernetes with Helm charts
 - 🤖 **AI Integration** - Intelligent configuration, predictive analytics
+<img width="986" height="741" alt="Screenshot 2025-07-21 at 5 36 47 PM" src="https://github.com/user-attachments/assets/9716acdc-40ab-4c45-bec6-0621d162cd2c" />
 
 ---
+## 🚀 **GUI Screenshots**
+<img width="986" height="741" alt="Screenshot 2025-07-21 at 5 36 47 PM" src="https://github.com/user-attachments/assets/b641fb94-22e4-4b45-bad6-e062576fb7b8" />
+<img width="986" height="741" alt="Screenshot 2025-07-21 at 5 37 04 PM" src="https://github.com/user-attachments/assets/1b1b5fcc-72de-4a7b-8153-9817149040b2" />
+<img width="986" height="741" alt="Screenshot 2025-07-21 at 5 37 18 PM" src="https://github.com/user-attachments/assets/539d542b-6e87-4452-8cc4-15cd3b59542e" />
+<img width="986" height="741" alt="Screenshot 2025-07-21 at 5 37 34 PM" src="https://github.com/user-attachments/assets/93eda52f-f61a-439f-aa60-31d1fb8ccae9" />
+<img width="986" height="741" alt="Screenshot 2025-07-21 at 5 37 45 PM" src="https://github.com/user-attachments/assets/51f5ee68-5ac9-47b2-becc-c01eadb989b5" />
 
 ## 🚀 **Quick Start**
 
