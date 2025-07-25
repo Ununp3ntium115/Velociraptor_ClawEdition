@@ -877,7 +877,7 @@ catch {
     Write-Host $errorMsg -ForegroundColor Red
     Write-Host "Stack trace:" -ForegroundColor Yellow
     Write-Host $_.ScriptStackTrace -ForegroundColor Yellow
-    
+}
     try {
         [System.Windows.Forms.MessageBox]::Show($errorMsg, "Critical Error", "OK", "Error")
     }
@@ -893,7 +893,7 @@ try {
     
     # Create main form
     $script:MainForm = New-MainForm
-    if ($script:MainForm -eq $null) {
+    if ($null -eq $script:MainForm) {
         throw "Failed to create main form"
     }
     
