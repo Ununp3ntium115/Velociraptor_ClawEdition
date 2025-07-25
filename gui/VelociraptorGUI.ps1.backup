@@ -98,7 +98,7 @@ function New-SafeControl {
     }
 }
 
-# Configuration data with encryption options
+# Configuration data
 $script:ConfigData = @{
     DeploymentType        = ""
     DatastoreDirectory    = "C:\VelociraptorData"
@@ -114,18 +114,6 @@ $script:ConfigData = @{
     OrganizationName      = "VelociraptorOrg"
     AdminUsername         = "admin"
     AdminPassword         = ""
-    # New encryption options
-    EncryptionType        = "SelfSigned"  # SelfSigned, Custom, LetsEncrypt
-    CustomCertPath        = ""
-    CustomKeyPath         = ""
-    LetsEncryptDomain     = ""
-    LetsEncryptCacheDir   = "C:\VelociraptorData\autocert"
-    Environment           = "Production"  # Production, Development, Testing, Staging
-    LogLevel              = "INFO"        # ERROR, WARN, INFO, DEBUG
-    DatastoreSize         = "Medium"      # Small, Medium, Large, Enterprise
-    EnableDebugLogging    = $false
-    EnforceTLS12          = $true
-    ValidateCertificates  = $true
 }
 
 # Current step tracking
@@ -133,8 +121,6 @@ $script:CurrentStep = 0
 $script:WizardSteps = @(
     @{ Title = "Welcome"; Description = "Welcome to Velociraptor Configuration Wizard" }
     @{ Title = "Deployment Type"; Description = "Choose your deployment type" }
-    @{ Title = "Encryption Settings"; Description = "Configure certificate and encryption options" }
-    @{ Title = "Security Settings"; Description = "Configure environment and security options" }
     @{ Title = "Storage Configuration"; Description = "Configure data storage locations" }
     @{ Title = "Network Configuration"; Description = "Configure network bindings and ports" }
     @{ Title = "Authentication"; Description = "Configure admin credentials" }
