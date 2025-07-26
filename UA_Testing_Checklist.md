@@ -3,10 +3,28 @@
 ## 🎯 **UA Testing Phase - Complete Feature Validation**
 
 ### **Test Environment Setup**
-- [ ] PowerShell 7+ available
-- [ ] Windows Forms assemblies load correctly
-- [ ] GUI launches without errors
-- [ ] All visual elements render properly
+- [ ] **Git Repository**: Ensure you're on the `main` branch with latest changes
+- [ ] **PowerShell**: Version 7+ recommended (5.1+ minimum for Windows)
+- [ ] **Windows OS**: Required for Windows Forms GUI testing
+- [ ] **Permissions**: Administrator privileges for deployment script testing
+- [ ] **Network**: Internet access for Velociraptor binary downloads
+- [ ] **Storage**: At least 1GB free space for testing directories
+
+### **Pre-Testing Verification**
+```powershell
+# Verify you're on main branch with latest updates
+git status
+git pull origin main
+
+# Verify PowerShell version
+$PSVersionTable.PSVersion
+
+# Test PowerShell execution policy
+Get-ExecutionPolicy
+
+# If needed, set execution policy for testing
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
 
 ---
 
@@ -21,10 +39,18 @@
 - [ ] Cancel button functional
 
 **Test Actions:**
-1. Launch GUI: `pwsh gui/VelociraptorGUI.ps1`
-2. Verify welcome content is readable and professional
-3. Test Next button navigation
-4. Test Cancel button (should prompt for confirmation)
+```powershell
+# From repository root directory
+.\gui\VelociraptorGUI.ps1
+
+# Alternative: Launch minimized for testing
+.\gui\VelociraptorGUI.ps1 -StartMinimized
+```
+1. Verify welcome content is readable and professional
+2. Test Next button navigation
+3. Test Cancel button (should prompt for confirmation)
+4. Check window sizing and positioning
+5. Verify all text is properly formatted and visible
 
 ---
 
@@ -139,37 +165,90 @@
 ## **🔍 CRITICAL UA TEST SCENARIOS**
 
 ### **Scenario 1: Server Deployment (Full Configuration)**
-1. Select Server deployment
-2. Configure custom datastore and logs directories
-3. Set 2-year certificate expiration
-4. Enable registry storage
-5. Configure network settings (API: 8000, GUI: 8889)
-6. Set strong admin credentials
-7. Generate configuration file
+```powershell
+# Test complete server setup workflow
+.\gui\VelociraptorGUI.ps1
+```
+1. Select **Server deployment**
+2. Configure custom datastore: `C:\VelociraptorData\Server`
+3. Configure logs directory: `C:\VelociraptorLogs\Server`
+4. Set **2-year certificate expiration**
+5. **Enable registry storage** with path: `HKLM:\SOFTWARE\Velociraptor`
+6. Configure network settings:
+   - API Server: `0.0.0.0:8000`
+   - GUI Server: `127.0.0.1:8889`
+7. Set strong admin credentials:
+   - Organization: `Test Organization`
+   - Username: `admin`
+   - Password: Use generated secure password
+8. **Generate configuration file** and save as `server-config.yaml`
+9. **Test deployment script** with generated config
 
 ### **Scenario 2: Standalone Deployment (Minimal Configuration)**
-1. Select Standalone deployment
-2. Use default directories
-3. Set 1-year certificate expiration
-4. Disable registry storage
-5. Use localhost binding
+```powershell
+# Test standalone deployment workflow
+.\gui\VelociraptorGUI.ps1
+```
+1. Select **Standalone deployment**
+2. Use default directories (verify they're reasonable)
+3. Set **1-year certificate expiration**
+4. **Disable registry storage**
+5. Use localhost binding (`127.0.0.1`)
 6. Set basic admin credentials
-7. Generate configuration file
+7. Generate configuration file as `standalone-config.yaml`
+8. **Test with deployment script**:
+   ```powershell
+   .\Deploy_Velociraptor_Standalone.ps1 -Force
+   ```
 
 ### **Scenario 3: Client Configuration**
-1. Select Client deployment
-2. Configure minimal storage
+```powershell
+# Test client configuration workflow
+.\gui\VelociraptorGUI.ps1
+```
+1. Select **Client deployment**
+2. Configure minimal storage requirements
 3. Set network settings for server connection
-4. Set client credentials
-5. Generate configuration file
+4. Configure client authentication
+5. Generate client configuration file
+6. Verify client config is valid YAML
 
-### **Scenario 4: Error Handling & Validation**
-1. Leave required fields empty
-2. Enter invalid IP addresses
-3. Use conflicting port numbers
-4. Set weak passwords
-5. Verify validation messages appear
-6. Test error recovery
+### **Scenario 4: Integration Testing with Deployment Scripts**
+```powershell
+# Test GUI + Deployment Script Integration
+# 1. Generate config with GUI
+.\gui\VelociraptorGUI.ps1
+
+# 2. Test standalone deployment
+.\Deploy_Velociraptor_Standalone.ps1 -InstallDir "C:\TestVelo" -GuiPort 9999
+
+# 3. Test server deployment  
+.\Deploy_Velociraptor_Server.ps1 -InstallDir "C:\TestVeloServer"
+
+# 4. Verify deployments work with GUI-generated configs
+```
+
+### **Scenario 5: Error Handling & Validation**
+1. **Empty Field Testing**:
+   - Leave organization name empty
+   - Skip password fields
+   - Leave network fields blank
+2. **Invalid Input Testing**:
+   - Enter invalid IP addresses (`999.999.999.999`)
+   - Use invalid port numbers (`0`, `99999`)
+   - Enter conflicting port numbers
+3. **Password Testing**:
+   - Test weak passwords (`123`, `password`)
+   - Test password mismatch scenarios
+   - Verify strength indicator accuracy
+4. **Network Validation**:
+   - Test port conflicts (same API and GUI ports)
+   - Test invalid IP formats
+   - Test reserved port numbers
+5. **Recovery Testing**:
+   - Fix validation errors and re-test
+   - Verify error messages are helpful
+   - Test navigation with validation errors
 
 ---
 
@@ -191,18 +270,132 @@
 - [ ] No crashes or unexpected behavior
 
 ### **Technical Requirements**
-- [ ] PowerShell compatibility maintained
+- [ ] PowerShell compatibility maintained (5.1+ and 7+)
 - [ ] Windows Forms integration stable
 - [ ] File I/O operations work correctly
-- [ ] Memory usage reasonable
-- [ ] Performance acceptable for wizard workflow
+- [ ] Memory usage reasonable (< 100MB)
+- [ ] Performance acceptable for wizard workflow (< 5s startup)
+- [ ] Integration with deployment scripts seamless
+- [ ] Generated configurations are valid YAML
+- [ ] Error handling is robust and user-friendly
+
+---
+
+## **📋 COMPREHENSIVE UA TESTING GUIDELINES**
+
+### **Pre-Testing Setup Checklist**
+```powershell
+# 1. Environment Verification
+Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion
+$PSVersionTable.PSVersion
+Get-ExecutionPolicy
+
+# 2. Repository Status Check
+git status
+git log --oneline -5
+ls gui/, Deploy_Velociraptor_*.ps1
+
+# 3. Permissions Check
+([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+
+# 4. Network Connectivity Test
+Test-NetConnection -ComputerName github.com -Port 443
+Test-NetConnection -ComputerName api.github.com -Port 443
+```
+
+### **Testing Methodology**
+
+#### **1. Systematic Testing Approach**
+- **Sequential Testing**: Complete each step before moving to next
+- **Documentation**: Record all observations and issues
+- **Screenshots**: Capture key screens and error messages
+- **Timing**: Note performance metrics for each operation
+- **Recovery**: Test error recovery and user guidance
+
+#### **2. Test Data Standards**
+```powershell
+# Standard Test Data for Consistency
+$TestData = @{
+    Organization = "UA Test Organization"
+    AdminUser = "testadmin"
+    StrongPassword = "UATest2025!@#$"
+    WeakPassword = "123"
+    ValidIP = "192.168.1.100"
+    InvalidIP = "999.999.999.999"
+    ValidPort = "8889"
+    InvalidPort = "99999"
+    TestDatastore = "C:\UATest\VelociraptorData"
+    TestLogs = "C:\UATest\VelociraptorLogs"
+}
+```
+
+#### **3. Issue Documentation Template**
+For each issue found, document:
+```
+**Issue ID**: UA-001
+**Component**: GUI Wizard - Step 3
+**Severity**: High/Medium/Low
+**Description**: Brief description of the issue
+**Steps to Reproduce**: 
+1. Step 1
+2. Step 2
+3. Step 3
+**Expected Result**: What should happen
+**Actual Result**: What actually happened
+**Workaround**: If any workaround exists
+**Status**: Open/Fixed/Verified
+```
+
+### **Performance Benchmarks**
+- **GUI Startup**: < 5 seconds
+- **Step Navigation**: < 1 second per step
+- **File Generation**: < 3 seconds for YAML
+- **Deployment Script**: < 30 seconds for download and setup
+- **Memory Usage**: < 100MB during GUI operation
+- **CPU Usage**: < 10% during normal operation
+
+### **Success Criteria**
+- ✅ **All test scenarios complete successfully**
+- ✅ **No critical or high-severity issues remain**
+- ✅ **Performance meets or exceeds benchmarks**
+- ✅ **User experience is intuitive and professional**
+- ✅ **Integration between GUI and deployment scripts works seamlessly**
+- ✅ **Error handling provides clear guidance to users**
+- ✅ **Generated configurations are valid and functional**
 
 ---
 
 ## **🚀 UA TESTING STATUS**
 
-**Current Phase:** Ready for User Acceptance Testing
-**Test Environment:** macOS with PowerShell 7+
-**GUI Version:** v5.0.1 Enhanced
+**Current Phase:** ✅ Ready for Comprehensive User Acceptance Testing
+**Branch:** `main` (consolidated with all improvements)
+**Test Environment:** Windows with PowerShell 5.1+ or 7+
+**GUI Version:** v5.0.1 Enhanced with Deployment Integration
+**Deployment Scripts:** Enhanced with parameter support and better error handling
 
-**Ready to begin comprehensive UA testing!**
+### **Testing Components Available:**
+- ✅ **GUI Wizard**: `gui/VelociraptorGUI.ps1`
+- ✅ **Standalone Deployment**: `Deploy_Velociraptor_Standalone.ps1`
+- ✅ **Server Deployment**: `Deploy_Velociraptor_Server.ps1`
+- ✅ **Testing Documentation**: This checklist and results file
+- ✅ **Branch Consolidation**: All improvements merged to main
+
+### **Quick Start Testing Commands:**
+```powershell
+# Clone and setup (if needed)
+git clone <repository-url>
+cd Velociraptor_Setup_Scripts
+git checkout main
+git pull origin main
+
+# Start GUI testing
+.\gui\VelociraptorGUI.ps1
+
+# Test standalone deployment
+.\Deploy_Velociraptor_Standalone.ps1 -Force
+
+# Test server deployment
+.\Deploy_Velociraptor_Server.ps1 -Force
+```
+
+**🎯 Ready to begin comprehensive UA testing on main branch!**
