@@ -2,6 +2,16 @@
 
 ## **Ready to Test? Start Here!**
 
+### **0. First Time Setup (1 minute)**
+```powershell
+# Clone repository (first time users only)
+git clone https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts.git
+cd Velociraptor_Setup_Scripts
+
+# For existing users, just update
+git checkout main && git pull origin main
+```
+
 ### **1. Environment Check (30 seconds)**
 ```powershell
 # Verify you're on main with latest changes
