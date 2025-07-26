@@ -14,7 +14,7 @@ $guiPort = 8889                            # Port for web GUI access
 #─────────────── Helper Functions ───────────────#
 
 # Logging function - creates log directory and writes timestamped messages
-function Write-Log ($message) {
+function Log ($message) {
     $logDir = Join-Path $Env:ProgramData VelociraptorDeploy
     # Create log directory if it doesn't exist
     if (-not (Test-Path $logDir)) { 
@@ -28,11 +28,8 @@ function Write-Log ($message) {
     Write-Host $message -ForegroundColor Green
 }
 
-# Backward compatibility alias
-Set-Alias -Name Log -Value Write-Log
-
 # Interactive prompt function with default value
-function Get-UserInput ($question, $defaultValue = 'n') { 
+function Ask ($question, $defaultValue = 'n') { 
     $response = Read-Host "$question [$defaultValue]"
     if ([string]::IsNullOrEmpty($response)) { 
         return $defaultValue 
@@ -42,11 +39,8 @@ function Get-UserInput ($question, $defaultValue = 'n') {
     } 
 }
 
-# Backward compatibility alias
-Set-Alias -Name Ask -Value Get-UserInput
-
 # Secure password input function - compatible with older PowerShell versions
-function Get-SecureInput ($prompt) { 
+function AskSecret ($prompt) { 
     $secureString = Read-Host $prompt -AsSecureString
     # Convert SecureString to plain text safely
     try {
@@ -60,9 +54,6 @@ function Get-SecureInput ($prompt) {
         }
     }
 }
-
-# Backward compatibility alias
-Set-Alias -Name AskSecret -Value Get-SecureInput
 
 # Check if running as Administrator - required for service installation
 function Test-Administrator {
@@ -146,20 +137,11 @@ if (-not (Test-Path $exe)) {
         $headers = @{ 'User-Agent' = 'VelociraptorDeploy/1.0' }
         $releaseInfo = Invoke-RestMethod -Uri 'https://api.github.com/repos/Velocidex/velociraptor/releases/latest' -Headers $headers
         
-        # Validate release information
-        if (-not $releaseInfo -or -not $releaseInfo.assets) {
-            throw "Failed to retrieve valid release information from GitHub API"
-        }
-        
         # Find Windows AMD64 executable asset
         $asset = $releaseInfo.assets | Where-Object { $_.name -like '*windows-amd64.exe' } | Select-Object -First 1
         
         if (-not $asset) {
             throw "Windows AMD64 executable not found in latest release"
-        }
-        
-        if (-not $asset.browser_download_url -or -not $asset.name -or -not $asset.size) {
-            throw "Asset information is incomplete or corrupted"
         }
         
         Log "Downloading $($asset.name) (Size: $([math]::Round($asset.size/1MB, 2)) MB)..."
@@ -252,9 +234,9 @@ if (Ask 'Enable Single-Sign-On (OAuth2/OIDC)?' 'n' -match '^[Yy]') {
             $sec = AskSecret 'Google client-secret'
             $sso = @"
 authenticator:
-  type: Google
-  oauth_client_id: '$cid'
-  oauth_client_secret: '$($sec.Password)'
+type: Google
+oauth_client_id: '$cid'
+oauth_client_secret: '$sec'
 "@ 
         }
         'azure' {
@@ -263,10 +245,10 @@ authenticator:
             $ten = Read-Host 'Azure tenant-ID'
             $sso = @"
 authenticator:
-  type: Azure
-  oauth_client_id: '$cid'
-  oauth_client_secret: '$($sec.Password)'
-  tenant: '$ten'
+type: Azure
+oauth_client_id: '$cid'
+oauth_client_secret: '$sec'
+tenant: '$ten'
 "@ 
         }
         'github' {
@@ -274,9 +256,9 @@ authenticator:
             $sec = AskSecret 'GitHub client-secret'
             $sso = @"
 authenticator:
-  type: GitHub
-  oauth_client_id: '$cid'
-  oauth_client_secret: '$($sec.Password)'
+type: GitHub
+oauth_client_id: '$cid'
+oauth_client_secret: '$sec'
 "@ 
         }
         'okta' {
@@ -285,11 +267,11 @@ authenticator:
             $iss = Read-Host 'Okta issuer URL'
             $sso = @"
 authenticator:
-  type: OIDC
-  oidc_issuer_url: '$iss'
-  client_id: '$cid'
-  client_secret: '$($sec.Password)'
-  scopes: ['openid','profile','email']
+type: OIDC
+oidc_issuer_url: '$iss'
+client_id: '$cid'
+client_secret: '$sec'
+scopes: ['openid','profile','email']
 "@ 
         }
         'oidc' {
@@ -298,10 +280,10 @@ authenticator:
             $iss = Read-Host 'OIDC issuer URL'
             $sso = @"
 authenticator:
-  type: OIDC
-  oidc_issuer_url: '$iss'
-  client_id: '$cid'
-  client_secret: '$($sec.Password)'
+type: OIDC
+oidc_issuer_url: '$iss'
+client_id: '$cid'
+client_secret: '$sec'
 "@ 
         }
         default { Log 'Unknown provider – skipping SSO.' }
@@ -545,7 +527,7 @@ try {
     
     # Build the MSI package
     Log "This may take a few minutes for large deployments..."
-    $msiResult = & $exe config generate --config $config --msi_out $msi 2>&1
+    $msiResult = & $exe package windows msi --msi_out $msi --config $config 2>&1
     
     if ($LASTEXITCODE -ne 0) {
         throw "MSI creation failed with exit code $LASTEXITCODE`: $msiResult"
@@ -624,9 +606,10 @@ try {
     # Verify service is running
     Start-Sleep -Seconds 3
     $service = Get-Service -Name "Velociraptor" -ErrorAction Stop
-    if ($service -and $service.Status -eq "Running") {
+    if ($service.Status -eq "Running") {
         Log "Velociraptor service installed and started successfully"
-    } else {
+    }
+    else {
         throw "Service installed but not running (Status: $($service.Status))"
     }
     

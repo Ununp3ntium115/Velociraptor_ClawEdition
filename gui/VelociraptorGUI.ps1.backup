@@ -98,7 +98,7 @@ function New-SafeControl {
     }
 }
 
-# Configuration data with encryption options
+# Configuration data
 $script:ConfigData = @{
     DeploymentType        = ""
     DatastoreDirectory    = "C:\VelociraptorData"
@@ -114,18 +114,6 @@ $script:ConfigData = @{
     OrganizationName      = "VelociraptorOrg"
     AdminUsername         = "admin"
     AdminPassword         = ""
-    # New encryption options
-    EncryptionType        = "SelfSigned"  # SelfSigned, Custom, LetsEncrypt
-    CustomCertPath        = ""
-    CustomKeyPath         = ""
-    LetsEncryptDomain     = ""
-    LetsEncryptCacheDir   = "C:\VelociraptorData\autocert"
-    Environment           = "Production"  # Production, Development, Testing, Staging
-    LogLevel              = "INFO"        # ERROR, WARN, INFO, DEBUG
-    DatastoreSize         = "Medium"      # Small, Medium, Large, Enterprise
-    EnableDebugLogging    = $false
-    EnforceTLS12          = $true
-    ValidateCertificates  = $true
 }
 
 # Current step tracking
@@ -133,8 +121,6 @@ $script:CurrentStep = 0
 $script:WizardSteps = @(
     @{ Title = "Welcome"; Description = "Welcome to Velociraptor Configuration Wizard" }
     @{ Title = "Deployment Type"; Description = "Choose your deployment type" }
-    @{ Title = "Encryption Settings"; Description = "Configure certificate and encryption options" }
-    @{ Title = "Security Settings"; Description = "Configure environment and security options" }
     @{ Title = "Storage Configuration"; Description = "Configure data storage locations" }
     @{ Title = "Network Configuration"; Description = "Configure network bindings and ports" }
     @{ Title = "Authentication"; Description = "Configure admin credentials" }
@@ -457,325 +443,6 @@ function Show-DeploymentTypeStep {
     }
     catch {
         Write-Error "Failed to show deployment type step: $($_.Exception.Message)"
-    }
-}
-
-# Show certificate settings step
-function Show-CertificateSettingsStep {
-    param($ContentPanel)
-    
-    try {
-        $ContentPanel.Controls.Clear()
-        
-        # Title
-        $titleLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
-            Text = "Certificate & Encryption Settings"
-            Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
-            Location = New-Object System.Drawing.Point(40, 30)
-            Size = New-Object System.Drawing.Size(500, 35)
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $PRIMARY_TEAL
-        
-        if ($titleLabel -ne $null) {
-            $ContentPanel.Controls.Add($titleLabel)
-        }
-        
-        # Self-Signed option (default)
-        $script:SelfSignedRadio = New-SafeControl -ControlType "System.Windows.Forms.RadioButton" -Properties @{
-            Text = "Self-Signed Certificate (Recommended)"
-            Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
-            Location = New-Object System.Drawing.Point(60, 80)
-            Size = New-Object System.Drawing.Size(400, 25)
-            Checked = ($script:ConfigData.EncryptionType -eq "SelfSigned")
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
-        
-        if ($script:SelfSignedRadio -ne $null) {
-            $script:SelfSignedRadio.Add_CheckedChanged({ 
-                if ($script:SelfSignedRadio.Checked) { 
-                    $script:ConfigData.EncryptionType = "SelfSigned"
-                    Update-CertificateControls
-                }
-            })
-            $ContentPanel.Controls.Add($script:SelfSignedRadio)
-        }
-        
-        # Self-signed description
-        $selfSignedDesc = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
-            Text = "Automatically generates a self-signed certificate for immediate use. Best for testing and internal deployments."
-            Location = New-Object System.Drawing.Point(80, 105)
-            Size = New-Object System.Drawing.Size(600, 40)
-            Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Regular)
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $LIGHT_GRAY_TEXT
-        
-        if ($selfSignedDesc -ne $null) {
-            $ContentPanel.Controls.Add($selfSignedDesc)
-        }
-        
-        # Custom Certificate option
-        $script:CustomCertRadio = New-SafeControl -ControlType "System.Windows.Forms.RadioButton" -Properties @{
-            Text = "Custom Certificate Files"
-            Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
-            Location = New-Object System.Drawing.Point(60, 160)
-            Size = New-Object System.Drawing.Size(400, 25)
-            Checked = ($script:ConfigData.EncryptionType -eq "Custom")
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
-        
-        if ($script:CustomCertRadio -ne $null) {
-            $script:CustomCertRadio.Add_CheckedChanged({ 
-                if ($script:CustomCertRadio.Checked) { 
-                    $script:ConfigData.EncryptionType = "Custom"
-                    Update-CertificateControls
-                }
-            })
-            $ContentPanel.Controls.Add($script:CustomCertRadio)
-        }
-        
-        # Custom cert path controls
-        $certPathLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
-            Text = "Certificate File (.pem/.crt):"
-            Location = New-Object System.Drawing.Point(80, 190)
-            Size = New-Object System.Drawing.Size(200, 20)
-            Font = New-Object System.Drawing.Font("Segoe UI", 9)
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
-        
-        if ($certPathLabel -ne $null) {
-            $ContentPanel.Controls.Add($certPathLabel)
-        }
-        
-        $script:CustomCertPathTextBox = New-SafeControl -ControlType "System.Windows.Forms.TextBox" -Properties @{
-            Text = $script:ConfigData.CustomCertPath
-            Location = New-Object System.Drawing.Point(80, 210)
-            Size = New-Object System.Drawing.Size(400, 25)
-            Font = New-Object System.Drawing.Font("Segoe UI", 9)
-        } -BackColor $DARK_SURFACE -ForeColor $WHITE_TEXT
-        
-        if ($script:CustomCertPathTextBox -ne $null) {
-            $script:CustomCertPathTextBox.Add_TextChanged({
-                $script:ConfigData.CustomCertPath = $script:CustomCertPathTextBox.Text
-            })
-            $ContentPanel.Controls.Add($script:CustomCertPathTextBox)
-        }
-        
-        $keyPathLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
-            Text = "Private Key File (.key/.pem):"
-            Location = New-Object System.Drawing.Point(80, 240)
-            Size = New-Object System.Drawing.Size(200, 20)
-            Font = New-Object System.Drawing.Font("Segoe UI", 9)
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
-        
-        if ($keyPathLabel -ne $null) {
-            $ContentPanel.Controls.Add($keyPathLabel)
-        }
-        
-        $script:CustomKeyPathTextBox = New-SafeControl -ControlType "System.Windows.Forms.TextBox" -Properties @{
-            Text = $script:ConfigData.CustomKeyPath
-            Location = New-Object System.Drawing.Point(80, 260)
-            Size = New-Object System.Drawing.Size(400, 25)
-            Font = New-Object System.Drawing.Font("Segoe UI", 9)
-        } -BackColor $DARK_SURFACE -ForeColor $WHITE_TEXT
-        
-        if ($script:CustomKeyPathTextBox -ne $null) {
-            $script:CustomKeyPathTextBox.Add_TextChanged({
-                $script:ConfigData.CustomKeyPath = $script:CustomKeyPathTextBox.Text
-            })
-            $ContentPanel.Controls.Add($script:CustomKeyPathTextBox)
-        }
-        
-        # Let's Encrypt option
-        $script:LetsEncryptRadio = New-SafeControl -ControlType "System.Windows.Forms.RadioButton" -Properties @{
-            Text = "Let's Encrypt (AutoCert)"
-            Font = New-Object System.Drawing.Font("Segoe UI", 12, [System.Drawing.FontStyle]::Bold)
-            Location = New-Object System.Drawing.Point(60, 300)
-            Size = New-Object System.Drawing.Size(400, 25)
-            Checked = ($script:ConfigData.EncryptionType -eq "LetsEncrypt")
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
-        
-        if ($script:LetsEncryptRadio -ne $null) {
-            $script:LetsEncryptRadio.Add_CheckedChanged({ 
-                if ($script:LetsEncryptRadio.Checked) { 
-                    $script:ConfigData.EncryptionType = "LetsEncrypt"
-                    Update-CertificateControls
-                }
-            })
-            $ContentPanel.Controls.Add($script:LetsEncryptRadio)
-        }
-        
-        # Let's Encrypt domain
-        $domainLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
-            Text = "Domain Name:"
-            Location = New-Object System.Drawing.Point(80, 330)
-            Size = New-Object System.Drawing.Size(100, 20)
-            Font = New-Object System.Drawing.Font("Segoe UI", 9)
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
-        
-        if ($domainLabel -ne $null) {
-            $ContentPanel.Controls.Add($domainLabel)
-        }
-        
-        $script:LetsEncryptDomainTextBox = New-SafeControl -ControlType "System.Windows.Forms.TextBox" -Properties @{
-            Text = $script:ConfigData.LetsEncryptDomain
-            Location = New-Object System.Drawing.Point(80, 350)
-            Size = New-Object System.Drawing.Size(300, 25)
-            Font = New-Object System.Drawing.Font("Segoe UI", 9)
-        } -BackColor $DARK_SURFACE -ForeColor $WHITE_TEXT
-        
-        if ($script:LetsEncryptDomainTextBox -ne $null) {
-            $script:LetsEncryptDomainTextBox.Add_TextChanged({
-                $script:ConfigData.LetsEncryptDomain = $script:LetsEncryptDomainTextBox.Text
-            })
-            $ContentPanel.Controls.Add($script:LetsEncryptDomainTextBox)
-        }
-        
-        # Update control states
-        Update-CertificateControls
-        
-    }
-    catch {
-        Write-Error "Failed to show certificate settings step: $($_.Exception.Message)"
-    }
-}
-
-# Show security settings step
-function Show-SecuritySettingsStep {
-    param($ContentPanel)
-    
-    try {
-        $ContentPanel.Controls.Clear()
-        
-        # Title
-        $titleLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
-            Text = "Security & Environment Settings"
-            Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
-            Location = New-Object System.Drawing.Point(40, 30)
-            Size = New-Object System.Drawing.Size(500, 35)
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $PRIMARY_TEAL
-        
-        if ($titleLabel -ne $null) {
-            $ContentPanel.Controls.Add($titleLabel)
-        }
-        
-        # Environment selection
-        $envLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
-            Text = "Environment:"
-            Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-            Location = New-Object System.Drawing.Point(40, 80)
-            Size = New-Object System.Drawing.Size(100, 25)
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
-        
-        if ($envLabel -ne $null) {
-            $ContentPanel.Controls.Add($envLabel)
-        }
-        
-        $script:EnvironmentComboBox = New-SafeControl -ControlType "System.Windows.Forms.ComboBox" -Properties @{
-            Location = New-Object System.Drawing.Point(150, 80)
-            Size = New-Object System.Drawing.Size(200, 25)
-            Font = New-Object System.Drawing.Font("Segoe UI", 10)
-            DropDownStyle = "DropDownList"
-        } -BackColor $DARK_SURFACE -ForeColor $WHITE_TEXT
-        
-        if ($script:EnvironmentComboBox -ne $null) {
-            $script:EnvironmentComboBox.Items.AddRange(@("Production", "Development", "Testing", "Staging"))
-            $script:EnvironmentComboBox.SelectedItem = $script:ConfigData.Environment
-            $script:EnvironmentComboBox.Add_SelectedIndexChanged({
-                $script:ConfigData.Environment = $script:EnvironmentComboBox.SelectedItem
-            })
-            $ContentPanel.Controls.Add($script:EnvironmentComboBox)
-        }
-        
-        # Log level selection
-        $logLabel = New-SafeControl -ControlType "System.Windows.Forms.Label" -Properties @{
-            Text = "Log Level:"
-            Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-            Location = New-Object System.Drawing.Point(40, 120)
-            Size = New-Object System.Drawing.Size(100, 25)
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
-        
-        if ($logLabel -ne $null) {
-            $ContentPanel.Controls.Add($logLabel)
-        }
-        
-        $script:LogLevelComboBox = New-SafeControl -ControlType "System.Windows.Forms.ComboBox" -Properties @{
-            Location = New-Object System.Drawing.Point(150, 120)
-            Size = New-Object System.Drawing.Size(200, 25)
-            Font = New-Object System.Drawing.Font("Segoe UI", 10)
-            DropDownStyle = "DropDownList"
-        } -BackColor $DARK_SURFACE -ForeColor $WHITE_TEXT
-        
-        if ($script:LogLevelComboBox -ne $null) {
-            $script:LogLevelComboBox.Items.AddRange(@("ERROR", "WARN", "INFO", "DEBUG"))
-            $script:LogLevelComboBox.SelectedItem = $script:ConfigData.LogLevel
-            $script:LogLevelComboBox.Add_SelectedIndexChanged({
-                $script:ConfigData.LogLevel = $script:LogLevelComboBox.SelectedItem
-            })
-            $ContentPanel.Controls.Add($script:LogLevelComboBox)
-        }
-        
-        # Security checkboxes
-        $script:EnforceTLSCheckBox = New-SafeControl -ControlType "System.Windows.Forms.CheckBox" -Properties @{
-            Text = "Enforce TLS 1.2+"
-            Location = New-Object System.Drawing.Point(40, 160)
-            Size = New-Object System.Drawing.Size(200, 25)
-            Font = New-Object System.Drawing.Font("Segoe UI", 10)
-            Checked = $script:ConfigData.EnforceTLS12
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
-        
-        if ($script:EnforceTLSCheckBox -ne $null) {
-            $script:EnforceTLSCheckBox.Add_CheckedChanged({
-                $script:ConfigData.EnforceTLS12 = $script:EnforceTLSCheckBox.Checked
-            })
-            $ContentPanel.Controls.Add($script:EnforceTLSCheckBox)
-        }
-        
-        $script:ValidateCertsCheckBox = New-SafeControl -ControlType "System.Windows.Forms.CheckBox" -Properties @{
-            Text = "Validate Certificates"
-            Location = New-Object System.Drawing.Point(40, 190)
-            Size = New-Object System.Drawing.Size(200, 25)
-            Font = New-Object System.Drawing.Font("Segoe UI", 10)
-            Checked = $script:ConfigData.ValidateCertificates
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
-        
-        if ($script:ValidateCertsCheckBox -ne $null) {
-            $script:ValidateCertsCheckBox.Add_CheckedChanged({
-                $script:ConfigData.ValidateCertificates = $script:ValidateCertsCheckBox.Checked
-            })
-            $ContentPanel.Controls.Add($script:ValidateCertsCheckBox)
-        }
-        
-        $script:DebugLoggingCheckBox = New-SafeControl -ControlType "System.Windows.Forms.CheckBox" -Properties @{
-            Text = "Enable Debug Logging"
-            Location = New-Object System.Drawing.Point(40, 220)
-            Size = New-Object System.Drawing.Size(200, 25)
-            Font = New-Object System.Drawing.Font("Segoe UI", 10)
-            Checked = $script:ConfigData.EnableDebugLogging
-        } -BackColor ([System.Drawing.Color]::Transparent) -ForeColor $WHITE_TEXT
-        
-        if ($script:DebugLoggingCheckBox -ne $null) {
-            $script:DebugLoggingCheckBox.Add_CheckedChanged({
-                $script:ConfigData.EnableDebugLogging = $script:DebugLoggingCheckBox.Checked
-            })
-            $ContentPanel.Controls.Add($script:DebugLoggingCheckBox)
-        }
-        
-    }
-    catch {
-        Write-Error "Failed to show security settings step: $($_.Exception.Message)"
-    }
-}
-
-# Update certificate controls based on selection
-function Update-CertificateControls {
-    try {
-        if ($script:CustomCertPathTextBox -ne $null) {
-            $script:CustomCertPathTextBox.Enabled = ($script:ConfigData.EncryptionType -eq "Custom")
-        }
-        if ($script:CustomKeyPathTextBox -ne $null) {
-            $script:CustomKeyPathTextBox.Enabled = ($script:ConfigData.EncryptionType -eq "Custom")
-        }
-        if ($script:LetsEncryptDomainTextBox -ne $null) {
-            $script:LetsEncryptDomainTextBox.Enabled = ($script:ConfigData.EncryptionType -eq "LetsEncrypt")
-        }
-    }
-    catch {
-        # Silently handle control update errors
     }
 }
 
@@ -1135,13 +802,11 @@ function Update-CurrentStep {
         switch ($script:CurrentStep) {
             0 { Show-WelcomeStep -ContentPanel $script:ContentPanel }
             1 { Show-DeploymentTypeStep -ContentPanel $script:ContentPanel }
-            2 { Show-CertificateSettingsStep -ContentPanel $script:ContentPanel }
-            3 { Show-SecuritySettingsStep -ContentPanel $script:ContentPanel }
-            4 { Show-StorageConfigurationStep -ContentPanel $script:ContentPanel }
-            5 { Show-NetworkConfigurationStep -ContentPanel $script:ContentPanel }
-            6 { Show-AuthenticationStep -ContentPanel $script:ContentPanel }
-            7 { Show-ReviewStep -ContentPanel $script:ContentPanel }
-            8 { Show-CompleteStep -ContentPanel $script:ContentPanel }
+            2 { Show-StorageConfigurationStep -ContentPanel $script:ContentPanel }
+            3 { Show-NetworkConfigurationStep -ContentPanel $script:ContentPanel }
+            4 { Show-AuthenticationStep -ContentPanel $script:ContentPanel }
+            5 { Show-ReviewStep -ContentPanel $script:ContentPanel }
+            6 { Show-CompleteStep -ContentPanel $script:ContentPanel }
             default { 
                 # Fallback for any undefined steps
                 $script:ContentPanel.Controls.Clear()
@@ -1198,7 +863,7 @@ catch {
     Write-Host $errorMsg -ForegroundColor Red
     Write-Host "Stack trace:" -ForegroundColor Yellow
     Write-Host $_.ScriptStackTrace -ForegroundColor Yellow
-}
+    
     try {
         [System.Windows.Forms.MessageBox]::Show($errorMsg, "Critical Error", "OK", "Error")
     }
@@ -1214,7 +879,7 @@ try {
     
     # Create main form
     $script:MainForm = New-MainForm
-    if ($null -eq $script:MainForm) {
+    if ($script:MainForm -eq $null) {
         throw "Failed to create main form"
     }
     
