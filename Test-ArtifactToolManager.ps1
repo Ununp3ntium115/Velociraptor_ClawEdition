@@ -14,12 +14,24 @@ param(
     [switch]$QuickTest
 )
 
-# Import the module with full path
-$ModulePath = Join-Path $PSScriptRoot "modules\VelociraptorDeployment\VelociraptorDeployment.psd1"
+# Import the module with cross-platform path
+$ModulePath = Join-Path $PSScriptRoot "modules" | Join-Path -ChildPath "VelociraptorDeployment" | Join-Path -ChildPath "VelociraptorDeployment.psd1"
 if (Test-Path $ModulePath) {
-    Import-Module $ModulePath -Force -Verbose
+    try {
+        Import-Module $ModulePath -Force -Verbose
+        Write-Host "Successfully imported module from: $ModulePath" -ForegroundColor Green
+    }
+    catch {
+        Write-Error "Failed to import module: $($_.Exception.Message)"
+        exit 1
+    }
 } else {
     Write-Error "Module not found at: $ModulePath"
+    Write-Host "Current directory: $(Get-Location)" -ForegroundColor Yellow
+    Write-Host "Available modules:" -ForegroundColor Yellow
+    Get-ChildItem "modules" -Directory -ErrorAction SilentlyContinue | ForEach-Object {
+        Write-Host "  - $($_.Name)" -ForegroundColor Gray
+    }
     exit 1
 }
 
@@ -29,7 +41,7 @@ try {
     # Test 1: Extract and scan artifacts
     Write-Host "`n1. Testing artifact scanning..." -ForegroundColor Yellow
     
-    if (-not (Test-Path "content\exchange\artifacts")) {
+    if (-not (Test-Path (Join-Path "content" "exchange" | Join-Path -ChildPath "artifacts"))) {
         Write-Host "Extracting artifact_exchange_v2.zip..." -ForegroundColor Cyan
         if (Test-Path "artifact_exchange_v2.zip") {
             Expand-Archive -Path "artifact_exchange_v2.zip" -DestinationPath "." -Force
@@ -39,7 +51,7 @@ try {
     }
     
     # Test scanning
-    $scanResult = New-ArtifactToolManager -Action Scan -ArtifactPath "content\exchange\artifacts" -OutputPath ".\test-output"
+    $scanResult = New-ArtifactToolManager -Action Scan -ArtifactPath (Join-Path "content" "exchange" | Join-Path -ChildPath "artifacts") -OutputPath (Join-Path "." "test-output")
     
     if ($scanResult.Success) {
         Write-Host "✅ Artifact scanning successful" -ForegroundColor Green
@@ -51,13 +63,13 @@ try {
     # Test 2: Tool mapping
     Write-Host "`n2. Testing tool mapping..." -ForegroundColor Yellow
     
-    $mapResult = New-ArtifactToolManager -Action Map -ArtifactPath "content\exchange\artifacts" -OutputPath ".\test-output"
+    $mapResult = New-ArtifactToolManager -Action Map -ArtifactPath (Join-Path "content" "exchange" | Join-Path -ChildPath "artifacts") -OutputPath (Join-Path "." "test-output")
     
     if ($mapResult.Success) {
         Write-Host "✅ Tool mapping successful" -ForegroundColor Green
         
         # Check if mapping file was created
-        $mappingFile = ".\test-output\tool-artifact-mapping.json"
+        $mappingFile = Join-Path "." "test-output" | Join-Path -ChildPath "tool-artifact-mapping.json"
         if (Test-Path $mappingFile) {
             $mapping = Get-Content $mappingFile | ConvertFrom-Json
             Write-Host "   Total artifacts: $($mapping.TotalArtifacts)" -ForegroundColor Gray
@@ -78,15 +90,15 @@ try {
         Write-Host "`n3. Testing tool downloads (limited)..." -ForegroundColor Yellow
         
         # Create a test with just a few artifacts to avoid downloading everything
-        $testArtifacts = Get-ChildItem "content\exchange\artifacts" -Filter "*.yaml" | Select-Object -First 3
-        $testDir = ".\test-artifacts"
+        $testArtifacts = Get-ChildItem (Join-Path "content" "exchange" | Join-Path -ChildPath "artifacts") -Filter "*.yaml" | Select-Object -First 3
+        $testDir = Join-Path "." "test-artifacts"
         New-Item -Path $testDir -ItemType Directory -Force | Out-Null
         
         foreach ($artifact in $testArtifacts) {
             Copy-Item $artifact.FullName $testDir
         }
         
-        $downloadResult = New-ArtifactToolManager -Action Download -ArtifactPath $testDir -ToolCachePath ".\test-tools" -MaxConcurrentDownloads 2
+        $downloadResult = New-ArtifactToolManager -Action Download -ArtifactPath $testDir -ToolCachePath (Join-Path "." "test-tools") -MaxConcurrentDownloads 2
         
         if ($downloadResult.Success) {
             Write-Host "✅ Tool download test successful" -ForegroundColor Green
@@ -103,13 +115,13 @@ try {
     # Test 4: Package creation (without tools)
     Write-Host "`n4. Testing package creation..." -ForegroundColor Yellow
     
-    $packageResult = New-ArtifactToolManager -Action Package -ArtifactPath "content\exchange\artifacts" -OutputPath ".\test-output"
+    $packageResult = New-ArtifactToolManager -Action Package -ArtifactPath (Join-Path "content" "exchange" | Join-Path -ChildPath "artifacts") -OutputPath (Join-Path "." "test-output")
     
     if ($packageResult.Success) {
         Write-Host "✅ Package creation successful" -ForegroundColor Green
         
         # Check if package was created
-        $packageDir = ".\test-output\velociraptor-offline-collector"
+        $packageDir = Join-Path "." "test-output" | Join-Path -ChildPath "velociraptor-offline-collector"
         if (Test-Path $packageDir) {
             Write-Host "   Package created at: $packageDir" -ForegroundColor Gray
             
@@ -129,7 +141,7 @@ try {
         Write-Host "`n5. Testing build script..." -ForegroundColor Yellow
         
         try {
-            & ".\scripts\Build-VelociraptorArtifactPackage.ps1" -ArtifactSource "content\exchange\artifacts" -OutputPath ".\build-test" -PackageType Client -CreateZipPackage:$false
+            & (Join-Path "." "scripts" | Join-Path -ChildPath "Build-VelociraptorArtifactPackage.ps1") -ArtifactSource (Join-Path "content" "exchange" | Join-Path -ChildPath "artifacts") -OutputPath (Join-Path "." "build-test") -PackageType Client -CreateZipPackage:$false
             Write-Host "✅ Build script test successful" -ForegroundColor Green
         } catch {
             Write-Host "⚠️  Build script test failed: $($_.Exception.Message)" -ForegroundColor Yellow
@@ -166,9 +178,9 @@ try {
 $cleanup = Read-Host "`nCleanup test files? (y/N)"
 if ($cleanup -eq 'y' -or $cleanup -eq 'Y') {
     Write-Host "Cleaning up test files..." -ForegroundColor Yellow
-    Remove-Item ".\test-output" -Recurse -Force -ErrorAction SilentlyContinue
-    Remove-Item ".\test-tools" -Recurse -Force -ErrorAction SilentlyContinue
-    Remove-Item ".\build-test" -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item (Join-Path "." "test-output") -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item (Join-Path "." "test-tools") -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item (Join-Path "." "build-test") -Recurse -Force -ErrorAction SilentlyContinue
     Remove-Item "content" -Recurse -Force -ErrorAction SilentlyContinue
     Write-Host "Cleanup complete." -ForegroundColor Green
 }

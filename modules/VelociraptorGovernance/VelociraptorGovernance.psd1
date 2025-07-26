@@ -27,15 +27,12 @@
     PowerShellVersion = '5.1'
 
     # Functions to export from this module
+    # NOTE: Only implemented functions are exported for beta release
     FunctionsToExport = @(
         'Test-ComplianceBaseline',
         'Export-AuditReport',
-        'Set-PolicyEnforcement',
-        'New-ComplianceReport',
-        'Start-AuditTrail',
-        'Get-ChangeHistory',
-        'Set-AccessControl',
-        'Test-RiskAssessment'
+        'Write-AuditEvent',
+        'Get-AuditEvents'
     )
 
     # Cmdlets to export from this module

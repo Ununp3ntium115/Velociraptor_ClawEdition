@@ -9,8 +9,8 @@
 #>
 
 param(
-    [string]$ArtifactPath = ".\content\exchange\artifacts",
-    [string]$OutputPath = ".\test-output",
+    [string]$ArtifactPath = (Join-Path "." "content" | Join-Path -ChildPath "exchange" | Join-Path -ChildPath "artifacts"),
+    [string]$OutputPath = (Join-Path "." "test-output"),
     [switch]$Verbose
 )
 
@@ -23,9 +23,10 @@ if ($Verbose) {
 Write-Host "=== Testing Fixed Artifact Tool Manager ===" -ForegroundColor Green
 
 try {
-    # Import module with force to reload any changes
-    Import-Module ".\modules\VelociraptorDeployment\VelociraptorDeployment.psd1" -Force -Verbose:$Verbose
-    Write-Host "✓ Module imported successfully" -ForegroundColor Green
+    # Import module with cross-platform path
+    $ModulePath = Join-Path "." "modules" | Join-Path -ChildPath "VelociraptorDeployment" | Join-Path -ChildPath "VelociraptorDeployment.psd1"
+    Import-Module $ModulePath -Force -Verbose:$Verbose
+    Write-Host "✓ Module imported successfully from: $ModulePath" -ForegroundColor Green
 }
 catch {
     Write-Host "❌ Failed to import module: $($_.Exception.Message)" -ForegroundColor Red
