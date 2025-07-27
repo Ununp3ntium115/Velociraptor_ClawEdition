@@ -180,75 +180,86 @@ Having successfully completed v5.0.1-beta with production-ready stability, we no
 
 ### **Tier 1: High-Impact Moonshots (2025-2026)**
 
-#### **1. ServiceNow Security Operations Integration** 🎯
+#### **1. ServiceNow Real-Time Investigation Integration** 🎯
 ```powershell
-# ServiceNow-Integration.ps1
-function New-ServiceNowSecurityIncident {
+# ServiceNow-RealTime-Integration.ps1
+function Start-ServiceNowInvestigation {
     param(
-        [string]$VelociraptorIncidentID,
-        [string]$ServiceNowInstance,
+        [string]$ServiceNowIncidentID,
+        [string]$VelociraptorServerURL,
         [string]$APIKey
     )
     
-    # Extract incident data from Velociraptor
-    $incidentData = Get-VelociraptorIncident -ID $VelociraptorIncidentID
+    # Get incident details from ServiceNow
+    $incident = Get-ServiceNowIncident -ID $ServiceNowIncidentID
     
-    # Create ServiceNow incident
-    $serviceNowTicket = @{
-        short_description = "Security Incident: $($incidentData.Title)"
-        description = $incidentData.Summary
-        category = "Security"
-        subcategory = "Incident Response"
-        priority = $incidentData.Severity
-        assigned_to = $incidentData.Analyst
-        work_notes = "Automated creation from Velociraptor incident"
+    # Launch real-time investigation in Velociraptor
+    $investigation = @{
+        source = "ServiceNow"
+        incident_id = $ServiceNowIncidentID
+        priority = $incident.Priority
+        affected_systems = $incident.AffectedSystems
+        investigation_type = "Real-Time"
     }
     
-    # Submit to ServiceNow
-    Invoke-RestMethod -Uri "$ServiceNowInstance/api/now/table/incident" -Method Post -Body ($serviceNowTicket | ConvertTo-Json) -Headers @{Authorization="Bearer $APIKey"}
+    # Start coordinated investigation
+    $result = Invoke-RestMethod -Uri "$VelociraptorServerURL/api/v1/investigations" -Method Post -Body ($investigation | ConvertTo-Json) -Headers @{Authorization="Bearer $APIKey"}
+    
+    # Enable bi-directional updates
+    Enable-RealTimeCoordination -ServiceNowID $ServiceNowIncidentID -VelociraptorID $result.InvestigationID
+    
+    return $result
 }
 ```
 
-**Market Impact:** Revolutionary enterprise adoption  
+**Market Impact:** Enterprise workflow revolution  
 **Timeline:** 6-9 months  
 **Investment:** $200K-500K  
+**Key Features:** ServiceNow App Store application, real-time API integration, coordinated response  
 
-#### **2. Stellar Cyber Threat Intelligence Integration** 🎯
+#### **2. Stellar Cyber IDS/IPS Notification Integration** 🎯
 ```powershell
-# StellarCyber-Integration.ps1
-function Sync-StellarCyberThreatIntel {
+# StellarCyber-IDS-Integration.ps1
+function Process-StellarCyberIDSNotification {
     param(
-        [string]$StellarCyberAPI,
-        [string]$ThreatFeedURL
+        [string]$IDSNotification,
+        [string]$AdlatasenAPI,
+        [string]$VelociraptorServerURL
     )
     
-    # Fetch latest threat intelligence
-    $threatData = Invoke-RestMethod -Uri "$StellarCyberAPI/threat-intelligence/latest"
+    # Parse IDS/IPS notification
+    $alert = ConvertFrom-Json $IDSNotification
     
-    # Process IOCs for Velociraptor
-    foreach ($ioc in $threatData.indicators) {
-        # Create Velociraptor hunt
-        $huntParams = @{
-            ArtifactName = "ThreatHunting.IOCSearch"
-            Parameters = @{
-                IOCType = $ioc.type
-                IOCValue = $ioc.value
-                Confidence = $ioc.confidence
-            }
-        }
-        
-        Start-VelociraptorHunt @huntParams
+    # Create Adlatasen ticket
+    $ticket = @{
+        title = "IDS Alert: $($alert.ThreatType)"
+        description = $alert.Description
+        source_ip = $alert.SourceIP
+        destination_ip = $alert.DestinationIP
+        threat_type = $alert.ThreatType
+        severity = $alert.Severity
+        timestamp = $alert.Timestamp
     }
     
-    # Send results back to Stellar Cyber
-    $huntResults = Get-VelociraptorHuntResults -HuntID $huntID
-    Update-StellarCyberFindings -Results $huntResults
+    $adlatasenTicket = Invoke-RestMethod -Uri "$AdlatasenAPI/tickets" -Method Post -Body ($ticket | ConvertTo-Json)
+    
+    # Generate intelligence gathering package
+    $intelPackage = New-ThreatIntelligencePackage -FromIDSAlert $alert
+    
+    # Trigger Velociraptor investigation
+    $investigation = Start-VelociraptorInvestigation -IntelligencePackage $intelPackage -SourceTicket $adlatasenTicket.ID
+    
+    # Enable real-time pairing
+    Enable-NotificationPairing -IDSAlert $alert.ID -AdlatasenTicket $adlatasenTicket.ID -VelociraptorInvestigation $investigation.ID
+    
+    return $investigation
 }
 ```
 
-**Market Impact:** Advanced threat intelligence automation  
+**Market Impact:** Real-time threat intelligence automation  
 **Timeline:** 4-6 months  
 **Investment:** $150K-300K  
+**Key Features:** IDS/IPS notification processing, Adlatasen integration, intelligence package generation  
 
 #### **3. macOS Homebrew & Bash Deployment** 🎯
 ```bash
