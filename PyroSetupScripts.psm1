@@ -12,9 +12,19 @@ Write-Host "   Setting fire to traditional DFIR frameworks..." -ForegroundColor 
 $ModulePath = Join-Path $PSScriptRoot "modules\PyroDeployment\PyroDeployment.psm1"
 if (Test-Path $ModulePath) {
     Import-Module $ModulePath -Force -Global
-    Write-Verbose "Imported VelociraptorDeployment module"
+    Write-Verbose "Imported PyroDeployment module"
 } else {
-    Write-Warning "VelociraptorDeployment module not found at: $ModulePath"
+    Write-Warning "PyroDeployment module not found at: $ModulePath"
+}
+
+# Import PYRO tool integration module
+$ToolModulePath = Join-Path $PSScriptRoot "modules\PyroToolIntegration\PyroToolIntegration.psm1"
+if (Test-Path $ToolModulePath) {
+    Import-Module $ToolModulePath -Force -Global
+    Write-Verbose "Imported PyroToolIntegration module"
+    Write-Host "🔥 PYRO Tool Integration loaded - Ready to ignite DFIR tools!" -ForegroundColor Yellow
+} else {
+    Write-Warning "PyroToolIntegration module not found at: $ToolModulePath"
 }
 
 # Define PYRO module variables
