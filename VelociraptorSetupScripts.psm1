@@ -1,14 +1,15 @@
 #
-# VelociraptorSetupScripts PowerShell Module
-# Enterprise-grade Velociraptor DFIR platform deployment automation
-# Version: 5.0.1-alpha
+# PyroSetupScripts PowerShell Module
+# 🔥 Revolutionary DFIR platform deployment automation - Setting fire to traditional frameworks
+# Version: 6.0.0-ignition
 #
 
 # Module initialization
-Write-Host "Loading Velociraptor Setup Scripts v5.0.1-alpha..." -ForegroundColor Cyan
+Write-Host "🔥 Igniting PYRO DFIR Platform v6.0.0..." -ForegroundColor Red
+Write-Host "   Setting fire to traditional DFIR frameworks..." -ForegroundColor Yellow
 
-# Import core deployment module
-$ModulePath = Join-Path $PSScriptRoot "modules\VelociraptorDeployment\VelociraptorDeployment.psm1"
+# Import core PYRO deployment module
+$ModulePath = Join-Path $PSScriptRoot "modules\PyroDeployment\PyroDeployment.psm1"
 if (Test-Path $ModulePath) {
     Import-Module $ModulePath -Force -Global
     Write-Verbose "Imported VelociraptorDeployment module"
@@ -16,19 +17,19 @@ if (Test-Path $ModulePath) {
     Write-Warning "VelociraptorDeployment module not found at: $ModulePath"
 }
 
-# Define module variables
-$script:ModuleVersion = "5.0.1"
-$script:ModuleName = "VelociraptorSetupScripts"
-$script:Phase = 5
-$script:PhaseName = "Cloud-Native & Scalability"
+# Define PYRO module variables
+$script:ModuleVersion = "6.0.0"
+$script:ModuleName = "PyroSetupScripts"
+$script:Phase = 6
+$script:PhaseName = "Security Hardening & Enterprise Integration"
 
-# Export module information
-$VelociraptorSetupInfo = @{
+# Export PYRO module information
+$PyroSetupInfo = @{
     Version = $script:ModuleVersion
     Phase = $script:Phase
     PhaseName = $script:PhaseName
-    ReleaseDate = "2025-01-17"
-    Stability = "alpha"
+    ReleaseDate = "2025-07-27"
+    Stability = "ignition"
     Features = @{
         MultiCloud = $true
         Serverless = $true
@@ -42,29 +43,31 @@ $VelociraptorSetupInfo = @{
         Compliance = $true
     }
     SupportedCloudProviders = @('AWS', 'Azure', 'GCP', 'Multi-Cloud')
-    SupportedDeploymentTypes = @('Standalone', 'Server', 'Cluster', 'Cloud', 'Serverless', 'HPC', 'Edge')
+    SupportedDeploymentTypes = @('Standalone', 'Server', 'Cluster', 'Cloud', 'Serverless', 'HPC', 'Edge', 'Enterprise')
+    MoonshotTechnologies = @('ServiceNow Integration', 'Stellar Cyber Integration', 'macOS Homebrew', 'AI Threat Hunter', 'Quantum-Safe Crypto')
     Requirements = @{
         MinPowerShell = "5.1"
-        RecommendedPowerShell = "7.4"
+        RecommendedPowerShell = "7.5"
         MinMemory = "4GB"
-        RecommendedMemory = "16GB"
+        RecommendedMemory = "32GB"
         MinDisk = "50GB"
-        RecommendedDisk = "500GB"
+        RecommendedDisk = "1TB"
     }
 }
 
-# Core deployment functions
-function Deploy-Velociraptor {
+# Core PYRO deployment functions
+function Start-PyroIgnition {
     <#
     .SYNOPSIS
-        Universal Velociraptor deployment function with intelligent deployment type detection.
+        🔥 Universal PYRO deployment function that ignites DFIR infrastructure with intelligent deployment detection.
     
     .DESCRIPTION
-        This is the main entry point for Velociraptor deployments. It automatically detects
-        the best deployment strategy based on the environment and parameters provided.
+        This is the main entry point for PYRO deployments. It automatically detects
+        the best deployment strategy and sets fire to traditional DFIR frameworks with
+        revolutionary automation and enterprise integration capabilities.
     
     .PARAMETER DeploymentType
-        Type of deployment: Standalone, Server, Cluster, Cloud, Serverless, HPC, or Edge.
+        Type of deployment: Standalone, Server, Cluster, Cloud, Serverless, HPC, Edge, or Enterprise.
     
     .PARAMETER CloudProvider
         Target cloud provider: AWS, Azure, GCP, or MultiCloud.
@@ -72,25 +75,33 @@ function Deploy-Velociraptor {
     .PARAMETER AutoDetect
         Automatically detect the best deployment type based on environment.
     
-    .EXAMPLE
-        Deploy-Velociraptor -DeploymentType Standalone
+    .PARAMETER EnableMoonshots
+        Enable breakthrough moonshot technologies (ServiceNow, Stellar Cyber, AI).
     
     .EXAMPLE
-        Deploy-Velociraptor -DeploymentType Cloud -CloudProvider AWS
+        Start-PyroIgnition -DeploymentType Standalone
+    
+    .EXAMPLE
+        Start-PyroIgnition -DeploymentType Enterprise -EnableMoonshots
+    
+    .EXAMPLE
+        Start-PyroIgnition -DeploymentType Cloud -CloudProvider AWS
     #>
     [CmdletBinding()]
     param(
-        [ValidateSet('Standalone', 'Server', 'Cluster', 'Cloud', 'Serverless', 'HPC', 'Edge', 'Auto')]
+        [ValidateSet('Standalone', 'Server', 'Cluster', 'Cloud', 'Serverless', 'HPC', 'Edge', 'Enterprise', 'Auto')]
         [string]$DeploymentType = 'Auto',
         
         [ValidateSet('AWS', 'Azure', 'GCP', 'MultiCloud')]
         [string]$CloudProvider,
         
-        [switch]$AutoDetect
+        [switch]$AutoDetect,
+        
+        [switch]$EnableMoonshots
     )
     
-    Write-Host "🚀 Velociraptor Setup Scripts v$script:ModuleVersion" -ForegroundColor Cyan
-    Write-Host "Phase $script:Phase: $script:PhaseName" -ForegroundColor Green
+    Write-Host "🔥 PYRO DFIR Platform v$script:ModuleVersion - Setting Fire to DFIR Frameworks" -ForegroundColor Red
+    Write-Host "Phase $script:Phase: $script:PhaseName" -ForegroundColor Yellow
     Write-Host ""
     
     if ($DeploymentType -eq 'Auto' -or $AutoDetect) {
