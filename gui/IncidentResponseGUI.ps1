@@ -49,8 +49,9 @@ $MainForm.BackColor = $DarkBackground
 $MainForm.ForeColor = $TextColor
 $MainForm.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedSingle
 $MainForm.MaximizeBox = $false
-$MainForm.Icon = [System.Drawing.SystemIcons]::Shield# Create
-header panel with Velociraptor branding
+$MainForm.Icon = [System.Drawing.SystemIcons]::Shield
+
+# Create header panel with Velociraptor branding
 $HeaderPanel = New-Object System.Windows.Forms.Panel
 $HeaderPanel.Size = New-Object System.Drawing.Size(980, 80)
 $HeaderPanel.Location = New-Object System.Drawing.Point(10, 10)
@@ -106,8 +107,9 @@ $IncidentCategories = @(
 
 foreach ($category in $IncidentCategories) {
     $CategoryComboBox.Items.Add($category) | Out-Null
-}# Spec
-ific Incident ComboBox
+}
+
+# Specific Incident ComboBox
 $IncidentComboBox = New-Object System.Windows.Forms.ComboBox
 $IncidentComboBox.Size = New-Object System.Drawing.Size(600, 25)
 $IncidentComboBox.Location = New-Object System.Drawing.Point(340, 50)
@@ -169,8 +171,8 @@ $IncidentScenarios = @{
         "Intellectual Property Theft",
         "Election Infrastructure Targeting",
         "Critical Infrastructure Reconnaissance"
-    )    "
-👤 Insider Threats (15 scenarios)" = @(
+    )
+    "👤 Insider Threats (15 scenarios)" = @(
         "Disgruntled Employee Data Theft",
         "Privileged User Abuse",
         "Contractor/Vendor Insider Threat",
@@ -235,8 +237,9 @@ $IncidentScenarios = @{
         "5G Network Security Incidents",
         "Deepfake & Disinformation Campaigns"
     )
-}# Inc
-ident Details Panel
+}
+
+# Incident Details Panel
 $DetailsPanel = New-Object System.Windows.Forms.Panel
 $DetailsPanel.Size = New-Object System.Drawing.Size(940, 200)
 $DetailsPanel.Location = New-Object System.Drawing.Point(20, 90)
@@ -299,8 +302,9 @@ $BrowseButton.BackColor = $DarkPanel
 $BrowseButton.ForeColor = $TextColor
 $BrowseButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 
-$ConfigPanel.Controls.AddRange(@($ConfigLabel, $PathLabel, $PathTextBox, $BrowseButton))# Options
-checkboxes
+$ConfigPanel.Controls.AddRange(@($ConfigLabel, $PathLabel, $PathTextBox, $BrowseButton))
+
+# Options checkboxes
 $OfflineCheckBox = New-Object System.Windows.Forms.CheckBox
 $OfflineCheckBox.Text = "🔌 Offline Mode (Bundle all tools)"
 $OfflineCheckBox.ForeColor = $TextColor
@@ -358,8 +362,9 @@ $UrgencyComboBox.SelectedIndex = 1
 
 $ConfigPanel.Controls.AddRange(@($PriorityLabel, $PriorityComboBox, $UrgencyLabel, $UrgencyComboBox))
 
-$ContentPanel.Controls.AddRange(@($DetailsPanel, $ConfigPanel))#
- Action Buttons Panel
+$ContentPanel.Controls.AddRange(@($DetailsPanel, $ConfigPanel))
+
+# Action Buttons Panel
 $ButtonPanel = New-Object System.Windows.Forms.Panel
 $ButtonPanel.Size = New-Object System.Drawing.Size(940, 60)
 $ButtonPanel.Location = New-Object System.Drawing.Point(20, 470)
@@ -428,8 +433,9 @@ $ExitButton.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawin
 $ExitButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
 
 $ButtonPanel.Controls.AddRange(@($DeployButton, $PreviewButton, $SaveButton, $LoadButton, $HelpButton, $ExitButton))
-$ContentPanel.Controls.Add($ButtonPanel)# S
-tatus bar
+$ContentPanel.Controls.Add($ButtonPanel)
+
+# Status bar
 $StatusBar = New-Object System.Windows.Forms.StatusStrip
 $StatusBar.BackColor = $DarkPanel
 $StatusBar.ForeColor = $TextColor
@@ -498,8 +504,9 @@ $HelpButton.Add_Click({
 
 $ExitButton.Add_Click({
     $MainForm.Close()
-})# Func
-tion to update incident details
+})
+
+# Function to update incident details
 function Update-IncidentDetails {
     $incidentInfo = Get-IncidentInformation -IncidentType $script:SelectedIncident
 
@@ -581,8 +588,9 @@ function Get-IncidentInformation {
     }
 
     return $defaultInfo
-}#
- Function to deploy incident collector
+}
+
+# Function to deploy incident collector
 function Deploy-IncidentCollector {
     try {
         $StatusLabel.Text = "🦖 Deploying collector..."
