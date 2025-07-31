@@ -1,46 +1,43 @@
-# 🔥 PYRO v6.0.0 - Setting Fire to DFIR Frameworks
+# 🦖 Velociraptor Setup Scripts v5.0.1-beta
 
-[![PowerShell Gallery](https://img.shields.io/powershellgallery/v/PyroSetupScripts?label=PowerShell%20Gallery&logo=powershell&color=red)](https://www.powershellgallery.com/packages/PyroSetupScripts)
-[![GitHub Release](https://img.shields.io/github/v/release/Ununp3ntium115/Pyro_DFIR_Platform?include_prereleases&label=GitHub%20Release&logo=github&color=orange)](https://github.com/Ununp3ntium115/Pyro_DFIR_Platform/releases)
-[![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B%20%7C%20Core%207.0%2B-red?logo=powershell)](https://github.com/PowerShell/PowerShell)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-orange?logo=microsoft)](README.md)
-[![License](https://img.shields.io/badge/License-Commercial-red?logo=copyright)](LICENSE)
-[![Cloud](https://img.shields.io/badge/Cloud-AWS%20%7C%20Azure%20%7C%20GCP-red?logo=amazonaws)](README.md)
+[![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B%20%7C%20Core%207.0%2B-blue?logo=powershell)](https://github.com/PowerShell/PowerShell)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-green?logo=microsoft)](README.md)
+[![License](https://img.shields.io/badge/License-MIT-green?logo=opensource)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/Ununp3ntium115/Velociraptor_Setup_Scripts?include_prereleases&label=GitHub%20Release&logo=github&color=blue)](https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/releases)
 
-**🔥 Revolutionary DFIR deployment platform that ignites transformation in digital forensics and incident response. PYRO burns through complexity with enterprise-grade automation, breakthrough moonshot technologies, and cloud-native architecture powered by [Velociraptor](https://docs.velociraptor.app/).**
+**🦖 Advanced deployment automation for Velociraptor DFIR platform. Enterprise-grade digital forensics and incident response infrastructure deployment with PowerShell automation powered by [Velociraptor](https://docs.velociraptor.app/).**
 
-## 🚀 **"Setting Fire to DFIR Frameworks"**
+## 🚀 **Advanced DFIR Deployment Automation**
 
-PYRO transforms traditional DFIR deployment from manual, time-consuming processes into blazing-fast, intelligent automation that sparks innovation across the entire security operations landscape.
+Velociraptor Setup Scripts transforms complex DFIR deployment into intelligent, automated processes with enterprise-grade capabilities and advanced features.
 
-## 🔥 **PYRO Ignition Complete - Production Ready**
+## 🦖 **Production Ready - Advanced Features**
 
-**Version 6.0.0 has successfully ignited the DFIR revolution with comprehensive security hardening and enterprise integration:**
+**Version 5.0.1-beta provides enterprise-grade deployment automation:**
 
-- 🔥 **Blazing Fast Deployment**: Zero-to-DFIR in under 60 seconds
-- 🛡️ **Security Hardened**: CIS Level 2 compliance and zero-trust architecture
-- 🌐 **Enterprise Integration**: ServiceNow and Stellar Cyber moonshot capabilities
-- 🖥️ **Cross-Platform Ignition**: Windows, Linux, and macOS deployment automation
-- 🤖 **AI-Powered Intelligence**: Autonomous threat hunting and natural language queries
-- ⚡ **Real-Time Coordination**: Live investigation management and response orchestration
+- 🦖 **Quick Deployment**: Get Velociraptor running in minutes
+- 🛡️ **Security Focused**: Secure configuration and deployment practices
+- 🖥️ **Cross-Platform**: Windows and Linux deployment support
+- 🔧 **Easy Configuration**: Automated setup and configuration management
+- 📊 **Health Monitoring**: Built-in health checks and status monitoring
+- 🔄 **Backup & Restore**: Configuration backup and disaster recovery
 
-**Status**: 🔥 **IGNITED** - Ready to set your DFIR operations ablaze with revolutionary capabilities!
+**Status**: 🦖 **STABLE** - Community-tested and production-ready for DFIR operations!
 
 ---
 
-## 🔥 **PYRO Ignition: Revolutionary DFIR Capabilities**
+## 🦖 **Core Velociraptor Deployment Features**
 
-Ignite your security operations with breakthrough technologies that set the industry ablaze:
+Streamline your DFIR operations with community-driven automation:
 
-- 🔥 **Instant Ignition** - Deploy enterprise DFIR infrastructure in seconds, not hours
-- 🛡️ **Security Inferno** - Zero-trust architecture with quantum-safe cryptography
-- 🌐 **Multi-Cloud Blaze** - AWS, Azure, GCP with intelligent orchestration
-- ⚡ **Serverless Spark** - Event-driven, auto-scaling, cost-optimized architecture
-- 🖥️ **HPC Combustion** - GPU acceleration and distributed processing power
-- 📱 **Edge Ignition** - IoT devices, offline capabilities, global reach
-- 🐳 **Container Inferno** - Production Kubernetes with Helm automation
-- 🤖 **AI Firestorm** - Autonomous threat hunting and predictive analytics
-- 🎯 **Enterprise Integration** - ServiceNow and Stellar Cyber moonshot technologies
+- 🦖 **Standalone Deployment** - Single-node Velociraptor setup for small teams
+- 🖥️ **Server Deployment** - Multi-client server architecture for enterprises
+- 🔧 **Configuration Management** - Automated configuration and updates
+- 📊 **Health Monitoring** - System health checks and performance monitoring
+- 🔄 **Backup Solutions** - Data backup and configuration preservation
+- 🛡️ **Security Hardening** - Best practice security configurations
+- 📚 **Documentation** - Comprehensive guides and troubleshooting
+- 🤝 **Community Support** - Active community-driven development
 
 
 ---
