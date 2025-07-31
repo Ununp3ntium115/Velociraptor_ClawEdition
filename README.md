@@ -50,53 +50,43 @@ Streamline your DFIR operations with community-driven automation:
 
 ## 🔥 **Ignite Your DFIR Operations**
 
-### **PowerShell Gallery Installation (Recommended)**
+### **Direct Download & Run**
 ```powershell
-# Install PYRO - Set fire to traditional DFIR frameworks
-Install-Module PyroSetupScripts -AllowPrerelease
+# Download and run standalone deployment
+Invoke-WebRequest -Uri "https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/archive/main.zip" -OutFile "velociraptor-scripts.zip"
+Expand-Archive -Path "velociraptor-scripts.zip" -DestinationPath "."
+cd Velociraptor_Setup_Scripts-main
 
-# Import and ignite your infrastructure
-Import-Module PyroSetupScripts
-Start-PyroIgnition -DeploymentType Auto
-```
-
-### **Direct Download**
-```bash
-# Download the latest PYRO release
-wget https://github.com/Ununp3ntium115/Pyro_DFIR_Platform/releases/latest/download/pyro-dfir-platform-6.0.0.tar.gz
-tar -xzf pyro-dfir-platform-6.0.0.tar.gz
-cd pyro-dfir-platform-6.0.0
-
-# Ignite your DFIR deployment
-pwsh -ExecutionPolicy Bypass -File Deploy_Pyro_Standalone.ps1
-```
-
-### **PYRO Configuration Wizard**
-```powershell
-# Launch the revolutionary PYRO configuration wizard
-powershell.exe -ExecutionPolicy Bypass -File "gui\PyroGUI.ps1"
-
-# Alternative: Launch minimized for background ignition
-powershell.exe -ExecutionPolicy Bypass -File "gui\PyroGUI.ps1" -StartMinimized
+# Deploy Velociraptor standalone
+.\Deploy_Velociraptor_Standalone.ps1
 ```
 
 ### **Git Clone**
 ```bash
-git clone https://github.com/Ununp3ntium115/Pyro_DFIR_Platform.git
-cd Pyro_DFIR_Platform
-pwsh -ExecutionPolicy Bypass -File Deploy_Pyro_Standalone.ps1
+git clone https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts.git
+cd Velociraptor_Setup_Scripts
+pwsh -ExecutionPolicy Bypass -File Deploy_Velociraptor_Standalone.ps1
+```
+
+### **GUI Configuration Wizard**
+```powershell
+# Launch the Velociraptor configuration wizard
+powershell.exe -ExecutionPolicy Bypass -File "gui\VelociraptorGUI.ps1"
+
+# Alternative: Launch minimized
+powershell.exe -ExecutionPolicy Bypass -File "gui\VelociraptorGUI.ps1" -StartMinimized
 ```
 
 ### **🚀 Enterprise Moonshot Integration**
 ```powershell
-# ServiceNow Real-Time Investigation Integration
-Enable-PyroServiceNowIntegration -InstanceURL "https://company.service-now.com"
+# Deploy Velociraptor server with advanced options
+.\Deploy_Velociraptor_Server.ps1 -GuiPort 8889 -EnableSSL
 
-# Stellar Cyber IDS/IPS Notification Processing
-Enable-PyroStellarCyberIntegration -IDSEndpoint "https://ids.stellarcyber.com"
+# Deploy standalone with custom configuration
+.\Deploy_Velociraptor_Standalone.ps1 -InstallDir "C:\Velociraptor" -DataStore "D:\VelociraptorData"
 
-# macOS Homebrew Native Deployment
-brew tap pyro/dfir && brew install pyro-platform
+# Launch GUI configuration wizard
+.\gui\VelociraptorGUI.ps1
 ```
 
 ---
@@ -727,11 +717,9 @@ We welcome contributions from the community!
 
 ---
 
-## 🔥 **Commercial License**
+## 📄 **License**
 
-**PYRO DFIR Platform** is now a **commercial product** with professional support and enterprise features.
-
-### **🔥 License Tiers**
+**Velociraptor Setup Scripts** is open source software released under the MIT License.
 
 | Tier | Price | Features |
 |------|-------|----------|
@@ -739,13 +727,13 @@ We welcome contributions from the community!
 | **🔥 ENTERPRISE** | $9,999/year/org | Unlimited endpoints, Moonshot technologies, Priority support |
 | **🔥 GOVERNMENT** | $19,999/year/agency | Multi-org deployment, Enhanced security, Dedicated support |
 
-### **💬 Contact Sales**
+### **💬 Community Support**
 
-- **📧 Sales**: sales@pyro-dfir.com
-- **🛠️ Support**: support@pyro-dfir.com
-- **🌐 Website**: https://pyro-dfir.com
+- **🐛 Issues**: [GitHub Issues](https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/issues)
+- **💡 Discussions**: [GitHub Discussions](https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/discussions)
+- **📚 Documentation**: [Velociraptor Docs](https://docs.velociraptor.app/)
 
-### **🆓 Community Edition**
+### **🤝 Contributing**
 
 For individual incident responders and educational use, see our free community edition:
 **[velociraptor_setup_scripts](https://github.com/Community/velociraptor_setup_scripts)** (v5.0.1-beta)
