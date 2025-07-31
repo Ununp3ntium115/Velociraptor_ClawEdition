@@ -4,7 +4,7 @@
 [![GitHub Release](https://img.shields.io/github/v/release/Ununp3ntium115/Pyro_DFIR_Platform?include_prereleases&label=GitHub%20Release&logo=github&color=orange)](https://github.com/Ununp3ntium115/Pyro_DFIR_Platform/releases)
 [![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B%20%7C%20Core%207.0%2B-red?logo=powershell)](https://github.com/PowerShell/PowerShell)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-orange?logo=microsoft)](README.md)
-[![License](https://img.shields.io/badge/License-MIT-yellow?logo=opensource)](LICENSE)
+[![License](https://img.shields.io/badge/License-Commercial-red?logo=copyright)](LICENSE)
 [![Cloud](https://img.shields.io/badge/Cloud-AWS%20%7C%20Azure%20%7C%20GCP-red?logo=amazonaws)](README.md)
 
 **🔥 Revolutionary DFIR deployment platform that ignites transformation in digital forensics and incident response. PYRO burns through complexity with enterprise-grade automation, breakthrough moonshot technologies, and cloud-native architecture powered by [Velociraptor](https://docs.velociraptor.app/).**
@@ -730,9 +730,30 @@ We welcome contributions from the community!
 
 ---
 
-## � **aLicense**
+## 🔥 **Commercial License**
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+**PYRO DFIR Platform** is now a **commercial product** with professional support and enterprise features.
+
+### **🔥 License Tiers**
+
+| Tier | Price | Features |
+|------|-------|----------|
+| **🔥 PROFESSIONAL** | $2,999/year/analyst | Up to 100 endpoints, Standard toolsuite, Email support |
+| **🔥 ENTERPRISE** | $9,999/year/org | Unlimited endpoints, Moonshot technologies, Priority support |
+| **🔥 GOVERNMENT** | $19,999/year/agency | Multi-org deployment, Enhanced security, Dedicated support |
+
+### **💬 Contact Sales**
+
+- **📧 Sales**: sales@pyro-dfir.com
+- **🛠️ Support**: support@pyro-dfir.com
+- **🌐 Website**: https://pyro-dfir.com
+
+### **🆓 Community Edition**
+
+For individual incident responders and educational use, see our free community edition:
+**[velociraptor_setup_scripts](https://github.com/Community/velociraptor_setup_scripts)** (v5.0.1-beta)
+
+See the [LICENSE](LICENSE) file for complete commercial license terms.
 
 ---
 

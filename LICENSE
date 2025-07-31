@@ -1,21 +1,55 @@
-MIT License
+🔥 PYRO DFIR Platform Commercial License
 
-Copyright (c) 2024 Velociraptor Setup Scripts Contributors
+Copyright (c) 2025 PYRO Technologies, Inc.
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+REVOLUTIONARY DFIR PLATFORM - COMMERCIAL LICENSE
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+This software and associated documentation files (the "PYRO Platform") 
+are proprietary commercial software. Use, modification, and distribution 
+are subject to the terms of this commercial license agreement.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+GRANT OF LICENSE:
+Subject to the terms of this Agreement, PYRO Technologies grants you a 
+limited, non-exclusive, non-transferable license to use the PYRO Platform 
+in accordance with your purchased license tier.
+
+LICENSE TIERS:
+
+1. PYRO PROFESSIONAL ($2,999/year per analyst)
+   - Single organization use
+   - Up to 100 endpoints
+   - Standard toolsuite integration
+   - Email support
+
+2. PYRO ENTERPRISE ($9,999/year per organization)
+   - Unlimited endpoints within organization
+   - Complete moonshot technology suite
+   - ServiceNow and Stellar Cyber integration
+   - Priority support and custom development
+
+3. PYRO GOVERNMENT ($19,999/year per agency)
+   - Multi-organization deployment
+   - Enhanced security features
+   - Classified environment support
+   - Dedicated support team
+
+RESTRICTIONS:
+- No modification of core platform code
+- No redistribution or resale
+- No reverse engineering
+- Enterprise features require appropriate license tier
+
+SUPPORT:
+- Professional: Email support (48h response)
+- Enterprise: Priority support (24h response) + dedicated success manager
+- Government: Dedicated support team (4h response) + on-site training
+
+DISCLAIMER:
+THE PYRO PLATFORM IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.
+PYRO TECHNOLOGIES SHALL NOT BE LIABLE FOR ANY DAMAGES ARISING FROM USE.
+
+For licensing inquiries: sales@pyro-dfir.com
+For support: support@pyro-dfir.com
+
+🔥 Setting Fire to DFIR Frameworks Since 2025
