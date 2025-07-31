@@ -253,11 +253,11 @@ class PyroArtifactPackAnalyzer:
             'file_name': pack_file.name,
             'file_size': pack_file.stat().st_size,
             'artifacts_count': 0,
-            'extraction_path': self.output_dir / f"extracted_{pack_file.stem}"
+            'extraction_path': str(self.output_dir / f"extracted_{pack_file.stem}")
         }
         
         # Extract the pack
-        extraction_path = pack_info['extraction_path']
+        extraction_path = Path(pack_info['extraction_path'])
         extraction_path.mkdir(parents=True, exist_ok=True)
         
         try:
@@ -567,10 +567,13 @@ class PyroArtifactPackAnalyzer:
         """Save analysis results to files"""
         print("💾 Saving analysis results...")
         
+        # Convert Path objects to strings for JSON serialization
+        json_results = json.loads(json.dumps(self.analysis_results, default=str))
+        
         # Save main results as JSON
         results_file = self.output_dir / "pyro_artifact_pack_analysis.json"
         with open(results_file, 'w', encoding='utf-8') as f:
-            json.dump(self.analysis_results, f, indent=2, ensure_ascii=False)
+            json.dump(json_results, f, indent=2, ensure_ascii=False)
         
         # Save human-readable summary
         summary_file = self.output_dir / "PYRO_ANALYSIS_SUMMARY.md"
