@@ -1,26 +1,43 @@
-# 🚀 Velociraptor Setup Scripts v5.0.1-alpha
+# 🦖 Velociraptor Setup Scripts v5.0.1-beta
 
-[![PowerShell Gallery](https://img.shields.io/powershellgallery/v/VelociraptorSetupScripts?label=PowerShell%20Gallery&logo=powershell&color=blue)](https://www.powershellgallery.com/packages/VelociraptorSetupScripts)
-[![GitHub Release](https://img.shields.io/github/v/release/Ununp3ntium115/Velociraptor_Setup_Scripts?include_prereleases&label=GitHub%20Release&logo=github)](https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/releases)
 [![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B%20%7C%20Core%207.0%2B-blue?logo=powershell)](https://github.com/PowerShell/PowerShell)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey?logo=microsoft)](README.md)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-green?logo=microsoft)](README.md)
 [![License](https://img.shields.io/badge/License-MIT-green?logo=opensource)](LICENSE)
-[![Cloud](https://img.shields.io/badge/Cloud-AWS%20%7C%20Azure%20%7C%20GCP-orange?logo=amazonaws)](README.md)
+[![GitHub Release](https://img.shields.io/github/v/release/Ununp3ntium115/Velociraptor_Setup_Scripts?include_prereleases&label=GitHub%20Release&logo=github&color=blue)](https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/releases)
 
-**Enterprise-grade cloud-native automation platform for deploying, managing, and scaling [Velociraptor](https://docs.velociraptor.app/) DFIR infrastructure across multi-cloud, serverless, HPC, and edge computing environments.**
+**🦖 Advanced deployment automation for Velociraptor DFIR platform. Enterprise-grade digital forensics and incident response infrastructure deployment with PowerShell automation powered by [Velociraptor](https://docs.velociraptor.app/).**
+
+## 🚀 **Advanced DFIR Deployment Automation**
+
+Velociraptor Setup Scripts transforms complex DFIR deployment into intelligent, automated processes with enterprise-grade capabilities and advanced features.
+
+## 🦖 **Production Ready - Advanced Features**
+
+**Version 5.0.1-beta provides enterprise-grade deployment automation:**
+
+- 🦖 **Quick Deployment**: Get Velociraptor running in minutes
+- 🛡️ **Security Focused**: Secure configuration and deployment practices
+- 🖥️ **Cross-Platform**: Windows and Linux deployment support
+- 🔧 **Easy Configuration**: Automated setup and configuration management
+- 📊 **Health Monitoring**: Built-in health checks and status monitoring
+- 🔄 **Backup & Restore**: Configuration backup and disaster recovery
+
+**Status**: 🦖 **STABLE** - Community-tested and production-ready for DFIR operations!
 
 ---
 
-## 🌟 **Phase 5: Cloud-Native & Scalability**
+## 🦖 **Core Velociraptor Deployment Features**
 
-Transform your DFIR infrastructure with cutting-edge cloud-native capabilities:
+Streamline your DFIR operations with community-driven automation:
 
-- 🌐 **Multi-Cloud Deployment** - AWS, Azure, GCP with cross-cloud synchronization
-- ⚡ **Serverless Architecture** - Event-driven, auto-scaling, cost-optimized
-- 🖥️ **High-Performance Computing** - GPU acceleration, distributed processing
-- 📱 **Edge Computing** - IoT devices, offline capabilities, global scale
-- 🐳 **Container Orchestration** - Production Kubernetes with Helm charts
-- 🤖 **AI Integration** - Intelligent configuration, predictive analytics
+- 🦖 **Standalone Deployment** - Single-node Velociraptor setup for small teams
+- 🖥️ **Server Deployment** - Multi-client server architecture for enterprises
+- 🔧 **Configuration Management** - Automated configuration and updates
+- 📊 **Health Monitoring** - System health checks and performance monitoring
+- 🔄 **Backup Solutions** - Data backup and configuration preservation
+- 🛡️ **Security Hardening** - Best practice security configurations
+- 📚 **Documentation** - Comprehensive guides and troubleshooting
+- 🤝 **Community Support** - Active community-driven development
 
 
 ---
@@ -31,33 +48,17 @@ Transform your DFIR infrastructure with cutting-edge cloud-native capabilities:
 <img width="986" height="741" alt="Screenshot 2025-07-21 at 5 37 34 PM" src="https://github.com/user-attachments/assets/93eda52f-f61a-439f-aa60-31d1fb8ccae9" />
 <img width="986" height="741" alt="Screenshot 2025-07-21 at 5 37 45 PM" src="https://github.com/user-attachments/assets/51f5ee68-5ac9-47b2-becc-c01eadb989b5" />
 
-## 🚀 **Quick Start**
+## 🔥 **Ignite Your DFIR Operations**
 
-### **PowerShell Gallery Installation (Recommended)**
+### **Direct Download & Run**
 ```powershell
-# Install the latest alpha release
-Install-Module VelociraptorSetupScripts -AllowPrerelease
+# Download and run standalone deployment
+Invoke-WebRequest -Uri "https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/archive/main.zip" -OutFile "velociraptor-scripts.zip"
+Expand-Archive -Path "velociraptor-scripts.zip" -DestinationPath "."
+cd Velociraptor_Setup_Scripts-main
 
-# Import and get started
-Import-Module VelociraptorSetupScripts
-Deploy-Velociraptor -DeploymentType Auto
-```
-
-### **Direct Download**
-```bash
-# Download latest release
-wget https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/releases/latest/download/velociraptor-setup-scripts-5.0.1.tar.gz
-tar -xzf velociraptor-setup-scripts-5.0.1.tar.gz
-cd velociraptor-setup-scripts-5.0.1
-
-# Run deployment
-pwsh -ExecutionPolicy Bypass -File Deploy_Velociraptor_Standalone.ps1
-```
-
-### **Configuration Wizard GUI**
-```powershell
-# Launch the professional configuration wizard
-powershell.exe -ExecutionPolicy Bypass -File "gui\VelociraptorGUI-Fixed.ps1"
+# Deploy Velociraptor standalone
+.\Deploy_Velociraptor_Standalone.ps1
 ```
 
 ### **Git Clone**
@@ -65,6 +66,27 @@ powershell.exe -ExecutionPolicy Bypass -File "gui\VelociraptorGUI-Fixed.ps1"
 git clone https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts.git
 cd Velociraptor_Setup_Scripts
 pwsh -ExecutionPolicy Bypass -File Deploy_Velociraptor_Standalone.ps1
+```
+
+### **GUI Configuration Wizard**
+```powershell
+# Launch the Velociraptor configuration wizard
+powershell.exe -ExecutionPolicy Bypass -File "gui\VelociraptorGUI.ps1"
+
+# Alternative: Launch minimized
+powershell.exe -ExecutionPolicy Bypass -File "gui\VelociraptorGUI.ps1" -StartMinimized
+```
+
+### **🚀 Enterprise Moonshot Integration**
+```powershell
+# Deploy Velociraptor server with advanced options
+.\Deploy_Velociraptor_Server.ps1 -GuiPort 8889 -EnableSSL
+
+# Deploy standalone with custom configuration
+.\Deploy_Velociraptor_Standalone.ps1 -InstallDir "C:\Velociraptor" -DataStore "D:\VelociraptorData"
+
+# Launch GUI configuration wizard
+.\gui\VelociraptorGUI.ps1
 ```
 
 ---
@@ -695,9 +717,28 @@ We welcome contributions from the community!
 
 ---
 
-## � **aLicense**
+## 📄 **License**
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+**Velociraptor Setup Scripts** is open source software released under the MIT License.
+
+| Tier | Price | Features |
+|------|-------|----------|
+| **🔥 PROFESSIONAL** | $2,999/year/analyst | Up to 100 endpoints, Standard toolsuite, Email support |
+| **🔥 ENTERPRISE** | $9,999/year/org | Unlimited endpoints, Moonshot technologies, Priority support |
+| **🔥 GOVERNMENT** | $19,999/year/agency | Multi-org deployment, Enhanced security, Dedicated support |
+
+### **💬 Community Support**
+
+- **🐛 Issues**: [GitHub Issues](https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/issues)
+- **💡 Discussions**: [GitHub Discussions](https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/discussions)
+- **📚 Documentation**: [Velociraptor Docs](https://docs.velociraptor.app/)
+
+### **🤝 Contributing**
+
+For individual incident responders and educational use, see our free community edition:
+**[velociraptor_setup_scripts](https://github.com/Community/velociraptor_setup_scripts)** (v5.0.1-beta)
+
+See the [LICENSE](LICENSE) file for complete commercial license terms.
 
 ---
 

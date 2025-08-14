@@ -1,13 +1,14 @@
 #
 # VelociraptorSetupScripts PowerShell Module
-# Enterprise-grade Velociraptor DFIR platform deployment automation
-# Version: 5.0.1-alpha
+# Velociraptor DFIR platform deployment automation
+# Version: 5.0.1-beta
 #
 
 # Module initialization
-Write-Host "Loading Velociraptor Setup Scripts v5.0.1-alpha..." -ForegroundColor Cyan
+Write-Host "🦖 Loading Velociraptor Setup Scripts v5.0.1-beta..." -ForegroundColor Green
+Write-Host "   Community Edition - DFIR deployment automation..." -ForegroundColor Yellow
 
-# Import core deployment module
+# Import core Velociraptor deployment module
 $ModulePath = Join-Path $PSScriptRoot "modules\VelociraptorDeployment\VelociraptorDeployment.psm1"
 if (Test-Path $ModulePath) {
     Import-Module $ModulePath -Force -Global
@@ -17,57 +18,49 @@ if (Test-Path $ModulePath) {
 }
 
 # Define module variables
-$script:ModuleVersion = "5.0.1"
+$script:ModuleVersion = "5.0.1-beta"
 $script:ModuleName = "VelociraptorSetupScripts"
 $script:Phase = 5
-$script:PhaseName = "Cloud-Native & Scalability"
+$script:PhaseName = "Community Edition - Stable Release"
 
 # Export module information
 $VelociraptorSetupInfo = @{
     Version = $script:ModuleVersion
     Phase = $script:Phase
     PhaseName = $script:PhaseName
-    ReleaseDate = "2025-01-17"
-    Stability = "alpha"
+    ReleaseDate = "2025-07-27"
+    Stability = "beta"
     Features = @{
-        MultiCloud = $true
-        Serverless = $true
-        HPC = $true
-        EdgeComputing = $true
-        ContainerOrchestration = $true
-        AIIntegration = $true
-        AutoScaling = $true
-        Monitoring = $true
-        Security = $true
-        Compliance = $true
+        StandaloneDeployment = $true
+        ServerDeployment = $true
+        BasicGUI = $true
+        ConfigManagement = $true
+        HealthChecking = $true
+        BackupRestore = $true
     }
-    SupportedCloudProviders = @('AWS', 'Azure', 'GCP', 'Multi-Cloud')
-    SupportedDeploymentTypes = @('Standalone', 'Server', 'Cluster', 'Cloud', 'Serverless', 'HPC', 'Edge')
+    SupportedDeploymentTypes = @('Standalone', 'Server')
     Requirements = @{
         MinPowerShell = "5.1"
-        RecommendedPowerShell = "7.4"
-        MinMemory = "4GB"
-        RecommendedMemory = "16GB"
-        MinDisk = "50GB"
-        RecommendedDisk = "500GB"
+        RecommendedPowerShell = "7.0"
+        MinMemory = "2GB"
+        RecommendedMemory = "8GB"
+        MinDisk = "10GB"
+        RecommendedDisk = "100GB"
     }
 }
 
-# Core deployment functions
+# Core Velociraptor deployment functions
 function Deploy-Velociraptor {
     <#
     .SYNOPSIS
-        Universal Velociraptor deployment function with intelligent deployment type detection.
+        🦖 Universal Velociraptor deployment function with intelligent deployment detection.
     
     .DESCRIPTION
         This is the main entry point for Velociraptor deployments. It automatically detects
-        the best deployment strategy based on the environment and parameters provided.
+        the best deployment strategy for your environment.
     
     .PARAMETER DeploymentType
-        Type of deployment: Standalone, Server, Cluster, Cloud, Serverless, HPC, or Edge.
-    
-    .PARAMETER CloudProvider
-        Target cloud provider: AWS, Azure, GCP, or MultiCloud.
+        Type of deployment: Standalone or Server.
     
     .PARAMETER AutoDetect
         Automatically detect the best deployment type based on environment.
@@ -76,21 +69,21 @@ function Deploy-Velociraptor {
         Deploy-Velociraptor -DeploymentType Standalone
     
     .EXAMPLE
-        Deploy-Velociraptor -DeploymentType Cloud -CloudProvider AWS
+        Deploy-Velociraptor -DeploymentType Server
+    
+    .EXAMPLE
+        Deploy-Velociraptor -AutoDetect
     #>
     [CmdletBinding()]
     param(
-        [ValidateSet('Standalone', 'Server', 'Cluster', 'Cloud', 'Serverless', 'HPC', 'Edge', 'Auto')]
+        [ValidateSet('Standalone', 'Server', 'Auto')]
         [string]$DeploymentType = 'Auto',
-        
-        [ValidateSet('AWS', 'Azure', 'GCP', 'MultiCloud')]
-        [string]$CloudProvider,
         
         [switch]$AutoDetect
     )
     
-    Write-Host "🚀 Velociraptor Setup Scripts v$script:ModuleVersion" -ForegroundColor Cyan
-    Write-Host "Phase $script:Phase: $script:PhaseName" -ForegroundColor Green
+    Write-Host "🦖 Velociraptor Setup Scripts v$script:ModuleVersion - Community Edition" -ForegroundColor Green
+    Write-Host "Phase $script:Phase: $script:PhaseName" -ForegroundColor Yellow
     Write-Host ""
     
     if ($DeploymentType -eq 'Auto' -or $AutoDetect) {
@@ -104,21 +97,6 @@ function Deploy-Velociraptor {
         }
         'Server' {
             & "$PSScriptRoot\Deploy_Velociraptor_Server.ps1"
-        }
-        'Cloud' {
-            if (-not $CloudProvider) {
-                $CloudProvider = Get-RecommendedCloudProvider
-            }
-            Deploy-CloudVelociraptor -CloudProvider $CloudProvider
-        }
-        'Serverless' {
-            Deploy-VelociraptorServerless -CloudProvider $CloudProvider
-        }
-        'HPC' {
-            Enable-VelociraptorHPC
-        }
-        'Edge' {
-            Deploy-VelociraptorEdge
         }
         default {
             Write-Error "Unknown deployment type: $DeploymentType"
@@ -210,56 +188,14 @@ function Get-RecommendedDeploymentType {
     $memory = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -ExpandProperty TotalPhysicalMemory
     $memoryGB = [Math]::Round($memory / 1GB, 2)
     
-    if ($memoryGB -ge 32) {
-        return 'HPC'
-    } elseif ($memoryGB -ge 16) {
+    if ($memoryGB -ge 8) {
         return 'Server'
-    } elseif (Get-Command docker -ErrorAction SilentlyContinue) {
-        return 'Cloud'
     } else {
         return 'Standalone'
     }
 }
 
-function Get-RecommendedCloudProvider {
-    <#
-    .SYNOPSIS
-        Recommends a cloud provider based on available CLI tools.
-    #>
-    if (Get-Command aws -ErrorAction SilentlyContinue) {
-        return 'AWS'
-    } elseif (Get-Command az -ErrorAction SilentlyContinue) {
-        return 'Azure'
-    } elseif (Get-Command gcloud -ErrorAction SilentlyContinue) {
-        return 'GCP'
-    } else {
-        return 'AWS'  # Default recommendation
-    }
-}
 
-function Deploy-CloudVelociraptor {
-    <#
-    .SYNOPSIS
-        Deploys Velociraptor to cloud infrastructure.
-    #>
-    param(
-        [Parameter(Mandatory)]
-        [ValidateSet('AWS', 'Azure', 'GCP')]
-        [string]$CloudProvider
-    )
-    
-    switch ($CloudProvider) {
-        'AWS' {
-            & "$PSScriptRoot\cloud\aws\Deploy-VelociraptorAWS.ps1"
-        }
-        'Azure' {
-            & "$PSScriptRoot\cloud\azure\Deploy-VelociraptorAzure.ps1"
-        }
-        'GCP' {
-            Write-Host "GCP deployment coming in future release" -ForegroundColor Yellow
-        }
-    }
-}
 
 # Aliases for convenience
 Set-Alias -Name vr-deploy -Value Deploy-Velociraptor
@@ -276,8 +212,7 @@ Write-Host ""
 Export-ModuleMember -Function @(
     'Deploy-Velociraptor',
     'Get-VelociraptorSetupInfo', 
-    'Test-VelociraptorSetupEnvironment',
-    'Deploy-CloudVelociraptor'
+    'Test-VelociraptorSetupEnvironment'
 ) -Alias @(
     'vr-deploy',
     'vr-info', 
