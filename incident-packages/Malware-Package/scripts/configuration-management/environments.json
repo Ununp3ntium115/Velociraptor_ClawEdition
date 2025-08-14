@@ -1,0 +1,141 @@
+{
+  "environments": {
+    "Development": {
+      "description": "Development environment for testing and debugging",
+      "settings": {
+        "datastore_size": "Small",
+        "log_level": "Debug",
+        "security_level": "Basic",
+        "bind_address": "127.0.0.1",
+        "enable_debug": true,
+        "backup_retention_days": 7,
+        "monitoring_enabled": false,
+        "performance_monitoring": false,
+        "audit_logging": false,
+        "rate_limiting": false,
+        "ssl_required": false,
+        "max_upload_size_mb": 50,
+        "session_timeout_minutes": 480,
+        "max_concurrent_users": 5
+      },
+      "ports": {
+        "frontend": 8000,
+        "gui": 8889,
+        "monitoring": 9090
+      },
+      "paths": {
+        "datastore": "C:\\VelociraptorDev",
+        "logs": "C:\\VelociraptorDev\\logs",
+        "certificates": "C:\\VelociraptorDev\\certs",
+        "backups": "C:\\VelociraptorDev\\backups"
+      }
+    },
+    "Testing": {
+      "description": "Testing environment for QA and integration testing",
+      "settings": {
+        "datastore_size": "Medium",
+        "log_level": "Info",
+        "security_level": "Standard",
+        "bind_address": "0.0.0.0",
+        "enable_debug": false,
+        "backup_retention_days": 14,
+        "monitoring_enabled": true,
+        "performance_monitoring": true,
+        "audit_logging": true,
+        "rate_limiting": true,
+        "ssl_required": true,
+        "max_upload_size_mb": 100,
+        "session_timeout_minutes": 240,
+        "max_concurrent_users": 20
+      },
+      "ports": {
+        "frontend": 8000,
+        "gui": 8889,
+        "monitoring": 9090
+      },
+      "paths": {
+        "datastore": "C:\\VelociraptorTest",
+        "logs": "C:\\VelociraptorTest\\logs",
+        "certificates": "C:\\VelociraptorTest\\certs",
+        "backups": "C:\\VelociraptorTest\\backups"
+      }
+    },
+    "Staging": {
+      "description": "Staging environment for pre-production validation",
+      "settings": {
+        "datastore_size": "Large",
+        "log_level": "Warning",
+        "security_level": "Standard",
+        "bind_address": "0.0.0.0",
+        "enable_debug": false,
+        "backup_retention_days": 30,
+        "monitoring_enabled": true,
+        "performance_monitoring": true,
+        "audit_logging": true,
+        "rate_limiting": true,
+        "ssl_required": true,
+        "max_upload_size_mb": 200,
+        "session_timeout_minutes": 120,
+        "max_concurrent_users": 50
+      },
+      "ports": {
+        "frontend": 8000,
+        "gui": 8889,
+        "monitoring": 9090
+      },
+      "paths": {
+        "datastore": "D:\\VelociraptorStaging",
+        "logs": "D:\\VelociraptorStaging\\logs",
+        "certificates": "D:\\VelociraptorStaging\\certs",
+        "backups": "D:\\VelociraptorStaging\\backups"
+      }
+    },
+    "Production": {
+      "description": "Production environment with maximum security and performance",
+      "settings": {
+        "datastore_size": "Large",
+        "log_level": "Error",
+        "security_level": "Maximum",
+        "bind_address": "0.0.0.0",
+        "enable_debug": false,
+        "backup_retention_days": 90,
+        "monitoring_enabled": true,
+        "performance_monitoring": true,
+        "audit_logging": true,
+        "rate_limiting": true,
+        "ssl_required": true,
+        "max_upload_size_mb": 500,
+        "session_timeout_minutes": 60,
+        "max_concurrent_users": 200
+      },
+      "ports": {
+        "frontend": 8000,
+        "gui": 8889,
+        "monitoring": 9090
+      },
+      "paths": {
+        "datastore": "D:\\VelociraptorProd",
+        "logs": "D:\\VelociraptorProd\\logs",
+        "certificates": "D:\\VelociraptorProd\\certs",
+        "backups": "D:\\VelociraptorProd\\backups"
+      },
+      "compliance": {
+        "gdpr_enabled": true,
+        "hipaa_enabled": true,
+        "sox_enabled": true,
+        "data_retention_policy": "7_years",
+        "encryption_at_rest": true,
+        "encryption_in_transit": true
+      }
+    }
+  },
+  "global_settings": {
+    "supported_versions": ["0.7.0", "0.6.9", "0.6.8"],
+    "default_timezone": "UTC",
+    "backup_schedule": "daily",
+    "health_check_interval": 300,
+    "certificate_renewal_days": 30,
+    "log_rotation_size_mb": 100,
+    "max_log_files": 10
+  }
+}

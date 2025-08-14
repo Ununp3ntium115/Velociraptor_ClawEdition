@@ -1,0 +1,24 @@
+{
+  "ConfigTemplate": "complete-config.yaml",
+  "PackageType": "Complete",
+  "DeploymentScript": "Deploy-Complete.ps1",
+  "CreatedDate": "2025-07-28 15:55:44",
+  "ExternalTools": [
+    "*"
+  ],
+  "Priority": "Maximum",
+  "Requirements": {
+    "PowerShell": "5.1+",
+    "OS": "Windows 10+",
+    "Memory": "4GB",
+    "Disk": "10GB"
+  },
+  "Version": "1.0.0",
+  "Tools": [
+    "*"
+  ],
+  "Description": "Complete incident response toolkit",
+  "Artifacts": [
+    "*"
+  ]
+}

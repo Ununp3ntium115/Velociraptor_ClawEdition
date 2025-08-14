@@ -1,0 +1,44 @@
+{
+  "ConfigTemplate": "ransomware-config.yaml",
+  "PackageType": "Ransomware",
+  "DeploymentScript": "Deploy-Ransomware.ps1",
+  "CreatedDate": "2025-07-28 15:53:29",
+  "ExternalTools": [
+    "Sysinternals",
+    "NirSoft",
+    "EricZimmerman"
+  ],
+  "Priority": "Critical",
+  "Requirements": {
+    "PowerShell": "5.1+",
+    "OS": "Windows 10+",
+    "Memory": "4GB",
+    "Disk": "10GB"
+  },
+  "Version": "1.0.0",
+  "Tools": [
+    "Hayabusa",
+    "PersistenceSniper",
+    "YARA",
+    "Volatility",
+    "FTKImager"
+  ],
+  "Description": "Ransomware incident response and recovery",
+  "Artifacts": [
+    "Windows.EventLogs.Hayabusa",
+    "Windows.Forensics.PersistenceSniper",
+    "Windows.Detection.Yara.Yara64",
+    "Windows.System.Services",
+    "Windows.Registry.NTUser",
+    "Windows.Forensics.Jumplists",
+    "Windows.Timeline.Prefetch",
+    "Windows.System.TaskScheduler",
+    "Windows.EventLogs.RDPAuth",
+    "Windows.Network.NetstatEnriched",
+    "Windows.Sys.StartupItems",
+    "Windows.Registry.BackupRestore",
+    "Windows.Forensics.VSS",
+    "Windows.System.Powershell.PSReadline",
+    "Windows.Detection.BinaryRename"
+  ]
+}

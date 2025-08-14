@@ -1,0 +1,87 @@
+# Velociraptor Configuration Template
+# Package: Advanced Persistent Threat investigation
+# Generated: 2025-07-28 15:54:01
+
+version:
+  name: velociraptor
+  version: "0.8.0"
+  commit: "custom-build"
+  build_time: "2025-07-28 15:54:01"
+
+Client:
+  server_urls:
+    - https://localhost:8000/
+  ca_certificate: |
+    # CA Certificate will be inserted here
+  nonce: "1202ade7-16fd-4be6-96f5-80ea8fd0dbd4"
+  writeback_darwin: /opt/velociraptor/velociraptor.writeback.yaml
+  writeback_linux: /opt/velociraptor/velociraptor.writeback.yaml
+  writeback_windows: C:\Program Files\Velociraptor\velociraptor.writeback.yaml
+  max_poll: 60
+  max_poll_std: 5
+
+API:
+  bind_address: 0.0.0.0
+  bind_port: 8001
+  bind_scheme: tcp
+  pinned_gw_name: GRPC_GW
+
+GUI:
+  bind_address: 0.0.0.0
+  bind_port: 8889
+  gw_certificate: |
+    # GUI Certificate will be inserted here
+  gw_private_key: |
+    # GUI Private Key will be inserted here
+  internal_cidr:
+    - 127.0.0.1/12
+    - 192.168.0.0/16
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+
+CA:
+  private_key: |
+    # CA Private Key will be inserted here
+
+Frontend:
+  bind_address: 0.0.0.0
+  bind_port: 8000
+  certificate: |
+    # Frontend Certificate will be inserted here
+  private_key: |
+    # Frontend Private Key will be inserted here
+  dyn_dns: {}
+
+Datastore:
+  implementation: FileBaseDataStore
+  location: ./datastore
+  filestore_directory: ./datastore
+
+Logging:
+  output_directory: ./logs
+  separate_logs_per_component: true
+  rotation_time: 604800
+  max_age: 2678400
+
+Monitoring:
+  bind_address: 127.0.0.1
+  bind_port: 8003
+
+# Package-specific artifact definitions
+artifacts:
+  definitions:
+    - name: Windows.EventLogs.Hayabusa
+    - name: Windows.Forensics.PersistenceSniper
+    - name: Windows.Detection.Yara.Yara64
+    - name: Windows.System.Services
+    - name: Windows.Registry.NTUser
+    - name: Windows.Network.NetstatEnriched
+    - name: Windows.System.Powershell.PSReadline
+    - name: Windows.EventLogs.PowershellScriptblock
+    - name: Windows.Registry.Sysinternals.Eulacheck
+    - name: Windows.System.Handles
+    - name: Windows.Memory.ProcessInfo
+    - name: Windows.Detection.Malfind
+    - name: Windows.System.CertificateAuthorities
+    - name: Windows.Registry.RecentDocs
+    - name: Windows.Forensics.Lnk

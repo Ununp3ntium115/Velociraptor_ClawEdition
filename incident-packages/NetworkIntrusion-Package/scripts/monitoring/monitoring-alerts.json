@@ -1,0 +1,45 @@
+{
+    "Email": {
+        "Enabled": false,
+        "Recipients": [
+            "admin@company.com",
+            "security@company.com"
+        ],
+        "From": "velociraptor-monitor@company.com",
+        "SmtpServer": "smtp.company.com",
+        "Port": 587,
+        "UseSSL": true,
+        "Credential": null
+    },
+    "Webhook": {
+        "Enabled": false,
+        "Url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+        "AuthHeader": {
+            "Name": "Authorization",
+            "Value": "Bearer YOUR_API_TOKEN"
+        }
+    },
+    "Slack": {
+        "Enabled": false,
+        "WebhookUrl": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+        "Channel": "#velociraptor-alerts"
+    },
+    "EventLog": {
+        "Enabled": true
+    },
+    "AlertThresholds": {
+        "DiskSpaceGB": 10,
+        "MemoryUsagePercent": 80,
+        "CPUUsagePercent": 85,
+        "ResponseTimeMs": 5000,
+        "FailedChecksBeforeAlert": 3,
+        "AlertCooldownMinutes": 15
+    },
+    "RemediationSettings": {
+        "AutoRestartService": true,
+        "AutoCleanTempFiles": true,
+        "AutoRotateLogs": true,
+        "MaxRemediationAttempts": 3,
+        "RemediationCooldownMinutes": 30
+    }
+}

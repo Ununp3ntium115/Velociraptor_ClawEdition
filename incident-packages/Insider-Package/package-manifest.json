@@ -1,0 +1,42 @@
+{
+  "ConfigTemplate": "insider-config.yaml",
+  "PackageType": "Insider",
+  "DeploymentScript": "Deploy-Insider.ps1",
+  "CreatedDate": "2025-07-28 15:54:30",
+  "ExternalTools": [
+    "NirSoft",
+    "EricZimmerman"
+  ],
+  "Priority": "High",
+  "Requirements": {
+    "PowerShell": "5.1+",
+    "OS": "Windows 10+",
+    "Memory": "4GB",
+    "Disk": "10GB"
+  },
+  "Version": "1.0.0",
+  "Tools": [
+    "Hayabusa",
+    "LECmd",
+    "JLECmd",
+    "LastActivityView"
+  ],
+  "Description": "Insider threat investigation",
+  "Artifacts": [
+    "Windows.EventLogs.Hayabusa",
+    "Windows.Forensics.UserAccessLogs",
+    "Windows.Registry.RecentDocs",
+    "Windows.Forensics.Jumplists",
+    "Windows.System.Powershell.PSReadline",
+    "Windows.Applications.Chrome.History",
+    "Windows.Applications.Edge.History",
+    "Windows.System.LoggedInUsers",
+    "Windows.EventLogs.Authentication",
+    "Windows.Registry.UserAssist",
+    "Windows.Forensics.Clipboard",
+    "Windows.System.Handles",
+    "Windows.Network.NetstatEnriched",
+    "Windows.Forensics.NTFS.MFT",
+    "Windows.Forensics.USN"
+  ]
+}

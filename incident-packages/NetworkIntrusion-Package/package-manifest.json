@@ -1,0 +1,40 @@
+{
+  "ConfigTemplate": "network-config.yaml",
+  "PackageType": "NetworkIntrusion",
+  "DeploymentScript": "Deploy-NetworkIntrusion.ps1",
+  "CreatedDate": "2025-07-28 15:55:08",
+  "ExternalTools": [
+    "Sysinternals",
+    "NetworkTools"
+  ],
+  "Priority": "High",
+  "Requirements": {
+    "PowerShell": "5.1+",
+    "OS": "Windows 10+",
+    "Memory": "4GB",
+    "Disk": "10GB"
+  },
+  "Version": "1.0.0",
+  "Tools": [
+    "Hayabusa",
+    "PersistenceSniper",
+    "YARA",
+    "Wireshark"
+  ],
+  "Description": "Network-based attack investigation",
+  "Artifacts": [
+    "Windows.Network.NetstatEnriched",
+    "Windows.EventLogs.Hayabusa",
+    "Windows.System.Services",
+    "Windows.Registry.NTUser",
+    "Windows.EventLogs.Authentication",
+    "Windows.EventLogs.RDPAuth",
+    "Windows.System.LoggedInUsers",
+    "Windows.Network.ArpCache",
+    "Windows.Network.DNSCache",
+    "Windows.System.Handles",
+    "Windows.Forensics.PersistenceSniper",
+    "Windows.Detection.Yara.Yara64",
+    "Windows.System.Powershell.PSReadline"
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "APT": {
+    "DeployScriptExists": true,
+    "Issues": [],
+    "ArtifactsCount": 3,
+    "DirectoryExists": true,
+    "PackageType": "APT",
+    "ManifestExists": true,
+    "ToolsCount": 0,
+    "ConfigExists": true,
+    "ZipExists": true
+  },
+  "Ransomware": {
+    "DeployScriptExists": true,
+    "Issues": [],
+    "ArtifactsCount": 3,
+    "DirectoryExists": true,
+    "PackageType": "Ransomware",
+    "ManifestExists": true,
+    "ToolsCount": 0,
+    "ConfigExists": true,
+    "ZipExists": true
+  },
+  "DataBreach": {
+    "DeployScriptExists": true,
+    "Issues": [],
+    "ArtifactsCount": 1,
+    "DirectoryExists": true,
+    "PackageType": "DataBreach",
+    "ManifestExists": true,
+    "ToolsCount": 0,
+    "ConfigExists": true,
+    "ZipExists": true
+  },
+  "NetworkIntrusion": {
+    "DeployScriptExists": true,
+    "Issues": [],
+    "ArtifactsCount": 3,
+    "DirectoryExists": true,
+    "PackageType": "NetworkIntrusion",
+    "ManifestExists": true,
+    "ToolsCount": 0,
+    "ConfigExists": true,
+    "ZipExists": true
+  },
+  "Insider": {
+    "DeployScriptExists": true,
+    "Issues": [],
+    "ArtifactsCount": 2,
+    "DirectoryExists": true,
+    "PackageType": "Insider",
+    "ManifestExists": true,
+    "ToolsCount": 0,
+    "ConfigExists": true,
+    "ZipExists": true
+  },
+  "Complete": {
+    "DeployScriptExists": true,
+    "Issues": [],
+    "ArtifactsCount": 284,
+    "DirectoryExists": true,
+    "PackageType": "Complete",
+    "ManifestExists": true,
+    "ToolsCount": 0,
+    "ConfigExists": true,
+    "ZipExists": true
+  },
+  "Malware": {
+    "DeployScriptExists": true,
+    "Issues": [],
+    "ArtifactsCount": 4,
+    "DirectoryExists": true,
+    "PackageType": "Malware",
+    "ManifestExists": true,
+    "ToolsCount": 0,
+    "ConfigExists": true,
+    "ZipExists": true
+  }
+}

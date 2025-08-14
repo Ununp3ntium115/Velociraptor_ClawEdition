@@ -1,0 +1,46 @@
+{
+  "ConfigTemplate": "apt-config.yaml",
+  "PackageType": "APT",
+  "DeploymentScript": "Deploy-APT.ps1",
+  "CreatedDate": "2025-07-28 15:54:01",
+  "ExternalTools": [
+    "Sysinternals",
+    "NirSoft",
+    "EricZimmerman",
+    "VolatilityWorkbench"
+  ],
+  "Priority": "Critical",
+  "Requirements": {
+    "PowerShell": "5.1+",
+    "OS": "Windows 10+",
+    "Memory": "4GB",
+    "Disk": "10GB"
+  },
+  "Version": "1.0.0",
+  "Tools": [
+    "Hayabusa",
+    "PersistenceSniper",
+    "YARA",
+    "Volatility",
+    "Capa",
+    "DetectRaptor"
+  ],
+  "Description": "Advanced Persistent Threat investigation",
+  "Artifacts": [
+    "Windows.EventLogs.Hayabusa",
+    "Windows.Forensics.PersistenceSniper",
+    "Windows.Detection.Yara.Yara64",
+    "Windows.System.Services",
+    "Windows.Registry.NTUser",
+    "Windows.Network.NetstatEnriched",
+    "Windows.System.Powershell.PSReadline",
+    "Windows.EventLogs.PowershellScriptblock",
+    "Windows.Registry.Sysinternals.Eulacheck",
+    "Windows.System.Handles",
+    "Windows.Memory.ProcessInfo",
+    "Windows.Detection.Malfind",
+    "Windows.System.CertificateAuthorities",
+    "Windows.Registry.RecentDocs",
+    "Windows.Forensics.Lnk"
+  ]
+}
