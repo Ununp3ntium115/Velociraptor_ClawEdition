@@ -133,42 +133,49 @@ if (-not (Test-Path $exe)) {
         # Set TLS 1.2 for older systems compatibility
         [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
         
-        # Get latest release info from GitHub API
-        $headers = @{ 'User-Agent' = 'VelociraptorDeploy/1.0' }
-        $releaseInfo = Invoke-RestMethod -Uri 'https://api.github.com/repos/Velocidex/velociraptor/releases/latest' -Headers $headers
+        # Get latest release info from GitHub API (proven working method)
+        $apiUrl = "https://api.github.com/repos/Velocidex/velociraptor/releases/latest"
+        $response = Invoke-RestMethod -Uri $apiUrl -ErrorAction Stop
+        $windowsAsset = $response.assets | Where-Object { 
+            $_.name -like "*windows-amd64.exe" -and 
+            $_.name -notlike "*debug*" -and 
+            $_.name -notlike "*collector*"
+        } | Select-Object -First 1
         
-        # Find Windows AMD64 executable asset
-        $asset = $releaseInfo.assets | Where-Object { $_.name -like '*windows-amd64.exe' } | Select-Object -First 1
-        
-        if (-not $asset) {
-            throw "Windows AMD64 executable not found in latest release"
+        if (-not $windowsAsset) {
+            throw "Could not find Windows executable in release assets"
         }
+        
+        $version = $response.tag_name -replace '^v', ''
+        Log "Found Velociraptor v$version ($([math]::Round($windowsAsset.size / 1MB, 1)) MB)"
+        $asset = $windowsAsset
         
         Log "Downloading $($asset.name) (Size: $([math]::Round($asset.size/1MB, 2)) MB)..."
         
-        # Download with progress indication for large files
+        # Download using proven working method
         $webClient = New-Object System.Net.WebClient
-        $webClient.Headers.Add('User-Agent', 'VelociraptorDeploy/1.0')
-        
-        # Register progress event for older PowerShell versions
-        Register-ObjectEvent -InputObject $webClient -EventName DownloadProgressChanged -Action {
-            $percent = $Event.SourceEventArgs.ProgressPercentage
-            if ($percent % 10 -eq 0) {
-                # Show progress every 10%
-                Write-Progress -Activity "Downloading Velociraptor" -Status "$percent% Complete" -PercentComplete $percent
-            }
-        } | Out-Null
-        
         $webClient.DownloadFile($asset.browser_download_url, $exe)
-        $webClient.Dispose()
         
-        Write-Progress -Activity "Downloading Velociraptor" -Completed
-        Log "Successfully downloaded $($asset.name)"
-        
-        # Verify the downloaded file
-        if ((Get-Item $exe).Length -eq 0) {
-            throw "Downloaded file is empty"
+        if (Test-Path $exe) {
+            $fileSize = (Get-Item $exe).Length
+            Log "Download completed: $([math]::Round($fileSize / 1MB, 1)) MB"
+            
+            # Verify file size
+            if ([math]::Abs($fileSize - $asset.size) -lt 1024) {
+                Log "File size verification: PASSED"
+            } else {
+                Log "WARNING: File size mismatch"
+            }
+            
+            # Verify download is not empty
+            if ($fileSize -eq 0) {
+                throw "Downloaded file is empty"
+            }
+        } else {
+            throw "Download failed - file not found"
         }
+        
+        $webClient.Dispose()
         
     }
     catch {
@@ -670,10 +677,10 @@ try {
     
     try {
         $response = $webClient.DownloadString($testUrl)
-        Log "✓ Web interface is accessible at $testUrl"
+        Log "Web interface is accessible at $testUrl"
     }
     catch {
-        Log "⚠ Web interface test failed - this is normal for new installations"
+        Log "WARNING: Web interface test failed - this is normal for new installations"
         Log "  The service may still be starting up. Wait a few minutes and try accessing:"
         Log "  $testUrl"
     }

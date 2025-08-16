@@ -62,10 +62,10 @@ function Write-VelociraptorLog {
     
     # Determine log file path with cross-platform support
     if (-not $LogPath) {
-        # Cross-platform log directory selection
-        if ($IsWindows -or $env:OS -eq "Windows_NT") {
+        # Cross-platform log directory selection (PowerShell 5.1+ compatible)
+        if ($env:OS -eq "Windows_NT" -or [System.Environment]::OSVersion.Platform -eq "Win32NT") {
             $logDir = Join-Path $env:ProgramData 'VelociraptorDeploy'
-        } elseif ($IsMacOS -or $env:HOME) {
+        } elseif ($env:HOME) {
             $logDir = Join-Path $env:HOME '.velociraptor'
         } else {
             $logDir = Join-Path '/tmp' 'velociraptor'
@@ -98,13 +98,13 @@ function Write-VelociraptorLog {
         ""
     }
     
-    # Create log entry
-    $logEntry = @(
+    # Create log entry (PowerShell 5.1+ compatible)
+    $logEntry = (@(
         $timestamp,
         "[$Level]",
         $componentText,
         $Message
-    ) | Where-Object { $_ } | Join-String -Separator ' '
+    ) | Where-Object { $_ }) -join ' '
     
     # Write to file
     try {

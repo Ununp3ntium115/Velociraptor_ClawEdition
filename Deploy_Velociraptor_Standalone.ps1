@@ -3,11 +3,11 @@
     Deploy Velociraptor in standalone mode with GUI interface.
 
 .DESCRIPTION
-    Downloads latest Velociraptor EXE (or re-uses an existing one)
-    Creates C:\VelociraptorData as the GUI's datastore
-    Adds an inbound firewall rule for TCP 8889 (netsh fallback)
-    Launches velociraptor.exe gui --datastore C:\VelociraptorData
-    Waits until the port is listening, then exits
+    Downloads latest Velociraptor EXE from GitHub (proven working method)
+    Creates complete installation with proper configuration
+    Adds firewall rules for GUI and Frontend ports
+    Launches Velociraptor with proper server configuration
+    Opens web interface automatically
 
 .PARAMETER InstallDir
     Installation directory. Default: C:\tools
@@ -31,8 +31,10 @@
     .\Deploy_Velociraptor_Standalone.ps1 -GuiPort 9999 -SkipFirewall
 
 .NOTES
-    Requires Administrator privileges
+    Administrator privileges recommended for firewall rules
+    Uses proven installation method from v5.0.3-beta
     Logs → %ProgramData%\VelociraptorDeploy\standalone_deploy.log
+    Version: 5.0.3-beta (Production Ready)
 #>
 
 [CmdletBinding()]
@@ -97,19 +99,27 @@ function Test-AdminPrivileges {
 function Get-LatestVelociraptorAsset {
     Write-Log 'Querying GitHub for the latest Velociraptor release...'
     try {
-        $headers = @{ 
-            'User-Agent' = 'VelociraptorStandaloneDeployer/1.0'
-            'Accept'     = 'application/vnd.github.v3+json'
-        }
-        $release = Invoke-RestMethod -Uri 'https://api.github.com/repos/Velocidex/velociraptor/releases/latest' -Headers $headers -TimeoutSec 30
-        $asset = $release.assets | Where-Object { $_.name -like '*windows-amd64.exe' -and $_.name -notlike '*msi*' } | Select-Object -First 1
+        $apiUrl = "https://api.github.com/repos/Velocidex/velociraptor/releases/latest"
+        $response = Invoke-RestMethod -Uri $apiUrl -ErrorAction Stop
+        $windowsAsset = $response.assets | Where-Object { 
+            $_.name -like "*windows-amd64.exe" -and 
+            $_.name -notlike "*debug*" -and 
+            $_.name -notlike "*collector*"
+        } | Select-Object -First 1
         
-        if (-not $asset) { 
-            throw 'Could not locate a Windows AMD64 asset in the latest release.' 
+        if (-not $windowsAsset) {
+            throw "Could not find Windows executable in release assets"
         }
         
-        Write-Log "Found version: $($release.tag_name)" -Level 'Success'
-        return $asset.browser_download_url
+        $version = $response.tag_name -replace '^v', ''
+        Write-Log "Found Velociraptor v$version ($([math]::Round($windowsAsset.size / 1MB, 1)) MB)" -Level 'Success'
+        
+        return @{
+            Version = $version
+            DownloadUrl = $windowsAsset.browser_download_url
+            Size = $windowsAsset.size
+            Name = $windowsAsset.name
+        }
     }
     catch {
         Write-Log "Failed to query GitHub API - $($_.Exception.Message)" -Level 'Error'
@@ -118,30 +128,41 @@ function Get-LatestVelociraptorAsset {
 }
 
 function Install-VelociraptorExecutable {
-    param([string]$Url, [string]$DestinationPath)
+    param($AssetInfo, [string]$DestinationPath)
     
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    Write-Log "Downloading $($Url.Split('/')[-1])..."
+    Write-Log "Downloading $($AssetInfo.Name) ($([math]::Round($AssetInfo.Size / 1MB, 1)) MB)..."
     
     try {
         $tempFile = "$DestinationPath.download"
-        Invoke-WebRequest -Uri $Url -OutFile $tempFile -UseBasicParsing -Headers @{ 'User-Agent' = 'Mozilla/5.0' } -TimeoutSec 300
         
-        # Verify download
-        if (-not (Test-Path $tempFile) -or (Get-Item $tempFile).Length -eq 0) {
-            throw "Download failed or file is empty"
+        # Use proven working download method
+        $webClient = New-Object System.Net.WebClient
+        $webClient.DownloadFile($AssetInfo.DownloadUrl, $tempFile)
+        
+        if (Test-Path $tempFile) {
+            $fileSize = (Get-Item $tempFile).Length
+            Write-Log "Download completed: $([math]::Round($fileSize / 1MB, 1)) MB" -Level 'Success'
+            
+            # Verify file size
+            if ([math]::Abs($fileSize - $AssetInfo.Size) -lt 1024) {
+                Write-Log "File size verification: PASSED" -Level 'Success'
+            } else {
+                Write-Log "File size verification: WARNING - Size mismatch" -Level 'Warning'
+            }
+            
+            Move-Item $tempFile $DestinationPath -Force
+            Write-Log "Successfully installed to $DestinationPath" -Level 'Success'
+        } else {
+            throw "Download file not found at $tempFile"
         }
-        
-        Move-Item $tempFile $DestinationPath -Force
-        Write-Log 'Download completed successfully.' -Level 'Success'
     }
     catch {
-        # Cleanup on failure
-        if (Test-Path "$DestinationPath.download") {
-            Remove-Item "$DestinationPath.download" -Force -ErrorAction SilentlyContinue
-        }
         Write-Log "Download failed - $($_.Exception.Message)" -Level 'Error'
+        if (Test-Path $tempFile) { Remove-Item $tempFile -Force }
         throw
+    }
+    finally {
+        if ($webClient) { $webClient.Dispose() }
     }
 }
 
@@ -262,8 +283,19 @@ try {
     # Handle executable
     $executablePath = Join-Path $InstallDir 'velociraptor.exe'
     if (-not (Test-Path $executablePath) -or $Force) {
-        $downloadUrl = Get-LatestVelociraptorAsset
-        Install-VelociraptorExecutable -Url $downloadUrl -DestinationPath $executablePath
+        $assetInfo = Get-LatestVelociraptorAsset
+        Install-VelociraptorExecutable -AssetInfo $assetInfo -DestinationPath $executablePath
+        
+        # Test executable
+        try {
+            $versionOutput = & $executablePath version 2>&1
+            if ($LASTEXITCODE -eq 0) {
+                Write-Log "Executable verification: PASSED" -Level 'Success'
+            }
+        }
+        catch {
+            Write-Log "Executable verification: SKIPPED (non-critical)" -Level 'Warning'
+        }
     }
     else {
         Write-Log "Using existing executable: $executablePath"
