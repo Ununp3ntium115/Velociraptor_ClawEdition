@@ -1198,50 +1198,6 @@ catch {
     Write-Host $errorMsg -ForegroundColor Red
     Write-Host "Stack trace:" -ForegroundColor Yellow
     Write-Host $_.ScriptStackTrace -ForegroundColor Yellow
-}
-    try {
-        [System.Windows.Forms.MessageBox]::Show($errorMsg, "Critical Error", "OK", "Error")
-    }
-    catch {
-        # If even MessageBox fails, just exit
-        Write-Host "Cannot show error dialog, exiting..." -ForegroundColor Red
-    }
-    exit 1
-# Main execution block
-try {
-    Write-Host $VelociraptorBanner -ForegroundColor Cyan
-    Write-Host "Initializing Velociraptor Configuration Wizard..." -ForegroundColor Green
-    
-    # Create main form
-    $script:MainForm = New-MainForm
-    if ($null -eq $script:MainForm) {
-        throw "Failed to create main form"
-    }
-    
-    # Create panels
-    $script:HeaderPanel = New-HeaderPanel
-    $script:ContentPanel = New-ContentPanel  
-    $script:ButtonPanel = New-ButtonPanel
-    
-    # Add panels to form
-    $script:MainForm.Controls.Add($script:HeaderPanel)
-    $script:MainForm.Controls.Add($script:ContentPanel)
-    $script:MainForm.Controls.Add($script:ButtonPanel)
-    
-    # Show initial step
-    Update-CurrentStep
-    
-    # Show form
-    if ($StartMinimized) {
-        $script:MainForm.WindowState = "Minimized"
-    }
-    
-    Write-Host "Launching GUI..." -ForegroundColor Green
-    [System.Windows.Forms.Application]::Run($script:MainForm)
-}
-catch {
-    $errorMsg = "GUI failed: $($_.Exception.Message)"
-    Write-Host $errorMsg -ForegroundColor Red
     
     try {
         [System.Windows.Forms.MessageBox]::Show($errorMsg, "Critical Error", "OK", "Error")
