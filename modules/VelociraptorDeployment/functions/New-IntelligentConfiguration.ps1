@@ -115,9 +115,21 @@ function New-ConfigurationEngine {
     return @{
         Version = "1.0.0"
         KnowledgeBase = Import-ConfigurationKnowledgeBase
-        OptimizationRules = Load-OptimizationRules
-        SecurityProfiles = Load-SecurityProfiles
-        PerformanceProfiles = Load-PerformanceProfiles
+        OptimizationRules = @{
+            CPU = @{ MinCores = 2; RecommendedCores = 4; MaxCores = 16 }
+            Memory = @{ MinGB = 4; RecommendedGB = 8; MaxGB = 64 }
+            Storage = @{ MinGB = 50; RecommendedGB = 100; MaxGB = 1000 }
+        }
+        SecurityProfiles = @{
+            Basic = @{ Encryption = $false; Authentication = "Basic" }
+            Standard = @{ Encryption = $true; Authentication = "Standard" }
+            High = @{ Encryption = $true; Authentication = "MFA" }
+        }
+        PerformanceProfiles = @{
+            Balanced = @{ WorkerThreads = 4; CacheSize = 2 }
+            Performance = @{ WorkerThreads = 8; CacheSize = 4 }
+            Efficiency = @{ WorkerThreads = 2; CacheSize = 1 }
+        }
     }
 }
 
@@ -135,18 +147,18 @@ function Get-EnvironmentAnalysis {
     }
     
     # Analyze system specifications
-    if ($SystemSpecs.Count -eq 0) {
+    if (-not $SystemSpecs -or ($SystemSpecs -is [array] -and $SystemSpecs.Count -eq 0)) {
         # Auto-detect system specifications
         $SystemSpecs = Get-AutoDetectedSystemSpecs
     }
     
     # CPU Analysis
-    $cpuCores = $SystemSpecs.CPUCores ?? (Get-WmiObject -Class Win32_ComputerSystem).NumberOfLogicalProcessors
+    $cpuCores = if ($SystemSpecs['CPUCores']) { $SystemSpecs['CPUCores'] } else { (Get-WmiObject -Class Win32_ComputerSystem).NumberOfLogicalProcessors }
     $analysis.System.CPUCores = $cpuCores
     $analysis.System.CPURecommendation = Get-CPURecommendation -Cores $cpuCores
     
     # Memory Analysis
-    $totalMemoryGB = $SystemSpecs.MemoryGB ?? [math]::Round((Get-WmiObject -Class Win32_ComputerSystem).TotalPhysicalMemory / 1GB, 2)
+    $totalMemoryGB = if ($SystemSpecs['MemoryGB']) { $SystemSpecs['MemoryGB'] } else { [math]::Round((Get-WmiObject -Class Win32_ComputerSystem).TotalPhysicalMemory / 1GB, 2) }
     $analysis.System.MemoryGB = $totalMemoryGB
     $analysis.System.MemoryRecommendation = Get-MemoryRecommendation -MemoryGB $totalMemoryGB
     
@@ -485,14 +497,24 @@ function Get-IntelligentRecommendations {
     
     # Performance recommendations based on system analysis
     $sysRec = $EnvironmentAnalysis.System
-    if ($sysRec.CPURecommendation) {
-        $recommendations.Performance += "Configure $($sysRec.CPURecommendation.WorkerThreads) worker threads"
-        $recommendations.Performance += "Set max concurrent queries to $($sysRec.CPURecommendation.MaxConcurrentQueries)"
+    if ($sysRec -and $sysRec['CPURecommendation']) {
+        $cpuRec = $sysRec['CPURecommendation']
+        if ($cpuRec['WorkerThreads']) {
+            $recommendations.Performance += "Configure $($cpuRec['WorkerThreads']) worker threads"
+        }
+        if ($cpuRec['MaxConcurrentQueries']) {
+            $recommendations.Performance += "Set max concurrent queries to $($cpuRec['MaxConcurrentQueries'])"
+        }
     }
     
-    if ($sysRec.MemoryRecommendation) {
-        $recommendations.Performance += "Allocate $($sysRec.MemoryRecommendation.MaxMemoryUsage)GB for Velociraptor"
-        $recommendations.Performance += "Configure $($sysRec.MemoryRecommendation.CacheSize)GB cache size"
+    if ($sysRec -and $sysRec['MemoryRecommendation']) {
+        $memRec = $sysRec['MemoryRecommendation']
+        if ($memRec['MaxMemoryUsage']) {
+            $recommendations.Performance += "Allocate $($memRec['MaxMemoryUsage'])GB for Velociraptor"
+        }
+        if ($memRec['CacheSize']) {
+            $recommendations.Performance += "Configure $($memRec['CacheSize'])GB cache size"
+        }
     }
     
     # Use case specific recommendations
@@ -730,14 +752,14 @@ function Test-GeneratedConfiguration {
     }
     
     # Validate security configurations
-    if ($Config.GUI.use_plain_http -eq $false) {
+    if ($Config.GUI -and $Config.GUI.ContainsKey('use_plain_http') -and $Config.GUI.use_plain_http -eq $false) {
         $validation.Score += 15
     }
-    else {
+    elseif ($Config.GUI -and $Config.GUI.ContainsKey('use_plain_http') -and $Config.GUI.use_plain_http -eq $true) {
         $validation.Warnings += "Plain HTTP is enabled"
     }
     
-    if ($Config.GUI.authenticator) {
+    if ($Config.GUI -and $Config.GUI.ContainsKey('authenticator') -and $Config.GUI.authenticator) {
         $validation.Score += 15
     }
     else {
@@ -745,7 +767,7 @@ function Test-GeneratedConfiguration {
     }
     
     # Validate performance configurations
-    if ($Config.Frontend.resources) {
+    if ($Config.Frontend -and $Config.Frontend.ContainsKey('resources') -and $Config.Frontend.resources) {
         $validation.Score += 10
     }
     
@@ -821,4 +843,126 @@ function Import-SecurityProfiles {
 function Import-PerformanceProfiles {
     # This would load performance profiles
     return @{}
+}
+# Helper functions for configuration building
+function Get-BaseConfigurationTemplate {
+    return @{
+        Version = "0.7.0"
+        Client = @{
+            server_urls = @("https://localhost:8000/")
+            ca_certificate = ""
+            nonce = ""
+            writeback_darwin = "/opt/velociraptor/velociraptor.writeback.yaml"
+            writeback_linux = "/opt/velociraptor/velociraptor.writeback.yaml"
+            writeback_windows = "C:\\Program Files\\Velociraptor\\velociraptor.writeback.yaml"
+            max_poll = 60
+            max_poll_std = 30
+        }
+        API = @{
+            bind_address = "127.0.0.1"
+            bind_port = 8001
+            bind_scheme = "tcp"
+        }
+        GUI = @{
+            bind_address = "0.0.0.0"
+            bind_port = 8889
+            gw_certificate = ""
+            gw_private_key = ""
+            internal_cidr = @("127.0.0.1/12", "192.168.0.0/16")
+            vpn_cidr = @("192.168.220.0/24")
+        }
+        Frontend = @{
+            bind_address = "0.0.0.0"
+            bind_port = 8000
+            certificate = ""
+            private_key = ""
+            dyn_dns = @{}
+        }
+        Datastore = @{
+            implementation = "FileBaseDataStore"
+            location = "C:\\VelociraptorData"
+            filestore_directory = "C:\\VelociraptorData"
+        }
+        Logging = @{
+            output_directory = "C:\\VelociraptorData\\logs"
+            separate_logs_per_component = $true
+            rotation_time = 604800
+            max_age = 31536000
+        }
+    }
+}
+
+function Apply-PerformanceOptimizations {
+    param($Config, $Profile, $Recommendations)
+    
+    # Apply performance settings based on profile
+    switch ($Profile) {
+        'Performance' {
+            $Config.Client.max_poll = 30
+            $Config.Client.max_poll_std = 15
+        }
+        'Efficiency' {
+            $Config.Client.max_poll = 120
+            $Config.Client.max_poll_std = 60
+        }
+        default {
+            $Config.Client.max_poll = 60
+            $Config.Client.max_poll_std = 30
+        }
+    }
+}
+
+function Apply-SecurityConfigurations {
+    param($Config, $Recommendations)
+    
+    # Apply security recommendations
+    if ($Recommendations.Security -contains "Enable TLS encryption") {
+        $Config.Frontend.bind_scheme = "https"
+        $Config.API.bind_scheme = "https"
+    }
+}
+
+function Apply-ComplianceConfigurations {
+    param($Config, $Frameworks)
+    
+    # Apply compliance-specific settings
+    foreach ($framework in $Frameworks) {
+        switch ($framework) {
+            'SOX' {
+                $Config.Logging.separate_logs_per_component = $true
+                $Config.Logging.max_age = 94608000  # 3 years
+            }
+            'HIPAA' {
+                $Config.Logging.separate_logs_per_component = $true
+                $Config.Logging.max_age = 189216000  # 6 years
+            }
+        }
+    }
+}
+
+function Apply-OperationalConfigurations {
+    param($Config, $Recommendations)
+    
+    # Apply operational recommendations
+    if ($Recommendations.Operational -contains "Enable automated backups") {
+        $Config.Datastore.backup_enabled = $true
+        $Config.Datastore.backup_interval = 86400  # Daily
+    }
+}
+function Apply-FinalOptimizations {
+    param($Config, $ValidationResults)
+    
+    # Apply final optimizations based on validation results
+    if ($ValidationResults.Score -lt 50) {
+        # Apply basic optimizations for low-scoring configurations
+        $Config.Client.max_poll = 60
+        $Config.Client.max_poll_std = 30
+    }
+    
+    # Ensure required directories exist
+    if ($Config.Datastore.location) {
+        $Config.Datastore.filestore_directory = $Config.Datastore.location
+    }
+    
+    return $Config
 }

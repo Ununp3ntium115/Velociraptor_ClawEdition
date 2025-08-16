@@ -115,32 +115,32 @@ function Get-SystemResourceAnalysis {
     param([hashtable]$SystemSpecs)
     
     # Default system specs if not provided
-    if ($SystemSpecs.Count -eq 0) {
+    if (-not $SystemSpecs -or ($SystemSpecs -is [array] -and $SystemSpecs.Count -eq 0)) {
         $SystemSpecs = Get-AutoDetectedSystemSpecs
     }
 
     return @{
         CPU = @{
-            Cores = $SystemSpecs.CPU_Cores ?? 4
-            Architecture = $SystemSpecs.CPU_Architecture ?? "x64"
-            Frequency = $SystemSpecs.CPU_Frequency ?? 2.4
-            Recommendation = Get-CPURecommendation -Cores ($SystemSpecs.CPU_Cores ?? 4)
+            Cores = if ($SystemSpecs.CPU_Cores) { $SystemSpecs.CPU_Cores } else { 4 }
+            Architecture = if ($SystemSpecs.CPU_Architecture) { $SystemSpecs.CPU_Architecture } else { "x64" }
+            Frequency = if ($SystemSpecs.CPU_Frequency) { $SystemSpecs.CPU_Frequency } else { 2.4 }
+            Recommendation = Get-CPURecommendation -Cores (if ($SystemSpecs.CPU_Cores) { $SystemSpecs.CPU_Cores } else { 4 })
         }
         Memory = @{
-            TotalGB = $SystemSpecs.Memory_GB ?? 8
-            AvailableGB = $SystemSpecs.Available_Memory_GB ?? 6
-            Recommendation = Get-MemoryRecommendation -TotalGB ($SystemSpecs.Memory_GB ?? 8)
+            TotalGB = if ($SystemSpecs.Memory_GB) { $SystemSpecs.Memory_GB } else { 8 }
+            AvailableGB = if ($SystemSpecs.Available_Memory_GB) { $SystemSpecs.Available_Memory_GB } else { 6 }
+            Recommendation = Get-MemoryRecommendation -TotalGB (if ($SystemSpecs.Memory_GB) { $SystemSpecs.Memory_GB } else { 8 })
         }
         Storage = @{
-            TotalGB = $SystemSpecs.Storage_GB ?? 500
-            AvailableGB = $SystemSpecs.Available_Storage_GB ?? 400
-            Type = $SystemSpecs.Storage_Type ?? "SSD"
-            IOPS = $SystemSpecs.Storage_IOPS ?? 1000
+            TotalGB = if ($SystemSpecs.Storage_GB) { $SystemSpecs.Storage_GB } else { 500 }
+            AvailableGB = if ($SystemSpecs.Available_Storage_GB) { $SystemSpecs.Available_Storage_GB } else { 400 }
+            Type = if ($SystemSpecs.Storage_Type) { $SystemSpecs.Storage_Type } else { "SSD" }
+            IOPS = if ($SystemSpecs.Storage_IOPS) { $SystemSpecs.Storage_IOPS } else { 1000 }
         }
         Network = @{
-            Bandwidth = $SystemSpecs.Network_Bandwidth ?? "1Gbps"
-            Latency = $SystemSpecs.Network_Latency ?? 10
-            Interfaces = $SystemSpecs.Network_Interfaces ?? 1
+            Bandwidth = if ($SystemSpecs.Network_Bandwidth) { $SystemSpecs.Network_Bandwidth } else { "1Gbps" }
+            Latency = if ($SystemSpecs.Network_Latency) { $SystemSpecs.Network_Latency } else { 10 }
+            Interfaces = if ($SystemSpecs.Network_Interfaces) { $SystemSpecs.Network_Interfaces } else { 1 }
         }
     }
 }
