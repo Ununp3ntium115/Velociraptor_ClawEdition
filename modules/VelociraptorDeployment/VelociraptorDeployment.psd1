@@ -3,7 +3,7 @@
     RootModule = 'VelociraptorDeployment.psm1'
 
     # Version number of this module.
-    ModuleVersion = '5.0.3'
+    ModuleVersion = '5.0.4'
 
     # Supported PSEditions
     CompatiblePSEditions = @('Desktop', 'Core')

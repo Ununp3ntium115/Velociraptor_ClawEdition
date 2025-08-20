@@ -72,10 +72,10 @@ function New-ConfigurationEngine {
         }
 
         Write-VelociraptorLog "✅ Configuration Engine initialized successfully" -Level Info
-        Write-VelociraptorLog "📊 Knowledge Base: $($knowledgeBase.Rules.Count) rules loaded" -Level Info
-        Write-VelociraptorLog "🔧 Optimization Rules: $($optimizationRules.Count) rules loaded" -Level Info
-        Write-VelociraptorLog "🔒 Security Profiles: $($securityProfiles.Count) profiles loaded" -Level Info
-        Write-VelociraptorLog "🚀 Performance Profiles: $($performanceProfiles.Count) profiles loaded" -Level Info
+        Write-VelociraptorLog "Knowledge Base: $($knowledgeBase.Rules.Count) rules loaded" -Level Info
+        Write-VelociraptorLog "Optimization Rules: $($optimizationRules.Count) rules loaded" -Level Info
+        Write-VelociraptorLog "Security Profiles: $($securityProfiles.Count) profiles loaded" -Level Info
+        Write-VelociraptorLog "Performance Profiles: $($performanceProfiles.Count) profiles loaded" -Level Info
 
         return $configEngine
     }

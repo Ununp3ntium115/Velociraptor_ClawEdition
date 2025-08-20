@@ -89,7 +89,7 @@ function Start-PredictiveAnalytics {
             Mode = $AnalyticsMode
             Result = $result
             Report = $report
-            Recommendations = $result.Recommendations ?? @()
+            Recommendations = if ($result.Recommendations) { $result.Recommendations } else { @() }
         }
     }
     catch {

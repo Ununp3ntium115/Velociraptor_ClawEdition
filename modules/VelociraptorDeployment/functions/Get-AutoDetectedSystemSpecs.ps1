@@ -1,4 +1,4 @@
-function Get-AutoDetectedSystemSpecs {
+﻿function Get-AutoDetectedSystemSpecs {
     <#
     .SYNOPSIS
         Automatically detects system specifications for intelligent configuration optimization.
@@ -36,17 +36,33 @@ function Get-AutoDetectedSystemSpecs {
 
         Write-VelociraptorLog "🖥️ Platform detected: $($systemSpecs.Platform)" -Level Info
 
-        # CPU Detection
-        Write-VelociraptorLog "⚙️ Detecting CPU specifications..." -Level Info
-        $systemSpecs.CPU = Get-CPUSpecifications
+        # Parallel system detection for PowerShell 7+ with fallback
+        if ($PSVersionTable.PSVersion.Major -ge 7) {
+            # PowerShell 7+ parallel processing
+            $detectionTasks = @(
+                { Get-CPUSpecifications },
+                { Get-MemorySpecifications },
+                { Get-StorageSpecifications }
+            )
+            
+            $results = $detectionTasks | ForEach-Object -Parallel {
+                & $_
+            } -ThrottleLimit 3
+            
+            $systemSpecs.CPU = $results[0]
+            $systemSpecs.Memory = $results[1] 
+            $systemSpecs.Storage = $results[2]
+        } else {
+            # PowerShell 5.1 sequential processing
+            Write-VelociraptorLog "⚙️ Detecting CPU specifications..." -Level Info
+            $systemSpecs.CPU = Get-CPUSpecifications
 
-        # Memory Detection
-        Write-VelociraptorLog "🧠 Detecting memory specifications..." -Level Info
-        $systemSpecs.Memory = Get-MemorySpecifications
+            Write-VelociraptorLog "🧠 Detecting memory specifications..." -Level Info
+            $systemSpecs.Memory = Get-MemorySpecifications
 
-        # Storage Detection
-        Write-VelociraptorLog "💾 Detecting storage specifications..." -Level Info
-        $systemSpecs.Storage = Get-StorageSpecifications
+            Write-VelociraptorLog "💾 Detecting storage specifications..." -Level Info
+            $systemSpecs.Storage = Get-StorageSpecifications
+        }
 
         # Network Detection
         Write-VelociraptorLog "🌐 Detecting network specifications..." -Level Info
@@ -120,11 +136,11 @@ function Get-CPUSpecifications {
             $modelName = ($cpuInfo | Where-Object { $_ -match "model name" } | Select-Object -First 1) -replace ".*: ", ""
             
             return @{
-                Name              = $modelName ?? "Unknown CPU"
+                Name              = if ($modelName) { $modelName } else { "Unknown CPU" }
                 Manufacturer      = "Unknown"
                 Architecture      = "x64"
-                LogicalCores      = $cores ?? 4
-                PhysicalCores     = $cores ?? 4
+                LogicalCores      = if ($cores) { $cores } else { 4 }
+                PhysicalCores     = if ($cores) { $cores } else { 4 }
                 MaxClockSpeed     = 2.4
                 CurrentClockSpeed = 2.4
                 CacheSize         = 0
@@ -181,8 +197,8 @@ function Get-MemorySpecifications {
         }
         elseif ($IsLinux) {
             $memInfo = Get-Content /proc/meminfo -ErrorAction SilentlyContinue
-            $totalKB = ($memInfo | Where-Object { $_ -match "^MemTotal:" }) -replace ".*:\s*(\d+).*", '$1'
-            $availableKB = ($memInfo | Where-Object { $_ -match "^MemAvailable:" }) -replace ".*:\s*(\d+).*", '$1'
+            $totalKB = ($memInfo | Where-Object { $_ -match "^MemTotal:" }) -replace ".*:\s*(\d+).*", "`$1"
+            $availableKB = ($memInfo | Where-Object { $_ -match "^MemAvailable:" }) -replace ".*:\s*(\d+).*", "`$1"
             
             $totalBytes = [int64]$totalKB * 1024
             $availableBytes = [int64]$availableKB * 1024

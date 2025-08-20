@@ -69,14 +69,35 @@ function Get-VelociraptorLatestRelease {
             Write-VelociraptorLog "Fetching latest release information" -Level Debug
         }
         
-        # Set up web request headers
+        # Set up web request headers with PowerShell 7+ optimizations
         $headers = @{
             'User-Agent' = 'VelociraptorDeployment-PowerShell-Module/1.0'
             'Accept' = 'application/vnd.github.v3+json'
         }
         
-        # Make API request
-        $response = Invoke-RestMethod -Uri $apiUrl -Headers $headers -ErrorAction Stop
+        # Add compression and connection optimization for PowerShell 7+
+        if ($PSVersionTable.PSVersion.Major -ge 7) {
+            $headers['Accept-Encoding'] = 'gzip, deflate'
+            $requestParams = @{
+                Uri = $apiUrl
+                Headers = $headers
+                ErrorAction = 'Stop'
+                TimeoutSec = 30
+                MaximumRetryCount = 3
+                RetryIntervalSec = 2
+            }
+        } else {
+            # PowerShell 5.1 fallback
+            $requestParams = @{
+                Uri = $apiUrl
+                Headers = $headers
+                ErrorAction = 'Stop'
+                TimeoutSec = 30
+            }
+        }
+        
+        # Make API request with optimized parameters
+        $response = Invoke-RestMethod @requestParams
         
         # Handle multiple releases (for prerelease scenario)
         if ($IncludePrerelease -and -not $Version) {
@@ -102,8 +123,7 @@ function Get-VelociraptorLatestRelease {
         # Find matching asset
         $asset = $release.assets | Where-Object { 
             $_.name -like $assetPattern -and 
-            $_.name -like "*.exe" -or 
-            $_.name -like "*.zip" -or
+            ($_.name -like "*.exe" -or $_.name -like "*.zip") -and
             $_.name -notlike "*.sig"
         } | Select-Object -First 1
         

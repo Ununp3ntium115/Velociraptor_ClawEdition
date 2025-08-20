@@ -634,8 +634,8 @@ function Get-ServiceDiagnosticInfo {
     $service = Get-Service -Name "Velociraptor" -ErrorAction SilentlyContinue
     return @{
         ServiceExists = $service -ne $null
-        Status = $service.Status ?? "Not Found"
-        StartType = $service.StartType ?? "Unknown"
+        Status = if ($service.Status) { $service.Status } else { "Not Found" }
+        StartType = if ($service.StartType) { $service.StartType } else { "Unknown" }
     }
 }
 

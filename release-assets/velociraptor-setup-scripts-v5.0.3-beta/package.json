@@ -1,0 +1,150 @@
+{
+  "name": "velociraptor-setup-scripts",
+  "version": "5.0.2",
+  "description": "Enterprise-grade Velociraptor DFIR platform deployment automation with cloud-native scalability, multi-cloud support, serverless architectures, HPC, and edge computing capabilities.",
+  "main": "Deploy_Velociraptor_Standalone.ps1",
+  "scripts": {
+    "test": "powershell -ExecutionPolicy Bypass -File tests/Run-Tests.ps1",
+    "demo": "powershell -ExecutionPolicy Bypass -File examples/Phase5-CloudNative-Demo.ps1",
+    "install": "powershell -ExecutionPolicy Bypass -File scripts/Install-Prerequisites.ps1",
+    "validate": "powershell -ExecutionPolicy Bypass -File scripts/Validate-Environment.ps1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts.git"
+  },
+  "keywords": [
+    "velociraptor",
+    "dfir",
+    "digital-forensics",
+    "incident-response",
+    "security",
+    "automation",
+    "deployment",
+    "cloud-native",
+    "multi-cloud",
+    "serverless",
+    "hpc",
+    "edge-computing",
+    "kubernetes",
+    "powershell",
+    "enterprise",
+    "scalability",
+    "aws",
+    "azure",
+    "gcp",
+    "threat-hunting",
+    "forensics"
+  ],
+  "author": {
+    "name": "Velociraptor Setup Scripts Team",
+    "email": "support@velociraptorsetup.com",
+    "url": "https://github.com/Ununp3ntium115"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/issues"
+  },
+  "homepage": "https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts#readme",
+  "engines": {
+    "powershell": ">=5.1",
+    "pwsh": ">=7.0"
+  },
+  "os": [
+    "win32",
+    "linux",
+    "darwin"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "dependencies": {
+    "powershell": ">=7.0.0"
+  },
+  "devDependencies": {
+    "pester": ">=5.0.0"
+  },
+  "peerDependencies": {
+    "docker": ">=20.0.0",
+    "kubectl": ">=1.20.0",
+    "helm": ">=3.0.0"
+  },
+  "optionalDependencies": {
+    "aws-cli": ">=2.0.0",
+    "azure-cli": ">=2.0.0",
+    "gcloud": ">=400.0.0"
+  },
+  "files": [
+    "Deploy_Velociraptor_Standalone.ps1",
+    "Deploy_Velociraptor_Server.ps1",
+    "modules/",
+    "scripts/",
+    "templates/",
+    "containers/",
+    "cloud/",
+    "examples/",
+    "tests/",
+    "gui/",
+    "README.md",
+    "ROADMAP.md",
+    "PHASE5_COMPLETE.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/Ununp3ntium115"
+  },
+  "config": {
+    "phase": "5",
+    "version_name": "Cloud-Native & Scalability",
+    "release_date": "2025-01-17",
+    "stability": "alpha"
+  },
+  "velociraptor": {
+    "supported_versions": [
+      "0.6.x",
+      "0.7.x",
+      "0.8.x"
+    ],
+    "deployment_types": [
+      "standalone",
+      "server",
+      "cluster",
+      "cloud",
+      "serverless",
+      "hpc",
+      "edge"
+    ],
+    "cloud_providers": [
+      "aws",
+      "azure",
+      "gcp",
+      "multi-cloud"
+    ],
+    "features": {
+      "multi_cloud": true,
+      "serverless": true,
+      "hpc": true,
+      "edge_computing": true,
+      "container_orchestration": true,
+      "ai_integration": true,
+      "auto_scaling": true,
+      "monitoring": true,
+      "security": true,
+      "compliance": true
+    },
+    "requirements": {
+      "min_powershell": "5.1",
+      "recommended_powershell": "7.4",
+      "min_memory": "4GB",
+      "recommended_memory": "16GB",
+      "min_disk": "50GB",
+      "recommended_disk": "500GB"
+    }
+  }
+}

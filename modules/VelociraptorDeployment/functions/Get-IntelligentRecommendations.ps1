@@ -58,7 +58,7 @@ function Get-IntelligentRecommendations {
         $recommendations.Recommendations += $performanceRecs
 
         # 2. Security Recommendations
-        Write-VelociraptorLog "🔒 Analyzing security optimization opportunities..." -Level Info
+        Write-VelociraptorLog "Analyzing security optimization opportunities..." -Level Info
         $securityRecs = Get-SecurityRecommendations -EnvironmentAnalysis $EnvironmentAnalysis -SecurityLevel $SecurityLevel
         $recommendations.Recommendations += $securityRecs
 
@@ -99,7 +99,7 @@ function Get-IntelligentRecommendations {
 
         Write-VelociraptorLog "✅ Generated $($recommendations.Count) intelligent recommendations" -Level Info
         Write-VelociraptorLog "📊 Optimization Score: $($recommendations.OptimizationScore)" -Level Info
-        Write-VelociraptorLog "🔒 Security Score: $($recommendations.SecurityScore)" -Level Info
+        Write-VelociraptorLog "Security Score: $($recommendations.SecurityScore)" -Level Info
         Write-VelociraptorLog "⚡ Performance Score: $($recommendations.PerformanceScore)" -Level Info
 
         return $recommendations

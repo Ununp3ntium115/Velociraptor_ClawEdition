@@ -579,6 +579,30 @@ try {
     $InstallDirTextBox.Size = New-Object System.Drawing.Size(520, 25)
     $InstallDirTextBox.Add_TextChanged({
         $Script:InstallDir = $InstallDirTextBox.Text
+        
+        # Real-time validation with visual feedback
+        $parentDir = Split-Path $InstallDirTextBox.Text -Parent
+        $isValidPath = $false
+        
+        try {
+            if ([string]::IsNullOrWhiteSpace($InstallDirTextBox.Text)) {
+                $isValidPath = $false
+            } elseif ($parentDir -and (Test-Path $parentDir)) {
+                $isValidPath = $true
+            } elseif ([System.IO.Path]::IsPathRooted($InstallDirTextBox.Text) -and 
+                      $InstallDirTextBox.Text -match '^[A-Za-z]:\\[^<>:"|?*]*$') {
+                $isValidPath = $true
+            }
+        } catch {
+            $isValidPath = $false
+        }
+        
+        # Update visual feedback
+        $InstallDirTextBox.BackColor = if ($isValidPath) { 
+            [System.Drawing.Color]::FromArgb(25, 50, 25)  # Dark green
+        } else { 
+            [System.Drawing.Color]::FromArgb(50, 25, 25)  # Dark red
+        }
     })
     
     # Data directory
@@ -598,6 +622,30 @@ try {
     $DataDirTextBox.Size = New-Object System.Drawing.Size(520, 25)
     $DataDirTextBox.Add_TextChanged({
         $Script:DataStore = $DataDirTextBox.Text
+        
+        # Real-time validation with visual feedback
+        $parentDir = Split-Path $DataDirTextBox.Text -Parent
+        $isValidPath = $false
+        
+        try {
+            if ([string]::IsNullOrWhiteSpace($DataDirTextBox.Text)) {
+                $isValidPath = $false
+            } elseif ($parentDir -and (Test-Path $parentDir)) {
+                $isValidPath = $true
+            } elseif ([System.IO.Path]::IsPathRooted($DataDirTextBox.Text) -and 
+                      $DataDirTextBox.Text -match '^[A-Za-z]:\\[^<>:"|?*]*$') {
+                $isValidPath = $true
+            }
+        } catch {
+            $isValidPath = $false
+        }
+        
+        # Update visual feedback
+        $DataDirTextBox.BackColor = if ($isValidPath) { 
+            [System.Drawing.Color]::FromArgb(25, 50, 25)  # Dark green
+        } else { 
+            [System.Drawing.Color]::FromArgb(50, 25, 25)  # Dark red
+        }
     })
     
     # Progress bar

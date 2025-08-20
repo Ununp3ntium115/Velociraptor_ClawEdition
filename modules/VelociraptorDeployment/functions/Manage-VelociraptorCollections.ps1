@@ -1,4 +1,4 @@
-function Invoke-VelociraptorCollections {
+function Manage-VelociraptorCollections {
     <#
     .SYNOPSIS
         Manages Velociraptor collections, dependencies, and offline collector packages.
@@ -148,11 +148,11 @@ function Import-CollectionDefinitions {
                     Type = $collectionData.type
                     Description = $collectionData.description
                     FilePath = $file.FullName
-                    Dependencies = $collectionData.dependencies ?? @()
-                    Tools = $collectionData.tools ?? @()
-                    Parameters = $collectionData.parameters ?? @{}
-                    Preconditions = $collectionData.preconditions ?? @()
-                    Sources = $collectionData.sources ?? @()
+                    Dependencies = if ($collectionData.dependencies) { $collectionData.dependencies } else { @() }
+                    Tools = if ($collectionData.tools) { $collectionData.tools } else { @() }
+                    Parameters = if ($collectionData.parameters) { $collectionData.parameters } else { @{} }
+                    Preconditions = if ($collectionData.preconditions) { $collectionData.preconditions } else { @() }
+                    Sources = if ($collectionData.sources) { $collectionData.sources } else { @() }
                 }
                 
                 # Extract dependencies from sources

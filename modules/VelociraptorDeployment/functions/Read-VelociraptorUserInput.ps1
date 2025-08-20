@@ -88,10 +88,11 @@ function Read-VelociraptorUserInput {
             # Get user input
             try {
                 if ($AsSecureString) {
-                    $secureInput = Read-Host -Prompt $promptString -AsSecureString
-                    if ($secureInput.Length -eq 0 -and $DefaultValue) {
-                        # Convert default value to SecureString
-                        $secureInput = ConvertTo-SecureString -String $DefaultValue -AsPlainText -Force
+                    if ($DefaultValue) {
+                        Write-Warning "Default values cannot be used with secure input for security reasons. Please enter the value manually."
+                        $secureInput = Read-Host -Prompt $promptString -AsSecureString
+                    } else {
+                        $secureInput = Read-Host -Prompt $promptString -AsSecureString
                     }
                     return $secureInput
                 } else {

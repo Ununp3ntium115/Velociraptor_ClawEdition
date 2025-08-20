@@ -160,23 +160,38 @@ function Export-ToolMapping {
 
                 try {
                     if ($artifact.Name) { $artifactName = $artifact.Name }
-                } catch { }
+                } catch {
+                    Write-VelociraptorLog "Warning: Unable to extract artifact name: $($_.Exception.Message)" -Level Warning
+                    $artifactName = "Unknown"
+                }
                 
                 try {
                     if ($artifact.Path) { $artifactPath = $artifact.Path }
-                } catch { }
+                } catch {
+                    Write-VelociraptorLog "Warning: Unable to extract artifact path: $($_.Exception.Message)" -Level Warning
+                    $artifactPath = "Unknown"
+                }
                 
                 try {
                     if ($artifact.Type) { $artifactType = $artifact.Type }
-                } catch { }
+                } catch {
+                    Write-VelociraptorLog "Warning: Unable to extract artifact type: $($_.Exception.Message)" -Level Warning
+                    $artifactType = "Unknown"
+                }
                 
                 try {
                     if ($artifact.Author) { $artifactAuthor = $artifact.Author }
-                } catch { }
+                } catch {
+                    Write-VelociraptorLog "Warning: Unable to extract artifact author: $($_.Exception.Message)" -Level Warning
+                    $artifactAuthor = "Unknown"
+                }
                 
                 try {
                     if ($artifact.Description) { $artifactDescription = $artifact.Description }
-                } catch { }
+                } catch {
+                    Write-VelociraptorLog "Warning: Unable to extract artifact description: $($_.Exception.Message)" -Level Warning
+                    $artifactDescription = "No description available"
+                }
 
                 $artifactInfo = @{
                     Name = $artifactName

@@ -24,15 +24,26 @@ Write-Host "===========================================" -ForegroundColor Red
 Write-Host "🔧 Initializing Windows Forms..." -ForegroundColor Yellow
 
 try {
-    # MUST be called first, before any Windows Forms objects
-    [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
+    # Skip SetCompatibleTextRenderingDefault if Windows Forms is already initialized
+    try {
+        [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
+        Write-Host "✅ SetCompatibleTextRenderingDefault successful" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "⚠️  SetCompatibleTextRenderingDefault already called (this is normal)" -ForegroundColor Yellow
+    }
     
     # Load assemblies
-    Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
-    Add-Type -AssemblyName System.Drawing -ErrorAction Stop
+    [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
+    [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") | Out-Null
     
-    # Enable visual styles
-    [System.Windows.Forms.Application]::EnableVisualStyles()
+    # Enable visual styles (safe to call multiple times)
+    try {
+        [System.Windows.Forms.Application]::EnableVisualStyles()
+    }
+    catch {
+        # Ignore if already called
+    }
     
     Write-Host "✅ Windows Forms initialized successfully" -ForegroundColor Green
 }

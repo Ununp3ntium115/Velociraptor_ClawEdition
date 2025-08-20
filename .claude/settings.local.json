@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pwsh:*)",
+      "Bash(powershell:*)",
+      "Bash(timeout:*)",
+      "Bash(dir *v5.0.3*)",
+      "Bash(dir:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(git tag:*)",
+      "Bash(gh release create:*)",
+      "Bash(mkdir:*)",
+      "Bash(gh release upload:*)",
+      "Bash(gh release:*)",
+      "Bash(find:*)",
+      "Bash(rm:*)",
+      "Bash(touch:*)",
+      "Bash(grep:*)",
+      "Bash(mv:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

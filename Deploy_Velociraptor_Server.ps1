@@ -14,7 +14,17 @@ $guiPort = 8889                            # Port for web GUI access
 #─────────────── Helper Functions ───────────────#
 
 # Logging function - creates log directory and writes timestamped messages
-function Log ($message) {
+function Log {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Message,
+        
+        [Parameter()]
+        [ValidateSet('Info', 'Warning', 'Error', 'Success', 'Debug')]
+        [string]$Level = 'Info'
+    )
     $logDir = Join-Path $Env:ProgramData VelociraptorDeploy
     # Create log directory if it doesn't exist
     if (-not (Test-Path $logDir)) { 
@@ -22,17 +32,26 @@ function Log ($message) {
     }
     # Format timestamp and write to both log file and console
     $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
-    $logEntry = "$timestamp`t$message"
+    $logEntry = "$timestamp`t$Message"
     $logFile = Join-Path $logDir server_deploy.log
     $logEntry | Out-File $logFile -Append -Encoding UTF8
-    Write-Host $message -ForegroundColor Green
+    Write-Host $Message -ForegroundColor Green
 }
 
 # Interactive prompt function with default value
-function Ask ($question, $defaultValue = 'n') { 
-    $response = Read-Host "$question [$defaultValue]"
+function Ask {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Question,
+        
+        [Parameter()]
+        [string]$DefaultValue = 'n'
+    ) 
+    $response = Read-Host "$Question [$DefaultValue]"
     if ([string]::IsNullOrEmpty($response)) { 
-        return $defaultValue 
+        return $DefaultValue 
     }
     else { 
         return $response 
@@ -40,8 +59,14 @@ function Ask ($question, $defaultValue = 'n') {
 }
 
 # Secure password input function - compatible with older PowerShell versions
-function AskSecret ($prompt) { 
-    $secureString = Read-Host $prompt -AsSecureString
+function AskSecret {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateNotNullOrEmpty()]
+        [string]$Prompt
+    ) 
+    $secureString = Read-Host $Prompt -AsSecureString
     # Convert SecureString to plain text safely
     try {
         $ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureString)
@@ -152,9 +177,18 @@ if (-not (Test-Path $exe)) {
         
         Log "Downloading $($asset.name) (Size: $([math]::Round($asset.size/1MB, 2)) MB)..."
         
-        # Download using proven working method
-        $webClient = New-Object System.Net.WebClient
-        $webClient.DownloadFile($asset.browser_download_url, $exe)
+        # Download using proven working method with proper resource disposal
+        $webClient = $null
+        try {
+            $webClient = New-Object System.Net.WebClient
+            $webClient.DownloadFile($asset.browser_download_url, $exe)
+        }
+        finally {
+            if ($webClient) {
+                $webClient.Dispose()
+                Log "WebClient resources disposed" -Level Debug
+            }
+        }
         
         if (Test-Path $exe) {
             $fileSize = (Get-Item $exe).Length
@@ -672,8 +706,23 @@ try {
     $webClient = New-Object System.Net.WebClient
     $webClient.Headers.Add('User-Agent', 'VelociraptorDeployTest/1.0')
     
-    # Set up to ignore SSL certificate errors for self-signed certificates
-    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { $true }
+    # Set up targeted SSL certificate validation for self-signed certificates
+    $OriginalCallback = [System.Net.ServicePointManager]::ServerCertificateValidationCallback
+    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { 
+        param($sender, $cert, $chain, $errors)
+        # Allow self-signed certificates and name mismatches for localhost/local testing
+        # But reject other serious SSL errors
+        if ($errors -eq [System.Net.Security.SslPolicyErrors]::None) {
+            return $true
+        }
+        if ($errors -eq [System.Net.Security.SslPolicyErrors]::RemoteCertificateNotAvailable -or
+            $errors -eq [System.Net.Security.SslPolicyErrors]::RemoteCertificateNameMismatch) {
+            # Allow for self-signed certs and localhost testing
+            return $true
+        }
+        # Reject all other SSL policy errors (chain errors, etc.)
+        return $false
+    }
     
     try {
         $response = $webClient.DownloadString($testUrl)
@@ -686,8 +735,8 @@ try {
     }
     finally {
         $webClient.Dispose()
-        # Reset certificate validation
-        [System.Net.ServicePointManager]::ServerCertificateValidationCallback = $null
+        # Restore original certificate validation
+        [System.Net.ServicePointManager]::ServerCertificateValidationCallback = $OriginalCallback
     }
 }
 catch {

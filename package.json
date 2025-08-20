@@ -1,6 +1,6 @@
 {
   "name": "velociraptor-setup-scripts",
-  "version": "5.0.1",
+  "version": "5.0.4-beta",
   "description": "Enterprise-grade Velociraptor DFIR platform deployment automation with cloud-native scalability, multi-cloud support, serverless architectures, HPC, and edge computing capabilities.",
   "main": "Deploy_Velociraptor_Standalone.ps1",
   "scripts": {
@@ -103,7 +103,7 @@
     "phase": "5",
     "version_name": "Cloud-Native & Scalability",
     "release_date": "2025-01-17",
-    "stability": "alpha"
+    "stability": "beta"
   },
   "velociraptor": {
     "supported_versions": [

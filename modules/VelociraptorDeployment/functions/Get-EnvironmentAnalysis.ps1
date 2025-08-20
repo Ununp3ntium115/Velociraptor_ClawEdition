@@ -26,7 +26,7 @@ function Get-EnvironmentAnalysis {
     )
 
     try {
-        Write-VelociraptorLog "🔍 Starting comprehensive environment analysis..." -Level Info
+        Write-VelociraptorLog "Starting comprehensive environment analysis..." -Level Info
 
         # Initialize analysis results
         $analysis = @{
@@ -40,37 +40,37 @@ function Get-EnvironmentAnalysis {
         }
 
         # 1. System Resource Analysis
-        Write-VelociraptorLog "📊 Analyzing system resources..." -Level Info
+        Write-VelociraptorLog "Analyzing system resources..." -Level Info
         $resourceAnalysis = Get-SystemResourceAnalysis -SystemSpecs $SystemSpecs
         $analysis.ResourceAnalysis = $resourceAnalysis
 
         # 2. Network Analysis
-        Write-VelociraptorLog "🌐 Analyzing network configuration..." -Level Info
+        Write-VelociraptorLog "Analyzing network configuration..." -Level Info
         $networkAnalysis = Get-NetworkAnalysis -EnvironmentType $EnvironmentType
         $analysis.NetworkAnalysis = $networkAnalysis
 
         # 3. Security Context Analysis
-        Write-VelociraptorLog "🔒 Analyzing security context..." -Level Info
+        Write-VelociraptorLog "Analyzing security context..." -Level Info
         $securityAnalysis = Get-SecurityContextAnalysis -EnvironmentType $EnvironmentType
         $analysis.SecurityAnalysis = $securityAnalysis
 
         # 4. Storage Analysis
-        Write-VelociraptorLog "💾 Analyzing storage requirements..." -Level Info
+        Write-VelociraptorLog "Analyzing storage requirements..." -Level Info
         $storageAnalysis = Get-StorageAnalysis -SystemSpecs $SystemSpecs -EnvironmentType $EnvironmentType
         $analysis.StorageAnalysis = $storageAnalysis
 
         # 5. Performance Requirements Analysis
-        Write-VelociraptorLog "⚡ Analyzing performance requirements..." -Level Info
+        Write-VelociraptorLog "Analyzing performance requirements..." -Level Info
         $performanceAnalysis = Get-PerformanceRequirementsAnalysis -EnvironmentType $EnvironmentType -SystemSpecs $SystemSpecs
         $analysis.PerformanceAnalysis = $performanceAnalysis
 
         # 6. Compliance Requirements Analysis
-        Write-VelociraptorLog "📜 Analyzing compliance requirements..." -Level Info
+        Write-VelociraptorLog "Analyzing compliance requirements..." -Level Info
         $complianceAnalysis = Get-ComplianceRequirementsAnalysis -EnvironmentType $EnvironmentType
         $analysis.ComplianceAnalysis = $complianceAnalysis
 
         # 7. Scalability Analysis
-        Write-VelociraptorLog "📈 Analyzing scalability requirements..." -Level Info
+        Write-VelociraptorLog "Analyzing scalability requirements..." -Level Info
         $scalabilityAnalysis = Get-ScalabilityAnalysis -EnvironmentType $EnvironmentType -SystemSpecs $SystemSpecs
         $analysis.ScalabilityAnalysis = $scalabilityAnalysis
 
@@ -98,9 +98,9 @@ function Get-EnvironmentAnalysis {
         $analysis.Constraints = Identify-EnvironmentConstraints -Analysis $analysis
         $analysis.Opportunities = Identify-EnvironmentOpportunities -Analysis $analysis
 
-        Write-VelociraptorLog "✅ Environment analysis completed successfully" -Level Info
-        Write-VelociraptorLog "📊 Overall Readiness Score: $($analysis.Scores.OverallReadiness.ToString('F2'))" -Level Info
-        Write-VelociraptorLog "💡 Generated $($analysis.Recommendations.Count) recommendations" -Level Info
+        Write-VelociraptorLog "Environment analysis completed successfully" -Level Info
+        Write-VelociraptorLog "Overall Readiness Score: $($analysis.Scores.OverallReadiness.ToString('F2'))" -Level Info
+        Write-VelociraptorLog "Generated $($analysis.Recommendations.Count) recommendations" -Level Info
 
         return $analysis
     }
@@ -171,7 +171,7 @@ function Get-StorageAnalysis {
     param([hashtable]$SystemSpecs, [string]$EnvironmentType)
     
     return @{
-        CurrentCapacity = $SystemSpecs.Storage_GB ?? 500
+        CurrentCapacity = if ($SystemSpecs.Storage_GB) { $SystemSpecs.Storage_GB } else { 500 }
         ProjectedGrowth = Calculate-StorageGrowthProjection -EnvironmentType $EnvironmentType
         PerformanceRequirements = Get-StoragePerformanceRequirements -EnvironmentType $EnvironmentType
         RetentionRequirements = Get-DataRetentionRequirements -EnvironmentType $EnvironmentType

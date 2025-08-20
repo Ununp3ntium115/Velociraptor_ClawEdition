@@ -61,6 +61,46 @@ $Script:InstallDir = 'C:\tools'
 $Script:DataStore = 'C:\VelociraptorData'
 
 # Helper Functions
+function Show-UserFriendlyError {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$ErrorMessage,
+        
+        [Parameter(Mandatory)]
+        [string]$Context,
+        
+        [Parameter(Mandatory)]
+        [string[]]$SuggestedActions,
+        
+        [Parameter()]
+        [string]$HelpUrl = "https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/blob/main/TROUBLESHOOTING.md"
+    )
+    
+    $message = @"
+Operation Failed: $Context
+
+Problem: $ErrorMessage
+
+Suggested Actions:
+$($SuggestedActions | ForEach-Object { "• $_" })
+
+Need Help?
+• Check the troubleshooting guide: $HelpUrl
+• Review installation logs for detailed information
+• Ensure you have Administrator privileges
+• Verify internet connectivity for downloads
+• Contact support if issue persists
+"@
+    
+    [System.Windows.Forms.MessageBox]::Show(
+        $message, 
+        "Velociraptor Setup Issue", 
+        [System.Windows.Forms.MessageBoxButtons]::OK, 
+        [System.Windows.Forms.MessageBoxIcon]::Warning
+    )
+}
+
 function Write-LogToGUI {
     param([string]$Message, [string]$Level = 'Info')
     
@@ -246,11 +286,76 @@ function Start-VelociraptorInstallation {
             })
         }
         
-        [System.Windows.Forms.MessageBox]::Show(
-            "Installation failed: $($_.Exception.Message)",
-            "Installation Error",
-            [System.Windows.Forms.MessageBoxButtons]::OK,
-            [System.Windows.Forms.MessageBoxIcon]::Error
+        Show-UserFriendlyError -ErrorMessage $_.Exception.Message -Context "Velociraptor Installation" -SuggestedActions @(
+            "Verify you have Administrator privileges",
+            "Check internet connectivity",
+            "Ensure sufficient disk space (500MB+ required)",
+            "Verify parent directories exist and are writable",
+            "Temporarily disable antivirus if blocking downloads",
+            "Try running installation as Administrator"
+        )
+    }
+}
+
+function Start-EmergencyDeployment {
+    try {
+        Write-LogToGUI "=== EMERGENCY MODE ACTIVATED ===" -Level 'Warning'
+        Write-LogToGUI "Initiating rapid deployment for incident response..." -Level 'Warning'
+        
+        # Set emergency defaults
+        $Script:InstallDir = 'C:\EmergencyVelociraptor'
+        $Script:DataStore = 'C:\EmergencyVelociraptor\Data'
+        
+        # Show confirmation dialog
+        $emergencyConfirm = [System.Windows.Forms.MessageBox]::Show(
+            @"
+🚨 EMERGENCY DEPLOYMENT MODE 🚨
+
+This will perform a rapid Velociraptor deployment with:
+• Installation Directory: $($Script:InstallDir)
+• Data Directory: $($Script:DataStore)
+• Pre-configured for immediate incident response
+• Minimal user interaction required
+
+Time: ~2-3 minutes for full deployment
+
+Continue with emergency deployment?
+"@,
+            "Emergency Mode Confirmation",
+            [System.Windows.Forms.MessageBoxButtons]::YesNo,
+            [System.Windows.Forms.MessageBoxIcon]::Warning
+        )
+        
+        if ($emergencyConfirm -eq [System.Windows.Forms.DialogResult]::Yes) {
+            Write-LogToGUI "Emergency deployment confirmed - starting rapid installation..." -Level 'Success'
+            
+            # Disable emergency button during deployment
+            $Script:EmergencyButton.Enabled = $false
+            $Script:EmergencyButton.Text = "DEPLOYING..."
+            $Script:EmergencyButton.BackColor = [System.Drawing.Color]::DarkOrange
+            
+            # Run emergency installation
+            $runspace = [powershell]::Create()
+            $runspace.AddScript({
+                param($installFunction)
+                & $installFunction
+            }).AddArgument(${function:Start-VelociraptorInstallation}) | Out-Null
+            $runspace.BeginInvoke() | Out-Null
+            
+            Write-LogToGUI "Emergency deployment initiated - monitor log for progress" -Level 'Warning'
+        } else {
+            Write-LogToGUI "Emergency deployment cancelled" -Level 'Info'
+        }
+    }
+    catch {
+        Write-LogToGUI "Emergency deployment failed: $($_.Exception.Message)" -Level 'Error'
+        Show-UserFriendlyError -ErrorMessage $_.Exception.Message -Context "Emergency Deployment" -SuggestedActions @(
+            "Ensure you have Administrator privileges",
+            "Check available disk space (2GB+ recommended for emergency)",
+            "Verify internet connectivity for downloads", 
+            "Try running as Administrator",
+            "Use standard installation mode if emergency fails",
+            "Contact incident response team for assistance"
         )
     }
 }
@@ -290,11 +395,13 @@ function Start-VelociraptorLaunch {
     catch {
         Write-LogToGUI "Launch failed - $($_.Exception.Message)" -Level 'Error'
         
-        [System.Windows.Forms.MessageBox]::Show(
-            "Launch failed: $($_.Exception.Message)",
-            "Launch Error",
-            [System.Windows.Forms.MessageBoxButtons]::OK,
-            [System.Windows.Forms.MessageBoxIcon]::Error
+        Show-UserFriendlyError -ErrorMessage $_.Exception.Message -Context "Velociraptor Launch" -SuggestedActions @(
+            "Verify Velociraptor installation completed successfully",
+            "Check that data directory path is valid and accessible",
+            "Ensure no other Velociraptor processes are running",
+            "Try launching as Administrator",
+            "Check Windows Firewall and antivirus settings",
+            "Verify port 8889 is not in use by another application"
         )
     }
 }
@@ -372,8 +479,41 @@ try {
     $InstallDirTextBox.ForeColor = $Colors.WhiteText
     $InstallDirTextBox.Location = New-Object System.Drawing.Point(180, 28)
     $InstallDirTextBox.Size = New-Object System.Drawing.Size(300, 25)
+    $InstallDirTextBox.TabIndex = 1
+    $InstallDirTextBox.AccessibleName = "Installation Directory"
+    $InstallDirTextBox.AccessibleDescription = "Directory where Velociraptor will be installed. Changes background color to green for valid paths."
     $InstallDirTextBox.Add_TextChanged({
         $Script:InstallDir = $InstallDirTextBox.Text
+        
+        # Real-time validation with visual feedback
+        $parentDir = Split-Path $InstallDirTextBox.Text -Parent
+        $isValidPath = $false
+        
+        try {
+            # Check if parent directory exists or is valid path format
+            if ([string]::IsNullOrWhiteSpace($InstallDirTextBox.Text)) {
+                $isValidPath = $false
+            } elseif ($parentDir -and (Test-Path $parentDir)) {
+                $isValidPath = $true
+            } elseif ([System.IO.Path]::IsPathRooted($InstallDirTextBox.Text) -and 
+                      $InstallDirTextBox.Text -match '^[A-Za-z]:\\[^<>:"|?*]*$') {
+                $isValidPath = $true  # Valid path format even if parent doesn't exist
+            }
+        } catch {
+            $isValidPath = $false
+        }
+        
+        # Update visual feedback
+        $InstallDirTextBox.BackColor = if ($isValidPath) { 
+            [System.Drawing.Color]::FromArgb(25, 50, 25)  # Dark green
+        } else { 
+            [System.Drawing.Color]::FromArgb(50, 25, 25)  # Dark red
+        }
+        
+        # Enable/disable install button based on all validations
+        if ($Script:InstallButton) {
+            $Script:InstallButton.Enabled = $isValidPath -and -not [string]::IsNullOrWhiteSpace($Script:DataStore)
+        }
     })
     
     # Data directory
@@ -391,8 +531,41 @@ try {
     $DataDirTextBox.ForeColor = $Colors.WhiteText
     $DataDirTextBox.Location = New-Object System.Drawing.Point(180, 63)
     $DataDirTextBox.Size = New-Object System.Drawing.Size(300, 25)
+    $DataDirTextBox.TabIndex = 2
+    $DataDirTextBox.AccessibleName = "Data Directory"
+    $DataDirTextBox.AccessibleDescription = "Directory where Velociraptor data will be stored. Changes background color to green for valid paths."
     $DataDirTextBox.Add_TextChanged({
         $Script:DataStore = $DataDirTextBox.Text
+        
+        # Real-time validation with visual feedback
+        $parentDir = Split-Path $DataDirTextBox.Text -Parent
+        $isValidPath = $false
+        
+        try {
+            # Check if parent directory exists or is valid path format
+            if ([string]::IsNullOrWhiteSpace($DataDirTextBox.Text)) {
+                $isValidPath = $false
+            } elseif ($parentDir -and (Test-Path $parentDir)) {
+                $isValidPath = $true
+            } elseif ([System.IO.Path]::IsPathRooted($DataDirTextBox.Text) -and 
+                      $DataDirTextBox.Text -match '^[A-Za-z]:\\[^<>:"|?*]*$') {
+                $isValidPath = $true  # Valid path format even if parent doesn't exist
+            }
+        } catch {
+            $isValidPath = $false
+        }
+        
+        # Update visual feedback
+        $DataDirTextBox.BackColor = if ($isValidPath) { 
+            [System.Drawing.Color]::FromArgb(25, 50, 25)  # Dark green
+        } else { 
+            [System.Drawing.Color]::FromArgb(50, 25, 25)  # Dark red
+        }
+        
+        # Enable/disable install button based on all validations
+        if ($Script:InstallButton) {
+            $Script:InstallButton.Enabled = $isValidPath -and -not [string]::IsNullOrWhiteSpace($Script:InstallDir)
+        }
     })
     
     # Log area
@@ -433,15 +606,34 @@ try {
     $ButtonPanel.Location = New-Object System.Drawing.Point(10, 560)
     $ButtonPanel.BackColor = $Colors.DarkSurface
     
-    # Install button
+    # Emergency Mode button (prominent placement)
+    $Script:EmergencyButton = New-Object System.Windows.Forms.Button
+    $Script:EmergencyButton.Text = "🚨 EMERGENCY MODE"
+    $Script:EmergencyButton.Size = New-Object System.Drawing.Size(180, 45)
+    $Script:EmergencyButton.Location = New-Object System.Drawing.Point(350, 10)
+    $Script:EmergencyButton.BackColor = [System.Drawing.Color]::DarkRed
+    $Script:EmergencyButton.ForeColor = [System.Drawing.Color]::White
+    $Script:EmergencyButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $Script:EmergencyButton.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Bold)
+    $Script:EmergencyButton.TabIndex = 3
+    $Script:EmergencyButton.AccessibleName = "Emergency Mode"
+    $Script:EmergencyButton.AccessibleDescription = "Activates rapid deployment mode for emergency incident response situations. One-click deployment with minimal configuration."
+    $Script:EmergencyButton.Add_Click({
+        Start-EmergencyDeployment
+    })
+    
+    # Install button (moved to accommodate emergency button)
     $Script:InstallButton = New-Object System.Windows.Forms.Button
     $Script:InstallButton.Text = "Install Velociraptor"
-    $Script:InstallButton.Size = New-Object System.Drawing.Size(150, 35)
+    $Script:InstallButton.Size = New-Object System.Drawing.Size(140, 35)
     $Script:InstallButton.Location = New-Object System.Drawing.Point(550, 15)
     $Script:InstallButton.BackColor = $Colors.PrimaryTeal
     $Script:InstallButton.ForeColor = $Colors.WhiteText
     $Script:InstallButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
     $Script:InstallButton.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
+    $Script:InstallButton.TabIndex = 4
+    $Script:InstallButton.AccessibleName = "Install Velociraptor"
+    $Script:InstallButton.AccessibleDescription = "Downloads and installs Velociraptor to the specified directories. Requires valid installation and data directory paths."
     $Script:InstallButton.Add_Click({
         # Run installation in background thread
         $runspace = [powershell]::Create()
@@ -462,6 +654,9 @@ try {
     $Script:LaunchButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
     $Script:LaunchButton.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
     $Script:LaunchButton.Enabled = $false
+    $Script:LaunchButton.TabIndex = 5
+    $Script:LaunchButton.AccessibleName = "Launch Velociraptor"
+    $Script:LaunchButton.AccessibleDescription = "Launches the Velociraptor GUI interface after successful installation. Enabled only after installation completes."
     $Script:LaunchButton.Add_Click({
         Start-VelociraptorLaunch
     })
@@ -474,9 +669,12 @@ try {
     $ExitButton.BackColor = $Colors.DarkBackground
     $ExitButton.ForeColor = $Colors.WhiteText
     $ExitButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $ExitButton.TabIndex = 6
+    $ExitButton.AccessibleName = "Exit Application"
+    $ExitButton.AccessibleDescription = "Closes the Velociraptor installation wizard application."
     $ExitButton.Add_Click({ $MainForm.Close() })
     
-    $ButtonPanel.Controls.AddRange(@($Script:InstallButton, $Script:LaunchButton, $ExitButton))
+    $ButtonPanel.Controls.AddRange(@($Script:EmergencyButton, $Script:InstallButton, $Script:LaunchButton, $ExitButton))
     $MainForm.Controls.Add($ButtonPanel)
 }
 catch {

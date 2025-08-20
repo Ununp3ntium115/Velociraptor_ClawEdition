@@ -93,30 +93,50 @@ if (-not $ExistingTests) {
 Write-Host "Running $TestType tests..." -ForegroundColor Cyan
 Write-Host "Test paths: $($ExistingTests -join ', ')" -ForegroundColor Gray
 
-# Configure Pester
-$PesterConfig = @{
-    Run = @{
-        Path = $ExistingTests
-        PassThru = $true
-    }
-    Output = @{
-        Verbosity = 'Detailed'
-    }
-}
-
-# Add output configuration if specified
-if ($OutputFormat -ne 'Console' -and $OutputPath) {
-    $PesterConfig.TestResult = @{
-        Enabled = $true
-        OutputFormat = $OutputFormat
-        OutputPath = $OutputPath
-    }
-    Write-Host "Test results will be saved to: $OutputPath" -ForegroundColor Gray
-}
+# Configure Pester based on version
+$PesterVersion = (Get-Module Pester).Version
+Write-Host "Using Pester version: $PesterVersion" -ForegroundColor Gray
 
 # Run tests
 try {
-    $TestResults = Invoke-Pester -Configuration $PesterConfig
+    if ($PesterVersion.Major -ge 5) {
+        # Pester 5.x configuration
+        $PesterConfig = @{
+            Run = @{
+                Path = $ExistingTests
+                PassThru = $true
+            }
+            Output = @{
+                Verbosity = 'Detailed'
+            }
+        }
+        
+        # Add output configuration if specified
+        if ($OutputFormat -ne 'Console' -and $OutputPath) {
+            $PesterConfig.TestResult = @{
+                Enabled = $true
+                OutputFormat = $OutputFormat
+                OutputPath = $OutputPath
+            }
+            Write-Host "Test results will be saved to: $OutputPath" -ForegroundColor Gray
+        }
+        
+        $TestResults = Invoke-Pester -Configuration $PesterConfig
+    } else {
+        # Pester 4.x configuration
+        $invokeParams = @{
+            Script = $ExistingTests
+            PassThru = $true
+        }
+        
+        if ($OutputFormat -ne 'Console' -and $OutputPath) {
+            $invokeParams.OutputFile = $OutputPath
+            $invokeParams.OutputFormat = $OutputFormat
+            Write-Host "Test results will be saved to: $OutputPath" -ForegroundColor Gray
+        }
+        
+        $TestResults = Invoke-Pester @invokeParams
+    }
     
     # Display summary
     Write-Host "`n" -NoNewline

@@ -1,0 +1,427 @@
+function Optimize-PowerShell7Plus {
+    <#
+    .SYNOPSIS
+        Optimizes VelociraptorDeployment functions for PowerShell 7+ performance.
+
+    .DESCRIPTION
+        This function applies PowerShell 7+ specific optimizations including
+        parallel processing, improved performance operators, and modern syntax
+        while maintaining backward compatibility with PowerShell 5.1.
+
+    .PARAMETER OptimizationType
+        The type of optimization to apply.
+
+    .PARAMETER ModulePath
+        Path to the VelociraptorDeployment module to optimize.
+
+    .PARAMETER BackupOriginal
+        Whether to create backup of original functions.
+
+    .PARAMETER TestCompatibility
+        Whether to test compatibility with PowerShell 5.1 after optimization.
+
+    .EXAMPLE
+        Optimize-PowerShell7Plus -OptimizationType 'ParallelProcessing'
+
+    .EXAMPLE
+        Optimize-PowerShell7Plus -OptimizationType 'All' -BackupOriginal -TestCompatibility
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateSet('ParallelProcessing', 'PerformanceOperators', 'ModernSyntax', 'MemoryOptimization', 'All')]
+        [string]$OptimizationType,
+
+        [Parameter()]
+        [string]$ModulePath = (Get-Module VelociraptorDeployment).ModuleBase,
+
+        [Parameter()]
+        [switch]$BackupOriginal,
+
+        [Parameter()]
+        [switch]$TestCompatibility
+    )
+
+    Write-VelociraptorLog "Applying PowerShell 7+ optimizations: $OptimizationType" -Level Info
+
+    try {
+        # Check PowerShell version capabilities
+        $PSVersionInfo = $PSVersionTable.PSVersion
+        $IsPowerShell7Plus = $PSVersionInfo.Major -ge 7
+        $IsPowerShell5 = $PSVersionInfo.Major -eq 5
+
+        Write-VelociraptorLog "Current PowerShell version: $($PSVersionInfo.ToString())" -Level Info
+        Write-VelociraptorLog "PowerShell 7+ features available: $IsPowerShell7Plus" -Level Info
+
+        # Get functions to optimize
+        $FunctionsToOptimize = Get-OptimizableFunctions -ModulePath $ModulePath
+
+        $OptimizationResults = @{
+            TotalFunctions = $FunctionsToOptimize.Count
+            OptimizedFunctions = 0
+            PerformanceGains = @{}
+            BackwardCompatible = $true
+            Errors = @()
+        }
+
+        # Apply optimizations based on type
+        switch ($OptimizationType) {
+            'ParallelProcessing' {
+                $OptimizationResults = Apply-ParallelProcessingOptimizations -Functions $FunctionsToOptimize -Results $OptimizationResults
+            }
+            'PerformanceOperators' {
+                $OptimizationResults = Apply-PerformanceOperatorOptimizations -Functions $FunctionsToOptimize -Results $OptimizationResults
+            }
+            'ModernSyntax' {
+                $OptimizationResults = Apply-ModernSyntaxOptimizations -Functions $FunctionsToOptimize -Results $OptimizationResults
+            }
+            'MemoryOptimization' {
+                $OptimizationResults = Apply-MemoryOptimizations -Functions $FunctionsToOptimize -Results $OptimizationResults
+            }
+            'All' {
+                $OptimizationResults = Apply-ParallelProcessingOptimizations -Functions $FunctionsToOptimize -Results $OptimizationResults
+                $OptimizationResults = Apply-PerformanceOperatorOptimizations -Functions $FunctionsToOptimize -Results $OptimizationResults
+                $OptimizationResults = Apply-ModernSyntaxOptimizations -Functions $FunctionsToOptimize -Results $OptimizationResults
+                $OptimizationResults = Apply-MemoryOptimizations -Functions $FunctionsToOptimize -Results $OptimizationResults
+            }
+        }
+
+        # Test backward compatibility if requested
+        if ($TestCompatibility) {
+            Write-VelociraptorLog "Testing backward compatibility..." -Level Info
+            $CompatibilityResults = Test-PowerShell5Compatibility -Functions $FunctionsToOptimize
+            $OptimizationResults.BackwardCompatible = $CompatibilityResults.AllTestsPassed
+        }
+
+        # Report results
+        Write-VelociraptorLog "Optimization completed:" -Level Success
+        Write-VelociraptorLog "  - Functions analyzed: $($OptimizationResults.TotalFunctions)" -Level Info
+        Write-VelociraptorLog "  - Functions optimized: $($OptimizationResults.OptimizedFunctions)" -Level Success
+        Write-VelociraptorLog "  - Backward compatible: $($OptimizationResults.BackwardCompatible)" -Level Info
+        
+        if ($OptimizationResults.PerformanceGains.Count -gt 0) {
+            Write-VelociraptorLog "Performance improvements:" -Level Info
+            foreach ($gain in $OptimizationResults.PerformanceGains.GetEnumerator()) {
+                Write-VelociraptorLog "  - $($gain.Key): $($gain.Value)" -Level Success
+            }
+        }
+
+        return $OptimizationResults
+    }
+    catch {
+        $errorMsg = "PowerShell 7+ optimization failed: $($_.Exception.Message)"
+        Write-VelociraptorLog $errorMsg -Level Error
+        throw $errorMsg
+    }
+}
+
+function Get-OptimizableFunctions {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$ModulePath
+    )
+
+    $FunctionFiles = Get-ChildItem -Path (Join-Path $ModulePath 'functions') -Filter "*.ps1"
+    $OptimizableFunctions = @()
+
+    foreach ($file in $FunctionFiles) {
+        $content = Get-Content $file.FullName -Raw
+        
+        # Check for optimization opportunities
+        $OptimizationOpportunities = @()
+        
+        # Parallel processing opportunities
+        if ($content -match 'ForEach-Object' -and $content -match '\|' -and $content -notmatch '-Parallel') {
+            $OptimizationOpportunities += 'ParallelProcessing'
+        }
+        
+        # Performance operator opportunities
+        if ($content -match '-eq\s+\$null' -or $content -match '\$null\s+-eq') {
+            $OptimizationOpportunities += 'NullComparison'
+        }
+        
+        # Modern syntax opportunities
+        if ($content -match '@\(\)' -or $content -match 'New-Object.*ArrayList') {
+            $OptimizationOpportunities += 'ModernCollections'
+        }
+        
+        # Memory optimization opportunities
+        if ($content -match 'Get-ChildItem.*-Recurse' -and $content -notmatch '-File\s') {
+            $OptimizationOpportunities += 'FileOperations'
+        }
+
+        if ($OptimizationOpportunities.Count -gt 0) {
+            $OptimizableFunctions += @{
+                Path = $file.FullName
+                Name = $file.BaseName
+                Content = $content
+                Opportunities = $OptimizationOpportunities
+            }
+        }
+    }
+
+    return $OptimizableFunctions
+}
+
+function Apply-ParallelProcessingOptimizations {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [array]$Functions,
+        
+        [Parameter(Mandatory)]
+        [hashtable]$Results
+    )
+
+    Write-VelociraptorLog "Applying parallel processing optimizations..." -Level Info
+
+    foreach ($function in $Functions) {
+        if ('ParallelProcessing' -in $function.Opportunities) {
+            try {
+                # Add PowerShell 7+ parallel processing with fallback
+                $optimizedContent = Add-ParallelProcessingSupport -Content $function.Content
+                
+                if ($optimizedContent -ne $function.Content) {
+                    # Save optimized version
+                    Set-Content -Path $function.Path -Value $optimizedContent -Encoding UTF8
+                    $Results.OptimizedFunctions++
+                    $Results.PerformanceGains[$function.Name] = "Added parallel processing support"
+                    Write-VelociraptorLog "✓ Optimized $($function.Name) for parallel processing" -Level Success
+                }
+            }
+            catch {
+                $Results.Errors += "Failed to optimize $($function.Name): $($_.Exception.Message)"
+                Write-VelociraptorLog "✗ Failed to optimize $($function.Name): $($_.Exception.Message)" -Level Warning
+            }
+        }
+    }
+
+    return $Results
+}
+
+function Add-ParallelProcessingSupport {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Content
+    )
+
+    # Pattern for ForEach-Object that can benefit from parallel processing
+    $pattern = '(\|\s*ForEach-Object\s*\{[^}]+\})'
+    
+    $optimizedContent = $Content -replace $pattern, {
+        param($match)
+        $originalBlock = $match.Groups[1].Value
+        
+        # Add PowerShell 7+ parallel support with fallback
+        # Create conditional logic for PowerShell version
+        if ($PSVersionTable.PSVersion.Major -ge 7) {
+            "| ForEach-Object -Parallel { $($originalBlock -replace '\|\s*ForEach-Object\s*\{', '' -replace '\}$', '') } -ThrottleLimit ([Environment]::ProcessorCount)"
+        } else {
+            $originalBlock
+        }
+    }
+
+    return $optimizedContent
+}
+
+function Apply-PerformanceOperatorOptimizations {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [array]$Functions,
+        
+        [Parameter(Mandatory)]
+        [hashtable]$Results
+    )
+
+    Write-VelociraptorLog "Applying performance operator optimizations..." -Level Info
+
+    foreach ($function in $Functions) {
+        if ('NullComparison' -in $function.Opportunities) {
+            try {
+                $optimizedContent = $function.Content
+                
+                # Optimize null comparisons (PowerShell 7+ has better null comparison performance)
+                $optimizedContent = $optimizedContent -replace '-eq\s+\$null', '-eq $null'
+                $optimizedContent = $optimizedContent -replace '\$null\s+-eq', '$null -eq'
+                
+                # Use -is and -isnot for type checking (more efficient in PS7+)
+                $optimizedContent = $optimizedContent -replace '\.GetType\(\)\s*-eq\s*\[([^\]]+)\]', '-is [$1]'
+                
+                if ($optimizedContent -ne $function.Content) {
+                    Set-Content -Path $function.Path -Value $optimizedContent -Encoding UTF8
+                    $Results.OptimizedFunctions++
+                    $Results.PerformanceGains[$function.Name] = "Optimized comparison operators"
+                    Write-VelociraptorLog "✓ Optimized $($function.Name) comparison operators" -Level Success
+                }
+            }
+            catch {
+                $Results.Errors += "Failed to optimize operators in $($function.Name): $($_.Exception.Message)"
+                Write-VelociraptorLog "✗ Failed to optimize operators in $($function.Name): $($_.Exception.Message)" -Level Warning
+            }
+        }
+    }
+
+    return $Results
+}
+
+function Apply-ModernSyntaxOptimizations {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [array]$Functions,
+        
+        [Parameter(Mandatory)]
+        [hashtable]$Results
+    )
+
+    Write-VelociraptorLog "Applying modern syntax optimizations..." -Level Info
+
+    foreach ($function in $Functions) {
+        if ('ModernCollections' -in $function.Opportunities) {
+            try {
+                $optimizedContent = $function.Content
+                
+                # Replace ArrayList with Generic Lists (better performance in PS7+)
+                $optimizedContent = $optimizedContent -replace 'New-Object.*System\.Collections\.ArrayList', '[System.Collections.Generic.List[object]]::new()'
+                
+                # Use modern array syntax
+                $optimizedContent = $optimizedContent -replace '@\(\)', '[System.Collections.Generic.List[object]]::new()'
+                
+                # Optimize string operations for PS7+
+                $optimizedContent = Add-StringOptimizations -Content $optimizedContent
+                
+                if ($optimizedContent -ne $function.Content) {
+                    Set-Content -Path $function.Path -Value $optimizedContent -Encoding UTF8
+                    $Results.OptimizedFunctions++
+                    $Results.PerformanceGains[$function.Name] = "Updated to modern syntax"
+                    Write-VelociraptorLog "✓ Modernized syntax in $($function.Name)" -Level Success
+                }
+            }
+            catch {
+                $Results.Errors += "Failed to modernize syntax in $($function.Name): $($_.Exception.Message)"
+                Write-VelociraptorLog "✗ Failed to modernize syntax in $($function.Name): $($_.Exception.Message)" -Level Warning
+            }
+        }
+    }
+
+    return $Results
+}
+
+function Add-StringOptimizations {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Content
+    )
+
+    # Use StringBuilder for large string operations
+    $optimizedContent = $Content
+    
+    # Pattern for multiple string concatenations
+    if ($Content -match '\$\w+\s*\+=\s*["`'].*["`']\s*\n.*\$\w+\s*\+=') {
+        # Add StringBuilder usage comment for future optimization
+        $optimizedContent = "# TODO: Consider StringBuilder for large string operations`n" + $optimizedContent
+    }
+    
+    return $optimizedContent
+}
+
+function Apply-MemoryOptimizations {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [array]$Functions,
+        
+        [Parameter(Mandatory)]
+        [hashtable]$Results
+    )
+
+    Write-VelociraptorLog "Applying memory optimizations..." -Level Info
+
+    foreach ($function in $Functions) {
+        if ('FileOperations' -in $function.Opportunities) {
+            try {
+                $optimizedContent = $function.Content
+                
+                # Optimize file operations
+                $optimizedContent = $optimizedContent -replace 'Get-ChildItem\s+([^-\s]+)\s+-Recurse', 'Get-ChildItem $1 -Recurse -File'
+                
+                # Use streaming for large file operations
+                $optimizedContent = Add-StreamingOptimizations -Content $optimizedContent
+                
+                if ($optimizedContent -ne $function.Content) {
+                    Set-Content -Path $function.Path -Value $optimizedContent -Encoding UTF8
+                    $Results.OptimizedFunctions++
+                    $Results.PerformanceGains[$function.Name] = "Optimized memory usage"
+                    Write-VelociraptorLog "✓ Optimized memory usage in $($function.Name)" -Level Success
+                }
+            }
+            catch {
+                $Results.Errors += "Failed to optimize memory usage in $($function.Name): $($_.Exception.Message)"
+                Write-VelociraptorLog "✗ Failed to optimize memory usage in $($function.Name): $($_.Exception.Message)" -Level Warning
+            }
+        }
+    }
+
+    return $Results
+}
+
+function Add-StreamingOptimizations {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Content
+    )
+
+    # Add streaming support for large operations
+    $optimizedContent = $Content
+    
+    # Pattern for large file reads
+    if ($Content -match 'Get-Content.*-Raw') {
+        $optimizedContent = "# Consider streaming for large files: Get-Content -ReadCount 1000`n" + $optimizedContent
+    }
+    
+    return $optimizedContent
+}
+
+function Test-PowerShell5Compatibility {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [array]$Functions
+    )
+
+    $CompatibilityResults = @{
+        AllTestsPassed = $true
+        TestedFunctions = 0
+        IncompatibleFeatures = @()
+    }
+
+    foreach ($function in $Functions) {
+        $CompatibilityResults.TestedFunctions++
+        
+        # Check for PS7+ only features
+        $ps7OnlyFeatures = @(
+            '-Parallel',
+            'ForEach-Object.*-Parallel',
+            'System\.Collections\.Generic\.List.*::new\(\)'
+        )
+        
+        foreach ($feature in $ps7OnlyFeatures) {
+            if ($function.Content -match $feature) {
+                # Check if there's a fallback mechanism
+                if ($function.Content -notmatch '\$PSVersionTable\.PSVersion\.Major.*-ge.*7') {
+                    $CompatibilityResults.IncompatibleFeatures += "$($function.Name): $feature"
+                    $CompatibilityResults.AllTestsPassed = $false
+                }
+            }
+        }
+    }
+
+    return $CompatibilityResults
+}
+
+Export-ModuleMember -Function Optimize-PowerShell7Plus

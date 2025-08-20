@@ -125,8 +125,8 @@ function New-VelociraptorConfigurationTemplate {
 function Get-StandaloneTemplate {
     param($customSettings, $includeComments)
     
-    $guiPort = $customSettings.GuiPort ?? 8889
-    $datastore = $customSettings.Datastore ?? 'C:\VelociraptorData'
+    $guiPort = if ($customSettings.GuiPort) { $customSettings.GuiPort } else { 8889 }
+    $datastore = if ($customSettings.Datastore) { $customSettings.Datastore } else { 'C:\VelociraptorData' }
     
     $comments = if ($includeComments) {
         @"
@@ -186,9 +186,9 @@ autocert_domain: localhost
 function Get-ServerTemplate {
     param($customSettings, $includeComments)
     
-    $frontendPort = $customSettings.FrontendPort ?? 8000
-    $guiPort = $customSettings.GuiPort ?? 8889
-    $datastore = $customSettings.Datastore ?? 'C:\VelociraptorServerData'
+    $frontendPort = if ($customSettings.FrontendPort) { $customSettings.FrontendPort } else { 8000 }
+    $guiPort = if ($customSettings.GuiPort) { $customSettings.GuiPort } else { 8889 }
+    $datastore = if ($customSettings.Datastore) { $customSettings.Datastore } else { 'C:\VelociraptorServerData' }
     
     $comments = if ($includeComments) {
         @"

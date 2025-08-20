@@ -157,11 +157,11 @@ function Test-VelociraptorInternetConnection {
             if ($endpointResult.Success) {
                 $successCount++
                 if (-not $Quiet) {
-                    Write-VelociraptorLog "✓ $endpoint reachable ($($endpointResult.Method), $($endpointResult.ResponseTime)ms)" -Level Success
+                    Write-VelociraptorLog "OK $endpoint reachable ($($endpointResult.Method), $($endpointResult.ResponseTime)ms)" -Level Success
                 }
             } else {
                 if (-not $Quiet) {
-                    Write-VelociraptorLog "✗ $endpoint unreachable: $($endpointResult.Error)" -Level Warning
+                    Write-VelociraptorLog "FAIL $endpoint unreachable: $($endpointResult.Error)" -Level Warning
                 }
             }
         }
