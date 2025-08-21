@@ -28,6 +28,11 @@ Write-Host "=========================================================" -Foregrou
 Write-Host "🔧 Initializing Windows Forms..." -ForegroundColor Yellow
 
 try {
+    # CRITICAL: Load assemblies FIRST, then call SetCompatibleTextRenderingDefault
+    [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
+    [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") | Out-Null
+    
+    # NOW call SetCompatibleTextRenderingDefault after assemblies are loaded
     try {
         [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
         Write-Host "✅ SetCompatibleTextRenderingDefault successful" -ForegroundColor Green
@@ -35,9 +40,6 @@ try {
     catch {
         Write-Host "⚠️  SetCompatibleTextRenderingDefault already called (this is normal)" -ForegroundColor Yellow
     }
-    
-    [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
-    [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") | Out-Null
     
     try {
         [System.Windows.Forms.Application]::EnableVisualStyles()

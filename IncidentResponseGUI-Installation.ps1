@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 <#
 .SYNOPSIS
     Velociraptor Incident Response Collector GUI - Complete Installation Version
@@ -25,19 +25,21 @@ Write-Host "🚨 Velociraptor Incident Response Collector - Installation GUI" -F
 Write-Host "=========================================================" -ForegroundColor Red
 
 # CRITICAL: Initialize Windows Forms properly
-Write-Host "🔧 Initializing Windows Forms..." -ForegroundColor Yellow
+Write-Host "ðŸ”§ Initializing Windows Forms..." -ForegroundColor Yellow
 
 try {
-    try {
-        [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
-        Write-Host "✅ SetCompatibleTextRenderingDefault successful" -ForegroundColor Green
-    }
-    catch {
-        Write-Host "⚠️  SetCompatibleTextRenderingDefault already called (this is normal)" -ForegroundColor Yellow
-    }
-    
+    # CRITICAL: Load assemblies FIRST, then call SetCompatibleTextRenderingDefault
     [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
     [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing") | Out-Null
+    
+    # NOW call SetCompatibleTextRenderingDefault after assemblies are loaded
+    try {
+        [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
+        Write-Host "âœ… SetCompatibleTextRenderingDefault successful" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "âš ï¸  SetCompatibleTextRenderingDefault already called (this is normal)" -ForegroundColor Yellow
+    }
     
     try {
         [System.Windows.Forms.Application]::EnableVisualStyles()
@@ -46,10 +48,10 @@ try {
         # Ignore if already called
     }
     
-    Write-Host "✅ Windows Forms initialized successfully" -ForegroundColor Green
+    Write-Host "âœ… Windows Forms initialized successfully" -ForegroundColor Green
 }
 catch {
-    Write-Host "❌ Windows Forms initialization failed: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "âŒ Windows Forms initialization failed: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
 
@@ -89,7 +91,7 @@ $IncidentTypes = @(
     @{ 
         Name = "Malware Analysis"
         Description = "Malware infection investigation"
-        Icon = "🦠"
+        Icon = "ðŸ¦ "
         Artifacts = @("Windows.Detection.Yara", "Windows.Forensics.SAM", "Windows.Network.ArpCache", "Windows.System.Services")
         Priority = "High"
     }
@@ -160,7 +162,8 @@ function Get-LatestVelociraptorAsset {
         }
         
         $version = $response.tag_name -replace '^v', ''
-        Write-LogToGUI "Found Velociraptor v$version ($([math]::Round($windowsAsset.size / 1MB, 1)) MB)" -Level 'Success'
+        $sizeInMB = [math]::Round($windowsAsset.size / 1MB, 1)
+        Write-LogToGUI "Found Velociraptor v$version ($sizeInMB MB)" -Level 'Success'
         
         return @{
             Version = $version
@@ -178,7 +181,8 @@ function Get-LatestVelociraptorAsset {
 function Install-VelociraptorExecutable {
     param($AssetInfo, [string]$DestinationPath)
     
-    Write-LogToGUI "Downloading $($AssetInfo.Name) ($([math]::Round($AssetInfo.Size / 1MB, 1)) MB)..."
+    $sizeInMB = [math]::Round($AssetInfo.Size / 1MB, 1)
+    Write-LogToGUI "Downloading $($AssetInfo.Name) ($sizeInMB MB)..."
     
     try {
         $tempFile = "$DestinationPath.download"
@@ -212,7 +216,8 @@ function Install-VelociraptorExecutable {
         
         if (Test-Path $tempFile) {
             $fileSize = (Get-Item $tempFile).Length
-            Write-LogToGUI "Download completed: $([math]::Round($fileSize / 1MB, 1)) MB" -Level 'Success'
+            $completedSizeInMB = [math]::Round($fileSize / 1MB, 1)
+            Write-LogToGUI "Download completed: $completedSizeInMB MB" -Level 'Success'
             
             if ([math]::Abs($fileSize - $AssetInfo.Size) -lt 1024) {
                 Write-LogToGUI "File size verification: PASSED" -Level 'Success'
@@ -273,7 +278,7 @@ function Start-IncidentResponseDeployment {
         if ($Script:DeployButton) {
             $Script:DeployButton.Invoke([Action] {
                 $Script:DeployButton.Enabled = $false
-                $Script:DeployButton.Text = "🚀 Deploying..."
+                $Script:DeployButton.Text = "ðŸš€ Deploying..."
             })
         }
         
@@ -346,7 +351,7 @@ function Start-IncidentResponseDeployment {
             # Update UI
             if ($Script:DeployButton) {
                 $Script:DeployButton.Invoke([Action] {
-                    $Script:DeployButton.Text = "✅ Deployment Complete"
+                    $Script:DeployButton.Text = "âœ… Deployment Complete"
                     $Script:DeployButton.BackColor = $Colors.VelociraptorGreen
                     $Script:DeployButton.ForeColor = [System.Drawing.Color]::Black
                 })
@@ -375,7 +380,7 @@ function Start-IncidentResponseDeployment {
         if ($Script:DeployButton) {
             $Script:DeployButton.Invoke([Action] {
                 $Script:DeployButton.Enabled = $true
-                $Script:DeployButton.Text = "❌ Deploy Failed - Retry"
+                $Script:DeployButton.Text = "âŒ Deploy Failed - Retry"
                 $Script:DeployButton.BackColor = $Colors.ErrorRed
             })
         }
@@ -391,12 +396,12 @@ function Start-IncidentResponseDeployment {
 
 ############  GUI Creation  ###################################################
 
-Write-Host "🏗️ Creating main form..." -ForegroundColor Yellow
+Write-Host "ðŸ—ï¸ Creating main form..." -ForegroundColor Yellow
 
 try {
     # Create main form
     $MainForm = New-Object System.Windows.Forms.Form
-    $MainForm.Text = "🦖 Velociraptor Incident Response Collector - Installation & Deployment"
+    $MainForm.Text = "🦖 Velociraptor Incident Response Collector - Installation and Deployment"
     $MainForm.Size = New-Object System.Drawing.Size(1200, 800)
     $MainForm.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen
     $MainForm.BackColor = $Colors.DarkBackground
@@ -404,14 +409,14 @@ try {
     $MainForm.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedSingle
     $MainForm.MaximizeBox = $false
     
-    Write-Host "✅ Main form created successfully" -ForegroundColor Green
+    Write-Host "âœ… Main form created successfully" -ForegroundColor Green
 }
 catch {
-    Write-Host "❌ Failed to create main form: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "âŒ Failed to create main form: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
 
-Write-Host "📋 Creating header..." -ForegroundColor Yellow
+Write-Host "ðŸ“‹ Creating header..." -ForegroundColor Yellow
 
 try {
     # Header panel
@@ -422,7 +427,7 @@ try {
     
     # Title
     $TitleLabel = New-Object System.Windows.Forms.Label
-    $TitleLabel.Text = "🚨 INCIDENT RESPONSE COLLECTOR - DEPLOYMENT PLATFORM"
+    $TitleLabel.Text = "ðŸš¨ INCIDENT RESPONSE COLLECTOR - DEPLOYMENT PLATFORM"
     $TitleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
     $TitleLabel.ForeColor = $Colors.VelociraptorGreen
     $TitleLabel.Location = New-Object System.Drawing.Point(20, 15)
@@ -440,14 +445,14 @@ try {
     $HeaderPanel.Controls.Add($SubtitleLabel)
     $MainForm.Controls.Add($HeaderPanel)
     
-    Write-Host "✅ Header created successfully" -ForegroundColor Green
+    Write-Host "âœ… Header created successfully" -ForegroundColor Green
 }
 catch {
-    Write-Host "❌ Failed to create header: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "âŒ Failed to create header: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
 
-Write-Host "📝 Creating incident selection..." -ForegroundColor Yellow
+Write-Host "ðŸ“ Creating incident selection..." -ForegroundColor Yellow
 
 try {
     # Left panel for incident selection
@@ -538,14 +543,14 @@ try {
     
     $MainForm.Controls.Add($IncidentPanel)
     
-    Write-Host "✅ Incident selection created successfully" -ForegroundColor Green
+    Write-Host "âœ… Incident selection created successfully" -ForegroundColor Green
 }
 catch {
-    Write-Host "❌ Failed to create incident selection: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "âŒ Failed to create incident selection: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
 
-Write-Host "📊 Creating deployment panel..." -ForegroundColor Yellow
+Write-Host "ðŸ“Š Creating deployment panel..." -ForegroundColor Yellow
 
 try {
     # Right panel for deployment info
@@ -688,14 +693,14 @@ try {
     
     $MainForm.Controls.Add($DeploymentPanel)
     
-    Write-Host "✅ Deployment panel created successfully" -ForegroundColor Green
+    Write-Host "âœ… Deployment panel created successfully" -ForegroundColor Green
 }
 catch {
-    Write-Host "❌ Failed to create deployment panel: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "âŒ Failed to create deployment panel: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
 
-Write-Host "🔘 Creating buttons..." -ForegroundColor Yellow
+Write-Host "ðŸ”˜ Creating buttons..." -ForegroundColor Yellow
 
 try {
     # Button panel
@@ -706,7 +711,7 @@ try {
     
     # Deploy button
     $Script:DeployButton = New-Object System.Windows.Forms.Button
-    $Script:DeployButton.Text = "🚀 Deploy IR Collector"
+    $Script:DeployButton.Text = "ðŸš€ Deploy IR Collector"
     $Script:DeployButton.Size = New-Object System.Drawing.Size(200, 35)
     $Script:DeployButton.Location = New-Object System.Drawing.Point(850, 15)
     $Script:DeployButton.BackColor = $Colors.VelociraptorGreen
@@ -738,10 +743,10 @@ try {
     $ButtonPanel.Controls.Add($ExitButton)
     $MainForm.Controls.Add($ButtonPanel)
     
-    Write-Host "✅ Buttons created successfully" -ForegroundColor Green
+    Write-Host "âœ… Buttons created successfully" -ForegroundColor Green
 }
 catch {
-    Write-Host "❌ Failed to create buttons: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "âŒ Failed to create buttons: $($_.Exception.Message)" -ForegroundColor Red
     exit 1
 }
 
@@ -750,23 +755,23 @@ Write-LogToGUI "=== Velociraptor Incident Response Collector Ready ===" -Level '
 Write-LogToGUI "Select an incident type to deploy a specialized collector platform."
 
 # Show the form
-Write-Host "🚀 Launching Incident Response GUI..." -ForegroundColor Green
+Write-Host "ðŸš€ Launching Incident Response GUI..." -ForegroundColor Green
 
 try {
     if ($StartMinimized) {
         $MainForm.WindowState = [System.Windows.Forms.FormWindowState]::Minimized
     }
     
-    Write-Host "✅ Incident Response GUI launched successfully!" -ForegroundColor Green
-    Write-Host "💡 Select an incident type to deploy a specialized collector" -ForegroundColor Cyan
+    Write-Host "âœ… Incident Response GUI launched successfully!" -ForegroundColor Green
+    Write-Host "ðŸ’¡ Select an incident type to deploy a specialized collector" -ForegroundColor Cyan
     
     # Show the form and wait for it to close
     $result = $MainForm.ShowDialog()
     
-    Write-Host "✅ Incident Response GUI completed successfully" -ForegroundColor Green
+    Write-Host "âœ… Incident Response GUI completed successfully" -ForegroundColor Green
 }
 catch {
-    Write-Host "❌ Failed to show GUI: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "âŒ Failed to show GUI: $($_.Exception.Message)" -ForegroundColor Red
     Write-Host "Stack trace:" -ForegroundColor Yellow
     Write-Host $_.ScriptStackTrace -ForegroundColor Yellow
     exit 1

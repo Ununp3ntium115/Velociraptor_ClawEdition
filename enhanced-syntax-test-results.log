@@ -1,0 +1,91 @@
+﻿[2025-08-21 10:55:42] [INFO] === Testing Category: Installation and Setup Scripts ===
+[2025-08-21 10:55:42] [INFO] Testing: .\Install-Velociraptor-Direct.ps1
+[2025-08-21 10:55:42] [SUCCESS] Syntax PASSED: .\Install-Velociraptor-Direct.ps1
+[2025-08-21 10:55:42] [INFO] Testing: .\Install-Velociraptor-Fixed.ps1
+[2025-08-21 10:55:42] [SUCCESS] Syntax PASSED: .\Install-Velociraptor-Fixed.ps1
+[2025-08-21 10:55:42] [INFO] Testing: .\Install-Velociraptor-Live.ps1
+[2025-08-21 10:55:42] [SUCCESS] Syntax PASSED: .\Install-Velociraptor-Live.ps1
+[2025-08-21 10:55:42] [INFO] Testing: .\Install-Velociraptor-Simple.ps1
+[2025-08-21 10:55:42] [SUCCESS] Syntax PASSED: .\Install-Velociraptor-Simple.ps1
+[2025-08-21 10:55:42] [INFO] 
+[2025-08-21 10:55:42] [INFO] === Testing Category: Analysis and Reporting Scripts ===
+[2025-08-21 10:55:42] [INFO] Testing: .\Advanced-UA-Testing.ps1
+[2025-08-21 10:55:42] [SUCCESS] Syntax PASSED: .\Advanced-UA-Testing.ps1
+[2025-08-21 10:55:42] [INFO] Testing: .\execute-uat-checklist.ps1
+[2025-08-21 10:55:42] [SUCCESS] Syntax PASSED: .\execute-uat-checklist.ps1
+[2025-08-21 10:55:42] [INFO] 
+[2025-08-21 10:55:42] [INFO] === Testing Category: Test and QA Scripts ===
+[2025-08-21 10:55:42] [INFO] Testing: .\Test-Beta-Release-Full-Features.ps1
+[2025-08-21 10:55:42] [SUCCESS] Syntax PASSED: .\Test-Beta-Release-Full-Features.ps1
+[2025-08-21 10:55:42] [INFO] Testing: .\Test-Windows-Beta-Features.ps1
+[2025-08-21 10:55:43] [SUCCESS] Syntax PASSED: .\Test-Windows-Beta-Features.ps1
+[2025-08-21 10:55:43] [INFO] Testing: .\Test-Windows-Beta-Features-Clean.ps1
+[2025-08-21 10:55:43] [SUCCESS] Syntax PASSED: .\Test-Windows-Beta-Features-Clean.ps1
+[2025-08-21 10:55:43] [INFO] Testing: .\Test-VelociraptorHealth.ps1
+[2025-08-21 10:55:43] [SUCCESS] Syntax PASSED: .\Test-VelociraptorHealth.ps1
+[2025-08-21 10:55:43] [INFO] Testing: .\COMPREHENSIVE_BETA_QA.ps1
+[2025-08-21 10:55:43] [ERROR] Syntax FAILED: .\COMPREHENSIVE_BETA_QA.ps1
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 647: Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 766: Unexpected token ']' in expression or statement.
+[2025-08-21 10:55:43] [INFO] Testing: .\Test-CriticalFixes.ps1
+[2025-08-21 10:55:43] [SUCCESS] Syntax PASSED: .\Test-CriticalFixes.ps1
+[2025-08-21 10:55:43] [INFO] Testing: .\BETA_RELEASE_QA.ps1
+[2025-08-21 10:55:43] [ERROR] Syntax FAILED: .\BETA_RELEASE_QA.ps1
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 361: Unexpected token ']' in expression or statement.
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 361: Missing closing ')' after expression in 'if' statement.
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 359: Missing closing '}' in statement block or type definition.
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 352: Missing closing '}' in statement block or type definition.
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 361: Unexpected token ')' in expression or statement.
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 368: Unexpected token '}' in expression or statement.
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 383: Unexpected token '}' in expression or statement.
+[2025-08-21 10:55:43] [INFO] Testing: .\Test-WindowsForms.ps1
+[2025-08-21 10:55:43] [SUCCESS] Syntax PASSED: .\Test-WindowsForms.ps1
+[2025-08-21 10:55:43] [INFO] Testing: .\Test-WindowsFormsInit.ps1
+[2025-08-21 10:55:43] [SUCCESS] Syntax PASSED: .\Test-WindowsFormsInit.ps1
+[2025-08-21 10:55:43] [INFO] 
+[2025-08-21 10:55:43] [INFO] === Testing Category: Utility Scripts ===
+[2025-08-21 10:55:43] [INFO] Testing: .\Backup-VelociraptorData.ps1
+[2025-08-21 10:55:43] [ERROR] Syntax FAILED: .\Backup-VelociraptorData.ps1
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 140: Missing closing '}' in statement block or type definition.
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 125: Missing closing '}' in statement block or type definition.
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 75: Missing closing '}' in statement block or type definition.
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 143: The Try statement is missing its Catch or Finally block.
+[2025-08-21 10:55:43] [ERROR]   ERROR: Line 70: Missing closing '}' in statement block or type definition.
+[2025-08-21 10:55:43] [INFO] Testing: .\Cleanup_Velociraptor.ps1
+[2025-08-21 10:55:43] [SUCCESS] Syntax PASSED: .\Cleanup_Velociraptor.ps1
+[2025-08-21 10:55:43] [INFO] Testing: .\Manage-VelociraptorConfig.ps1
+[2025-08-21 10:55:43] [SUCCESS] Syntax PASSED: .\Manage-VelociraptorConfig.ps1
+[2025-08-21 10:55:43] [INFO] Testing: .\Prepare_OfflineCollector_Env.ps1
+[2025-08-21 10:55:43] [SUCCESS] Syntax PASSED: .\Prepare_OfflineCollector_Env.ps1
+[2025-08-21 10:55:43] [INFO] 
+[2025-08-21 10:55:43] [INFO] === COMPREHENSIVE RESULTS ===
+[2025-08-21 10:55:43] [INFO] Total Files Tested: 19
+[2025-08-21 10:55:43] [SUCCESS] Syntax Valid: 16
+[2025-08-21 10:55:43] [ERROR] Syntax Invalid: 3
+[2025-08-21 10:55:43] [INFO] 
+[2025-08-21 10:55:43] [SUCCESS] READY TO RUN (16 files):
+[2025-08-21 10:55:43] [SUCCESS]   - .\Install-Velociraptor-Direct.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Install-Velociraptor-Fixed.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Install-Velociraptor-Live.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Install-Velociraptor-Simple.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Advanced-UA-Testing.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\execute-uat-checklist.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Test-Beta-Release-Full-Features.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Test-Windows-Beta-Features.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Test-Windows-Beta-Features-Clean.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Test-VelociraptorHealth.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Test-CriticalFixes.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Test-WindowsForms.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Test-WindowsFormsInit.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Cleanup_Velociraptor.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Manage-VelociraptorConfig.ps1
+[2025-08-21 10:55:43] [SUCCESS]   - .\Prepare_OfflineCollector_Env.ps1
+[2025-08-21 10:55:43] [INFO] 
+[2025-08-21 10:55:43] [ERROR] FILES NEEDING FIXES (3 files):
+[2025-08-21 10:55:43] [ERROR]   FILE: .\COMPREHENSIVE_BETA_QA.ps1
+[2025-08-21 10:55:43] [INFO] 
+[2025-08-21 10:55:43] [ERROR]   FILE: .\BETA_RELEASE_QA.ps1
+[2025-08-21 10:55:43] [INFO] 
+[2025-08-21 10:55:43] [ERROR]   FILE: .\Backup-VelociraptorData.ps1
+[2025-08-21 10:55:43] [INFO] 
+[2025-08-21 10:55:43] [INFO] === Test Complete ===

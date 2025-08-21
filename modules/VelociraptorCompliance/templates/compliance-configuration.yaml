@@ -1,0 +1,382 @@
+# Velociraptor Compliance Configuration Template
+# This template provides the baseline configuration for compliance frameworks
+
+# General Compliance Settings
+compliance:
+  # Enable compliance mode (enforces additional controls)
+  enabled: true
+  
+  # Default compliance framework (can be overridden per deployment)
+  default_framework: "FedRAMP"
+  
+  # Compliance level (framework-specific: Low/Moderate/High for FedRAMP)
+  compliance_level: "Moderate"
+  
+  # Organization information for compliance documentation
+  organization:
+    name: "Your Organization Name"
+    industry: "Your Industry"
+    compliance_officer: "Compliance Officer Name"
+    contact_email: "compliance@yourdomain.com"
+    address: "Organization Address"
+    regulatory_requirements:
+      - "FedRAMP"
+      - "SOC2"
+      - "ISO27001"
+  
+  # Audit and evidence collection settings
+  audit:
+    # Enable comprehensive audit logging
+    enabled: true
+    
+    # Audit log retention period (days)
+    retention_days: 2555  # 7 years default
+    
+    # Audit log encryption
+    encryption_enabled: true
+    
+    # Evidence collection settings
+    evidence_collection:
+      enabled: true
+      automatic_collection: true
+      retention_days: 2555
+      encryption_required: true
+      chain_of_custody: true
+    
+    # Audit trail integrity verification
+    integrity_verification:
+      enabled: true
+      hash_algorithm: "SHA256"
+      digital_signatures: true
+
+# Access Control and Authentication
+access_control:
+  # Multi-factor authentication requirements
+  mfa:
+    enabled: true
+    required_for_admin: true
+    required_for_users: false
+    allowed_methods:
+      - "TOTP"
+      - "SMS"
+      - "Hardware_Token"
+  
+  # Password policy enforcement
+  password_policy:
+    min_length: 12
+    complexity_required: true
+    history_count: 12
+    max_age_days: 90
+    account_lockout:
+      enabled: true
+      threshold: 5
+      duration_minutes: 30
+  
+  # Role-based access control
+  rbac:
+    enabled: true
+    least_privilege: true
+    segregation_of_duties: true
+    periodic_review_days: 90
+  
+  # Session management
+  session:
+    timeout_minutes: 30
+    concurrent_sessions: 1
+    secure_cookies: true
+
+# Network Security and Communications
+network_security:
+  # Encryption requirements
+  encryption:
+    # Encryption in transit
+    transit:
+      tls_version: "1.3"
+      cipher_suites: ["TLS_AES_256_GCM_SHA384", "TLS_CHACHA20_POLY1305_SHA256"]
+      certificate_validation: true
+      
+    # Encryption at rest
+    at_rest:
+      enabled: true
+      algorithm: "AES-256"
+      key_rotation_days: 365
+  
+  # Network segmentation
+  segmentation:
+    enabled: true
+    network_zones:
+      - name: "Management"
+        description: "Administrative access zone"
+        access_controls: "Restricted"
+      - name: "DMZ"
+        description: "External facing services"
+        access_controls: "Limited"
+      - name: "Internal"
+        description: "Internal processing"
+        access_controls: "Controlled"
+  
+  # Firewall and boundary protection
+  boundary_protection:
+    firewall_enabled: true
+    intrusion_detection: true
+    traffic_monitoring: true
+    unauthorized_connection_blocking: true
+
+# System Monitoring and Logging
+monitoring:
+  # Event logging requirements
+  logging:
+    enabled: true
+    level: "INFO"
+    
+    # Events requiring audit
+    audit_events:
+      - "user_authentication"
+      - "user_authorization"
+      - "privilege_escalation"
+      - "system_access"
+      - "data_access"
+      - "configuration_changes"
+      - "security_events"
+      - "error_events"
+    
+    # Log management
+    centralized_logging: true
+    log_correlation: true
+    real_time_analysis: true
+    
+    # Log retention
+    retention_policy:
+      security_logs: 2555  # 7 years
+      system_logs: 365    # 1 year
+      application_logs: 90 # 3 months
+  
+  # Performance monitoring
+  performance:
+    enabled: true
+    metrics_collection: true
+    availability_monitoring: true
+    capacity_planning: true
+    
+    # Service level objectives
+    slo:
+      availability: 99.9
+      response_time_ms: 1000
+      throughput_ops: 1000
+
+# Incident Response and Recovery
+incident_response:
+  # Incident response capabilities
+  enabled: true
+  
+  # Response team configuration
+  team:
+    primary_contact: "incident-response@yourdomain.com"
+    escalation_procedures: true
+    external_contacts: true
+  
+  # Response procedures
+  procedures:
+    detection_enabled: true
+    containment_procedures: true
+    eradication_procedures: true
+    recovery_procedures: true
+    lessons_learned: true
+  
+  # Communication plan
+  communication:
+    internal_notification: true
+    external_notification: true
+    stakeholder_updates: true
+    media_response: false
+
+# Configuration Management
+configuration_management:
+  # Change control
+  change_control:
+    enabled: true
+    approval_required: true
+    testing_required: true
+    documentation_required: true
+    rollback_procedures: true
+  
+  # Baseline management
+  baseline:
+    configuration_baselines: true
+    security_baselines: true
+    regular_reviews: true
+    deviation_monitoring: true
+  
+  # Version control
+  version_control:
+    enabled: true
+    centralized_repository: true
+    change_tracking: true
+    release_management: true
+
+# Risk Management
+risk_management:
+  # Risk assessment
+  assessment:
+    enabled: true
+    periodic_assessment: true
+    assessment_frequency_days: 365
+    risk_register: true
+  
+  # Risk treatment
+  treatment:
+    mitigation_strategies: true
+    acceptance_criteria: true
+    transfer_mechanisms: false
+    avoidance_strategies: true
+  
+  # Continuous monitoring
+  monitoring:
+    real_time_monitoring: true
+    automated_alerts: true
+    threshold_management: true
+    trend_analysis: true
+
+# Business Continuity and Disaster Recovery
+business_continuity:
+  # Continuity planning
+  planning:
+    enabled: true
+    business_impact_analysis: true
+    recovery_strategies: true
+    continuity_procedures: true
+  
+  # Backup and recovery
+  backup:
+    enabled: true
+    backup_frequency: "daily"
+    backup_retention_days: 365
+    backup_testing: true
+    offsite_storage: true
+  
+  # Disaster recovery
+  disaster_recovery:
+    recovery_time_objective_hours: 4
+    recovery_point_objective_hours: 1
+    alternate_sites: true
+    recovery_testing: true
+
+# Data Protection and Privacy
+data_protection:
+  # Data classification
+  classification:
+    enabled: true
+    classification_levels:
+      - "Public"
+      - "Internal"
+      - "Confidential"
+      - "Restricted"
+    handling_procedures: true
+  
+  # Privacy protection
+  privacy:
+    enabled: true
+    pii_identification: true
+    consent_management: true
+    data_minimization: true
+    purpose_limitation: true
+  
+  # Data lifecycle management
+  lifecycle:
+    retention_policies: true
+    secure_disposal: true
+    data_archival: true
+    legal_hold_procedures: true
+
+# Vulnerability Management
+vulnerability_management:
+  # Vulnerability scanning
+  scanning:
+    enabled: true
+    scan_frequency_days: 30
+    automated_scanning: true
+    authenticated_scanning: true
+  
+  # Patch management
+  patch_management:
+    enabled: true
+    patch_testing: true
+    emergency_patching: true
+    patch_deployment_timeline_days: 30
+  
+  # Threat intelligence
+  threat_intelligence:
+    enabled: true
+    external_feeds: true
+    internal_analysis: true
+    indicator_sharing: false
+
+# Compliance Monitoring and Reporting
+compliance_monitoring:
+  # Continuous compliance monitoring
+  continuous_monitoring:
+    enabled: true
+    automated_testing: true
+    real_time_alerts: true
+    dashboard_reporting: true
+  
+  # Compliance assessment
+  assessment:
+    frequency_days: 365
+    independent_assessment: true
+    self_assessment: true
+    penetration_testing: true
+  
+  # Reporting
+  reporting:
+    executive_dashboard: true
+    compliance_scores: true
+    trend_analysis: true
+    exception_reporting: true
+    audit_reports: true
+
+# Framework-Specific Configurations
+frameworks:
+  fedramp:
+    authorization_level: "Moderate"
+    continuous_monitoring: true
+    annual_assessment: true
+    ato_maintenance: true
+    
+  soc2:
+    trust_service_categories:
+      - "Security"
+      - "Availability"
+      - "Processing Integrity"
+      - "Confidentiality"
+    type_ii_examination: true
+    quarterly_reviews: true
+    
+  iso27001:
+    isms_scope: "All information systems and processes"
+    management_review_frequency_days: 365
+    internal_audit_frequency_days: 365
+    continual_improvement: true
+    
+  nist:
+    framework_version: "1.1"
+    profile_implementation: "Custom"
+    maturity_target: "Tier 3"
+    
+  hipaa:
+    covered_entity: false
+    business_associate: false
+    phi_handling: false
+    breach_notification: true
+    
+  pci_dss:
+    merchant_level: "Level 1"
+    cardholder_data_environment: false
+    quarterly_scanning: true
+    annual_assessment: true
+    
+  gdpr:
+    data_controller: true
+    data_processor: false
+    privacy_by_design: true
+    dpia_required: true

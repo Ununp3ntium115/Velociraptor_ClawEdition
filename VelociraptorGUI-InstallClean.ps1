@@ -27,9 +27,12 @@ Write-Host "====================================" -ForegroundColor Cyan
 Write-Host "Initializing Windows Forms..." -ForegroundColor Yellow
 
 try {
-    [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
+    # CRITICAL: Load assemblies FIRST, then call SetCompatibleTextRenderingDefault
     Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
     Add-Type -AssemblyName System.Drawing -ErrorAction Stop
+    
+    # NOW call SetCompatibleTextRenderingDefault after assemblies are loaded
+    [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
     [System.Windows.Forms.Application]::EnableVisualStyles()
     Write-Host "Windows Forms initialized successfully" -ForegroundColor Green
 }

@@ -1,0 +1,817 @@
+{
+  "Framework": "ISO27001",
+  "Version": "2013",
+  "Description": "ISO/IEC 27001:2013 Information Security Management System Controls",
+  "AnnexAControlObjectives": [
+    {
+      "ObjectiveId": "A.5",
+      "ObjectiveName": "Information Security Policies",
+      "Description": "To provide management direction and support for information security in accordance with business requirements and relevant laws and regulations",
+      "Controls": [
+        {
+          "Id": "A.5.1.1",
+          "Title": "Policies for Information Security",
+          "Description": "A set of policies for information security shall be defined, approved by management, published and communicated to employees and relevant external parties.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "SecurityPolicyExists",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Information security policy is defined and approved"
+            },
+            {
+              "Name": "PolicyCommunication",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Policy is communicated to employees and external parties"
+            },
+            {
+              "Name": "ManagementApproval",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Policy is approved by management"
+            }
+          ],
+          "TestCriteria": [
+            "Verify information security policy exists",
+            "Verify policy is approved by management",
+            "Verify policy is communicated to stakeholders",
+            "Verify policy addresses business requirements"
+          ]
+        },
+        {
+          "Id": "A.5.1.2",
+          "Title": "Review of the Policies for Information Security",
+          "Description": "The policies for information security shall be reviewed at planned intervals or if significant changes occur to ensure their continuing suitability, adequacy and effectiveness.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "PolicyReviewSchedule",
+              "Type": "String",
+              "Required": true,
+              "Description": "Scheduled intervals for policy review"
+            },
+            {
+              "Name": "ChangeTriggeredReview",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Policy review triggered by significant changes"
+            }
+          ],
+          "TestCriteria": [
+            "Verify policy review schedule exists",
+            "Verify reviews are conducted at planned intervals",
+            "Verify significant changes trigger policy review",
+            "Verify review results are documented"
+          ]
+        }
+      ]
+    },
+    {
+      "ObjectiveId": "A.6",
+      "ObjectiveName": "Organization of Information Security",
+      "Description": "To establish a management framework to initiate and control the implementation and operation of information security within the organization",
+      "Controls": [
+        {
+          "Id": "A.6.1.1",
+          "Title": "Information Security Roles and Responsibilities",
+          "Description": "All information security responsibilities shall be defined and allocated.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "RolesDefined",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Information security roles are defined"
+            },
+            {
+              "Name": "ResponsibilitiesAllocated",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Responsibilities are allocated"
+            }
+          ],
+          "TestCriteria": [
+            "Verify information security roles are defined",
+            "Verify responsibilities are clearly allocated",
+            "Verify roles and responsibilities are documented",
+            "Verify accountability is established"
+          ]
+        },
+        {
+          "Id": "A.6.1.2",
+          "Title": "Segregation of Duties",
+          "Description": "Conflicting duties and areas of responsibility shall be segregated to reduce opportunities for unauthorized or unintentional modification or misuse of the organization's assets.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "DutySegregation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Conflicting duties are segregated"
+            },
+            {
+              "Name": "ResponsibilitySegregation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Conflicting responsibilities are segregated"
+            }
+          ],
+          "TestCriteria": [
+            "Verify conflicting duties are segregated",
+            "Verify conflicting responsibilities are segregated",
+            "Verify segregation reduces unauthorized access",
+            "Verify critical functions require multiple people"
+          ]
+        },
+        {
+          "Id": "A.6.1.3",
+          "Title": "Contact with Authorities",
+          "Description": "Appropriate contacts with relevant authorities shall be maintained.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AuthorityContacts",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Contacts with authorities are maintained"
+            },
+            {
+              "Name": "ContactProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Procedures for contacting authorities exist"
+            }
+          ],
+          "TestCriteria": [
+            "Verify contacts with authorities are maintained",
+            "Verify contact procedures are documented",
+            "Verify contacts are current and relevant",
+            "Verify regular communication occurs"
+          ]
+        }
+      ]
+    },
+    {
+      "ObjectiveId": "A.8",
+      "ObjectiveName": "Asset Management",
+      "Description": "To achieve and maintain appropriate protection of organizational assets",
+      "Controls": [
+        {
+          "Id": "A.8.1.1",
+          "Title": "Inventory of Assets",
+          "Description": "Assets associated with information and information processing facilities shall be identified and an inventory of these assets shall be drawn up and maintained.",
+          "TestType": "Technical",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AssetInventory",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Asset inventory is maintained"
+            },
+            {
+              "Name": "AssetIdentification",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Assets are identified and classified"
+            }
+          ],
+          "TestCriteria": [
+            "Verify asset inventory is maintained",
+            "Verify assets are identified and classified",
+            "Verify inventory is current and accurate",
+            "Verify inventory includes all relevant assets"
+          ]
+        },
+        {
+          "Id": "A.8.1.2",
+          "Title": "Ownership of Assets",
+          "Description": "Assets maintained in the inventory shall be owned.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AssetOwnership",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Asset ownership is assigned"
+            },
+            {
+              "Name": "OwnershipDocumentation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Ownership is documented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify asset ownership is assigned",
+            "Verify ownership is documented",
+            "Verify owners understand responsibilities",
+            "Verify ownership changes are managed"
+          ]
+        },
+        {
+          "Id": "A.8.2.1",
+          "Title": "Classification of Information",
+          "Description": "Information shall be classified in terms of legal requirements, value, criticality and sensitivity to unauthorized disclosure or modification.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "ClassificationScheme",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Information classification scheme exists"
+            },
+            {
+              "Name": "ClassificationCriteria",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Classification criteria are defined"
+            }
+          ],
+          "TestCriteria": [
+            "Verify classification scheme exists",
+            "Verify classification criteria are defined",
+            "Verify information is properly classified",
+            "Verify classification is reviewed regularly"
+          ]
+        }
+      ]
+    },
+    {
+      "ObjectiveId": "A.9",
+      "ObjectiveName": "Access Control",
+      "Description": "To limit access to information and information processing facilities",
+      "Controls": [
+        {
+          "Id": "A.9.1.1",
+          "Title": "Access Control Policy",
+          "Description": "An access control policy shall be established, documented and reviewed based on business and information security requirements.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AccessControlPolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Access control policy is established"
+            },
+            {
+              "Name": "PolicyDocumentation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Policy is documented"
+            },
+            {
+              "Name": "PolicyReview",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Policy is reviewed regularly"
+            }
+          ],
+          "TestCriteria": [
+            "Verify access control policy is established",
+            "Verify policy is documented",
+            "Verify policy is reviewed regularly",
+            "Verify policy addresses business requirements"
+          ]
+        },
+        {
+          "Id": "A.9.1.2",
+          "Title": "Access to Networks and Network Services",
+          "Description": "Users shall only be provided with access to the network and network services that they have been specifically authorized to use.",
+          "TestType": "Technical",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "NetworkAccessControl",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Network access is controlled"
+            },
+            {
+              "Name": "ServiceAccessControl",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Network service access is controlled"
+            }
+          ],
+          "TestCriteria": [
+            "Verify network access is controlled",
+            "Verify network service access is controlled",
+            "Verify access is based on authorization",
+            "Verify unauthorized access is prevented"
+          ]
+        },
+        {
+          "Id": "A.9.2.1",
+          "Title": "User Registration and De-registration",
+          "Description": "A formal user registration and de-registration process shall be implemented to enable assignment of access rights.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "UserRegistration",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Formal user registration process exists"
+            },
+            {
+              "Name": "UserDeregistration",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Formal user de-registration process exists"
+            }
+          ],
+          "TestCriteria": [
+            "Verify user registration process exists",
+            "Verify user de-registration process exists",
+            "Verify access rights assignment is formal",
+            "Verify processes are documented and followed"
+          ]
+        },
+        {
+          "Id": "A.9.2.2",
+          "Title": "User Access Provisioning",
+          "Description": "A formal user access provisioning process shall be implemented to assign or revoke access rights for all user types to all systems and services.",
+          "TestType": "Technical",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AccessProvisioning",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Formal access provisioning process exists"
+            },
+            {
+              "Name": "AccessRevocation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Access revocation process exists"
+            }
+          ],
+          "TestCriteria": [
+            "Verify access provisioning process exists",
+            "Verify access revocation process exists",
+            "Verify processes cover all user types",
+            "Verify processes cover all systems and services"
+          ]
+        },
+        {
+          "Id": "A.9.4.1",
+          "Title": "Information Access Restriction",
+          "Description": "Access to information and application system functions shall be restricted in accordance with the access control policy.",
+          "TestType": "Technical",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "InformationAccessRestriction",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Information access is restricted"
+            },
+            {
+              "Name": "ApplicationAccessRestriction",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Application system access is restricted"
+            }
+          ],
+          "TestCriteria": [
+            "Verify information access is restricted",
+            "Verify application access is restricted",
+            "Verify restrictions follow access control policy",
+            "Verify unauthorized access is prevented"
+          ]
+        }
+      ]
+    },
+    {
+      "ObjectiveId": "A.10",
+      "ObjectiveName": "Cryptography",
+      "Description": "To ensure proper and effective use of cryptography to protect the confidentiality, authenticity and/or integrity of information",
+      "Controls": [
+        {
+          "Id": "A.10.1.1",
+          "Title": "Policy on the Use of Cryptographic Controls",
+          "Description": "A policy on the use of cryptographic controls for protection of information shall be developed and implemented.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "CryptographicPolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Cryptographic policy is developed"
+            },
+            {
+              "Name": "PolicyImplementation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Policy is implemented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify cryptographic policy is developed",
+            "Verify policy is implemented",
+            "Verify policy addresses protection requirements",
+            "Verify policy covers key management"
+          ]
+        },
+        {
+          "Id": "A.10.1.2",
+          "Title": "Key Management",
+          "Description": "A policy on the use, protection and lifetime of cryptographic keys shall be developed and implemented through their whole lifecycle.",
+          "TestType": "Technical",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "KeyManagementPolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Key management policy exists"
+            },
+            {
+              "Name": "KeyLifecycleManagement",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Key lifecycle is managed"
+            }
+          ],
+          "TestCriteria": [
+            "Verify key management policy exists",
+            "Verify key lifecycle is managed",
+            "Verify keys are protected appropriately",
+            "Verify key rotation is performed"
+          ]
+        }
+      ]
+    },
+    {
+      "ObjectiveId": "A.12",
+      "ObjectiveName": "Operations Security",
+      "Description": "To ensure correct and secure operations of information processing facilities",
+      "Controls": [
+        {
+          "Id": "A.12.1.1",
+          "Title": "Operating Procedures and Responsibilities",
+          "Description": "Operating procedures shall be documented and made available to all users who need them.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "OperatingProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Operating procedures are documented"
+            },
+            {
+              "Name": "ProcedureAvailability",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Procedures are available to users"
+            }
+          ],
+          "TestCriteria": [
+            "Verify operating procedures are documented",
+            "Verify procedures are available to users",
+            "Verify procedures are current and accurate",
+            "Verify procedures cover security operations"
+          ]
+        },
+        {
+          "Id": "A.12.4.1",
+          "Title": "Event Logging",
+          "Description": "Event logs recording user activities, exceptions, faults and information security events shall be produced, kept and regularly reviewed.",
+          "TestType": "Technical",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "EventLogging",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Event logging is implemented"
+            },
+            {
+              "Name": "LogReview",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Logs are regularly reviewed"
+            },
+            {
+              "Name": "LogRetention",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Logs are kept for appropriate period"
+            }
+          ],
+          "TestCriteria": [
+            "Verify event logging is implemented",
+            "Verify logs are regularly reviewed",
+            "Verify logs are kept for appropriate period",
+            "Verify logs include security events"
+          ]
+        },
+        {
+          "Id": "A.12.6.1",
+          "Title": "Management of Technical Vulnerabilities",
+          "Description": "Information about technical vulnerabilities of information systems being used shall be obtained in a timely fashion.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "VulnerabilityManagement",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Vulnerability management process exists"
+            },
+            {
+              "Name": "VulnerabilityInformation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Vulnerability information is obtained timely"
+            }
+          ],
+          "TestCriteria": [
+            "Verify vulnerability management process exists",
+            "Verify vulnerability information is obtained timely",
+            "Verify vulnerabilities are assessed and addressed",
+            "Verify patch management is effective"
+          ]
+        }
+      ]
+    },
+    {
+      "ObjectiveId": "A.14",
+      "ObjectiveName": "System Acquisition, Development and Maintenance",
+      "Description": "To ensure that information security is an integral part of information systems across the entire lifecycle",
+      "Controls": [
+        {
+          "Id": "A.14.1.1",
+          "Title": "Information Security Requirements Analysis and Specification",
+          "Description": "The information security related requirements shall be included in the requirements for new information systems or enhancements to existing information systems.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "SecurityRequirements",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Security requirements are included"
+            },
+            {
+              "Name": "RequirementsAnalysis",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Requirements analysis includes security"
+            }
+          ],
+          "TestCriteria": [
+            "Verify security requirements are included",
+            "Verify requirements analysis includes security",
+            "Verify requirements are documented",
+            "Verify requirements address information security"
+          ]
+        },
+        {
+          "Id": "A.14.2.1",
+          "Title": "Secure Development Policy",
+          "Description": "Rules for the secure development of software and systems shall be established and applied to developments within the organization.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "SecureDevelopmentPolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Secure development policy exists"
+            },
+            {
+              "Name": "PolicyApplication",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Policy is applied to developments"
+            }
+          ],
+          "TestCriteria": [
+            "Verify secure development policy exists",
+            "Verify policy is applied to developments",
+            "Verify policy addresses security requirements",
+            "Verify development follows secure practices"
+          ]
+        }
+      ]
+    },
+    {
+      "ObjectiveId": "A.16",
+      "ObjectiveName": "Information Security Incident Management",
+      "Description": "To ensure a consistent and effective approach to the management of information security incidents",
+      "Controls": [
+        {
+          "Id": "A.16.1.1",
+          "Title": "Responsibilities and Procedures",
+          "Description": "Management responsibilities and procedures shall be established to ensure a quick, effective and orderly response to information security incidents.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "IncidentResponsibilities",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Incident response responsibilities are established"
+            },
+            {
+              "Name": "IncidentProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Incident response procedures are established"
+            }
+          ],
+          "TestCriteria": [
+            "Verify incident response responsibilities are established",
+            "Verify incident response procedures are established",
+            "Verify response is quick and effective",
+            "Verify management oversight exists"
+          ]
+        },
+        {
+          "Id": "A.16.1.2",
+          "Title": "Reporting Information Security Events",
+          "Description": "Information security events shall be reported through appropriate management channels as quickly as possible.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "EventReporting",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Security event reporting process exists"
+            },
+            {
+              "Name": "ReportingChannels",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Appropriate reporting channels exist"
+            }
+          ],
+          "TestCriteria": [
+            "Verify event reporting process exists",
+            "Verify appropriate reporting channels exist",
+            "Verify events are reported quickly",
+            "Verify reporting reaches management"
+          ]
+        }
+      ]
+    },
+    {
+      "ObjectiveId": "A.17",
+      "ObjectiveName": "Information Security Aspects of Business Continuity Management",
+      "Description": "To ensure continuity of information security management in adverse situations",
+      "Controls": [
+        {
+          "Id": "A.17.1.1",
+          "Title": "Planning Information Security Continuity",
+          "Description": "The organization shall determine its requirements for information security and the continuity of information security management in adverse situations.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "ContinuityPlanning",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Information security continuity planning exists"
+            },
+            {
+              "Name": "RequirementsDetermination",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Continuity requirements are determined"
+            }
+          ],
+          "TestCriteria": [
+            "Verify continuity planning exists",
+            "Verify continuity requirements are determined",
+            "Verify planning addresses adverse situations",
+            "Verify information security is maintained"
+          ]
+        }
+      ]
+    },
+    {
+      "ObjectiveId": "A.18",
+      "ObjectiveName": "Compliance",
+      "Description": "To avoid breaches of legal, statutory, regulatory or contractual obligations related to information security and of any security requirements",
+      "Controls": [
+        {
+          "Id": "A.18.1.1",
+          "Title": "Identification of Applicable Legislation and Contractual Requirements",
+          "Description": "All relevant legislative, statutory, regulatory, contractual requirements and the organization's approach to meet these requirements shall be explicitly identified, documented and kept up to date.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "LegalRequirements",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Legal requirements are identified"
+            },
+            {
+              "Name": "ContractualRequirements",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Contractual requirements are identified"
+            },
+            {
+              "Name": "RequirementsDocumentation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Requirements are documented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify legal requirements are identified",
+            "Verify contractual requirements are identified",
+            "Verify requirements are documented",
+            "Verify requirements are kept up to date"
+          ]
+        },
+        {
+          "Id": "A.18.1.4",
+          "Title": "Privacy and Protection of Personally Identifiable Information",
+          "Description": "Privacy and protection of personally identifiable information shall be ensured as required in relevant legislation and regulation where applicable.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "PrivacyProtection",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Privacy protection is ensured"
+            },
+            {
+              "Name": "PIIProtection",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "PII protection is implemented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify privacy protection is ensured",
+            "Verify PII protection is implemented",
+            "Verify compliance with legislation",
+            "Verify compliance with regulations"
+          ]
+        },
+        {
+          "Id": "A.18.2.1",
+          "Title": "Independent Review of Information Security",
+          "Description": "The organization's approach to managing information security and its implementation shall be reviewed independently at planned intervals.",
+          "TestType": "Process",
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "IndependentReview",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Independent review is conducted"
+            },
+            {
+              "Name": "ReviewSchedule",
+              "Type": "String",
+              "Required": true,
+              "Description": "Review schedule is established"
+            }
+          ],
+          "TestCriteria": [
+            "Verify independent review is conducted",
+            "Verify review schedule is established",
+            "Verify review covers management approach",
+            "Verify review covers implementation"
+          ]
+        }
+      ]
+    }
+  ],
+  "ComplianceMappings": {
+    "VelociraptorComponents": {
+      "InformationSecurityPolicy": ["A.5.1.1", "A.5.1.2"],
+      "OrganizationalSecurity": ["A.6.1.1", "A.6.1.2", "A.6.1.3"],
+      "AssetManagement": ["A.8.1.1", "A.8.1.2", "A.8.2.1"],
+      "AccessControl": ["A.9.1.1", "A.9.1.2", "A.9.2.1", "A.9.2.2", "A.9.4.1"],
+      "Cryptography": ["A.10.1.1", "A.10.1.2"],
+      "OperationsSecurity": ["A.12.1.1", "A.12.4.1", "A.12.6.1"],
+      "SystemDevelopment": ["A.14.1.1", "A.14.2.1"],
+      "IncidentManagement": ["A.16.1.1", "A.16.1.2"],
+      "BusinessContinuity": ["A.17.1.1"],
+      "Compliance": ["A.18.1.1", "A.18.1.4", "A.18.2.1"]
+    }
+  }
+}

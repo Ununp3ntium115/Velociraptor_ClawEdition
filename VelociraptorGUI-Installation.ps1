@@ -29,12 +29,12 @@ Write-Host "=======================================================" -Foreground
 Write-Host "🔧 Initializing Windows Forms..." -ForegroundColor Yellow
 
 try {
-    # CRITICAL: SetCompatibleTextRenderingDefault MUST be called FIRST
-    [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
-    
-    # Then load assemblies
+    # CRITICAL: Load assemblies FIRST, then call SetCompatibleTextRenderingDefault
     Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
     Add-Type -AssemblyName System.Drawing -ErrorAction Stop
+    
+    # NOW call SetCompatibleTextRenderingDefault after assemblies are loaded
+    [System.Windows.Forms.Application]::SetCompatibleTextRenderingDefault($false)
     
     # Then enable visual styles
     [System.Windows.Forms.Application]::EnableVisualStyles()

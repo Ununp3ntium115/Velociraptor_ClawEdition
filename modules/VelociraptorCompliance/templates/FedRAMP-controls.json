@@ -1,0 +1,643 @@
+{
+  "Framework": "FedRAMP",
+  "Version": "2.0",
+  "Description": "Federal Risk and Authorization Management Program (FedRAMP) Security Controls",
+  "AuthorizationLevels": ["Low", "Moderate", "High"],
+  "ControlFamilies": [
+    {
+      "FamilyId": "AC",
+      "FamilyName": "Access Control",
+      "Controls": [
+        {
+          "Id": "AC-1",
+          "Title": "Access Control Policy and Procedures",
+          "Description": "The organization develops, documents, and disseminates access control policy and procedures.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "PolicyDocumentation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Access control policy is documented"
+            },
+            {
+              "Name": "ProceduresDocumented",
+              "Type": "Boolean", 
+              "Required": true,
+              "Description": "Access control procedures are documented"
+            },
+            {
+              "Name": "ReviewFrequency",
+              "Type": "String",
+              "Required": true,
+              "Description": "Policy review frequency (annually minimum)"
+            }
+          ],
+          "TestCriteria": [
+            "Verify access control policy exists and is current",
+            "Verify procedures are documented and implemented",
+            "Verify policy is reviewed at least annually"
+          ]
+        },
+        {
+          "Id": "AC-2",
+          "Title": "Account Management",
+          "Description": "The organization manages system accounts, group memberships, privileges, workflow, notifications, deactivations, and reviews.",
+          "TestType": "Technical",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AccountCreationProcess",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Formal account creation process exists"
+            },
+            {
+              "Name": "PrivilegeReview",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Regular privilege reviews are conducted"
+            },
+            {
+              "Name": "AccountDeactivation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Account deactivation process is automated/timely"
+            }
+          ],
+          "TestCriteria": [
+            "Verify account creation requires authorization",
+            "Verify privileged accounts are reviewed regularly",
+            "Verify inactive accounts are disabled promptly"
+          ]
+        },
+        {
+          "Id": "AC-3",
+          "Title": "Access Enforcement",
+          "Description": "The information system enforces approved authorizations for logical access.",
+          "TestType": "Technical",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "LogicalAccessControls",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Logical access controls are implemented"
+            },
+            {
+              "Name": "AuthorizationMechanism",
+              "Type": "String",
+              "Required": true,
+              "Description": "Access authorization mechanism type"
+            }
+          ],
+          "TestCriteria": [
+            "Verify access controls prevent unauthorized access",
+            "Verify authorization mechanisms are functioning",
+            "Verify access is granted based on approved authorizations"
+          ]
+        }
+      ]
+    },
+    {
+      "FamilyId": "AU",
+      "FamilyName": "Audit and Accountability",
+      "Controls": [
+        {
+          "Id": "AU-1",
+          "Title": "Audit and Accountability Policy and Procedures",
+          "Description": "The organization develops, documents, and disseminates audit and accountability policy and procedures.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AuditPolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Audit policy is documented and current"
+            },
+            {
+              "Name": "AccountabilityProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Accountability procedures are documented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify audit policy exists and is current",
+            "Verify accountability procedures are implemented",
+            "Verify policy addresses audit requirements"
+          ]
+        },
+        {
+          "Id": "AU-2",
+          "Title": "Audit Events",
+          "Description": "The organization determines what events require auditing and ensures audit capability for those events.",
+          "TestType": "Configuration",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AuditableEvents",
+              "Type": "Array",
+              "Required": true,
+              "Description": "List of events requiring audit"
+            },
+            {
+              "Name": "AuditCapability",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Audit capability is implemented for required events"
+            }
+          ],
+          "TestCriteria": [
+            "Verify auditable events are defined",
+            "Verify audit capability exists for required events",
+            "Verify audit events are documented"
+          ]
+        },
+        {
+          "Id": "AU-3",
+          "Title": "Content of Audit Records",
+          "Description": "The information system generates audit records containing required information.",
+          "TestType": "Technical",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AuditRecordContent",
+              "Type": "Object",
+              "Required": true,
+              "Description": "Required audit record content elements"
+            },
+            {
+              "Name": "TimestampAccuracy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Audit timestamps are accurate and synchronized"
+            }
+          ],
+          "TestCriteria": [
+            "Verify audit records contain required information",
+            "Verify timestamps are accurate and synchronized",
+            "Verify audit records are complete and readable"
+          ]
+        }
+      ]
+    },
+    {
+      "FamilyId": "CA",
+      "FamilyName": "Security Assessment and Authorization",
+      "Controls": [
+        {
+          "Id": "CA-1",
+          "Title": "Security Assessment and Authorization Policy and Procedures",
+          "Description": "The organization develops, documents, and disseminates security assessment and authorization policy.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AssessmentPolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Security assessment policy is documented"
+            },
+            {
+              "Name": "AuthorizationProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Authorization procedures are documented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify assessment policy exists and is current",
+            "Verify authorization procedures are implemented",
+            "Verify continuous monitoring requirements are addressed"
+          ]
+        },
+        {
+          "Id": "CA-2",
+          "Title": "Security Assessments",
+          "Description": "The organization conducts security assessments of the information system and its environment.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AssessmentFrequency",
+              "Type": "String",
+              "Required": true,
+              "Description": "Security assessment frequency"
+            },
+            {
+              "Name": "AssessmentScope",
+              "Type": "String",
+              "Required": true,
+              "Description": "Scope of security assessments"
+            },
+            {
+              "Name": "IndependentAssessment",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Assessments conducted by independent parties"
+            }
+          ],
+          "TestCriteria": [
+            "Verify security assessments are conducted regularly",
+            "Verify assessment scope is comprehensive",
+            "Verify assessments are conducted independently"
+          ]
+        }
+      ]
+    },
+    {
+      "FamilyId": "CM",
+      "FamilyName": "Configuration Management",
+      "Controls": [
+        {
+          "Id": "CM-1",
+          "Title": "Configuration Management Policy and Procedures",
+          "Description": "The organization develops, documents, and disseminates configuration management policy and procedures.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "ConfigurationPolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Configuration management policy is documented"
+            },
+            {
+              "Name": "ChangeControlProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Change control procedures are documented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify configuration management policy exists",
+            "Verify change control procedures are implemented",
+            "Verify configuration baselines are maintained"
+          ]
+        },
+        {
+          "Id": "CM-2",
+          "Title": "Baseline Configuration",
+          "Description": "The organization develops, documents, and maintains baseline configurations.",
+          "TestType": "Configuration",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "BaselineDocumentation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Baseline configurations are documented"
+            },
+            {
+              "Name": "BaselineMaintenance",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Baselines are maintained and updated"
+            }
+          ],
+          "TestCriteria": [
+            "Verify baseline configurations are documented",
+            "Verify baselines are maintained current",
+            "Verify configuration items are inventoried"
+          ]
+        }
+      ]
+    },
+    {
+      "FamilyId": "CP",
+      "FamilyName": "Contingency Planning",
+      "Controls": [
+        {
+          "Id": "CP-1",
+          "Title": "Contingency Planning Policy and Procedures",
+          "Description": "The organization develops, documents, and disseminates contingency planning policy and procedures.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "ContingencyPolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Contingency planning policy is documented"
+            },
+            {
+              "Name": "BusinessContinuityPlan",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Business continuity plan exists"
+            }
+          ],
+          "TestCriteria": [
+            "Verify contingency planning policy exists",
+            "Verify business continuity plans are documented",
+            "Verify plans are tested regularly"
+          ]
+        }
+      ]
+    },
+    {
+      "FamilyId": "IA",
+      "FamilyName": "Identification and Authentication",
+      "Controls": [
+        {
+          "Id": "IA-1",
+          "Title": "Identification and Authentication Policy and Procedures",
+          "Description": "The organization develops, documents, and disseminates identification and authentication policy.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "IdentificationPolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Identification policy is documented"
+            },
+            {
+              "Name": "AuthenticationProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Authentication procedures are documented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify identification policy exists",
+            "Verify authentication procedures are implemented",
+            "Verify multi-factor authentication requirements"
+          ]
+        },
+        {
+          "Id": "IA-2",
+          "Title": "Identification and Authentication (Organizational Users)",
+          "Description": "The information system uniquely identifies and authenticates organizational users.",
+          "TestType": "Technical",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "UniqueIdentification",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Users are uniquely identified"
+            },
+            {
+              "Name": "AuthenticationMechanism",
+              "Type": "String",
+              "Required": true,
+              "Description": "Authentication mechanism implemented"
+            },
+            {
+              "Name": "MultifactorAuth",
+              "Type": "Boolean",
+              "Required": false,
+              "Description": "Multi-factor authentication implemented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify users are uniquely identified",
+            "Verify authentication mechanisms are secure",
+            "Verify multi-factor authentication where required"
+          ]
+        }
+      ]
+    },
+    {
+      "FamilyId": "IR",
+      "FamilyName": "Incident Response",
+      "Controls": [
+        {
+          "Id": "IR-1",
+          "Title": "Incident Response Policy and Procedures",
+          "Description": "The organization develops, documents, and disseminates incident response policy and procedures.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "IncidentResponsePolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Incident response policy is documented"
+            },
+            {
+              "Name": "ResponseProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Incident response procedures are documented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify incident response policy exists",
+            "Verify response procedures are documented",
+            "Verify incident response team is defined"
+          ]
+        },
+        {
+          "Id": "IR-2",
+          "Title": "Incident Response Training",
+          "Description": "The organization provides incident response training to information system users.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "TrainingProgram",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Incident response training program exists"
+            },
+            {
+              "Name": "TrainingFrequency",
+              "Type": "String",
+              "Required": true,
+              "Description": "Training frequency requirements"
+            }
+          ],
+          "TestCriteria": [
+            "Verify incident response training is provided",
+            "Verify training is conducted regularly",
+            "Verify training effectiveness is measured"
+          ]
+        }
+      ]
+    },
+    {
+      "FamilyId": "SC",
+      "FamilyName": "System and Communications Protection",
+      "Controls": [
+        {
+          "Id": "SC-1",
+          "Title": "System and Communications Protection Policy and Procedures",
+          "Description": "The organization develops, documents, and disseminates system and communications protection policy.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "ProtectionPolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Protection policy is documented"
+            },
+            {
+              "Name": "CommunicationsSecurity",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Communications security procedures documented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify protection policy exists",
+            "Verify communications security is addressed",
+            "Verify encryption requirements are defined"
+          ]
+        },
+        {
+          "Id": "SC-7",
+          "Title": "Boundary Protection",
+          "Description": "The information system monitors and controls communications at the external boundary.",
+          "TestType": "Technical",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "BoundaryProtection",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Boundary protection mechanisms implemented"
+            },
+            {
+              "Name": "TrafficMonitoring",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Network traffic monitoring implemented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify boundary protection mechanisms exist",
+            "Verify network traffic is monitored",
+            "Verify unauthorized connections are blocked"
+          ]
+        },
+        {
+          "Id": "SC-8",
+          "Title": "Transmission Confidentiality and Integrity",
+          "Description": "The information system protects the confidentiality and integrity of transmitted information.",
+          "TestType": "Technical",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "TransmissionEncryption",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Transmission encryption is implemented"
+            },
+            {
+              "Name": "IntegrityProtection",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Transmission integrity protection implemented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify transmission encryption is implemented",
+            "Verify transmission integrity is protected",
+            "Verify encryption strength meets requirements"
+          ]
+        }
+      ]
+    },
+    {
+      "FamilyId": "SI",
+      "FamilyName": "System and Information Integrity",
+      "Controls": [
+        {
+          "Id": "SI-1",
+          "Title": "System and Information Integrity Policy and Procedures",
+          "Description": "The organization develops, documents, and disseminates system and information integrity policy.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "IntegrityPolicy",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Information integrity policy is documented"
+            },
+            {
+              "Name": "IntegrityProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Integrity monitoring procedures documented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify integrity policy exists",
+            "Verify integrity monitoring procedures are implemented",
+            "Verify malicious code protection is addressed"
+          ]
+        },
+        {
+          "Id": "SI-2",
+          "Title": "Flaw Remediation",
+          "Description": "The organization identifies, reports, and corrects information system flaws.",
+          "TestType": "Process",
+          "AuthorizationLevel": ["Low", "Moderate", "High"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "FlawIdentification",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Flaw identification process exists"
+            },
+            {
+              "Name": "RemediationProcess",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Remediation process is documented"
+            },
+            {
+              "Name": "PatchManagement",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Patch management process implemented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify flaw identification process exists",
+            "Verify remediation process is timely",
+            "Verify patch management is effective"
+          ]
+        }
+      ]
+    }
+  ],
+  "ComplianceMappings": {
+    "VelociraptorComponents": {
+      "ServerConfiguration": ["AC-1", "AC-2", "AC-3", "AU-1", "AU-2", "AU-3", "IA-1", "IA-2"],
+      "NetworkSecurity": ["SC-7", "SC-8"],
+      "AuditLogging": ["AU-1", "AU-2", "AU-3"],
+      "AccessControl": ["AC-1", "AC-2", "AC-3"],
+      "IncidentResponse": ["IR-1", "IR-2"],
+      "ConfigurationManagement": ["CM-1", "CM-2"],
+      "SystemIntegrity": ["SI-1", "SI-2"]
+    }
+  }
+}

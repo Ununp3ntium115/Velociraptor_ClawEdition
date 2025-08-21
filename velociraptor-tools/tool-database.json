@@ -1,471 +1,123 @@
 {
-  "gzip": {
-    "Name": "gzip",
-    "UsedByArtifacts": [
-      "Linux.Sys.APTHistory"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "ps": {
-    "Name": "ps",
-    "UsedByArtifacts": [
-      "FreeBSD.Sys.Utx",
-      "Linux.Detection.IncorrectPermissions",
-      "Linux.Detection.IncorrectPermissions",
-      "Linux.Network.NM.Connections",
-      "MacOS.System.LocationServices",
-      "MoveIt",
-      "SquirrelWaffle",
-      "VscodeTasks",
-      "Windows.Detection.PipeHunter",
-      "Windows.Detection.ScmanagerBackdoor"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "bash": {
-    "Name": "bash",
-    "UsedByArtifacts": [
-      "Linux.Collection.HistoryFiles",
-      "Linux.Collection.UserConfig",
-      "Linux.Detection.CVE20214034",
-      "Linux.System.BashLogout",
-      "MacOS.Sys.BashHistory",
-      "MacOS.Sys.BashHistory"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "unzip": {
-    "Name": "unzip",
-    "UsedByArtifacts": [
-      "Windows.Hunter.Yara.LOLDrivers",
-      "Windows.Hunter.Yara.LOLDrivers"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "cut": {
-    "Name": "cut",
-    "UsedByArtifacts": [
-      "Exchange.Windows.System.PowerShell.DetectResponder",
-      "Getcap",
-      "KACE_SW_Process",
-      "Linux.Detection.MemFD",
-      "MacOS.Network.LittleSnitch",
-      "MacroRaptor",
-      "malfind",
-      "PrefetchHunter",
-      "PrintSpoolerRemediation",
-      "Windows.Detection.PipeHunter",
-      "Windows.Forensics.RecentFileCache",
-      "Windows.Registry.CapabilityAccessManager",
-      "Windows.Registry.PrintNightmare",
-      "Windows.Services.Hijacking",
-      "Windows.System.AppCompatPCA"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "ss": {
-    "Name": "ss",
-    "UsedByArtifacts": [
-      "Apache.AccessLogs",
-      "Apache.AccessLogs",
-      "BRc4",
-      "BumbleBee",
-      "DefenderExclusion",
-      "DefenderExclusion",
-      "Exchange.Windows.System.PowerShell.DetectResponder",
-      "FluentBit",
-      "Generic.Events.TrackNetworkConnections",
-      "KillProcess",
-      "Linux.Detection.CVE20214034",
-      "Linux.Detection.Honeyfiles",
-      "Linux.Event.Network.Nethogs",
-      "Linux.Event.Network.Nethogs",
-      "Linux.Network.Nethogs",
-      "Linux.Network.Nethogs",
-      "MacOS.Network.LittleSnitch",
-      "MacOS.UnifiedLogHunter",
-      "malfind",
-      "MoveITEvtx",
-      "Notebooks.Admin.Flows",
-      "PrinterDriver",
-      "ProcessRemediation",
-      "ProcessRemediation",
-      "Qakbot",
-      "Server.Alerts.TrackNetworkConnections",
-      "SquirrelWaffle",
-      "SystemBC",
-      "Windows.Detection.BruteRatel",
-      "Windows.Detection.Honeyfile",
-      "Windows.Detection.PipeHunter",
-      "Windows.ETW.DetectProcessSpoofing",
-      "Windows.ETW.ScreenshotTaken",
-      "Windows.EventLogs.RemoteAccessVPN",
-      "Windows.EventLogs.SysmonProcessEnriched",
-      "Windows.Mounted.Mass.Storage",
-      "Windows.Registry.CapabilityAccessManager",
-      "Windows.Registry.COMAutoApprovalList",
-      "Windows.Registry.NetshHelperDLLs",
-      "Windows.System.AccessControlList",
-      "Windows.Triage.HighValueMemory",
-      "WS_FTP"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "grep": {
-    "Name": "grep",
-    "UsedByArtifacts": [
-      "ConfluenceLogs",
-      "MacOS.Sys.BashHistory"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "sed": {
-    "Name": "sed",
-    "UsedByArtifacts": [
-      "BinaryVersion",
-      "CondensedAccountUsage",
-      "Detection.Application.CursedChrome",
-      "Detection.Application.CursedChrome",
-      "Exports",
-      "FreeBSD.Sys.Utx",
-      "Generic.Events.TrackNetworkConnections",
-      "GlobRemediation",
-      "Linux.Applications.WgetHSTS",
-      "Linux.Collection.Autoruns",
-      "Linux.Collection.BrowserExtensions",
-      "Linux.Collection.BrowserExtensions",
-      "Linux.Collection.BrowserExtensions",
-      "Linux.Collection.BrowserHistory",
-      "Linux.Collection.BrowserHistory",
-      "Linux.Collection.DBConfig",
-      "Linux.Collection.HistoryFiles",
-      "Linux.Collection.NetworkConfig",
-      "Linux.Collection.SysConfig",
-      "Linux.Collection.SysLogs",
-      "Linux.Collection.UserConfig",
-      "Linux.Event.Network.Nethogs",
-      "Linux.Forensics.ProcFD",
-      "Linux.Forensics.RecentlyUsed",
-      "linux.kunai",
-      "Linux.Network.Nethogs",
-      "Linux.Network.NM.Connections",
-      "Linux.Sysinternals.SysmonEvent",
-      "MacOS.Applications.Cache",
-      "MacOS.System.Man",
-      "modinfo",
-      "Notebooks.Admin.Flows",
-      "Onenote",
-      "PrefetchHunter",
-      "PrefetchHunter",
-      "PrintSpoolerRemediation",
-      "RecordIDCheck",
-      "Server.Hunt.Comparison",
-      "Server.Notification.Mastodon",
-      "SmoothOperator",
-      "TabState",
-      "Timestomp",
-      "UnattendXML",
-      "VscodeTasks",
-      "Windows.Applications.FreeFileSync",
-      "Windows.Applications.GoodSync",
-      "Windows.Detection.Keylogger",
-      "Windows.Detection.PipeHunter",
-      "Windows.ETW.DNSOfflineCollector",
-      "Windows.EventLogs.RDPClientActivity",
-      "Windows.EventLogs.WonkaVision",
-      "Windows.Forensics.AdvancedPortScanner",
-      "Windows.Forensics.AdvancedPortScanner",
-      "Windows.Forensics.AngryIPScanner",
-      "Windows.Forensics.SoftPerfectNetworkScanner",
-      "Windows.Forensics.SoftPerfectNetworkScanner",
-      "Windows.Hunter.Yara.LOLDrivers",
-      "Windows.Office.MRU",
-      "Windows.Registry.COMAutoApprovalList"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "netstat": {
-    "Name": "netstat",
-    "UsedByArtifacts": [
-      "Generic.Events.TrackNetworkConnections",
-      "Linux.Event.Network.Nethogs",
-      "Linux.Network.Nethogs",
-      "ProxyHunter"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "execve": {
-    "Name": "execve",
-    "UsedByArtifacts": [
-      "DefenderExclusion",
-      "Exchange.Windows.System.PowerShell.DetectResponder",
-      "Getcap",
-      "Linux.Event.Network.Nethogs",
-      "Linux.Network.Nethogs",
-      "Linux.Network.NM.Connections",
-      "Linux.Network.NM.Connections",
-      "Linux.Network.NM.Connections",
-      "MacOS.System.MountedDiskImages",
-      "PrintSpoolerRemediation",
-      "Windows.LastDomainUsers"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "strings": {
-    "Name": "strings",
-    "UsedByArtifacts": [
-      "Confluence_CVE_2023_22527",
-      "ConfluenceLogs",
-      "Detection.Application.CursedChrome",
-      "Linux.Carving.SSHLogs",
-      "Onenote",
-      "Qakbot",
-      "Windows.Detection.BruteRatel"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "sort": {
-    "Name": "sort",
-    "UsedByArtifacts": [
-      "Windows.LastDomainUsers"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "sh": {
-    "Name": "sh",
-    "UsedByArtifacts": [
-      "amsi",
-      "hash_run_keys",
-      "Linux.Carving.SSHLogs",
-      "Linux.System.BashLogout",
-      "MacOS.Logs.MacMonitor",
-      "MacOS.Network.Bluetooth",
-      "MacOS.Sys.BashHistory",
-      "MacOS.UnifiedLogHunter",
-      "MagicWeb",
-      "Server.Enrichment.MalwareBazaar",
-      "Splunk.Events.Clients",
-      "Windows.EventLogs.SysmonProcessEnriched",
-      "Windows.EventLogs.SysmonProcessEnriched",
-      "Windows.Generic.Internet.BlockAccess",
-      "Windows.Registry.NetshHelperDLLs",
-      "Windows.Ssh.AuthorizedKeys"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "7zip": {
-    "Name": "7zip",
-    "UsedByArtifacts": [
-      "Windows.Hunter.Yara.LOLDrivers"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "awk": {
-    "Name": "awk",
-    "UsedByArtifacts": [
-      "Windows.Hunter.Yara.LOLDrivers"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "tar": {
-    "Name": "tar",
-    "UsedByArtifacts": [
-      "BinaryVersion",
-      "bulkfile",
-      "BumbleBee",
-      "Confluence_CVE_2023_22527",
-      "ConfluenceLogs",
-      "DefenderConfig",
-      "DefenderQuarantineExtract",
-      "Detection.Application.CursedChrome",
-      "DetectRaptor",
-      "Exports",
-      "Generic.Detection.WebShells",
-      "Getcap",
-      "GlobRemediation",
-      "GlobRemediation",
-      "IdatLoader",
-      "KACE_SW_Process",
-      "Linux.Collection.Autoruns",
-      "Linux.Forensics.Targets",
-      "Linux.Forensics.Targets",
-      "Linux.Forensics.Targets",
-      "Linux.Forensics.Targets",
-      "Linux.Forensics.Targets",
-      "Linux.Forensics.Targets",
-      "Linux.Forensics.Targets",
-      "Linux.Forensics.Targets",
-      "Linux.Forensics.Targets",
-      "Linux.Forensics.Targets",
-      "Linux.Sys.APTHistory",
-      "MacOS.Logs.MacMonitor",
-      "MacOS.Sys.BashHistory",
-      "MacOS.Sys.BashHistory",
-      "MacroRaptor",
-      "MagicWeb",
-      "MagicWeb",
-      "ManageEngineLog",
-      "MsdtFollina",
-      "Ntdsutil",
-      "Ntdsutil",
-      "PowerEfficiencyDiagnostics",
-      "PrintNightmareMonitor",
-      "ProxyHunter",
-      "RegistryRemediation",
-      "RemoteIconForcedAuth",
-      "ScreenConnect",
-      "ScreenConnect",
-      "ScreenConnect",
-      "Server.Alerts.Monitor.IRIS",
-      "SmoothOperator",
-      "SmoothOperator",
-      "Splunk.Events.Clients",
-      "SquirrelWaffle",
-      "SSHYara",
-      "SysmonRegistry",
-      "SysmonTriage",
-      "TabState",
-      "TeamViewerLanguage",
-      "Termsrv",
-      "UnattendXML",
-      "USBYara",
-      "Windows.Applications.DefenderHistory",
-      "Windows.Detection.ISOMount",
-      "Windows.Detection.ISOMount",
-      "Windows.Detection.Keylogger",
-      "Windows.EventLogs.Aurora",
-      "Windows.EventLogs.LogonSessions",
-      "Windows.EventLogs.RemoteAccessVPN",
-      "Windows.EventLogs.RPCFirewall",
-      "Windows.EventLogs.WonkaVision",
-      "Windows.Events.TrackProcesses.UseExistingSysmonOnly",
-      "Windows.Forensics.Clipboard",
-      "Windows.Hunter.Yara.LOLDrivers",
-      "Windows.Hunter.Yara.LOLDrivers",
-      "Windows.Registry.Bulk.ComputerName",
-      "Windows.Sys.LoggedInUsers"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "yara": {
-    "Name": "yara",
-    "UsedByArtifacts": [
-      "BumbleBee",
-      "Confluence_CVE_2023_22527",
-      "Detection.Application.CursedChrome",
-      "Detection.Application.CursedChrome",
-      "EffluenceWebshell",
-      "FindFlows",
-      "Generic.Detection.WebShells",
-      "IdatLoader",
-      "IdatLoader",
-      "Linux.Carving.SSHLogs",
-      "log4jRCE",
-      "ManageEngineLog",
-      "MoveIt",
-      "MsdtFollina",
-      "Onenote",
-      "Qakbot",
-      "SmoothOperator",
-      "SmoothOperator",
-      "SquirrelWaffle",
-      "SSHYara",
-      "SysAid",
-      "TeamViewerLanguage",
-      "Termsrv",
-      "Termsrv",
-      "USBYara",
-      "USBYara",
-      "Windows.Detection.BruteRatel",
-      "Windows.Detection.BruteRatel",
-      "Windows.Hunter.Yara.LOLDrivers",
-      "Windows.Hunter.Yara.LOLDrivers",
-      "Windows.Hunter.Yara.LOLDrivers",
-      "WS_FTP"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  },
-  "zip": {
-    "Name": "zip",
-    "UsedByArtifacts": [
-      "DetectRaptor",
-      "Linux.Sys.APTHistory",
-      "Server.Utils.BackupAzure",
-      "Windows.Hunter.Yara.LOLDrivers",
-      "Windows.Hunter.Yara.LOLDrivers"
-    ],
-    "Version": "Unknown",
-    "LocalPath": null,
-    "ExpectedHash": "",
-    "Url": "",
-    "DownloadStatus": "Pending"
-  }
+    "Unknown_Tool_1211842900":  {
+                                    "Version":  "Unknown",
+                                    "UsedByArtifacts":  [
+                                                            "Windows.Applications.DIEC"
+                                                        ],
+                                    "LocalPath":  null,
+                                    "Url":  "",
+                                    "Name":  "Unknown_Tool_1211842900",
+                                    "DownloadStatus":  "Pending",
+                                    "ExpectedHash":  ""
+                                },
+    "TCGLogTools":  {
+                        "Version":  "Unknown",
+                        "UsedByArtifacts":  [
+                                                "Windows.Forensics.UEFI.BootApplication"
+                                            ],
+                        "LocalPath":  null,
+                        "Url":  "https://raw.githubusercontent.com/mattifestation/TCGLogTools/master/TCGLogTools.psm1",
+                        "Name":  "TCGLogTools",
+                        "DownloadStatus":  "Pending",
+                        "ExpectedHash":  ""
+                    },
+    "Unknown_Tool_790711330":  {
+                                   "Version":  "Unknown",
+                                   "UsedByArtifacts":  [
+                                                           "Windows.Applications.DIEC"
+                                                       ],
+                                   "LocalPath":  null,
+                                   "Url":  "",
+                                   "Name":  "Unknown_Tool_790711330",
+                                   "DownloadStatus":  "Pending",
+                                   "ExpectedHash":  ""
+                               },
+    "Unknown_Tool_856065042":  {
+                                   "Version":  "Unknown",
+                                   "UsedByArtifacts":  [
+                                                           "CyberTriage.Collector"
+                                                       ],
+                                   "LocalPath":  null,
+                                   "Url":  "",
+                                   "Name":  "Unknown_Tool_856065042",
+                                   "DownloadStatus":  "Pending",
+                                   "ExpectedHash":  ""
+                               },
+    "Unknown_Tool_1637608072":  {
+                                    "Version":  "Unknown",
+                                    "UsedByArtifacts":  [
+                                                            "Windows.Applications.DIEC"
+                                                        ],
+                                    "LocalPath":  null,
+                                    "Url":  "",
+                                    "Name":  "Unknown_Tool_1637608072",
+                                    "DownloadStatus":  "Pending",
+                                    "ExpectedHash":  ""
+                                },
+    "DIEC":  {
+                 "Version":  "Unknown",
+                 "UsedByArtifacts":  [
+                                         "Windows.Applications.DIEC"
+                                     ],
+                 "LocalPath":  null,
+                 "Url":  "https://github.com/horsicq/DIE-engine/releases/download/3.03b/die_win64_portable_3.03.zip",
+                 "Name":  "DIEC",
+                 "DownloadStatus":  "Pending",
+                 "ExpectedHash":  ""
+             },
+    "deploy_cyber_triage_collector":  {
+                                          "Version":  "Unknown",
+                                          "UsedByArtifacts":  [
+                                                                  "CyberTriage.Collector"
+                                                              ],
+                                          "LocalPath":  null,
+                                          "Url":  "",
+                                          "Name":  "deploy_cyber_triage_collector",
+                                          "DownloadStatus":  "Pending",
+                                          "ExpectedHash":  ""
+                                      },
+    "Unknown_Tool_1162344232":  {
+                                    "Version":  "Unknown",
+                                    "UsedByArtifacts":  [
+                                                            "Windows.Applications.DIEC"
+                                                        ],
+                                    "LocalPath":  null,
+                                    "Url":  "",
+                                    "Name":  "Unknown_Tool_1162344232",
+                                    "DownloadStatus":  "Pending",
+                                    "ExpectedHash":  ""
+                                },
+    "Unknown_Tool_1027632187":  {
+                                    "Version":  "Unknown",
+                                    "UsedByArtifacts":  [
+                                                            "Windows.Forensics.UEFI.BootApplication"
+                                                        ],
+                                    "LocalPath":  null,
+                                    "Url":  "",
+                                    "Name":  "Unknown_Tool_1027632187",
+                                    "DownloadStatus":  "Pending",
+                                    "ExpectedHash":  ""
+                                },
+    "TCGLogToolsExecution":  {
+                                 "Version":  "Unknown",
+                                 "UsedByArtifacts":  [
+                                                         "Windows.Forensics.UEFI.BootApplication"
+                                                     ],
+                                 "LocalPath":  null,
+                                 "Url":  "https://gist.githubusercontent.com/mgreen27/d7bd2480069f714f31296d5f38fe7f0c/raw/708002dd858a38e8e8885e926c3016f80057a7d4/Run-TCGLogTools.ps1",
+                                 "Name":  "TCGLogToolsExecution",
+                                 "DownloadStatus":  "Pending",
+                                 "ExpectedHash":  ""
+                             },
+    "Unknown_Tool_1912093305":  {
+                                    "Version":  "Unknown",
+                                    "UsedByArtifacts":  [
+                                                            "Windows.Applications.DIEC"
+                                                        ],
+                                    "LocalPath":  null,
+                                    "Url":  "",
+                                    "Name":  "Unknown_Tool_1912093305",
+                                    "DownloadStatus":  "Pending",
+                                    "ExpectedHash":  ""
+                                }
 }

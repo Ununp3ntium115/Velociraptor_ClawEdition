@@ -1,0 +1,421 @@
+{
+  "version": "1.0.0",
+  "description": "Zero-Trust Security Policies for Velociraptor DFIR Infrastructure",
+  "lastUpdated": "2025-08-20",
+  "frameworks": {
+    "NIST": {
+      "description": "NIST Cybersecurity Framework Zero-Trust Implementation",
+      "version": "1.1",
+      "categories": {
+        "Identify": {
+          "policies": {
+            "asset_management": {
+              "name": "Asset Identification and Management",
+              "description": "Comprehensive identification and management of all DFIR assets",
+              "requirements": [
+                "All Velociraptor servers must be inventoried and classified",
+                "Evidence storage systems must be tagged with security labels",
+                "Network segments must be documented with trust boundaries",
+                "User accounts must be associated with specific roles and access levels"
+              ],
+              "controls": [
+                "Automated asset discovery and classification",
+                "Regular asset inventory audits",
+                "Asset lifecycle management",
+                "Security labeling and data classification"
+              ]
+            },
+            "governance": {
+              "name": "Information Security Governance",
+              "description": "Governance framework for zero-trust DFIR operations",
+              "requirements": [
+                "Zero-trust policies must be formally documented and approved",
+                "Incident response procedures must incorporate zero-trust principles",
+                "Forensic chain of custody must be maintained at all times",
+                "Regular security assessments must be conducted"
+              ]
+            }
+          }
+        },
+        "Protect": {
+          "policies": {
+            "access_control": {
+              "name": "Identity and Access Management",
+              "description": "Zero-trust access controls for DFIR operations",
+              "requirements": [
+                "All access must be explicitly granted based on verified identity",
+                "Multi-factor authentication required for all administrative access",
+                "Least privilege principle enforced for all user accounts",
+                "Session-based access with automatic timeout",
+                "Continuous authentication and verification"
+              ],
+              "controls": [
+                "Role-based access control (RBAC)",
+                "Attribute-based access control (ABAC)",
+                "Just-in-time (JIT) access",
+                "Privileged access management (PAM)",
+                "Continuous authentication"
+              ],
+              "roles": {
+                "DFIRAnalyst": {
+                  "permissions": [
+                    "velociraptor:read",
+                    "artifacts:execute",
+                    "data:analyze",
+                    "reports:generate",
+                    "timeline:access"
+                  ],
+                  "restrictions": [
+                    "no_system_modification",
+                    "evidence_read_only",
+                    "limited_network_access"
+                  ]
+                },
+                "ForensicInvestigator": {
+                  "permissions": [
+                    "velociraptor:read_write",
+                    "evidence:full_access",
+                    "tools:forensic_suite",
+                    "artifacts:execute",
+                    "data:analyze_modify",
+                    "reports:generate_sign"
+                  ],
+                  "restrictions": [
+                    "audit_all_actions",
+                    "chain_of_custody_required",
+                    "witness_for_critical_operations"
+                  ]
+                },
+                "IncidentResponder": {
+                  "permissions": [
+                    "velociraptor:read",
+                    "incident:manage",
+                    "threat:hunt",
+                    "response:execute",
+                    "containment:implement"
+                  ],
+                  "restrictions": [
+                    "time_limited_elevation",
+                    "approval_required_containment",
+                    "real_time_monitoring"
+                  ]
+                },
+                "Administrator": {
+                  "permissions": [
+                    "velociraptor:admin",
+                    "system:configure",
+                    "users:manage",
+                    "policies:configure",
+                    "audit:access"
+                  ],
+                  "restrictions": [
+                    "dual_control_required",
+                    "all_actions_logged",
+                    "regular_recertification"
+                  ]
+                }
+              }
+            },
+            "encryption": {
+              "name": "Data Protection and Encryption",
+              "description": "Comprehensive encryption framework for DFIR data protection",
+              "requirements": [
+                "All data in transit must be encrypted using TLS 1.3 or higher",
+                "All data at rest must be encrypted using AES-256 or stronger",
+                "Encryption keys must be managed through secure key management system",
+                "Perfect forward secrecy must be implemented for all communications",
+                "Forensic data must maintain integrity through cryptographic hashing"
+              ],
+              "algorithms": {
+                "symmetric": {
+                  "approved": ["AES-256-GCM", "ChaCha20-Poly1305"],
+                  "deprecated": ["AES-128", "3DES"],
+                  "prohibited": ["DES", "RC4"]
+                },
+                "asymmetric": {
+                  "approved": ["RSA-4096", "ECDSA-P384", "Ed25519"],
+                  "minimum": ["RSA-2048", "ECDSA-P256"],
+                  "prohibited": ["RSA-1024", "DSA"]
+                },
+                "hashing": {
+                  "approved": ["SHA-384", "SHA-512", "SHA3-384", "BLAKE2"],
+                  "acceptable": ["SHA-256"],
+                  "prohibited": ["SHA-1", "MD5"]
+                }
+              }
+            },
+            "network_security": {
+              "name": "Network Security and Segmentation",
+              "description": "Zero-trust network security for DFIR infrastructure",
+              "requirements": [
+                "Network segmentation with micro-perimeters around critical assets",
+                "All network traffic must be inspected and authenticated",
+                "Default deny network policies with explicit allow rules",
+                "Network access controls based on device trust and user identity",
+                "Continuous monitoring of all network communications"
+              ],
+              "segments": {
+                "management": {
+                  "description": "Velociraptor management and administration",
+                  "trust_level": "high",
+                  "access_controls": ["certificate_auth", "mfa_required", "privileged_access"]
+                },
+                "evidence_storage": {
+                  "description": "Forensic evidence storage and processing",
+                  "trust_level": "maximum",
+                  "access_controls": ["forensic_grade_auth", "chain_of_custody", "integrity_monitoring"]
+                },
+                "analysis": {
+                  "description": "Data analysis and investigation workstations",
+                  "trust_level": "high",
+                  "access_controls": ["analyst_credentials", "time_limited", "session_monitoring"]
+                },
+                "collection": {
+                  "description": "Evidence collection and endpoint monitoring",
+                  "trust_level": "medium",
+                  "access_controls": ["device_auth", "encrypted_comms", "limited_scope"]
+                }
+              }
+            }
+          }
+        },
+        "Detect": {
+          "policies": {
+            "continuous_monitoring": {
+              "name": "Continuous Security Monitoring",
+              "description": "Real-time security monitoring and threat detection",
+              "requirements": [
+                "All user activities must be continuously monitored",
+                "Behavioral analysis must detect anomalies in real-time",
+                "Security events must be correlated across all systems",
+                "Threat intelligence must be integrated into detection systems",
+                "Automated response must be triggered for critical threats"
+              ],
+              "monitoring_scope": [
+                "user_authentication_events",
+                "privilege_escalation_attempts",
+                "data_access_patterns",
+                "network_traffic_analysis",
+                "system_configuration_changes",
+                "forensic_tool_usage",
+                "evidence_chain_of_custody"
+              ]
+            },
+            "anomaly_detection": {
+              "name": "Behavioral Anomaly Detection",
+              "description": "AI-powered behavioral analysis for threat detection",
+              "baselines": {
+                "user_behavior": [
+                  "login_patterns",
+                  "access_patterns",
+                  "tool_usage",
+                  "data_handling",
+                  "geographic_location"
+                ],
+                "system_behavior": [
+                  "resource_utilization",
+                  "network_traffic",
+                  "process_execution",
+                  "file_access_patterns"
+                ]
+              }
+            }
+          }
+        },
+        "Respond": {
+          "policies": {
+            "incident_response": {
+              "name": "Zero-Trust Incident Response",
+              "description": "Incident response procedures with zero-trust principles",
+              "phases": {
+                "preparation": [
+                  "Zero-trust incident response playbooks",
+                  "Automated containment procedures",
+                  "Secure communication channels",
+                  "Evidence preservation protocols"
+                ],
+                "detection_analysis": [
+                  "Real-time threat detection",
+                  "Automated triage and classification",
+                  "Threat intelligence correlation",
+                  "Impact assessment"
+                ],
+                "containment_eradication": [
+                  "Automated containment actions",
+                  "Network isolation procedures",
+                  "Access revocation protocols",
+                  "System quarantine procedures"
+                ],
+                "recovery": [
+                  "Secure system restoration",
+                  "Access re-certification",
+                  "Trust re-establishment",
+                  "Continuous monitoring"
+                ]
+              }
+            }
+          }
+        },
+        "Recover": {
+          "policies": {
+            "business_continuity": {
+              "name": "Zero-Trust Business Continuity",
+              "description": "Business continuity with zero-trust security",
+              "requirements": [
+                "Backup systems must maintain zero-trust principles",
+                "Recovery procedures must re-establish trust boundaries",
+                "Access controls must be re-certified after recovery",
+                "Forensic integrity must be maintained during recovery"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "CIS": {
+      "description": "CIS Controls Zero-Trust Implementation",
+      "version": "8.0",
+      "controls": {
+        "control_1": {
+          "name": "Inventory and Control of Enterprise Assets",
+          "zero_trust_mapping": "Asset identification and trust assignment"
+        },
+        "control_3": {
+          "name": "Data Protection",
+          "zero_trust_mapping": "Data-centric security and encryption"
+        },
+        "control_6": {
+          "name": "Access Control Management",
+          "zero_trust_mapping": "Identity and access management"
+        },
+        "control_8": {
+          "name": "Audit Log Management",
+          "zero_trust_mapping": "Continuous monitoring and verification"
+        }
+      }
+    },
+    "DISA_STIG": {
+      "description": "DISA STIG Zero-Trust Security Requirements",
+      "classification": "FOUO",
+      "requirements": {
+        "authentication": {
+          "multi_factor": "mandatory",
+          "certificate_based": "required_for_privileged",
+          "continuous_verification": "enabled"
+        },
+        "encryption": {
+          "fips_140_2": "level_3_minimum",
+          "key_management": "hardware_security_module",
+          "algorithm_approval": "nsa_suite_b"
+        },
+        "auditing": {
+          "comprehensive_logging": "all_events",
+          "log_integrity": "cryptographic_protection",
+          "retention": "minimum_7_years"
+        }
+      }
+    }
+  },
+  "implementation_templates": {
+    "basic_deployment": {
+      "description": "Basic zero-trust deployment for small DFIR teams",
+      "components": [
+        "identity_management",
+        "network_segmentation",
+        "encryption_basic",
+        "monitoring_essential"
+      ],
+      "minimum_requirements": {
+        "users": "1-10",
+        "systems": "1-5",
+        "complexity": "low"
+      }
+    },
+    "standard_deployment": {
+      "description": "Standard zero-trust deployment for medium DFIR operations",
+      "components": [
+        "identity_management",
+        "multi_factor_authentication",
+        "network_microsegmentation",
+        "encryption_enhanced",
+        "threat_detection",
+        "continuous_monitoring"
+      ],
+      "minimum_requirements": {
+        "users": "10-100",
+        "systems": "5-50",
+        "complexity": "medium"
+      }
+    },
+    "enterprise_deployment": {
+      "description": "Enterprise zero-trust deployment for large DFIR organizations",
+      "components": [
+        "identity_management",
+        "certificate_based_authentication",
+        "network_microsegmentation",
+        "encryption_forensic_grade",
+        "advanced_threat_detection",
+        "behavioral_analysis",
+        "automated_response",
+        "compliance_reporting"
+      ],
+      "minimum_requirements": {
+        "users": "100+",
+        "systems": "50+",
+        "complexity": "high"
+      }
+    },
+    "forensic_grade": {
+      "description": "Forensic-grade zero-trust for high-assurance DFIR operations",
+      "components": [
+        "hardware_security_modules",
+        "cryptographic_authentication",
+        "air_gapped_networks",
+        "forensic_encryption",
+        "chain_of_custody_automation",
+        "real_time_integrity_monitoring",
+        "automated_evidence_preservation"
+      ],
+      "compliance": [
+        "NIST_800-53",
+        "ISO_27037",
+        "SWGDE_guidelines",
+        "ACPO_principles"
+      ]
+    }
+  },
+  "compliance_mappings": {
+    "SOX": {
+      "requirements": [
+        "Access controls for financial data",
+        "Audit trail integrity",
+        "Segregation of duties",
+        "Regular access reviews"
+      ]
+    },
+    "HIPAA": {
+      "requirements": [
+        "PHI access controls",
+        "Encryption of sensitive data",
+        "Audit logging",
+        "Access certification"
+      ]
+    },
+    "PCI_DSS": {
+      "requirements": [
+        "Cardholder data protection",
+        "Strong access controls",
+        "Network segmentation",
+        "Regular security testing"
+      ]
+    },
+    "GDPR": {
+      "requirements": [
+        "Data protection by design",
+        "Privacy impact assessments",
+        "Right to be forgotten",
+        "Data breach notification"
+      ]
+    }
+  }
+}

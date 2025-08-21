@@ -1,0 +1,29 @@
+﻿{
+    "SystemInfo":  {
+                       "PowerShellVersion":  "5.1.26100.4768",
+                       "OSVersion":  "Microsoft Windows NT 10.0.26100.0",
+                       "ProcessorCount":  8,
+                       "TotalMemoryGB":  31.8
+                   },
+    "TestDuration":  2.37,
+    "Tests":  {
+                  "PowerShellExecution":  {
+                                              "SuccessRate":  100,
+                                              "AverageMs":  16.33,
+                                              "MaxMs":  37,
+                                              "MinMs":  6
+                                          },
+                  "NetworkConnectivity":  {
+                                              "SuccessRate":  100,
+                                              "AverageMs":  537.33,
+                                              "MaxMs":  1505,
+                                              "MinMs":  53
+                                          },
+                  "FileIO":  {
+                                 "SuccessRate":  100,
+                                 "AverageMs":  15.33,
+                                 "MaxMs":  35,
+                                 "MinMs":  5
+                             }
+              }
+}

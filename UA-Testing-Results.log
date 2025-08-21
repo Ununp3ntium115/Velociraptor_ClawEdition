@@ -1,0 +1,341 @@
+[2025-08-20 13:33:34] [INFO] Starting Comprehensive UA Testing - Scope: All
+[2025-08-20 13:33:35] [INFO] Output Format: Console
+[2025-08-20 13:33:35] [INFO] Log Path: .\UA-Testing-Results.log
+[2025-08-20 13:33:35] [INFO] === TESTING CORE DEPLOYMENT SCRIPTS ===
+[2025-08-20 13:33:35] [INFO] Testing core script: Deploy_Velociraptor_Standalone.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Standalone.ps1
+[2025-08-20 13:33:35] [INFO] Testing required functions: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Standalone.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Standalone.ps1
+[2025-08-20 13:33:35] [INFO] Testing deployment script: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Standalone.ps1
+[2025-08-20 13:33:35] [INFO] Testing core script: Deploy_Velociraptor_Server.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Server.ps1
+[2025-08-20 13:33:35] [INFO] Testing required functions: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Server.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Server.ps1
+[2025-08-20 13:33:35] [INFO] Testing deployment script: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Server.ps1
+[2025-08-20 13:33:35] [INFO] Testing core script: Deploy_Velociraptor_Clean.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Clean.ps1
+[2025-08-20 13:33:35] [INFO] Testing required functions: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Clean.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Clean.ps1
+[2025-08-20 13:33:35] [INFO] Testing deployment script: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Clean.ps1
+[2025-08-20 13:33:35] [INFO] Testing core script: Deploy_Velociraptor_Fresh.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Fresh.ps1
+[2025-08-20 13:33:35] [INFO] Testing required functions: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Fresh.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Fresh.ps1
+[2025-08-20 13:33:35] [INFO] Testing deployment script: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Deploy_Velociraptor_Fresh.ps1
+[2025-08-20 13:33:35] [INFO] === TESTING GUI SCRIPTS ===
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Enhanced-Package-GUI-Fixed.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Enhanced-Package-GUI-Fixed.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Enhanced-Package-GUI-Fixed.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Enhanced-Package-GUI-Fixed.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Enhanced-Package-GUI.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Enhanced-Package-GUI.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Enhanced-Package-GUI.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Enhanced-Package-GUI.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Fix-GUI-Critical-Issues.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Fix-GUI-Critical-Issues.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Fix-GUI-Critical-Issues.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Fix-GUI-Critical-Issues.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Fix-GUIDeploymentStep.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Fix-GUIDeploymentStep.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Fix-GUIDeploymentStep.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Fix-GUIDeploymentStep.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Interactive-GUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Interactive-GUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Interactive-GUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Interactive-GUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Test-GUI-Comprehensive.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUI-Comprehensive.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUI-Comprehensive.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUI-Comprehensive.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: test-gui-syntax.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\test-gui-syntax.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\test-gui-syntax.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\test-gui-syntax.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Test-GUIBackColorFix.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUIBackColorFix.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUIBackColorFix.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUIBackColorFix.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Test-GUIFixes.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUIFixes.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUIFixes.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUIFixes.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Test-GUILayout.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUILayout.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUILayout.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUILayout.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Test-GUILogic.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUILogic.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUILogic.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUILogic.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Test-GUISyntax.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUISyntax.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUISyntax.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUISyntax.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: Test-IncidentResponseGUI.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-IncidentResponseGUI.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-IncidentResponseGUI.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-IncidentResponseGUI.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: VelociraptorGUI-Safe.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Safe.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Safe.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Safe.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: ForceGUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\ForceGUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\ForceGUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\ForceGUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: FreshGUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\FreshGUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\FreshGUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\FreshGUI-Test.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: IncidentResponseGUI-Working.ps1
+[2025-08-20 13:33:35] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\IncidentResponseGUI-Working.ps1
+[2025-08-20 13:33:35] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\IncidentResponseGUI-Working.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\IncidentResponseGUI-Working.ps1
+[2025-08-20 13:33:35] [INFO] Testing GUI script: SimpleGUI-Test.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\SimpleGUI-Test.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\SimpleGUI-Test.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\SimpleGUI-Test.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI script: VelociraptorGUI-Bulletproof.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Bulletproof.ps1
+[2025-08-20 13:33:36] [ERROR] SYNTAX ERROR in D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Bulletproof.ps1: Exception calling "Tokenize" with "2" argument(s): "Cannot process argument because the value of argument "script" is null. Change the value of argument "script" to a non-null value."
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Bulletproof.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Bulletproof.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI script: VelociraptorGUI-Fixed.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Fixed.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Fixed.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Fixed.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI script: VelociraptorGUI-Test.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Test.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Test.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Test.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI script: VelociraptorGUI-Working.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Working.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Working.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Working.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI script: Test-GUI-Download-Functionality.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUI-Download-Functionality.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUI-Download-Functionality.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Test-GUI-Download-Functionality.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI script: Demo-GUI-Functionality.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Demo-GUI-Functionality.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Demo-GUI-Functionality.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\Demo-GUI-Functionality.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI script: VelociraptorGUI-Installation.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Installation.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Installation.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-Installation.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI script: IncidentResponseGUI-Installation.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\IncidentResponseGUI-Installation.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\IncidentResponseGUI-Installation.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\IncidentResponseGUI-Installation.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI script: VelociraptorGUI-InstallClean.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-InstallClean.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-InstallClean.ps1
+[2025-08-20 13:33:36] [INFO] Testing GUI components: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\VelociraptorGUI-InstallClean.ps1
+[2025-08-20 13:33:36] [INFO] === TESTING MODULE FILES ===
+[2025-08-20 13:33:36] [INFO] Testing module: VelociraptorDeployment.psm1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\VelociraptorDeployment.psm1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\VelociraptorDeployment.psm1
+[2025-08-20 13:33:36] [INFO] Testing module structure: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\VelociraptorDeployment.psm1
+[2025-08-20 13:33:36] [INFO] Testing module: VelociraptorDeployment.psd1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\VelociraptorDeployment.psd1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\VelociraptorDeployment.psd1
+[2025-08-20 13:33:36] [INFO] Testing module: Add-VelociraptorFirewallRule.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Add-VelociraptorFirewallRule.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Add-VelociraptorFirewallRule.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Backup-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Backup-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Backup-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Deploy-VelociraptorEdge.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Deploy-VelociraptorEdge.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Deploy-VelociraptorEdge.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Deploy-VelociraptorServerless.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Deploy-VelociraptorServerless.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Deploy-VelociraptorServerless.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Enable-VelociraptorHPC.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Enable-VelociraptorHPC.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Enable-VelociraptorHPC.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Export-ToolMapping-Simple.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Export-ToolMapping-Simple.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Export-ToolMapping-Simple.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Invoke-VelociraptorAPI.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Invoke-VelociraptorAPI.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Invoke-VelociraptorAPI.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Invoke-VelociraptorDownload.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Invoke-VelociraptorDownload.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Invoke-VelociraptorDownload.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: New-ArtifactToolManager.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\New-ArtifactToolManager.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\New-ArtifactToolManager.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: New-IntelligentConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\New-IntelligentConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\New-IntelligentConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Read-VelociraptorSecureInput.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Read-VelociraptorSecureInput.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Read-VelociraptorSecureInput.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Restore-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Restore-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Restore-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Set-VelociraptorSecurityHardening.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Set-VelociraptorSecurityHardening.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Set-VelociraptorSecurityHardening.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Test-VelociraptorAdminPrivileges.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Test-VelociraptorAdminPrivileges.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Test-VelociraptorAdminPrivileges.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Test-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Test-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Test-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Test-VelociraptorHealth.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Test-VelociraptorHealth.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Test-VelociraptorHealth.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Wait-VelociraptorTcpPort.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Wait-VelociraptorTcpPort.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Wait-VelociraptorTcpPort.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: New-VelociraptorConfigurationTemplate.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\New-VelociraptorConfigurationTemplate.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\New-VelociraptorConfigurationTemplate.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Start-AutomatedTroubleshooting.ps1
+[2025-08-20 13:33:36] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Start-AutomatedTroubleshooting.ps1
+[2025-08-20 13:33:36] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Start-AutomatedTroubleshooting.ps1
+[2025-08-20 13:33:36] [INFO] Testing module: Start-PredictiveAnalytics.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Start-PredictiveAnalytics.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Start-PredictiveAnalytics.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: Test-VelociraptorInternetConnection.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Test-VelociraptorInternetConnection.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Test-VelociraptorInternetConnection.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: New-ConfigurationEngine.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\New-ConfigurationEngine.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\New-ConfigurationEngine.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: Get-IntelligentRecommendations.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Get-IntelligentRecommendations.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Get-IntelligentRecommendations.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: Get-EnvironmentAnalysis.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Get-EnvironmentAnalysis.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Get-EnvironmentAnalysis.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: Write-VelociraptorLog.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Write-VelociraptorLog.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Write-VelociraptorLog.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: Read-VelociraptorUserInput.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Read-VelociraptorUserInput.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Read-VelociraptorUserInput.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: Export-ToolMapping.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Export-ToolMapping.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Export-ToolMapping.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: New-IncidentResponsePackage.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\New-IncidentResponsePackage.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\New-IncidentResponsePackage.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: Get-AutoDetectedSystemSpecs.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Get-AutoDetectedSystemSpecs.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Get-AutoDetectedSystemSpecs.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: Manage-VelociraptorCollections.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Manage-VelociraptorCollections.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Manage-VelociraptorCollections.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: Get-VelociraptorLatestRelease.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Get-VelociraptorLatestRelease.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Get-VelociraptorLatestRelease.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: Start-AdvancedMonitoring.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Start-AdvancedMonitoring.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorDeployment\functions\Start-AdvancedMonitoring.ps1
+[2025-08-20 13:33:37] [INFO] Testing module: VelociraptorGovernance.psd1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorGovernance\VelociraptorGovernance.psd1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorGovernance\VelociraptorGovernance.psd1
+[2025-08-20 13:33:37] [INFO] Testing module: VelociraptorGovernance.psm1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorGovernance\VelociraptorGovernance.psm1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorGovernance\VelociraptorGovernance.psm1
+[2025-08-20 13:33:37] [INFO] Testing module structure: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\modules\VelociraptorGovernance\VelociraptorGovernance.psm1
+[2025-08-20 13:33:37] [INFO] === TESTING INCIDENT PACKAGE SCRIPTS ===
+[2025-08-20 13:33:37] [INFO] Testing incident script: Deploy-APT.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\Deploy-APT.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\Deploy-APT.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Deploy_Velociraptor_Server.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\Deploy_Velociraptor_Server.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\Deploy_Velociraptor_Server.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Deploy_Velociraptor_Standalone.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\Deploy_Velociraptor_Standalone.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\Deploy_Velociraptor_Standalone.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: IncidentResponseGUI.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\gui\IncidentResponseGUI.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\gui\IncidentResponseGUI.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: VelociraptorGUI-Original-Backup.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\gui\VelociraptorGUI-Original-Backup.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\gui\VelociraptorGUI-Original-Backup.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: VelociraptorGUI.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\gui\VelociraptorGUI.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\gui\VelociraptorGUI.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Add-VelociraptorFirewallRule.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Add-VelociraptorFirewallRule.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Add-VelociraptorFirewallRule.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Backup-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Backup-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Backup-VelociraptorConfiguration.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Deploy-VelociraptorEdge.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Deploy-VelociraptorEdge.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Deploy-VelociraptorEdge.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Deploy-VelociraptorServerless.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Deploy-VelociraptorServerless.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Deploy-VelociraptorServerless.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Enable-VelociraptorHPC.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Enable-VelociraptorHPC.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Enable-VelociraptorHPC.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Export-ToolMapping-Simple.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Export-ToolMapping-Simple.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Export-ToolMapping-Simple.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Get-VelociraptorLatestRelease.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Get-VelociraptorLatestRelease.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Get-VelociraptorLatestRelease.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Invoke-VelociraptorAPI.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Invoke-VelociraptorAPI.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Invoke-VelociraptorAPI.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Invoke-VelociraptorDownload.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Invoke-VelociraptorDownload.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Invoke-VelociraptorDownload.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: Manage-VelociraptorCollections.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Manage-VelociraptorCollections.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Manage-VelociraptorCollections.ps1
+[2025-08-20 13:33:37] [INFO] Testing incident script: New-ArtifactToolManager.ps1
+[2025-08-20 13:33:37] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\New-ArtifactToolManager.ps1
+[2025-08-20 13:33:37] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\New-ArtifactToolManager.ps1
+[2025-08-20 13:33:38] [INFO] Testing incident script: New-IntelligentConfiguration.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\New-IntelligentConfiguration.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\New-IntelligentConfiguration.ps1
+[2025-08-20 13:33:38] [INFO] Testing incident script: New-VelociraptorConfigurationTemplate.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\New-VelociraptorConfigurationTemplate.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\New-VelociraptorConfigurationTemplate.ps1
+[2025-08-20 13:33:38] [INFO] Testing incident script: Read-VelociraptorSecureInput.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Read-VelociraptorSecureInput.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\incident-packages\APT-Package\modules\VelociraptorDeployment\functions\Read-VelociraptorSecureInput.ps1
+[2025-08-20 13:33:38] [INFO] === TESTING UTILITY SCRIPTS ===
+[2025-08-20 13:33:38] [INFO] Testing utility: Build-IncidentResponsePackages.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Build-IncidentResponsePackages.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Build-IncidentResponsePackages.ps1
+[2025-08-20 13:33:38] [INFO] Testing utility: Build-VelociraptorArtifactPackage.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Build-VelociraptorArtifactPackage.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Build-VelociraptorArtifactPackage.ps1
+[2025-08-20 13:33:38] [INFO] Testing utility: Discover-VelociraptorRepos.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Discover-VelociraptorRepos.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Discover-VelociraptorRepos.ps1
+[2025-08-20 13:33:38] [INFO] Testing utility: Fork-VelociraptorEcosystem.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Fork-VelociraptorEcosystem.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Fork-VelociraptorEcosystem.ps1
+[2025-08-20 13:33:38] [INFO] Testing utility: Publish-Release.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Publish-Release.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Publish-Release.ps1
+[2025-08-20 13:33:38] [INFO] Testing utility: Quick-CodeFix.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Quick-CodeFix.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Quick-CodeFix.ps1
+[2025-08-20 13:33:38] [INFO] Testing utility: Release-Pipeline.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Release-Pipeline.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Release-Pipeline.ps1
+[2025-08-20 13:33:38] [INFO] Testing utility: Test-CodeQuality.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Test-CodeQuality.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Test-CodeQuality.ps1
+[2025-08-20 13:33:38] [INFO] Testing utility: Build-ConsolidatedIncidentPackages.ps1
+[2025-08-20 13:33:38] [INFO] Testing PowerShell syntax: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Build-ConsolidatedIncidentPackages.ps1
+[2025-08-20 13:33:38] [INFO] Testing security patterns: D:\GitRepos\Velociraptor_scripts\Velociraptor_Setup_Scripts\scripts\Build-ConsolidatedIncidentPackages.ps1
+[2025-08-20 13:33:38] [INFO] === TESTING COMPLETE ===
+[2025-08-20 13:33:38] [INFO] Total Tests: 229
+[2025-08-20 13:33:38] [INFO] Passed: 211
+[2025-08-20 13:33:38] [ERROR] Failed: 15
+[2025-08-20 13:33:38] [WARNING] Warnings: 3
+[2025-08-20 13:33:38] [INFO] Skipped: 0
+[2025-08-20 13:33:38] [INFO] Duration: 3.5468393 seconds

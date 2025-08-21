@@ -1,0 +1,619 @@
+{
+  "Framework": "SOC2",
+  "Version": "2017",
+  "Description": "System and Organization Controls (SOC) 2 Trust Service Categories",
+  "TrustServiceCategories": ["Security", "Availability", "Processing Integrity", "Confidentiality", "Privacy"],
+  "ControlCategories": [
+    {
+      "CategoryId": "CC",
+      "CategoryName": "Common Criteria",
+      "Description": "Common criteria related to all trust service categories",
+      "Controls": [
+        {
+          "Id": "CC1.1",
+          "Title": "Control Environment - Integrity and Ethical Values",
+          "Description": "The entity demonstrates a commitment to integrity and ethical values.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Security", "Availability", "Processing Integrity", "Confidentiality", "Privacy"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "CodeOfConduct",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Code of conduct exists and is communicated"
+            },
+            {
+              "Name": "EthicalStandards",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Ethical standards are documented and enforced"
+            },
+            {
+              "Name": "IntegrityCommitment",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Management demonstrates commitment to integrity"
+            }
+          ],
+          "TestCriteria": [
+            "Verify code of conduct exists and is communicated",
+            "Verify ethical standards are documented",
+            "Verify management demonstrates commitment to integrity",
+            "Verify ethical violations are addressed appropriately"
+          ]
+        },
+        {
+          "Id": "CC1.2",
+          "Title": "Control Environment - Board Independence and Oversight",
+          "Description": "The board of directors demonstrates independence and exercises oversight responsibilities.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Security", "Availability", "Processing Integrity", "Confidentiality", "Privacy"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "BoardIndependence",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Board demonstrates independence"
+            },
+            {
+              "Name": "OversightResponsibilities",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Board exercises oversight responsibilities"
+            }
+          ],
+          "TestCriteria": [
+            "Verify board independence",
+            "Verify board oversight of internal controls",
+            "Verify board oversight of risk management"
+          ]
+        },
+        {
+          "Id": "CC2.1",
+          "Title": "Communication and Information - Internal Communication",
+          "Description": "The entity obtains or generates and uses relevant, quality information to support internal control.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Security", "Availability", "Processing Integrity", "Confidentiality", "Privacy"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "InformationQuality",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Quality information is used for internal control"
+            },
+            {
+              "Name": "CommunicationChannels",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Effective communication channels exist"
+            }
+          ],
+          "TestCriteria": [
+            "Verify quality information supports internal control",
+            "Verify communication channels are effective",
+            "Verify information is timely and relevant"
+          ]
+        },
+        {
+          "Id": "CC3.1",
+          "Title": "Risk Assessment - Risk Identification",
+          "Description": "The entity specifies objectives with sufficient clarity to enable identification of risks.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Security", "Availability", "Processing Integrity", "Confidentiality", "Privacy"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "ObjectiveClarity",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Objectives are specified with sufficient clarity"
+            },
+            {
+              "Name": "RiskIdentification",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Risks to objectives are identified"
+            }
+          ],
+          "TestCriteria": [
+            "Verify objectives are clearly specified",
+            "Verify risks to objectives are identified",
+            "Verify risk identification process is comprehensive"
+          ]
+        },
+        {
+          "Id": "CC4.1",
+          "Title": "Monitoring Activities - Ongoing and Separate Evaluations",
+          "Description": "The entity selects, develops, and performs ongoing and separate evaluations.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Security", "Availability", "Processing Integrity", "Confidentiality", "Privacy"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "OngoingEvaluations",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Ongoing evaluations are performed"
+            },
+            {
+              "Name": "SeparateEvaluations",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Separate evaluations are performed"
+            }
+          ],
+          "TestCriteria": [
+            "Verify ongoing evaluations are performed",
+            "Verify separate evaluations are conducted",
+            "Verify evaluation results are communicated"
+          ]
+        },
+        {
+          "Id": "CC5.1",
+          "Title": "Control Activities - Selection and Development of Control Activities",
+          "Description": "The entity selects and develops control activities that contribute to mitigation of risks.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Security", "Availability", "Processing Integrity", "Confidentiality", "Privacy"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "ControlActivities",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Control activities are selected and developed"
+            },
+            {
+              "Name": "RiskMitigation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Control activities mitigate identified risks"
+            }
+          ],
+          "TestCriteria": [
+            "Verify control activities are selected and developed",
+            "Verify control activities mitigate risks",
+            "Verify control activities are implemented effectively"
+          ]
+        },
+        {
+          "Id": "CC6.1",
+          "Title": "Logical and Physical Access Controls - Logical Access",
+          "Description": "The entity implements logical access security software and infrastructure to protect against threats.",
+          "TestType": "Technical",
+          "TrustServiceCategory": ["Security", "Confidentiality", "Privacy"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "LogicalAccessControls",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Logical access controls are implemented"
+            },
+            {
+              "Name": "AccessSecuritySoftware",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Access security software is implemented"
+            },
+            {
+              "Name": "ThreatProtection",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Protection against threats is implemented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify logical access controls are implemented",
+            "Verify access security software protects against threats",
+            "Verify unauthorized access is prevented",
+            "Verify access controls are reviewed and updated"
+          ]
+        },
+        {
+          "Id": "CC6.2",
+          "Title": "Logical and Physical Access Controls - User Authentication",
+          "Description": "Prior to issuing credentials, the entity registers and authorizes new users whose access is administered.",
+          "TestType": "Technical",
+          "TrustServiceCategory": ["Security", "Confidentiality", "Privacy"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "UserRegistration",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "User registration process exists"
+            },
+            {
+              "Name": "UserAuthorization",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "User authorization process exists"
+            },
+            {
+              "Name": "CredentialManagement",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Credential management is implemented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify user registration process exists",
+            "Verify users are authorized before credential issuance",
+            "Verify credential management is effective",
+            "Verify authentication mechanisms are secure"
+          ]
+        },
+        {
+          "Id": "CC6.3",
+          "Title": "Logical and Physical Access Controls - User Access Rights",
+          "Description": "The entity authorizes, modifies, or removes access to data, software, and system resources.",
+          "TestType": "Technical",
+          "TrustServiceCategory": ["Security", "Confidentiality", "Privacy"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "AccessAuthorization",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Access authorization process exists"
+            },
+            {
+              "Name": "AccessModification",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Access modification process exists"
+            },
+            {
+              "Name": "AccessRemoval",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Access removal process exists"
+            }
+          ],
+          "TestCriteria": [
+            "Verify access authorization is documented",
+            "Verify access modifications are authorized",
+            "Verify access removal is timely",
+            "Verify access rights are reviewed regularly"
+          ]
+        },
+        {
+          "Id": "CC7.1",
+          "Title": "System Operations - System Monitoring",
+          "Description": "The entity uses detection and monitoring procedures to identify security events.",
+          "TestType": "Technical",
+          "TrustServiceCategory": ["Security", "Availability"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "DetectionProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Detection procedures are implemented"
+            },
+            {
+              "Name": "MonitoringProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Monitoring procedures are implemented"
+            },
+            {
+              "Name": "SecurityEventIdentification",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Security events are identified"
+            }
+          ],
+          "TestCriteria": [
+            "Verify detection procedures are implemented",
+            "Verify monitoring procedures are effective",
+            "Verify security events are identified",
+            "Verify monitoring is continuous"
+          ]
+        },
+        {
+          "Id": "CC7.2",
+          "Title": "System Operations - System Security Incidents",
+          "Description": "The entity responds to identified security incidents by executing a defined incident response program.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Security", "Availability"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "IncidentResponseProgram",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Incident response program is defined"
+            },
+            {
+              "Name": "IncidentResponse",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Incident response procedures are executed"
+            }
+          ],
+          "TestCriteria": [
+            "Verify incident response program is defined",
+            "Verify incident response procedures are executed",
+            "Verify incidents are documented and analyzed",
+            "Verify lessons learned are incorporated"
+          ]
+        },
+        {
+          "Id": "CC8.1",
+          "Title": "Change Management - Configuration Management",
+          "Description": "The entity authorizes, designs, develops, configures, documents, tests, approves, and implements changes to infrastructure.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Security", "Availability", "Processing Integrity"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "ChangeAuthorization",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Changes are authorized"
+            },
+            {
+              "Name": "ChangeDocumentation",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Changes are documented"
+            },
+            {
+              "Name": "ChangeTesting",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Changes are tested"
+            }
+          ],
+          "TestCriteria": [
+            "Verify changes are authorized",
+            "Verify changes are documented",
+            "Verify changes are tested before implementation",
+            "Verify change approval process exists"
+          ]
+        }
+      ]
+    },
+    {
+      "CategoryId": "A",
+      "CategoryName": "Availability",
+      "Description": "Availability criteria related to system availability commitments",
+      "Controls": [
+        {
+          "Id": "A1.1",
+          "Title": "Availability - Performance Monitoring",
+          "Description": "The entity monitors system performance and evaluates whether the system is meeting availability commitments.",
+          "TestType": "Technical",
+          "TrustServiceCategory": ["Availability"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "PerformanceMonitoring",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "System performance is monitored"
+            },
+            {
+              "Name": "AvailabilityCommitments",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Availability commitments are evaluated"
+            }
+          ],
+          "TestCriteria": [
+            "Verify system performance is monitored",
+            "Verify availability commitments are evaluated",
+            "Verify performance metrics are tracked",
+            "Verify corrective actions are taken when needed"
+          ]
+        },
+        {
+          "Id": "A1.2",
+          "Title": "Availability - Capacity Management",
+          "Description": "The entity maintains system capacity consistent with system availability commitments.",
+          "TestType": "Technical",
+          "TrustServiceCategory": ["Availability"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "CapacityManagement",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "System capacity is managed"
+            },
+            {
+              "Name": "CapacityPlanning",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Capacity planning is performed"
+            }
+          ],
+          "TestCriteria": [
+            "Verify system capacity is managed",
+            "Verify capacity planning is performed",
+            "Verify capacity meets availability commitments",
+            "Verify capacity issues are addressed proactively"
+          ]
+        }
+      ]
+    },
+    {
+      "CategoryId": "PI",
+      "CategoryName": "Processing Integrity",
+      "Description": "Processing integrity criteria related to system processing commitments",
+      "Controls": [
+        {
+          "Id": "PI1.1",
+          "Title": "Processing Integrity - Data Input and Authorization",
+          "Description": "The entity implements controls over completeness and accuracy of data input and data processing.",
+          "TestType": "Technical",
+          "TrustServiceCategory": ["Processing Integrity"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "DataInputControls",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Data input controls are implemented"
+            },
+            {
+              "Name": "DataProcessingControls",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Data processing controls are implemented"
+            }
+          ],
+          "TestCriteria": [
+            "Verify data input controls are implemented",
+            "Verify data processing controls are implemented",
+            "Verify data completeness and accuracy",
+            "Verify unauthorized data changes are prevented"
+          ]
+        }
+      ]
+    },
+    {
+      "CategoryId": "C",
+      "CategoryName": "Confidentiality",
+      "Description": "Confidentiality criteria related to confidential information protection",
+      "Controls": [
+        {
+          "Id": "C1.1",
+          "Title": "Confidentiality - Confidential Information Identification",
+          "Description": "The entity identifies and maintains confidential information to meet the entity's objectives.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Confidentiality"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "ConfidentialInfoIdentification",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Confidential information is identified"
+            },
+            {
+              "Name": "ConfidentialInfoMaintenance",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Confidential information is maintained"
+            }
+          ],
+          "TestCriteria": [
+            "Verify confidential information is identified",
+            "Verify confidential information is maintained",
+            "Verify confidentiality requirements are defined",
+            "Verify access to confidential information is controlled"
+          ]
+        },
+        {
+          "Id": "C1.2",
+          "Title": "Confidentiality - Confidential Information Disposal",
+          "Description": "The entity disposes of confidential information to meet the entity's objectives.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Confidentiality"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "DisposalProcedures",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Confidential information disposal procedures exist"
+            },
+            {
+              "Name": "SecureDisposal",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Confidential information is securely disposed"
+            }
+          ],
+          "TestCriteria": [
+            "Verify disposal procedures exist",
+            "Verify confidential information is securely disposed",
+            "Verify disposal is documented",
+            "Verify disposal procedures are followed"
+          ]
+        }
+      ]
+    },
+    {
+      "CategoryId": "P",
+      "CategoryName": "Privacy",
+      "Description": "Privacy criteria related to personal information protection",
+      "Controls": [
+        {
+          "Id": "P1.1",
+          "Title": "Privacy - Personal Information Collection",
+          "Description": "The entity collects personal information only for the purposes identified in the entity's objectives.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Privacy"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "PersonalInfoCollection",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Personal information collection is limited to purpose"
+            },
+            {
+              "Name": "CollectionPurpose",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Collection purpose is identified"
+            }
+          ],
+          "TestCriteria": [
+            "Verify personal information collection is limited",
+            "Verify collection purpose is identified",
+            "Verify collection is necessary for objectives",
+            "Verify consent is obtained when required"
+          ]
+        },
+        {
+          "Id": "P2.1",
+          "Title": "Privacy - Personal Information Use and Retention",
+          "Description": "The entity uses and retains personal information consistent with the entity's objectives.",
+          "TestType": "Process",
+          "TrustServiceCategory": ["Privacy"],
+          "Implementation": "Required",
+          "Parameters": [
+            {
+              "Name": "PersonalInfoUse",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Personal information use is consistent with objectives"
+            },
+            {
+              "Name": "PersonalInfoRetention",
+              "Type": "Boolean",
+              "Required": true,
+              "Description": "Personal information retention is appropriate"
+            }
+          ],
+          "TestCriteria": [
+            "Verify personal information use is consistent",
+            "Verify retention periods are appropriate",
+            "Verify information is disposed when no longer needed",
+            "Verify use is authorized"
+          ]
+        }
+      ]
+    }
+  ],
+  "ComplianceMappings": {
+    "VelociraptorComponents": {
+      "UserAuthentication": ["CC6.1", "CC6.2", "CC6.3"],
+      "SystemMonitoring": ["CC7.1", "A1.1"],
+      "IncidentResponse": ["CC7.2"],
+      "ChangeManagement": ["CC8.1"],
+      "DataProcessing": ["PI1.1"],
+      "ConfidentialData": ["C1.1", "C1.2"],
+      "PersonalData": ["P1.1", "P2.1"],
+      "PerformanceMonitoring": ["A1.1", "A1.2"],
+      "AccessControls": ["CC6.1", "CC6.2", "CC6.3"]
+    }
+  }
+}

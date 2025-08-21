@@ -1,0 +1,169 @@
+[2025-08-21 10:51:49] [INFO] === Testing Category: Installation and Setup Scripts ===
+[2025-08-21 10:51:49] [INFO] Testing: .\Install-Velociraptor-Direct.ps1
+[2025-08-21 10:51:49] [SUCCESS] Syntax PASSED: .\Install-Velociraptor-Direct.ps1
+[2025-08-21 10:51:49] [SUCCESS] Basic functionality PASSED: .\Install-Velociraptor-Direct.ps1 (Score: 4/4)
+[2025-08-21 10:51:49] [INFO]   File: .\Install-Velociraptor-Direct.ps1
+[2025-08-21 10:51:49] [INFO]   Status: READY
+[2025-08-21 10:51:49] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] Testing: .\Install-Velociraptor-Fixed.ps1
+[2025-08-21 10:51:49] [SUCCESS] Syntax PASSED: .\Install-Velociraptor-Fixed.ps1
+[2025-08-21 10:51:49] [SUCCESS] Basic functionality PASSED: .\Install-Velociraptor-Fixed.ps1 (Score: 4/4)
+[2025-08-21 10:51:49] [INFO]   File: .\Install-Velociraptor-Fixed.ps1
+[2025-08-21 10:51:49] [INFO]   Status: READY
+[2025-08-21 10:51:49] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] Testing: .\Install-Velociraptor-Live.ps1
+[2025-08-21 10:51:49] [SUCCESS] Syntax PASSED: .\Install-Velociraptor-Live.ps1
+[2025-08-21 10:51:49] [SUCCESS] Basic functionality PASSED: .\Install-Velociraptor-Live.ps1 (Score: 4/4)
+[2025-08-21 10:51:49] [INFO]   File: .\Install-Velociraptor-Live.ps1
+[2025-08-21 10:51:49] [INFO]   Status: READY
+[2025-08-21 10:51:49] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] Testing: .\Install-Velociraptor-Simple.ps1
+[2025-08-21 10:51:49] [SUCCESS] Syntax PASSED: .\Install-Velociraptor-Simple.ps1
+[2025-08-21 10:51:49] [SUCCESS] Basic functionality PASSED: .\Install-Velociraptor-Simple.ps1 (Score: 4/4)
+[2025-08-21 10:51:49] [INFO]   File: .\Install-Velociraptor-Simple.ps1
+[2025-08-21 10:51:49] [INFO]   Status: READY
+[2025-08-21 10:51:49] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] === Testing Category: Analysis and Reporting Scripts ===
+[2025-08-21 10:51:49] [INFO] Testing: .\Advanced-UA-Testing.ps1
+[2025-08-21 10:51:49] [SUCCESS] Syntax PASSED: .\Advanced-UA-Testing.ps1
+[2025-08-21 10:51:49] [SUCCESS] Basic functionality PASSED: .\Advanced-UA-Testing.ps1 (Score: 2/4)
+[2025-08-21 10:51:49] [INFO]   File: .\Advanced-UA-Testing.ps1
+[2025-08-21 10:51:49] [INFO]   Status: NEEDS_REVIEW
+[2025-08-21 10:51:49] [INFO]   Functionality Score: 2/4
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] Testing: .\execute-uat-checklist.ps1
+[2025-08-21 10:51:49] [SUCCESS] Syntax PASSED: .\execute-uat-checklist.ps1
+[2025-08-21 10:51:49] [SUCCESS] Basic functionality PASSED: .\execute-uat-checklist.ps1 (Score: 4/4)
+[2025-08-21 10:51:49] [INFO]   File: .\execute-uat-checklist.ps1
+[2025-08-21 10:51:49] [INFO]   Status: READY
+[2025-08-21 10:51:49] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] === Testing Category: Test and QA Scripts ===
+[2025-08-21 10:51:49] [INFO] Testing: .\Test-Beta-Release-Full-Features.ps1
+[2025-08-21 10:51:49] [SUCCESS] Syntax PASSED: .\Test-Beta-Release-Full-Features.ps1
+[2025-08-21 10:51:49] [SUCCESS] Basic functionality PASSED: .\Test-Beta-Release-Full-Features.ps1 (Score: 3/4)
+[2025-08-21 10:51:49] [INFO]   File: .\Test-Beta-Release-Full-Features.ps1
+[2025-08-21 10:51:49] [INFO]   Status: READY
+[2025-08-21 10:51:49] [INFO]   Functionality Score: 3/4
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] Testing: .\Test-Windows-Beta-Features.ps1
+[2025-08-21 10:51:49] [SUCCESS] Syntax PASSED: .\Test-Windows-Beta-Features.ps1
+[2025-08-21 10:51:49] [SUCCESS] Basic functionality PASSED: .\Test-Windows-Beta-Features.ps1 (Score: 3/4)
+[2025-08-21 10:51:49] [INFO]   File: .\Test-Windows-Beta-Features.ps1
+[2025-08-21 10:51:49] [INFO]   Status: READY
+[2025-08-21 10:51:49] [INFO]   Functionality Score: 3/4
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] Testing: .\Test-Windows-Beta-Features-Clean.ps1
+[2025-08-21 10:51:49] [SUCCESS] Syntax PASSED: .\Test-Windows-Beta-Features-Clean.ps1
+[2025-08-21 10:51:49] [SUCCESS] Basic functionality PASSED: .\Test-Windows-Beta-Features-Clean.ps1 (Score: 3/4)
+[2025-08-21 10:51:49] [INFO]   File: .\Test-Windows-Beta-Features-Clean.ps1
+[2025-08-21 10:51:49] [INFO]   Status: READY
+[2025-08-21 10:51:49] [INFO]   Functionality Score: 3/4
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] Testing: .\Test-VelociraptorHealth.ps1
+[2025-08-21 10:51:49] [SUCCESS] Syntax PASSED: .\Test-VelociraptorHealth.ps1
+[2025-08-21 10:51:49] [SUCCESS] Basic functionality PASSED: .\Test-VelociraptorHealth.ps1 (Score: 4/4)
+[2025-08-21 10:51:49] [INFO]   File: .\Test-VelociraptorHealth.ps1
+[2025-08-21 10:51:49] [INFO]   Status: READY
+[2025-08-21 10:51:49] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:49] [INFO] 
+[2025-08-21 10:51:49] [INFO] Testing: .\COMPREHENSIVE_BETA_QA.ps1
+[2025-08-21 10:51:49] [SUCCESS] Syntax PASSED: .\COMPREHENSIVE_BETA_QA.ps1
+[2025-08-21 10:51:49] [SUCCESS] Basic functionality PASSED: .\COMPREHENSIVE_BETA_QA.ps1 (Score: 4/4)
+[2025-08-21 10:51:49] [INFO]   File: .\COMPREHENSIVE_BETA_QA.ps1
+[2025-08-21 10:51:49] [INFO]   Status: READY
+[2025-08-21 10:51:49] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] Testing: .\Test-CriticalFixes.ps1
+[2025-08-21 10:51:50] [SUCCESS] Syntax PASSED: .\Test-CriticalFixes.ps1
+[2025-08-21 10:51:50] [SUCCESS] Basic functionality PASSED: .\Test-CriticalFixes.ps1 (Score: 3/4)
+[2025-08-21 10:51:50] [INFO]   File: .\Test-CriticalFixes.ps1
+[2025-08-21 10:51:50] [INFO]   Status: READY
+[2025-08-21 10:51:50] [INFO]   Functionality Score: 3/4
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] Testing: .\BETA_RELEASE_QA.ps1
+[2025-08-21 10:51:50] [SUCCESS] Syntax PASSED: .\BETA_RELEASE_QA.ps1
+[2025-08-21 10:51:50] [SUCCESS] Basic functionality PASSED: .\BETA_RELEASE_QA.ps1 (Score: 4/4)
+[2025-08-21 10:51:50] [INFO]   File: .\BETA_RELEASE_QA.ps1
+[2025-08-21 10:51:50] [INFO]   Status: READY
+[2025-08-21 10:51:50] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] Testing: .\Test-WindowsForms.ps1
+[2025-08-21 10:51:50] [SUCCESS] Syntax PASSED: .\Test-WindowsForms.ps1
+[2025-08-21 10:51:50] [SUCCESS] Basic functionality PASSED: .\Test-WindowsForms.ps1 (Score: 2/4)
+[2025-08-21 10:51:50] [INFO]   File: .\Test-WindowsForms.ps1
+[2025-08-21 10:51:50] [INFO]   Status: NEEDS_REVIEW
+[2025-08-21 10:51:50] [INFO]   Functionality Score: 2/4
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] Testing: .\Test-WindowsFormsInit.ps1
+[2025-08-21 10:51:50] [SUCCESS] Syntax PASSED: .\Test-WindowsFormsInit.ps1
+[2025-08-21 10:51:50] [SUCCESS] Basic functionality PASSED: .\Test-WindowsFormsInit.ps1 (Score: 2/4)
+[2025-08-21 10:51:50] [INFO]   File: .\Test-WindowsFormsInit.ps1
+[2025-08-21 10:51:50] [INFO]   Status: NEEDS_REVIEW
+[2025-08-21 10:51:50] [INFO]   Functionality Score: 2/4
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] === Testing Category: Utility Scripts ===
+[2025-08-21 10:51:50] [INFO] Testing: .\Backup-VelociraptorData.ps1
+[2025-08-21 10:51:50] [SUCCESS] Syntax PASSED: .\Backup-VelociraptorData.ps1
+[2025-08-21 10:51:50] [SUCCESS] Basic functionality PASSED: .\Backup-VelociraptorData.ps1 (Score: 4/4)
+[2025-08-21 10:51:50] [INFO]   File: .\Backup-VelociraptorData.ps1
+[2025-08-21 10:51:50] [INFO]   Status: READY
+[2025-08-21 10:51:50] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] Testing: .\Cleanup_Velociraptor.ps1
+[2025-08-21 10:51:50] [SUCCESS] Syntax PASSED: .\Cleanup_Velociraptor.ps1
+[2025-08-21 10:51:50] [SUCCESS] Basic functionality PASSED: .\Cleanup_Velociraptor.ps1 (Score: 4/4)
+[2025-08-21 10:51:50] [INFO]   File: .\Cleanup_Velociraptor.ps1
+[2025-08-21 10:51:50] [INFO]   Status: READY
+[2025-08-21 10:51:50] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] Testing: .\Manage-VelociraptorConfig.ps1
+[2025-08-21 10:51:50] [SUCCESS] Syntax PASSED: .\Manage-VelociraptorConfig.ps1
+[2025-08-21 10:51:50] [SUCCESS] Basic functionality PASSED: .\Manage-VelociraptorConfig.ps1 (Score: 4/4)
+[2025-08-21 10:51:50] [INFO]   File: .\Manage-VelociraptorConfig.ps1
+[2025-08-21 10:51:50] [INFO]   Status: READY
+[2025-08-21 10:51:50] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] Testing: .\Prepare_OfflineCollector_Env.ps1
+[2025-08-21 10:51:50] [SUCCESS] Syntax PASSED: .\Prepare_OfflineCollector_Env.ps1
+[2025-08-21 10:51:50] [SUCCESS] Basic functionality PASSED: .\Prepare_OfflineCollector_Env.ps1 (Score: 4/4)
+[2025-08-21 10:51:50] [INFO]   File: .\Prepare_OfflineCollector_Env.ps1
+[2025-08-21 10:51:50] [INFO]   Status: READY
+[2025-08-21 10:51:50] [INFO]   Functionality Score: 4/4
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] === SUMMARY REPORT ===
+[2025-08-21 10:51:50] [INFO] Total Files Tested: 19
+[2025-08-21 10:51:50] [INFO] Files Not Found: 0
+[2025-08-21 10:51:50] [INFO] Syntax Validation - Passed: 19, Failed: 0
+[2025-08-21 10:51:50] [INFO] Basic Functionality - Passed: 19, Failed: 0
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] : 19 files
+[2025-08-21 10:51:50] [INFO]   - .\Install-Velociraptor-Direct.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Install-Velociraptor-Fixed.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Install-Velociraptor-Live.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Install-Velociraptor-Simple.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Advanced-UA-Testing.ps1
+[2025-08-21 10:51:50] [INFO]   - .\execute-uat-checklist.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Test-Beta-Release-Full-Features.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Test-Windows-Beta-Features.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Test-Windows-Beta-Features-Clean.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Test-VelociraptorHealth.ps1
+[2025-08-21 10:51:50] [INFO]   - .\COMPREHENSIVE_BETA_QA.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Test-CriticalFixes.ps1
+[2025-08-21 10:51:50] [INFO]   - .\BETA_RELEASE_QA.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Test-WindowsForms.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Test-WindowsFormsInit.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Backup-VelociraptorData.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Cleanup_Velociraptor.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Manage-VelociraptorConfig.ps1
+[2025-08-21 10:51:50] [INFO]   - .\Prepare_OfflineCollector_Env.ps1
+[2025-08-21 10:51:50] [INFO] 
+[2025-08-21 10:51:50] [INFO] === Test Complete ===
