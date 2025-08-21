@@ -168,9 +168,13 @@ function Invoke-ArtifactScan {
     
     $artifacts = @()
     $toolDatabase = @{}
+    $processedCount = 0
+    $failedCount = 0
+    $failedArtifacts = @()
     
     # Get all YAML files
     $yamlFiles = Get-ChildItem -Path $Manager.ArtifactPath -Filter "*.yaml" -Recurse
+    Write-VelociraptorLog "Found $($yamlFiles.Count) YAML files to process" -Level Info
     
     foreach ($yamlFile in $yamlFiles) {
         $artifactName = [System.IO.Path]::GetFileNameWithoutExtension($yamlFile.Name)
@@ -196,66 +200,147 @@ function Invoke-ArtifactScan {
         if (-not $include) { continue }
         
         try {
-            # Parse YAML content
-            $content = Get-Content $yamlFile.FullName -Raw
-            $artifactData = ConvertFrom-Yaml $content
+            Write-VelociraptorLog "Processing artifact: $artifactName" -Level Debug
             
-            if ($artifactData.tools) {
-                $artifactInfo = @{
-                    Name = $artifactName
-                    Path = $yamlFile.FullName
-                    Tools = @()
-                    Type = $artifactData.type
-                    Author = $artifactData.author
-                    Description = $artifactData.description
-                }
-                
-                foreach ($tool in $artifactData.tools) {
-                    $toolInfo = @{
-                        Name = $tool.name
-                        Url = $tool.url
-                        ExpectedHash = $tool.expected_hash
-                        Version = $tool.version
-                        ServeLocally = $tool.serve_locally
-                        IsExecutable = $tool.IsExecutable
-                        ArtifactName = $artifactName
-                    }
-                    
-                    $artifactInfo.Tools += $toolInfo
-                    
-                    # Add to tool database
-                    if (-not $toolDatabase.ContainsKey($tool.name)) {
-                        $toolDatabase[$tool.name] = @{
-                            Name = $tool.name
-                            Url = $tool.url
-                            ExpectedHash = $tool.expected_hash
-                            Version = $tool.version
-                            UsedByArtifacts = @()
-                            DownloadStatus = "Pending"
-                            LocalPath = $null
-                        }
-                    }
-                    
-                    $toolDatabase[$tool.name].UsedByArtifacts += $artifactName
-                }
-                
-                $artifacts += $artifactInfo
+            # Parse YAML content with validation
+            $content = Get-Content $yamlFile.FullName -Raw -ErrorAction Stop
+            
+            if ([string]::IsNullOrWhiteSpace($content)) {
+                Write-VelociraptorLog "Skipping empty artifact file: $($yamlFile.Name)" -Level Warning
+                $failedCount++
+                $failedArtifacts += @{ Name = $artifactName; Reason = "Empty file" }
+                continue
             }
+            
+            $artifactData = ConvertFrom-Yaml -Content $content -FileName $yamlFile.Name
+            
+            # Validate that we have required properties with safe access
+            if (-not $artifactData -or $artifactData -eq $null) {
+                Write-VelociraptorLog "Failed to parse YAML for artifact: $artifactName" -Level Warning
+                $failedCount++
+                $failedArtifacts += @{ Name = $artifactName; Reason = "YAML parsing failed" }
+                continue
+            }
+            
+            # Safe property access with fallbacks
+            $parsedName = if ($artifactData.PSObject.Properties['name']) { $artifactData.name } else { $artifactName }
+            $parsedType = if ($artifactData.PSObject.Properties['type']) { $artifactData.type } else { "CLIENT" }
+            $parsedAuthor = if ($artifactData.PSObject.Properties['author']) { $artifactData.author } else { "Unknown" }
+            $parsedDescription = if ($artifactData.PSObject.Properties['description']) { $artifactData.description } else { "No description available" }
+            $parsedTools = if ($artifactData.PSObject.Properties['tools']) { $artifactData.tools } else { @() }
+            
+            # Ensure tools is always an array
+            if ($parsedTools -and $parsedTools -isnot [array]) {
+                $parsedTools = @($parsedTools)
+            }
+            
+            # Create artifact info with validated data
+            $artifactInfo = @{
+                Name = $parsedName
+                Path = $yamlFile.FullName
+                Tools = @()
+                Type = $parsedType
+                Author = $parsedAuthor
+                Description = $parsedDescription
+                ToolCount = 0
+            }
+            
+            # Process tools if they exist
+            if ($parsedTools -and @($parsedTools).Count -gt 0) {
+                foreach ($tool in $parsedTools) {
+                    try {
+                        # Safe tool property access
+                        $toolName = if ($tool.PSObject.Properties['name']) { $tool.name } else { "Unknown_Tool_$(Get-Random)" }
+                        $toolUrl = if ($tool.PSObject.Properties['url']) { $tool.url } else { "" }
+                        $toolHash = if ($tool.PSObject.Properties['expected_hash']) { $tool.expected_hash } else { "" }
+                        $toolVersion = if ($tool.PSObject.Properties['version']) { $tool.version } else { "Unknown" }
+                        $toolServeLocally = if ($tool.PSObject.Properties['serve_locally']) { $tool.serve_locally } else { $false }
+                        $toolIsExecutable = if ($tool.PSObject.Properties['IsExecutable']) { $tool.IsExecutable } else { $true }
+                        
+                        $toolInfo = @{
+                            Name = $toolName
+                            Url = $toolUrl
+                            ExpectedHash = $toolHash
+                            Version = $toolVersion
+                            ServeLocally = $toolServeLocally
+                            IsExecutable = $toolIsExecutable
+                            ArtifactName = $parsedName
+                        }
+                        
+                        $artifactInfo.Tools += $toolInfo
+                        
+                        # Add to tool database with safe access
+                        if (-not $toolDatabase.ContainsKey($toolName)) {
+                            $toolDatabase[$toolName] = @{
+                                Name = $toolName
+                                Url = $toolUrl
+                                ExpectedHash = $toolHash
+                                Version = $toolVersion
+                                UsedByArtifacts = @()
+                                DownloadStatus = "Pending"
+                                LocalPath = $null
+                            }
+                        }
+                        
+                        # Ensure UsedByArtifacts is always an array
+                        if ($toolDatabase[$toolName].UsedByArtifacts -isnot [array]) {
+                            $toolDatabase[$toolName].UsedByArtifacts = @($toolDatabase[$toolName].UsedByArtifacts)
+                        }
+                        
+                        $toolDatabase[$toolName].UsedByArtifacts += $parsedName
+                    }
+                    catch {
+                        Write-VelociraptorLog "Failed to process tool in artifact $parsedName`: $($_.Exception.Message)" -Level Warning
+                        continue
+                    }
+                }
+            }
+            
+            $artifactInfo.ToolCount = @($artifactInfo.Tools).Count
+            $artifacts += $artifactInfo
+            $processedCount++
+            
+            Write-VelociraptorLog "Successfully processed artifact: $parsedName ($($artifactInfo.ToolCount) tools)" -Level Debug
         }
         catch {
-            Write-VelociraptorLog "Failed to parse artifact $($yamlFile.Name): $($_.Exception.Message)" -Level Warning
+            $errorMsg = "Failed to parse artifact $($yamlFile.Name): $($_.Exception.Message)"
+            Write-VelociraptorLog $errorMsg -Level Warning
+            $failedCount++
+            $failedArtifacts += @{ Name = $artifactName; Reason = $_.Exception.Message }
+            
+            # Continue processing other artifacts
+            continue
         }
     }
     
     # Save tool database
-    $toolDatabase | ConvertTo-Json -Depth 10 | Set-Content $Manager.DatabasePath
+    try {
+        $toolDatabase | ConvertTo-Json -Depth 10 | Set-Content $Manager.DatabasePath -ErrorAction Stop
+    }
+    catch {
+        Write-VelociraptorLog "Warning: Failed to save tool database: $($_.Exception.Message)" -Level Warning
+    }
     
-    Write-VelociraptorLog "Found $($artifacts.Count) artifacts with $($toolDatabase.Count) unique tools" -Level Info
+    # Log scan results
+    Write-VelociraptorLog "Artifact scan completed:" -Level Info
+    Write-VelociraptorLog "  - Successfully processed: $processedCount artifacts" -Level Info
+    Write-VelociraptorLog "  - Failed to process: $failedCount artifacts" -Level Info
+    Write-VelociraptorLog "  - Total unique tools found: $(@($toolDatabase.Keys).Count)" -Level Info
+    
+    if (@($failedArtifacts).Count -gt 0) {
+        Write-VelociraptorLog "Failed artifacts:" -Level Warning
+        foreach ($failed in $failedArtifacts) {
+            Write-VelociraptorLog "  - $($failed.Name): $($failed.Reason)" -Level Warning
+        }
+    }
     
     return @{
         Artifacts = $artifacts
         ToolDatabase = $toolDatabase
         ScanTime = Get-Date
+        ProcessedCount = $processedCount
+        FailedCount = $failedCount
+        FailedArtifacts = $failedArtifacts
     }
 }
 
@@ -268,7 +353,7 @@ function Invoke-ToolDownload {
     $toolDatabase = $Artifacts.ToolDatabase
     $downloadJobs = @()
     $completed = 0
-    $total = $toolDatabase.Count
+    $total = @($toolDatabase.Keys).Count
     
     foreach ($toolName in $toolDatabase.Keys) {
         $tool = $toolDatabase[$toolName]
@@ -355,7 +440,7 @@ function Invoke-ToolDownload {
     # Update tool database
     $toolDatabase | ConvertTo-Json -Depth 10 | Set-Content $Manager.DatabasePath
     
-    $successful = ($toolDatabase.Values | Where-Object { $_.DownloadStatus -eq "Downloaded" }).Count
+    $successful = @($toolDatabase.Values | Where-Object { $_.DownloadStatus -eq "Downloaded" }).Count
     Write-VelociraptorLog "Download complete: $successful/$total tools downloaded successfully" -Level Info
 }
 
@@ -367,8 +452,8 @@ function New-ToolArtifactMapping {
     
     $mapping = @{
         GeneratedDate = Get-Date
-        TotalArtifacts = $Artifacts.Artifacts.Count
-        TotalTools = $Artifacts.ToolDatabase.Count
+        TotalArtifacts = @($Artifacts.Artifacts).Count
+        TotalTools = @($Artifacts.ToolDatabase.Keys).Count
         ToolToArtifacts = @{}
         ArtifactToTools = @{}
         ToolCategories = @{}
@@ -394,7 +479,7 @@ function New-ToolArtifactMapping {
             Author = $artifact.Author
             Description = $artifact.Description
             Tools = $artifact.Tools | ForEach-Object { $_.Name }
-            ToolCount = $artifact.Tools.Count
+            ToolCount = @($artifact.Tools).Count
         }
     }
     
@@ -495,8 +580,8 @@ function New-OfflineCollectorPackage {
     
     return @{
         PackagePath = $packagePath
-        ArtifactCount = $Artifacts.Artifacts.Count
-        ToolCount = $toolManifest.Count
+        ArtifactCount = @($Artifacts.Artifacts).Count
+        ToolCount = @($toolManifest).Count
         PackageSize = (Get-ChildItem $packagePath -Recurse | Measure-Object -Property Length -Sum).Sum
     }
 }
@@ -594,8 +679,8 @@ This package contains a complete offline deployment of Velociraptor artifacts an
 
 ## Contents
 
-- **artifacts/**: $($Artifacts.Artifacts.Count) Velociraptor artifacts
-- **tools/**: $($Artifacts.ToolDatabase.Count) external tools and utilities
+- **artifacts/**: $(@($Artifacts.Artifacts).Count) Velociraptor artifacts
+- **tools/**: $(@($Artifacts.ToolDatabase.Keys).Count) external tools and utilities
 - **scripts/**: Deployment and management scripts
 - **config/**: Configuration files and manifests
 - **docs/**: Documentation and guides
@@ -621,7 +706,7 @@ $(foreach ($artifact in $Artifacts.Artifacts) { "- **$($artifact.Name)**: $($art
 
 $(foreach ($toolName in $Artifacts.ToolDatabase.Keys) { 
     $tool = $Artifacts.ToolDatabase[$toolName]
-    "- **$toolName**: Used by $($tool.UsedByArtifacts.Count) artifact(s)"
+    "- **$toolName**: Used by $(@($tool.UsedByArtifacts).Count) artifact(s)"
 })
 
 ## Support
@@ -654,59 +739,130 @@ function Clear-ToolCache {
 
 # Enhanced YAML parser for Velociraptor artifacts
 function ConvertFrom-Yaml {
-    param($Content)
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Content,
+        
+        [Parameter(Mandatory = $false)]
+        [string]$FileName = "Unknown"
+    )
     
-    # Parse Velociraptor artifact YAML and extract tool references from VQL queries
-    $result = @{
+    # Initialize result with safe defaults
+    $result = [PSCustomObject]@{
         name = ""
         description = ""
         author = ""
-        type = ""
+        type = "CLIENT"
         tools = @()
         sources = @()
         parameters = @()
         precondition = ""
+        parse_status = "unknown"
+        parse_errors = @()
     }
     
     if ([string]::IsNullOrWhiteSpace($Content)) {
+        $result.parse_status = "empty_content"
+        $result.parse_errors += "Content is null or empty"
+        Write-VelociraptorLog "ConvertFrom-Yaml: Empty content for file $FileName" -Level Warning
         return $result
     }
     
     try {
+        Write-VelociraptorLog "ConvertFrom-Yaml: Starting parse of $FileName" -Level Debug
+        
         $lines = $Content -split "`r?`n"
         $currentSection = $null
         $currentQuery = ""
         $inMultilineString = $false
         $multilineDelimiter = ""
+        $toolsSection = @()
+        $inToolsSection = $false
+        $currentTool = $null
+        $toolIndentLevel = 0
         
-        foreach ($line in $lines) {
+        for ($i = 0; $i -lt $lines.Count; $i++) {
+            $line = $lines[$i]
             # Skip empty lines and comments (but not in multiline strings)
             if (-not $inMultilineString -and ([string]::IsNullOrWhiteSpace($line) -or $line.TrimStart().StartsWith('#'))) {
                 continue
             }
             
             $trimmedLine = $line.Trim()
+            $indentLevel = $line.Length - $line.TrimStart().Length
             
             # Handle multiline strings
             if ($inMultilineString) {
-                if ($line.Trim() -eq $multilineDelimiter) {
+                if ($indentLevel -le $toolIndentLevel -and -not [string]::IsNullOrWhiteSpace($trimmedLine)) {
                     $inMultilineString = $false
                     $multilineDelimiter = ""
+                    # Don't continue, process this line
                 } else {
                     $currentQuery += "`n$line"
+                    continue
                 }
-                continue
             }
             
             # Check for multiline string start
             if ($line -match "^\s*\|" -or $line -match "^\s*>") {
                 $inMultilineString = $true
-                $multilineDelimiter = ""  # YAML multiline strings end with dedent
+                $multilineDelimiter = ""
+                $toolIndentLevel = $indentLevel
                 continue
             }
             
+            # Handle tools section
+            if ($line -match "^tools:\s*$") {
+                $inToolsSection = $true
+                $toolIndentLevel = $indentLevel
+                continue
+            }
+            
+            # Handle tool entries
+            if ($inToolsSection -and $line -match "^\s*-\s*name:\s*(.+)$") {
+                # Save previous tool if exists
+                if ($currentTool) {
+                    $toolsSection += $currentTool
+                }
+                
+                $currentTool = [PSCustomObject]@{
+                    name = $matches[1].Trim() -replace '^["\''](.*)["\'']\s*$', '$1'
+                    url = ""
+                    expected_hash = ""
+                    version = "Unknown"
+                    serve_locally = $false
+                    IsExecutable = $true
+                }
+                continue
+            }
+            
+            # Handle tool properties
+            if ($inToolsSection -and $currentTool -and $line -match "^\s+(\w+):\s*(.*)$") {
+                $propName = $matches[1].ToLower()
+                $propValue = $matches[2].Trim() -replace '^["\''](.*)["\'']\s*$', '$1'
+                
+                switch ($propName) {
+                    "url" { $currentTool.url = $propValue }
+                    "expected_hash" { $currentTool.expected_hash = $propValue }
+                    "version" { $currentTool.version = $propValue }
+                    "serve_locally" { $currentTool.serve_locally = $propValue -eq "true" -or $propValue -eq "True" }
+                    "isexecutable" { $currentTool.IsExecutable = $propValue -eq "true" -or $propValue -eq "True" }
+                }
+                continue
+            }
+            
+            # Check if we're leaving tools section
+            if ($inToolsSection -and $indentLevel -le $toolIndentLevel -and $line -match "^\w+:\s*") {
+                # Save current tool and exit tools section
+                if ($currentTool) {
+                    $toolsSection += $currentTool
+                    $currentTool = $null
+                }
+                $inToolsSection = $false
+            }
+            
             # Handle top-level properties
-            if ($line -match "^(\w+):\s*(.*)$") {
+            if (-not $inToolsSection -and $line -match "^(\w+):\s*(.*)$") {
                 $key = $matches[1].ToLower()
                 $value = $matches[2].Trim()
                 
@@ -714,11 +870,15 @@ function ConvertFrom-Yaml {
                 $value = $value -replace '^["\''](.*)["\'']\s*$', '$1'
                 
                 switch ($key) {
-                    "name" { $result.name = $value }
+                    "name" { 
+                        $result.name = $value
+                        Write-VelociraptorLog "ConvertFrom-Yaml: Found name: $value" -Level Debug
+                    }
                     "description" { 
                         if ($value -eq "|" -or $value -eq ">") {
                             $inMultilineString = $true
                             $currentQuery = ""
+                            $toolIndentLevel = $indentLevel
                         } else {
                             $result.description = $value
                         }
@@ -729,7 +889,10 @@ function ConvertFrom-Yaml {
                     "sources" { $currentSection = "sources" }
                     "parameters" { $currentSection = "parameters" }
                     default {
-                        $result[$key] = $value
+                        # Add any other properties
+                        if ($result.PSObject.Properties[$key]) {
+                            $result.$key = $value
+                        }
                     }
                 }
             }
@@ -737,42 +900,65 @@ function ConvertFrom-Yaml {
             elseif ($line -match "query:\s*\|" -or $line -match "^\s*-\s*\|") {
                 $inMultilineString = $true
                 $currentQuery = ""
-            }
-            # Process completed queries for tool extraction
-            elseif ($currentQuery -and -not $inMultilineString) {
-                $extractedTools = Extract-ToolsFromVQL -VQLQuery $currentQuery
-                foreach ($tool in $extractedTools) {
-                    $result.tools += $tool
-                }
-                $currentQuery = ""
+                $toolIndentLevel = $indentLevel
             }
         }
         
-        # Process any remaining query
+        # Save final tool if exists
+        if ($currentTool) {
+            $toolsSection += $currentTool
+        }
+        
+        # Add tools to result
+        $result.tools = $toolsSection
+        
+        # Process any VQL queries for additional tool extraction
         if ($currentQuery) {
-            $extractedTools = Extract-ToolsFromVQL -VQLQuery $currentQuery
-            foreach ($tool in $extractedTools) {
-                $result.tools += $tool
+            try {
+                $extractedTools = Extract-ToolsFromVQL -VQLQuery $currentQuery
+                if ($extractedTools -and $extractedTools.Count -gt 0) {
+                    $result.tools += $extractedTools
+                }
+            }
+            catch {
+                $result.parse_errors += "VQL tool extraction failed: $($_.Exception.Message)"
             }
         }
         
-        # Ensure we have basic required properties
-        if (-not $result.name) { $result.name = "Unknown" }
-        if (-not $result.author) { $result.author = "Unknown" }
-        if (-not $result.type) { $result.type = "CLIENT" }
+        # Validate and set defaults for required properties
+        if ([string]::IsNullOrWhiteSpace($result.name)) { 
+            $result.name = "Unknown_Artifact_$(Get-Random)"
+            $result.parse_errors += "Missing 'name' property, generated placeholder"
+        }
+        if ([string]::IsNullOrWhiteSpace($result.author)) { 
+            $result.author = "Unknown"
+        }
+        if ([string]::IsNullOrWhiteSpace($result.type)) { 
+            $result.type = "CLIENT"
+        }
+        if ([string]::IsNullOrWhiteSpace($result.description)) {
+            $result.description = "No description available"
+        }
+        
+        $result.parse_status = "success"
+        
+        Write-VelociraptorLog "ConvertFrom-Yaml: Successfully parsed $FileName - Name: $($result.name), Tools: $($result.tools.Count)" -Level Debug
         
         return $result
     }
     catch {
-        Write-VelociraptorLog "YAML parsing error for artifact: $($_.Exception.Message)" -Level Warning
-        return @{
-            name = "Parse_Error_$(Get-Random)"
-            description = "Failed to parse artifact YAML"
-            author = "Unknown"
-            type = "CLIENT"
-            tools = @()
-            parse_error = $_.Exception.Message
-        }
+        $errorMsg = "YAML parsing error for $FileName`: $($_.Exception.Message)"
+        Write-VelociraptorLog $errorMsg -Level Warning
+        
+        $result.name = "Parse_Error_$(Get-Random)"
+        $result.description = "Failed to parse artifact YAML"
+        $result.author = "Unknown"
+        $result.type = "CLIENT"
+        $result.tools = @()
+        $result.parse_status = "error"
+        $result.parse_errors += $_.Exception.Message
+        
+        return $result
     }
 }
 
@@ -915,8 +1101,8 @@ function Export-ToolMapping {
         $toolDatabase = if ($Results.ToolDatabase) { $Results.ToolDatabase } else { @{} }
         
         # Safe counting
-        $artifactCount = if ($artifactList) { $artifactList.Count } else { 0 }
-        $toolCount = if ($toolDatabase -and $toolDatabase.Keys) { $toolDatabase.Keys.Count } else { 0 }
+        $artifactCount = if ($artifactList) { @($artifactList).Count } else { 0 }
+        $toolCount = if ($toolDatabase -and $toolDatabase.Keys) { @($toolDatabase.Keys).Count } else { 0 }
         
         Write-VelociraptorLog "Export-ToolMapping: Processing $artifactCount artifacts and $toolCount tools" -Level Info
         
@@ -925,12 +1111,12 @@ function Export-ToolMapping {
             GeneratedAt = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
             ScanTime = $Results.ScanTime
             Summary = @{
-                TotalArtifacts = $artifactList.Count
-                TotalTools = $toolDatabase.Count
+                TotalArtifacts = @($artifactList).Count
+                TotalTools = @($toolDatabase.Keys).Count
                 ArtifactsWithTools = ($artifactList | Where-Object { 
                     $_.Tools -and (@($_.Tools)).Count -gt 0 
                 }).Count
-                ArtifactsWithoutTools = ($artifactList | Where-Object { 
+                ArtifactsWithoutTools = @($artifactList | Where-Object { 
                     -not $_.Tools -or (@($_.Tools)).Count -eq 0 
                 }).Count
             }
@@ -949,7 +1135,7 @@ function Export-ToolMapping {
                 Type = $artifact.Type
                 Author = $artifact.Author
                 Description = $artifact.Description
-                ToolCount = $toolList.Count
+                ToolCount = @($toolList).Count
                 Tools = $toolList | ForEach-Object { $_.Name }
             }
             $mappingReport.Artifacts += $artifactInfo
@@ -966,7 +1152,7 @@ function Export-ToolMapping {
                 Version = $tool.Version
                 ExpectedHash = $tool.ExpectedHash
                 UsedByArtifacts = $usedByList
-                ArtifactCount = $usedByList.Count
+                ArtifactCount = @($usedByList).Count
                 DownloadStatus = $tool.DownloadStatus
                 LocalPath = $tool.LocalPath
             }
@@ -984,7 +1170,7 @@ function Export-ToolMapping {
         $csvData = @()
         foreach ($artifact in $artifactList) {
             $toolList = if ($artifact.Tools) { @($artifact.Tools) } else { @() }
-            if ($toolList.Count -eq 0) {
+            if (@($toolList).Count -eq 0) {
                 $csvData += [PSCustomObject]@{
                     ArtifactName = $artifact.Name
                     ArtifactType = $artifact.Type
@@ -1036,7 +1222,7 @@ $((($mappingReport.Tools | Sort-Object ArtifactCount -Descending | Select-Object
 
 ARTIFACTS WITHOUT TOOLS:
 =======================
-$(($artifactList | Where-Object { -not $_.Tools -or $_.Tools.Count -eq 0 } | ForEach-Object { "- $($_.Name)" }) -join "`n")
+$(@($artifactList | Where-Object { -not $_.Tools -or @($_.Tools).Count -eq 0 } | ForEach-Object { "- $($_.Name)" }) -join "`n")
 
 FILES GENERATED:
 ===============
