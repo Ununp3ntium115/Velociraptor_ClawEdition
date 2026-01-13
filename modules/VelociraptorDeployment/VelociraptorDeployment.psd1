@@ -3,7 +3,7 @@
     RootModule = 'VelociraptorDeployment.psm1'
 
     # Version number of this module.
-    ModuleVersion = '5.0.4'
+    ModuleVersion = '5.0.5'
 
     # Supported PSEditions
     CompatiblePSEditions = @('Desktop', 'Core')
@@ -79,7 +79,8 @@
         'Set-VelociraptorSecurityHardening',
         'New-ArtifactToolManager',
         'Export-ToolMapping',
-        'Deploy-VelociraptorEdge'
+        'Deploy-VelociraptorEdge',
+        'Wait-VelociraptorProcessHeartbeat'
     )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -99,7 +100,8 @@
         'Download-EXE',
         'Ask',
         'AskSecret',
-        'Wait-Port'
+        'Wait-Port',
+        'Wait-ProcessHeartbeat'
     )
 
     # DSC resources to export from this module
@@ -130,9 +132,12 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = @'
-# Release Notes - Version 1.0.0
+# Release Notes - Version 5.0.5
 
-## New Features
+## New in 5.0.5
+- Wait-VelociraptorProcessHeartbeat: Heartbeat-based process monitoring to wait for process completion before re-execution
+
+## Features
 - Comprehensive PowerShell module for Velociraptor deployment operations
 - Standardized logging with multiple output options
 - Enhanced security validation and hardening functions
@@ -147,6 +152,7 @@
 - Invoke-VelociraptorDownload: Secure file download with progress tracking
 - Add-VelociraptorFirewallRule: Firewall rule management
 - Wait-VelociraptorTcpPort: Network port availability checking
+- Wait-VelociraptorProcessHeartbeat: Process completion heartbeat monitoring
 - Test-VelociraptorInternetConnection: Internet connectivity validation
 - Read-VelociraptorUserInput: Interactive user input with validation
 - Read-VelociraptorSecureInput: Secure password input handling

@@ -116,6 +116,49 @@ if (-not (Test-Administrator)) {
     exit 1
 }
 
+# Try to load VelociraptorDeployment module for heartbeat support
+$moduleLoaded = $false
+$modulePaths = @(
+    (Join-Path $PSScriptRoot 'modules\VelociraptorDeployment\VelociraptorDeployment.psd1'),
+    (Join-Path $PSScriptRoot 'VelociraptorDeployment\VelociraptorDeployment.psd1')
+)
+foreach ($modulePath in $modulePaths) {
+    if (Test-Path $modulePath) {
+        try {
+            Import-Module $modulePath -Force -ErrorAction SilentlyContinue
+            $moduleLoaded = $true
+            Log "VelociraptorDeployment module loaded"
+            break
+        }
+        catch {
+            # Continue without module
+        }
+    }
+}
+
+# Heartbeat check - wait for any existing Velociraptor processes to complete
+if ($moduleLoaded -and (Get-Command Wait-VelociraptorProcessHeartbeat -ErrorAction SilentlyContinue)) {
+    Log "Checking for existing Velociraptor processes..."
+    $heartbeatResult = Wait-VelociraptorProcessHeartbeat -Action Check
+
+    if ($heartbeatResult.WasRunning) {
+        Log "WARNING: Found running Velociraptor process(es). Waiting for completion..."
+        $heartbeatResult = Wait-VelociraptorProcessHeartbeat -TimeoutSeconds 120 -HeartbeatIntervalSeconds 5 -ShowProgress
+
+        if (-not $heartbeatResult.IsComplete) {
+            Log "WARNING: Previous process still running after timeout."
+            Write-Error "Existing Velociraptor process is still running. Please stop it manually before deployment."
+            exit 1
+        }
+        else {
+            Log "Previous process completed. Proceeding with deployment."
+        }
+    }
+    else {
+        Log "No existing Velociraptor processes detected."
+    }
+}
+
 # Check PowerShell version compatibility
 $psVersion = $PSVersionTable.PSVersion.Major
 Log "PowerShell version: $($PSVersionTable.PSVersion)"
