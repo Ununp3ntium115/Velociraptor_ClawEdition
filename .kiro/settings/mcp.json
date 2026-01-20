@@ -1,4 +1,23 @@
 {
   "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/user/Velociraptor_ClawEdition"
+      ],
+      "description": "File system access for Velociraptor Setup Scripts"
+    },
+    "git": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git",
+        "--repository",
+        "/home/user/Velociraptor_ClawEdition"
+      ],
+      "description": "Git operations for version control"
+    }
   }
 }
