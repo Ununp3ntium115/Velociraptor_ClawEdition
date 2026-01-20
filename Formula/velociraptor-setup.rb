@@ -1,10 +1,15 @@
 class VelociraptorSetup < Formula
   desc "Automated deployment scripts for Velociraptor DFIR framework on macOS"
   homepage "https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts"
-  url "https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/archive/refs/tags/v5.0.1.tar.gz"
-  sha256 "YOUR_SHA256_HERE" # This will need to be updated with actual SHA256
   license "MIT"
-  version "5.0.1"
+  version "5.0.5"
+
+  # Use head for development installation (no SHA256 required)
+  head "https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts.git", branch: "main"
+
+  # For stable releases, uncomment and update SHA256 after creating a GitHub release:
+  # url "https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts/archive/refs/tags/v5.0.5.tar.gz"
+  # sha256 "REPLACE_WITH_ACTUAL_SHA256_AFTER_RELEASE"
 
   depends_on "jq"
   depends_on "curl"
