@@ -59,11 +59,9 @@
     "x64",
     "arm64"
   ],
-  "dependencies": {
-    "powershell": ">=7.0.0"
-  },
-  "devDependencies": {
-    "pester": ">=5.0.0"
+  "systemRequirements": {
+    "powershell": ">=7.0.0",
+    "pester": ">=5.0.0 (for testing)"
   },
   "peerDependencies": {
     "docker": ">=20.0.0",
