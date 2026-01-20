@@ -61,17 +61,13 @@
   ],
   "systemRequirements": {
     "powershell": ">=7.0.0",
-    "pester": ">=5.0.0 (for testing)"
-  },
-  "peerDependencies": {
-    "docker": ">=20.0.0",
-    "kubectl": ">=1.20.0",
-    "helm": ">=3.0.0"
-  },
-  "optionalDependencies": {
-    "aws-cli": ">=2.0.0",
-    "azure-cli": ">=2.0.0",
-    "gcloud": ">=400.0.0"
+    "pester": ">=5.0.0 (for testing)",
+    "docker": ">=20.0.0 (optional, for containers)",
+    "kubectl": ">=1.20.0 (optional, for kubernetes)",
+    "helm": ">=3.0.0 (optional, for kubernetes)",
+    "aws-cli": ">=2.0.0 (optional, for AWS)",
+    "azure-cli": ">=2.0.0 (optional, for Azure)",
+    "gcloud": ">=400.0.0 (optional, for GCP)"
   },
   "files": [
     "Deploy_Velociraptor_Standalone.ps1",
