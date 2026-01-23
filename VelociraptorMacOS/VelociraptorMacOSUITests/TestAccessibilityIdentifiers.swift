@@ -34,6 +34,49 @@ enum TestIDs {
         static let complete = "wizard.step.complete"
     }
     
+    // MARK: - Certificate Settings
+    enum CertificateSettings {
+        static let selfSignedCard = "certificate.card.selfSigned"
+        static let customCard = "certificate.card.custom"
+        static let letsEncryptCard = "certificate.card.letsEncrypt"
+        static let expirationPicker = "certificate.picker.expiration"
+        static let organizationField = "certificate.field.organization"
+        static let certPathField = "certificate.field.certPath"
+        static let keyPathField = "certificate.field.keyPath"
+        static let domainField = "certificate.field.domain"
+        static let browseCertButton = "certificate.button.browseCert"
+        static let browseKeyButton = "certificate.button.browseKey"
+    }
+    
+    // MARK: - Security Settings
+    enum SecuritySettings {
+        static let environmentPicker = "security.picker.environment"
+        static let logLevelPicker = "security.picker.logLevel"
+        static let debugLoggingToggle = "security.toggle.debugLogging"
+        static let enforceTLSToggle = "security.toggle.enforceTLS"
+        static let validateCertsToggle = "security.toggle.validateCerts"
+        static let restrictVQLToggle = "security.toggle.restrictVQL"
+        static let useKeychainToggle = "security.toggle.useKeychain"
+        static let notificationsToggle = "security.toggle.notifications"
+        static let launchAtLoginToggle = "security.toggle.launchAtLogin"
+        static let autoUpdateToggle = "security.toggle.autoUpdate"
+    }
+    
+    // MARK: - Network Configuration
+    enum NetworkConfiguration {
+        static let frontendAddressField = "network.field.frontendAddress"
+        static let frontendPortField = "network.field.frontendPort"
+        static let guiAddressField = "network.field.guiAddress"
+        static let guiPortField = "network.field.guiPort"
+        static let apiAddressField = "network.field.apiAddress"
+        static let apiPortField = "network.field.apiPort"
+        static let portStatus = "network.status.port"
+        static let presetStandardButton = "network.button.presetStandard"
+        static let presetDevelopmentButton = "network.button.presetDevelopment"
+        static let presetCustomButton = "network.button.presetCustom"
+        static let portConflictWarning = "network.warning.portConflict"
+    }
+    
     // MARK: - Storage Configuration
     enum StorageConfiguration {
         static let datastorePathField = "storage.field.datastorePath"
