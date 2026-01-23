@@ -325,6 +325,9 @@ struct NavigationButtonsView: View {
         configViewModel.validateStep(appState.currentStep)
     }
     
+    /// Validate the current wizard step and advance to the next step if validation succeeds.
+    /// 
+    /// If validation fails, presents the first validation error via `appState.displayError(_:)` and does not change the current step.
     private func handleNextStep() {
         // Validate current step
         guard configViewModel.validateStep(appState.currentStep) else {

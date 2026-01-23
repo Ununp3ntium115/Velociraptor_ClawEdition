@@ -140,6 +140,10 @@ struct VelociraptorMacOSApp: App {
 
 /// Application delegate for handling macOS-specific lifecycle events
 class AppDelegate: NSObject, NSApplicationDelegate {
+    /// Performs startup initialization when the application finishes launching.
+    /// 
+    /// Sets the app's appearance to Dark Aqua and records a startup log entry.
+    /// - Parameter notification: The notification sent by NSApplication indicating launch completion.
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Configure application appearance
         NSApp.appearance = NSAppearance(named: .darkAqua)
@@ -148,15 +152,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         Logger.shared.info("Velociraptor macOS started", component: "App")
     }
     
+    /// Perform final cleanup when the application is about to terminate.
+    /// - Parameter notification: The termination notification sent by the application.
     func applicationWillTerminate(_ notification: Notification) {
         // Cleanup on termination
         Logger.shared.info("Velociraptor macOS shutting down", component: "App")
     }
     
+    /// Allow the app to terminate when the last open window is closed.
+    /// - Returns: `true` to terminate the app after the last window closes, `false` otherwise.
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
     
+    /// Indicates that the application supports secure state restoration.
+    /// - Returns: `true` to indicate the application supports secure restorable state.
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
     }

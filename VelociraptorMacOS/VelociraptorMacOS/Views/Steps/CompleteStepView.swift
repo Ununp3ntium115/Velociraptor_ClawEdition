@@ -166,6 +166,9 @@ struct CompleteStepView: View {
         .accessibilityId(AccessibilityIdentifiers.WizardStep.complete)
     }
     
+    /// Opens the application's web administration interface in the user's default browser.
+    /// 
+    /// Builds an HTTPS URL from the current configuration's `guiBindAddress` and `guiBindPort` and opens it using the system workspace.
     private func openWebGUI() {
         let urlString = "https://\(configViewModel.data.guiBindAddress):\(configViewModel.data.guiBindPort)"
         if let url = URL(string: urlString) {
@@ -173,16 +176,24 @@ struct CompleteStepView: View {
         }
     }
     
+    /// Opens the configured logs directory in Finder.
+    /// The directory path is taken from `configViewModel.data.logsDirectory`.
     private func openLogsFolder() {
         let url = URL(fileURLWithPath: configViewModel.data.logsDirectory)
         NSWorkspace.shared.open(url)
     }
     
+    /// Opens the configured datastore directory in Finder.
+    /// 
+    /// Reads the `datastoreDirectory` path from `configViewModel.data` and asks the system to open that folder.
     private func openDataFolder() {
         let url = URL(fileURLWithPath: configViewModel.data.datastoreDirectory)
         NSWorkspace.shared.open(url)
     }
     
+    /// Copies the server configuration file path from the configuration view model to the system clipboard and temporarily marks the UI as copied.
+    /// 
+    /// The copied indicator is set to `true` immediately and is reset to `false` after 2 seconds.
     private func copyConfigPath() {
         let path = configViewModel.data.datastoreDirectory + "/config/server.config.yaml"
         NSPasteboard.general.clearContents()

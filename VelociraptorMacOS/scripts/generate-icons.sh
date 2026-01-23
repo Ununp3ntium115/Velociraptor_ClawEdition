@@ -25,14 +25,17 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+# log_info outputs an informational message prefixed with [INFO] in green (resets color) using its first argument and writes it to stdout.
 log_info() {
     echo -e "${GREEN}[INFO]${NC} $1"
 }
 
+# log_warn prints a warning message prefixed with a yellow "[WARN]" tag.
 log_warn() {
     echo -e "${YELLOW}[WARN]${NC} $1"
 }
 
+# log_error prints an error message prefixed with "[ERROR]" in red using the first argument as the message.
 log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }

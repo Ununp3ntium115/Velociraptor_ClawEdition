@@ -52,6 +52,9 @@ struct DeploymentTypeStepView: View {
         .accessibilityId(AccessibilityIdentifiers.WizardStep.deploymentType)
     }
     
+    /// Maps a deployment type to its corresponding accessibility identifier.
+    /// - Parameter type: The deployment type to map.
+    /// - Returns: The accessibility identifier string associated with `type`.
     private func accessibilityIdForType(_ type: AppState.DeploymentType) -> String {
         switch type {
         case .server:

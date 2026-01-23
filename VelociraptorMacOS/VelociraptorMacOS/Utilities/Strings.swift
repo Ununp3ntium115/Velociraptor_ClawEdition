@@ -204,7 +204,9 @@ enum Strings {
 // MARK: - String Extension for non-SwiftUI contexts
 
 extension String {
-    /// Get localized string for non-SwiftUI contexts
+    /// Fetches the localized string for a localization key.
+    /// - Parameter key: The lookup key from the app's localization tables (e.g., Localizable.strings).
+    /// - Returns: The localized string for `key`, or `key` itself if no translation is found.
     static func localized(_ key: String) -> String {
         NSLocalizedString(key, comment: "")
     }
