@@ -27,6 +27,7 @@ struct SettingsView: View {
                     Label("General", systemImage: "gear")
                 }
                 .tag(Tab.general)
+                .accessibilityId(AccessibilityIdentifiers.Settings.generalTab)
             
             SecuritySettingsTab()
                 .environmentObject(keychainManager)
@@ -34,14 +35,17 @@ struct SettingsView: View {
                     Label("Security", systemImage: "lock.shield")
                 }
                 .tag(Tab.security)
+                .accessibilityId(AccessibilityIdentifiers.Settings.securityTab)
             
             AdvancedSettingsView()
                 .tabItem {
                     Label("Advanced", systemImage: "gearshape.2")
                 }
                 .tag(Tab.advanced)
+                .accessibilityId(AccessibilityIdentifiers.Settings.advancedTab)
         }
         .frame(width: 500, height: 400)
+        .accessibilityId(AccessibilityIdentifiers.Settings.window)
     }
 }
 
@@ -57,11 +61,14 @@ struct GeneralSettingsView: View {
         Form {
             Section("Startup") {
                 Toggle("Launch at Login", isOn: $launchAtLogin)
+                    .accessibilityId(AccessibilityIdentifiers.Settings.launchAtLoginToggle)
                 Toggle("Check for Updates Automatically", isOn: $autoCheckUpdates)
+                    .accessibilityId(AccessibilityIdentifiers.Settings.checkUpdatesToggle)
             }
             
             Section("Notifications") {
                 Toggle("Enable System Notifications", isOn: $enableNotifications)
+                    .accessibilityId(AccessibilityIdentifiers.Settings.notificationsToggle)
             }
             
             Section("Appearance") {
@@ -71,6 +78,7 @@ struct GeneralSettingsView: View {
                     Text("Dark").tag("dark")
                 }
                 .pickerStyle(.segmented)
+                .accessibilityId(AccessibilityIdentifiers.Settings.themePicker)
             }
             
             Section("Data") {
@@ -82,6 +90,7 @@ struct GeneralSettingsView: View {
                             NSWorkspace.shared.selectFile(path.path, inFileViewerRootedAtPath: path.deletingLastPathComponent().path)
                         }
                     }
+                    .accessibilityId(AccessibilityIdentifiers.Settings.openLogsFolderButton)
                 }
                 
                 HStack {
@@ -90,6 +99,7 @@ struct GeneralSettingsView: View {
                     Button("Clear (> 30 days)") {
                         Logger.shared.clearOldLogs(olderThanDays: 30)
                     }
+                    .accessibilityId(AccessibilityIdentifiers.Settings.clearOldLogsButton)
                 }
             }
         }

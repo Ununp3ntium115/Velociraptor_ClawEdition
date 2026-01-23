@@ -17,6 +17,7 @@ struct ContentView: View {
     var body: some View {
         NavigationSplitView {
             SidebarView()
+                .accessibilityId(AccessibilityIdentifiers.Navigation.sidebar)
         } detail: {
             VStack(spacing: 0) {
                 // Header
@@ -37,6 +38,7 @@ struct ContentView: View {
                     .progressViewStyle(.linear)
                     .padding(.horizontal)
                     .padding(.vertical, 4)
+                    .accessibilityId(AccessibilityIdentifiers.Navigation.progressBar)
                 
                 // Navigation buttons
                 NavigationButtonsView()
@@ -57,9 +59,11 @@ struct ContentView: View {
         }
         .sheet(isPresented: $appState.showEmergencyMode) {
             EmergencyModeView()
+                .accessibilityId(AccessibilityIdentifiers.EmergencyMode.sheet)
         }
         .sheet(isPresented: $appState.showAbout) {
             AboutView()
+                .accessibilityId(AccessibilityIdentifiers.Dialog.about)
         }
     }
 }
@@ -269,33 +273,43 @@ struct NavigationButtonsView: View {
             .buttonStyle(.borderedProminent)
             .tint(.red)
             .help("Rapid emergency deployment")
+            .accessibilityId(AccessibilityIdentifiers.Navigation.emergencyButton)
             
             Spacer()
             
             // Back button
-            Button("Back") {
+            Button {
                 appState.previousStep()
+            } label: {
+                Text(Strings.Action.back)
             }
             .disabled(!appState.canGoBack || deploymentManager.isDeploying)
             .keyboardShortcut(.leftArrow, modifiers: [.command])
+            .accessibilityId(AccessibilityIdentifiers.Navigation.backButton)
             
             // Next/Finish button
-            Button(appState.currentStep == .complete ? "Finish" : "Next") {
+            Button {
                 if appState.currentStep == .complete {
                     NSApplication.shared.terminate(nil)
                 } else {
                     handleNextStep()
                 }
+            } label: {
+                Text(appState.currentStep == .complete ? Strings.Action.finish : Strings.Action.next)
             }
             .buttonStyle(.borderedProminent)
             .disabled(!canProceed || deploymentManager.isDeploying)
             .keyboardShortcut(.rightArrow, modifiers: [.command])
+            .accessibilityId(AccessibilityIdentifiers.Navigation.nextButton)
             
             // Cancel button
-            Button("Cancel", role: .cancel) {
+            Button(role: .cancel) {
                 showCancelConfirmation = true
+            } label: {
+                Text(Strings.Action.cancel)
             }
             .disabled(deploymentManager.isDeploying)
+            .accessibilityId(AccessibilityIdentifiers.Navigation.cancelButton)
         }
         .confirmationDialog("Cancel Configuration?", isPresented: $showCancelConfirmation) {
             Button("Cancel Configuration", role: .destructive) {

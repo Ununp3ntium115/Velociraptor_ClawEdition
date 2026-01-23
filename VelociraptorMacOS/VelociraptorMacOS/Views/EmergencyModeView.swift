@@ -25,11 +25,12 @@ struct EmergencyModeView: View {
                     .font(.system(size: 48))
                     .foregroundColor(.red)
                 
-                Text("EMERGENCY DEPLOYMENT")
+                Text(Strings.Emergency.title)
                     .font(.title.bold())
                     .foregroundColor(.red)
+                    .accessibilityId(AccessibilityIdentifiers.EmergencyMode.title)
                 
-                Text("Rapid deployment for active incident response")
+                Text(Strings.Emergency.subtitle)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -42,6 +43,7 @@ struct EmergencyModeView: View {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 48))
                         .foregroundColor(.green)
+                        .accessibilityId(AccessibilityIdentifiers.EmergencyMode.successView)
                     
                     Text("Deployment Complete!")
                         .font(.headline)
@@ -98,6 +100,7 @@ struct EmergencyModeView: View {
                     ProgressView(value: deploymentManager.progress)
                         .progressViewStyle(.linear)
                         .frame(width: 300)
+                        .accessibilityId(AccessibilityIdentifiers.EmergencyMode.progressIndicator)
                     
                     Text("Estimated time: 2-3 minutes")
                         .font(.caption)
@@ -124,12 +127,15 @@ struct EmergencyModeView: View {
                             startEmergencyDeployment()
                         }
                         .buttonStyle(.borderedProminent)
+                        .accessibilityId(AccessibilityIdentifiers.EmergencyMode.retryButton)
                         
                         Button("Cancel") {
                             dismiss()
                         }
+                        .accessibilityId(AccessibilityIdentifiers.EmergencyMode.cancelButton)
                     }
                 }
+                .accessibilityId(AccessibilityIdentifiers.EmergencyMode.errorView)
             } else {
                 // Initial state
                 VStack(alignment: .leading, spacing: 16) {
@@ -170,19 +176,26 @@ struct EmergencyModeView: View {
                     Button("Cancel", role: .cancel) {
                         dismiss()
                     }
+                    .accessibilityId(AccessibilityIdentifiers.EmergencyMode.cancelButton)
                     
                     Button {
                         startEmergencyDeployment()
                     } label: {
-                        Label("Deploy Now", systemImage: "bolt.fill")
+                        Label {
+                            Text(Strings.Emergency.deployNow)
+                        } icon: {
+                            Image(systemName: "bolt.fill")
+                        }
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.red)
+                    .accessibilityId(AccessibilityIdentifiers.EmergencyMode.deployButton)
                 }
             }
         }
         .padding(32)
         .frame(width: 500)
+        .accessibilityId(AccessibilityIdentifiers.EmergencyMode.sheet)
     }
     
     private func startEmergencyDeployment() {

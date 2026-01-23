@@ -52,7 +52,7 @@ final class InstallerUITests: XCTestCase {
         navigateToStep(.storageConfiguration)
         
         // Step 1: Verify datastore path field exists
-        let datastoreField = app.textFields["wizard.storage.path"]
+        let datastoreField = app.textFields[TestIDs.StorageConfiguration.datastorePathField]
         XCTAssertTrue(datastoreField.waitForExistence(timeout: 5), "Datastore path field should exist")
         takeScreenshot(name: "datastore-initial", testCase: "INS-001")
         logStep("Datastore field found", to: testCasePath)
@@ -73,7 +73,7 @@ final class InstallerUITests: XCTestCase {
         logStep("Entered valid path", to: testCasePath)
         
         // Step 4: Verify Next button state
-        let nextButton = app.buttons["wizard.next"]
+        let nextButton = app.buttons[TestIDs.Navigation.nextButton]
         XCTAssertTrue(nextButton.exists, "Next button should exist")
         
         // Write assertions JSON
@@ -107,7 +107,7 @@ final class InstallerUITests: XCTestCase {
         takeScreenshot(name: "review-step", testCase: "INS-002")
         
         // Find deploy button
-        let deployButton = app.buttons["review.button.deploy"]
+        let deployButton = app.buttons[TestIDs.Review.deployButton]
         
         if deployButton.waitForExistence(timeout: 5) {
             logStep("Deploy button found", to: testCasePath)
@@ -147,7 +147,7 @@ final class InstallerUITests: XCTestCase {
         logStep("Starting INS-003: Emergency Mode", to: testCasePath)
         
         // Find emergency button
-        let emergencyButton = app.buttons["navigation.button.emergency"]
+        let emergencyButton = app.buttons[TestIDs.Navigation.emergencyButton]
         XCTAssertTrue(emergencyButton.waitForExistence(timeout: 5), "Emergency button should exist")
         takeScreenshot(name: "emergency-button", testCase: "INS-003")
         
@@ -200,7 +200,7 @@ final class InstallerUITests: XCTestCase {
         takeScreenshot(name: "complete-step", testCase: "INS-004")
         
         // Find Open Web GUI button
-        let openGUIButton = app.buttons["complete.button.openGUI"]
+        let openGUIButton = app.buttons[TestIDs.Complete.openGUIButton]
         
         if openGUIButton.waitForExistence(timeout: 5) {
             logStep("Open GUI button found", to: testCasePath)
@@ -236,7 +236,7 @@ final class InstallerUITests: XCTestCase {
         takeScreenshot(name: "before-exit", testCase: "INS-005")
         
         // Find cancel button
-        let cancelButton = app.buttons["navigation.button.cancel"]
+        let cancelButton = app.buttons[TestIDs.Navigation.cancelButton]
         
         if cancelButton.waitForExistence(timeout: 5) && cancelButton.isEnabled {
             logStep("Cancel button found and enabled", to: testCasePath)

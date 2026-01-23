@@ -51,9 +51,9 @@ final class WizardUITests: XCTestCase {
         XCTAssertTrue(welcomeText.waitForExistence(timeout: 5), "Should start on Welcome step")
         logStep("Welcome step verified", to: testCasePath)
         
-        // Step 2: Click Next
-        let nextButton = app.buttons["Next"]
-        XCTAssertTrue(nextButton.exists && nextButton.isEnabled, "Next button should be enabled")
+        // Step 2: Click Next (using accessibility ID for reliability)
+        let nextButton = app.buttons[TestIDs.Navigation.nextButton]
+        XCTAssertTrue(nextButton.waitForExistence(timeout: 5) && nextButton.isEnabled, "Next button should be enabled")
         nextButton.click()
         takeScreenshot(name: "after-first-next", testCase: "WIZ-001")
         logStep("Navigated to Deployment Type step", to: testCasePath)
@@ -64,14 +64,14 @@ final class WizardUITests: XCTestCase {
         logStep("Navigated to Certificate step", to: testCasePath)
         
         // Step 4: Click Back
-        let backButton = app.buttons["Back"]
-        XCTAssertTrue(backButton.exists && backButton.isEnabled, "Back button should be enabled")
+        let backButton = app.buttons[TestIDs.Navigation.backButton]
+        XCTAssertTrue(backButton.waitForExistence(timeout: 5) && backButton.isEnabled, "Back button should be enabled")
         backButton.click()
         takeScreenshot(name: "after-back", testCase: "WIZ-001")
         logStep("Navigated back to Deployment Type step", to: testCasePath)
         
         // Step 5: Test Cancel
-        let cancelButton = app.buttons["Cancel"]
+        let cancelButton = app.buttons[TestIDs.Navigation.cancelButton]
         if cancelButton.exists && cancelButton.isEnabled {
             cancelButton.click()
             takeScreenshot(name: "cancel-dialog", testCase: "WIZ-001")

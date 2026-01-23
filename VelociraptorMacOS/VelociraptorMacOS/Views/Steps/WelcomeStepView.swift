@@ -15,16 +15,14 @@ struct WelcomeStepView: View {
         VStack(alignment: .leading, spacing: 24) {
             // Welcome message
             VStack(alignment: .leading, spacing: 16) {
-                Text("Welcome to the Velociraptor Configuration Wizard")
+                Text(Strings.Welcome.title)
                     .font(.title3.bold())
+                    .accessibilityId(AccessibilityIdentifiers.Welcome.title)
                 
-                Text("""
-                This wizard will guide you through creating a complete Velociraptor \
-                configuration optimized for macOS. Whether you're setting up a server, \
-                standalone instance, or client, we'll walk you through each step.
-                """)
-                .font(.body)
-                .foregroundColor(.secondary)
+                Text(Strings.Welcome.description)
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .accessibilityId(AccessibilityIdentifiers.Welcome.description)
             }
             
             Divider()
@@ -39,24 +37,28 @@ struct WelcomeStepView: View {
                     title: "Multi-Deployment Modes",
                     description: "Server, Standalone, or Client configurations"
                 )
+                .accessibilityId("\(AccessibilityIdentifiers.Welcome.featureCard).deployment")
                 
                 FeatureCard(
                     icon: "lock.shield.fill",
                     title: "Secure by Default",
                     description: "TLS encryption and Keychain integration"
                 )
+                .accessibilityId("\(AccessibilityIdentifiers.Welcome.featureCard).security")
                 
                 FeatureCard(
                     icon: "checkmark.circle.fill",
                     title: "Real-time Validation",
                     description: "Input validation at every step"
                 )
+                .accessibilityId("\(AccessibilityIdentifiers.Welcome.featureCard).validation")
                 
                 FeatureCard(
                     icon: "doc.text.fill",
                     title: "YAML Configuration",
                     description: "Professional configuration file generation"
                 )
+                .accessibilityId("\(AccessibilityIdentifiers.Welcome.featureCard).yaml")
             }
             
             Divider()
@@ -68,17 +70,19 @@ struct WelcomeStepView: View {
                 
                 HStack(spacing: 16) {
                     QuickStartButton(
-                        title: "Standard Setup",
-                        description: "Walk through all configuration steps",
+                        titleKey: Strings.Welcome.standardSetup,
+                        descriptionKey: Strings.Welcome.standardSetupDescription,
                         icon: "wand.and.stars",
+                        accessibilityId: AccessibilityIdentifiers.Welcome.standardSetupButton,
                         action: { appState.nextStep() }
                     )
                     
                     QuickStartButton(
-                        title: "Emergency Mode",
-                        description: "Rapid deployment in under 3 minutes",
+                        titleKey: Strings.Welcome.emergencyMode,
+                        descriptionKey: Strings.Welcome.emergencyModeDescription,
                         icon: "exclamationmark.triangle.fill",
                         isPrimary: true,
+                        accessibilityId: AccessibilityIdentifiers.Welcome.emergencyModeButton,
                         action: { appState.showEmergencyMode = true }
                     )
                 }
@@ -97,6 +101,7 @@ struct WelcomeStepView: View {
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Welcome to Velociraptor Configuration Wizard")
+        .accessibilityId(AccessibilityIdentifiers.WizardStep.welcome)
     }
 }
 
@@ -133,10 +138,11 @@ struct FeatureCard: View {
 // MARK: - Quick Start Button
 
 struct QuickStartButton: View {
-    let title: String
-    let description: String
+    let titleKey: LocalizedStringKey
+    let descriptionKey: LocalizedStringKey
     let icon: String
     var isPrimary: Bool = false
+    var accessibilityId: String = ""
     let action: () -> Void
     
     var body: some View {
@@ -146,10 +152,10 @@ struct QuickStartButton: View {
                     .font(.title2)
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
+                    Text(titleKey)
                         .font(.subheadline.bold())
                     
-                    Text(description)
+                    Text(descriptionKey)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -169,6 +175,7 @@ struct QuickStartButton: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(accessibilityId)
     }
 }
 
