@@ -25,6 +25,7 @@ struct CertificateSettingsStepView: View {
                     isSelected: configViewModel.data.encryptionType == type,
                     action: { configViewModel.data.encryptionType = type }
                 )
+                .accessibilityId(accessibilityIdForType(type))
             }
             
             // Additional settings based on selection
@@ -62,6 +63,18 @@ struct CertificateSettingsStepView: View {
             if case .success(let urls) = result, let url = urls.first {
                 configViewModel.data.customKeyPath = url.path
             }
+        }
+        .accessibilityId(AccessibilityIdentifiers.WizardStep.certificateSettings)
+    }
+    
+    private func accessibilityIdForType(_ type: ConfigurationData.EncryptionType) -> String {
+        switch type {
+        case .selfSigned:
+            return AccessibilityIdentifiers.CertificateSettings.selfSignedCard
+        case .custom:
+            return AccessibilityIdentifiers.CertificateSettings.customCard
+        case .letsEncrypt:
+            return AccessibilityIdentifiers.CertificateSettings.letsEncryptCard
         }
     }
 }
@@ -150,6 +163,7 @@ struct SelfSignedSettingsView: View {
                     }
                     .labelsHidden()
                     .frame(width: 200)
+                    .accessibilityId(AccessibilityIdentifiers.CertificateSettings.expirationPicker)
                 }
                 
                 HStack {
@@ -159,6 +173,7 @@ struct SelfSignedSettingsView: View {
                     TextField("Organization", text: $configViewModel.data.organizationName)
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 300)
+                        .accessibilityId(AccessibilityIdentifiers.CertificateSettings.organizationField)
                 }
                 
                 HStack {
@@ -192,10 +207,12 @@ struct CustomCertificateSettingsView: View {
                     HStack {
                         TextField("Path to certificate file", text: $configViewModel.data.customCertPath)
                             .textFieldStyle(.roundedBorder)
+                            .accessibilityId(AccessibilityIdentifiers.CertificateSettings.certPathField)
                         
                         Button("Browse...") {
                             showCertFilePicker = true
                         }
+                        .accessibilityId(AccessibilityIdentifiers.CertificateSettings.browseCertButton)
                     }
                     
                     if !configViewModel.data.customCertPath.isEmpty {
@@ -219,10 +236,12 @@ struct CustomCertificateSettingsView: View {
                     HStack {
                         TextField("Path to private key file", text: $configViewModel.data.customKeyPath)
                             .textFieldStyle(.roundedBorder)
+                            .accessibilityId(AccessibilityIdentifiers.CertificateSettings.keyPathField)
                         
                         Button("Browse...") {
                             showKeyFilePicker = true
                         }
+                        .accessibilityId(AccessibilityIdentifiers.CertificateSettings.browseKeyButton)
                     }
                     
                     if !configViewModel.data.customKeyPath.isEmpty {
@@ -266,6 +285,7 @@ struct LetsEncryptSettingsView: View {
                     TextField("example.com", text: $configViewModel.data.letsEncryptDomain)
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 300)
+                        .accessibilityId(AccessibilityIdentifiers.CertificateSettings.domainField)
                 }
                 
                 HStack {
