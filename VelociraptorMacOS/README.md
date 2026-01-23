@@ -11,11 +11,32 @@ This is the native macOS (Swift/SwiftUI) implementation of the Velociraptor conf
 - **Notarization** - Code signing for Gatekeeper
 - **SwiftUI** - Modern declarative UI
 
+## Installation
+
+### Homebrew (Recommended)
+
+```bash
+# Install the GUI application
+brew install --cask velociraptor-gui
+
+# Or build from source
+brew install velociraptor-setup --with-gui
+```
+
+### Direct Download
+
+Download the latest DMG from [GitHub Releases](https://github.com/Ununp3ntium115/Velociraptor_ClawEdition/releases).
+
+### Build from Source
+
+See [Building](#building) section below.
+
 ## Requirements
 
 - macOS 13.0 (Ventura) or later
 - Xcode 15.0 or later (for development)
 - Swift 5.9 or later
+- XcodeGen (for project generation): `brew install xcodegen`
 
 ## Features
 
@@ -44,46 +65,80 @@ This is the native macOS (Swift/SwiftUI) implementation of the Velociraptor conf
 
 ```
 VelociraptorMacOS/
+├── Package.swift                       # Swift Package manifest
+├── project.yml                         # XcodeGen configuration
 ├── VelociraptorMacOS/
-│   ├── VelociraptorMacOSApp.swift    # Main app entry
+│   ├── VelociraptorMacOSApp.swift      # Main app entry
+│   ├── Info.plist                      # App configuration
+│   ├── VelociraptorMacOS.entitlements  # App entitlements
 │   ├── Models/
-│   │   ├── AppState.swift             # Global app state
-│   │   ├── ConfigurationData.swift    # Configuration model
+│   │   ├── AppState.swift              # Global app state
+│   │   ├── ConfigurationData.swift     # Configuration model
 │   │   ├── ConfigurationViewModel.swift
 │   │   └── IncidentResponseViewModel.swift
 │   ├── Views/
-│   │   ├── ContentView.swift          # Main content view
+│   │   ├── ContentView.swift           # Main content view
 │   │   ├── EmergencyModeView.swift
 │   │   ├── SettingsView.swift
-│   │   ├── Steps/                     # Wizard step views
-│   │   │   ├── WelcomeStepView.swift
-│   │   │   ├── DeploymentTypeStepView.swift
-│   │   │   ├── CertificateSettingsStepView.swift
-│   │   │   ├── SecuritySettingsStepView.swift
-│   │   │   ├── StorageConfigurationStepView.swift
-│   │   │   ├── NetworkConfigurationStepView.swift
-│   │   │   ├── AuthenticationStepView.swift
-│   │   │   ├── ReviewStepView.swift
-│   │   │   └── CompleteStepView.swift
+│   │   ├── HealthMonitorView.swift     # Service health dashboard
+│   │   ├── LogsView.swift              # Log viewer
+│   │   ├── Steps/                      # Wizard step views (9 files)
 │   │   └── IncidentResponse/
 │   │       └── IncidentResponseView.swift
 │   ├── Services/
-│   │   ├── KeychainManager.swift      # Keychain integration
-│   │   └── DeploymentManager.swift    # Deployment operations
+│   │   ├── KeychainManager.swift       # Keychain integration
+│   │   ├── DeploymentManager.swift     # Deployment operations
+│   │   └── NotificationManager.swift   # System notifications
 │   ├── Utilities/
-│   │   └── Logger.swift               # Unified logging
+│   │   ├── Logger.swift                # Unified logging
+│   │   ├── Strings.swift               # Localization keys
+│   │   ├── AccessibilityIdentifiers.swift  # UI test IDs
+│   │   └── ConfigurationExporter.swift # Config import/export
 │   └── Resources/
-├── VelociraptorMacOSTests/            # Unit tests
-└── VelociraptorMacOSUITests/          # UI tests
+│       ├── Assets.xcassets/            # App icons & colors
+│       └── en.lproj/Localizable.strings # English strings
+├── VelociraptorMacOSTests/             # Unit tests (7 files)
+├── VelociraptorMacOSUITests/           # UI tests (5 files)
+└── scripts/
+    ├── create-release.sh               # Release automation
+    └── generate-icons.sh               # App icon generation
 ```
+
+**Code Statistics:**
+- ~12,000 lines of Swift code
+- 119 accessibility identifiers
+- 327 localization strings
+- 80+ unit tests
+- 40+ UI tests
 
 ## Building
 
-### Using Xcode
+### Quick Start
 
-1. Open `VelociraptorMacOS.xcodeproj` in Xcode
-2. Select the `VelociraptorMacOS` scheme
-3. Build (⌘B) or Run (⌘R)
+```bash
+cd VelociraptorMacOS
+
+# Install XcodeGen (one-time setup)
+brew install xcodegen
+
+# Generate Xcode project
+xcodegen generate
+
+# Build release
+swift build -c release
+```
+
+### Using XcodeGen (Recommended)
+
+The project uses XcodeGen for Xcode project generation:
+
+```bash
+# Generate project.xcodeproj from project.yml
+xcodegen generate
+
+# Open in Xcode
+open VelociraptorMacOS.xcodeproj
+```
 
 ### Using Swift Package Manager
 
@@ -102,6 +157,32 @@ xcodebuild -project VelociraptorMacOS.xcodeproj \
   build
 ```
 
+### Release Build
+
+Use the automated release script for production builds:
+
+```bash
+./scripts/create-release.sh [options]
+
+Options:
+  --version VERSION    Set version number
+  --skip-tests         Skip running tests
+  --skip-sign          Skip code signing
+  --skip-notarize      Skip notarization
+  --clean              Clean build first
+```
+
+This script handles:
+1. Environment validation
+2. Xcode project generation
+3. Running tests
+4. Building release binary
+5. Creating app bundle
+6. Code signing
+7. Notarization
+8. DMG creation
+9. Checksum generation
+
 ## Testing
 
 ### Run Unit Tests
@@ -110,20 +191,56 @@ xcodebuild -project VelociraptorMacOS.xcodeproj \
 swift test
 ```
 
+Unit test coverage includes:
+- `AppStateTests` - Navigation, state management
+- `ConfigurationDataTests` - Validation, encoding
+- `KeychainManagerTests` - Credential storage
+- `DeploymentManagerTests` - Deployment operations
+- `IncidentResponseViewModelTests` - IR workflow
+- `ConfigurationExporterTests` - Import/export
+- `HealthMonitorTests` - Health monitoring
+
 ### Run UI Tests
 
 ```bash
+# Generate Xcode project first
+xcodegen generate
+
+# Run UI tests
 xcodebuild test -project VelociraptorMacOS.xcodeproj \
   -scheme VelociraptorMacOS \
-  -destination 'platform=macOS'
+  -destination 'platform=macOS' \
+  -only-testing:VelociraptorMacOSUITests
 ```
+
+UI test coverage includes:
+- Complete wizard navigation (8 steps)
+- All form fields and controls
+- Emergency mode workflow
+- Incident Response interface
+- Settings preferences
+- Accessibility verification
 
 ### Test Coverage
 
 ```bash
 swift test --enable-code-coverage
-xcov report
+
+# Generate HTML report
+xcrun llvm-cov show \
+  .build/debug/VelociraptorMacOSPackageTests.xctest/Contents/MacOS/VelociraptorMacOSPackageTests \
+  -instr-profile .build/debug/codecov/default.profdata \
+  -format html > coverage.html
 ```
+
+### Accessibility Testing
+
+All UI elements have accessibility identifiers for:
+- XCUITest automation
+- VoiceOver navigation
+- UI testing frameworks
+
+See `Utilities/AccessibilityIdentifiers.swift` for the complete list.
 
 ## Code Signing
 
