@@ -1,0 +1,327 @@
+/* 
+  Localizable.strings
+  VelociraptorMacOS
+
+  English localization strings for Velociraptor macOS application
+*/
+
+// MARK: - App General
+"app.name" = "Velociraptor";
+"app.tagline" = "DFIR Framework for macOS";
+"app.version" = "Version 5.0.5";
+"app.copyright" = "© 2026 Velocidex. All rights reserved.";
+"app.freeForAll" = "Free For All First Responders";
+
+// MARK: - Common Actions
+"action.next" = "Next";
+"action.back" = "Back";
+"action.cancel" = "Cancel";
+"action.finish" = "Finish";
+"action.save" = "Save";
+"action.open" = "Open";
+"action.close" = "Close";
+"action.browse" = "Browse...";
+"action.reset" = "Reset";
+"action.deploy" = "Deploy";
+"action.copy" = "Copy";
+"action.export" = "Export";
+"action.import" = "Import";
+"action.retry" = "Try Again";
+"action.continue" = "Continue";
+
+// MARK: - Wizard Steps
+"wizard.step.welcome" = "Welcome";
+"wizard.step.deploymentType" = "Deployment Type";
+"wizard.step.certificateSettings" = "Certificate Settings";
+"wizard.step.securitySettings" = "Security Settings";
+"wizard.step.storageConfiguration" = "Storage Configuration";
+"wizard.step.networkConfiguration" = "Network Configuration";
+"wizard.step.authentication" = "Authentication";
+"wizard.step.review" = "Review & Generate";
+"wizard.step.complete" = "Complete";
+
+// MARK: - Welcome Step
+"welcome.title" = "Welcome to the Velociraptor Configuration Wizard";
+"welcome.description" = "This wizard will guide you through creating a complete Velociraptor configuration optimized for macOS.";
+"welcome.standardSetup" = "Standard Setup";
+"welcome.standardSetup.description" = "Walk through all configuration steps";
+"welcome.emergencyMode" = "Emergency Mode";
+"welcome.emergencyMode.description" = "Rapid deployment in under 3 minutes";
+
+// MARK: - Deployment Type Step
+"deploymentType.title" = "Choose Your Deployment Type";
+"deploymentType.description" = "Select how you want to deploy Velociraptor:";
+"deploymentType.server" = "Server";
+"deploymentType.server.description" = "Full server deployment with client management capabilities. Ideal for centralized DFIR operations.";
+"deploymentType.standalone" = "Standalone";
+"deploymentType.standalone.description" = "Single-node deployment for local analysis. Perfect for individual investigators and testing.";
+"deploymentType.client" = "Client";
+"deploymentType.client.description" = "Client-only configuration for connecting to an existing server. Used for endpoint deployment.";
+
+// MARK: - Certificate Settings Step
+"certificate.title" = "Certificate Settings";
+"certificate.description" = "Configure SSL/TLS certificate settings for secure communication:";
+"certificate.selfSigned" = "Self-Signed Certificate";
+"certificate.selfSigned.description" = "Automatically generate a self-signed certificate. Best for testing and internal deployments.";
+"certificate.custom" = "Custom Certificate Files";
+"certificate.custom.description" = "Use your own certificate and private key files. Required for production with trusted certificates.";
+"certificate.letsEncrypt" = "Let's Encrypt (AutoCert)";
+"certificate.letsEncrypt.description" = "Automatically obtain certificates from Let's Encrypt. Requires a public domain name.";
+"certificate.expiration" = "Certificate Expiration:";
+"certificate.organization" = "Organization Name:";
+"certificate.path" = "Certificate File:";
+"certificate.keyPath" = "Private Key File:";
+"certificate.domain" = "Domain Name:";
+
+// MARK: - Security Settings Step
+"security.title" = "Security Settings";
+"security.description" = "Configure security and environment settings:";
+"security.environment" = "Environment";
+"security.environment.production" = "Production";
+"security.environment.development" = "Development";
+"security.environment.testing" = "Testing";
+"security.environment.staging" = "Staging";
+"security.logLevel" = "Log Level:";
+"security.enableDebugLogging" = "Enable Debug Logging";
+"security.enforceTLS" = "Enforce TLS 1.2 or Higher";
+"security.validateCerts" = "Validate SSL Certificates";
+"security.restrictVQL" = "Restrict VQL Capabilities";
+"security.useKeychain" = "Store Credentials in Keychain";
+"security.enableNotifications" = "Enable System Notifications";
+"security.launchAtLogin" = "Launch at Login";
+"security.autoCheckUpdates" = "Auto-check for Updates";
+
+// MARK: - Storage Configuration Step
+"storage.title" = "Storage Configuration";
+"storage.description" = "Configure data storage locations:";
+"storage.datastore" = "Datastore Directory";
+"storage.datastore.description" = "Primary location for Velociraptor data, including collected artifacts and database files.";
+"storage.logs" = "Logs Directory";
+"storage.logs.description" = "Location for log files. Following macOS conventions, logs go to ~/Library/Logs.";
+"storage.cache" = "Cache Directory";
+"storage.cache.description" = "Temporary cache for downloaded tools and temporary files.";
+"storage.size" = "Datastore Size Preset";
+"storage.size.small" = "Small - Up to 100 clients";
+"storage.size.medium" = "Medium - 100-1,000 clients";
+"storage.size.large" = "Large - 1,000-10,000 clients";
+"storage.size.enterprise" = "Enterprise - 10,000+ clients";
+
+// MARK: - Network Configuration Step
+"network.title" = "Network Configuration";
+"network.description" = "Configure network bindings and ports:";
+"network.frontend" = "Frontend (Client Communication)";
+"network.frontend.description" = "The frontend handles communication with Velociraptor clients.";
+"network.gui" = "Web GUI";
+"network.gui.description" = "The web-based graphical user interface for administration.";
+"network.api" = "API Server";
+"network.api.description" = "The gRPC API for programmatic access.";
+"network.bindAddress" = "Bind Address:";
+"network.port" = "Port:";
+"network.serverConnection" = "Server Connection";
+"network.presets" = "Quick Presets";
+"network.preset.standard" = "Standard";
+"network.preset.development" = "Development";
+"network.preset.custom" = "Custom Ports";
+
+// MARK: - Authentication Step
+"auth.title" = "Authentication";
+"auth.description" = "Configure administrator credentials:";
+"auth.adminAccount" = "Administrator Account";
+"auth.username" = "Username:";
+"auth.password" = "Password:";
+"auth.confirmPassword" = "Confirm:";
+"auth.organization" = "Organization";
+"auth.organizationName" = "Organization Name:";
+"auth.keychain" = "macOS Keychain";
+"auth.saveToKeychain" = "Save credentials to Keychain";
+"auth.generatePassword" = "Generate Secure Password";
+"auth.passwordStrength.weak" = "Weak";
+"auth.passwordStrength.medium" = "Medium";
+"auth.passwordStrength.strong" = "Strong";
+"auth.passwordStrength.veryStrong" = "Very Strong";
+"auth.requirement.length" = "At least 8 characters";
+"auth.requirement.uppercase" = "Contains uppercase letter";
+"auth.requirement.lowercase" = "Contains lowercase letter";
+"auth.requirement.number" = "Contains number";
+
+// MARK: - Review Step
+"review.title" = "Review Configuration";
+"review.description" = "Review your configuration before deploying:";
+"review.valid" = "Configuration is valid";
+"review.valid.description" = "All required fields have been configured correctly.";
+"review.issues" = "Configuration has issues";
+"review.issues.description" = "Please review the highlighted issues below.";
+"review.previewYAML" = "Preview YAML";
+"review.exportConfig" = "Export Config";
+"review.deployNow" = "Deploy Now";
+"review.deployment" = "Deployment";
+"review.certificate" = "Certificate";
+"review.security" = "Security";
+"review.storage" = "Storage";
+"review.network" = "Network";
+"review.authentication" = "Authentication";
+"review.macos" = "macOS";
+
+// MARK: - Complete Step
+"complete.title" = "Deployment Complete!";
+"complete.description" = "Velociraptor has been successfully deployed on your Mac.";
+"complete.accessInfo" = "Access Information";
+"complete.webInterface" = "Web Interface";
+"complete.username" = "Username";
+"complete.password" = "Password";
+"complete.version" = "Version";
+"complete.quickActions" = "Quick Actions";
+"complete.openWebGUI" = "Open Web GUI";
+"complete.viewLogs" = "View Logs";
+"complete.openDataFolder" = "Open Data Folder";
+"complete.copyConfigPath" = "Copy Config Path";
+"complete.serviceStatus" = "Service Status";
+"complete.running" = "Velociraptor is running";
+"complete.notRunning" = "Velociraptor is not running";
+"complete.stopService" = "Stop Service";
+"complete.startService" = "Start Service";
+"complete.nextSteps" = "Next Steps:";
+"complete.step1" = "Open the web interface and log in with your admin credentials";
+"complete.step2" = "Create additional user accounts if needed";
+"complete.step3" = "Configure artifact collection for your investigation";
+"complete.step4" = "Deploy clients to target endpoints";
+
+// MARK: - Emergency Mode
+"emergency.title" = "EMERGENCY DEPLOYMENT";
+"emergency.subtitle" = "Rapid deployment for active incident response";
+"emergency.description" = "This will perform a rapid deployment with default settings:";
+"emergency.feature.standalone" = "Standalone deployment mode";
+"emergency.feature.selfSigned" = "Self-signed certificate";
+"emergency.feature.defaultPorts" = "Default ports (8889 for GUI)";
+"emergency.feature.autoPassword" = "Auto-generated secure password";
+"emergency.feature.dataPath" = "Data stored in ~/EmergencyVelociraptor";
+"emergency.estimatedTime" = "Estimated deployment time: 2-3 minutes";
+"emergency.warning" = "This is intended for emergency situations. For production use, complete the full configuration wizard.";
+"emergency.deployNow" = "Deploy Now";
+"emergency.complete" = "Deployment Complete!";
+"emergency.ready" = "Velociraptor is now running and ready for use.";
+
+// MARK: - Incident Response
+"ir.title" = "Incident Response";
+"ir.subtitle" = "Select incident type to build a specialized collector";
+"ir.selectIncident" = "Select an Incident Type";
+"ir.selectDescription" = "Choose a category and incident from the left panel to configure a specialized offline collector.";
+"ir.category.malware" = "Malware & Ransomware";
+"ir.category.apt" = "Advanced Persistent Threats";
+"ir.category.insider" = "Insider Threats";
+"ir.category.network" = "Network & Infrastructure";
+"ir.category.dataBreach" = "Data Breaches & Compliance";
+"ir.category.industrial" = "Industrial & Critical Infrastructure";
+"ir.category.emerging" = "Emerging & Specialized Threats";
+"ir.priority.critical" = "Critical";
+"ir.priority.high" = "High";
+"ir.priority.medium" = "Medium";
+"ir.priority.low" = "Low";
+"ir.description" = "Description";
+"ir.artifacts" = "Recommended Artifacts";
+"ir.configuration" = "Collector Configuration";
+"ir.outputPath" = "Output Path:";
+"ir.offlineMode" = "Offline Mode";
+"ir.portablePackage" = "Portable Package";
+"ir.encryptPackage" = "Encrypt Package";
+"ir.includeTools" = "Include Tools";
+"ir.compressOutput" = "Compress Output";
+"ir.buildCollector" = "Build Collector";
+"ir.reset" = "Reset";
+
+// MARK: - Settings
+"settings.general" = "General";
+"settings.security" = "Security";
+"settings.advanced" = "Advanced";
+"settings.startup" = "Startup";
+"settings.launchAtLogin" = "Launch at Login";
+"settings.checkUpdates" = "Check for Updates Automatically";
+"settings.notifications" = "Notifications";
+"settings.enableNotifications" = "Enable System Notifications";
+"settings.appearance" = "Appearance";
+"settings.theme" = "Theme:";
+"settings.theme.system" = "System";
+"settings.theme.light" = "Light";
+"settings.theme.dark" = "Dark";
+"settings.data" = "Data";
+"settings.logFiles" = "Log Files:";
+"settings.openInFinder" = "Open in Finder";
+"settings.clearOldLogs" = "Clear (> 30 days)";
+"settings.credentialStorage" = "Credential Storage";
+"settings.storeInKeychain" = "Store Credentials in Keychain";
+"settings.storedAccounts" = "Stored Accounts:";
+"settings.viewInKeychain" = "View in Keychain Access";
+"settings.networkSecurity" = "Network Security";
+"settings.enforceTLS" = "Enforce TLS 1.2 or Higher";
+"settings.dangerZone" = "Danger Zone";
+"settings.deleteCredentials" = "Delete All Stored Credentials";
+"settings.logging" = "Logging";
+"settings.debugLogging" = "Enable Debug Logging";
+"settings.verboseOutput" = "Verbose Console Output";
+"settings.developer" = "Developer";
+"settings.developerMode" = "Developer Mode";
+"settings.openDevConsole" = "Open Developer Console";
+"settings.exportDiagnostics" = "Export Diagnostics";
+"settings.reset" = "Reset";
+"settings.resetAll" = "Reset All Settings to Defaults";
+"settings.clearCache" = "Clear Configuration Cache";
+
+// MARK: - Errors
+"error.generic" = "An error occurred";
+"error.networkUnavailable" = "Network connection unavailable";
+"error.permissionDenied" = "Permission denied";
+"error.insufficientDiskSpace" = "Insufficient disk space";
+"error.configurationInvalid" = "Configuration is invalid";
+"error.deploymentFailed" = "Deployment failed";
+"error.keychainAccess" = "Could not access Keychain";
+
+// MARK: - Validation Errors
+"validation.emptyUsername" = "Admin username cannot be empty";
+"validation.usernameTooShort" = "Username must be at least 3 characters";
+"validation.invalidUsername" = "Username can only contain letters, numbers, and underscores";
+"validation.emptyPassword" = "Password cannot be empty";
+"validation.weakPassword" = "Password must be at least 8 characters";
+"validation.passwordComplexity" = "Password must contain uppercase, lowercase, and numbers";
+"validation.passwordMismatch" = "Passwords do not match";
+"validation.invalidPort" = "Port must be between 1 and 65535";
+"validation.portConflict" = "All ports must be different";
+"validation.invalidIP" = "Invalid IP address";
+"validation.invalidPath" = "Invalid path";
+"validation.missingCertificate" = "Certificate file path is required";
+"validation.missingPrivateKey" = "Private key file path is required";
+"validation.missingDomain" = "Domain name is required for Let's Encrypt";
+"validation.invalidDomain" = "Domain name format is invalid";
+
+// MARK: - Deployment Status
+"deploy.preparing" = "Preparing deployment...";
+"deploy.downloading" = "Downloading Velociraptor...";
+"deploy.extracting" = "Extracting files...";
+"deploy.creatingDirs" = "Creating directories...";
+"deploy.generatingConfig" = "Generating configuration...";
+"deploy.installingService" = "Installing service...";
+"deploy.starting" = "Starting Velociraptor...";
+"deploy.verifying" = "Verifying deployment...";
+"deploy.complete" = "Deployment completed successfully!";
+"deploy.failed" = "Deployment failed";
+
+// MARK: - Accessibility
+"accessibility.nextStep" = "Go to next wizard step";
+"accessibility.previousStep" = "Go to previous wizard step";
+"accessibility.deploymentType.server" = "Server deployment option";
+"accessibility.deploymentType.standalone" = "Standalone deployment option";
+"accessibility.deploymentType.client" = "Client deployment option";
+"accessibility.passwordStrength" = "Password strength indicator";
+"accessibility.portAvailable" = "Port is available";
+"accessibility.portInUse" = "Port may be in use";
+"accessibility.directoryExists" = "Directory exists";
+"accessibility.directoryWillCreate" = "Directory will be created";
+
+// MARK: - Menu Items
+"menu.file.newConfiguration" = "New Configuration";
+"menu.file.openConfiguration" = "Open Configuration...";
+"menu.file.saveConfiguration" = "Save Configuration";
+"menu.file.emergencyDeployment" = "Emergency Deployment";
+"menu.help.velociraptorHelp" = "Velociraptor Help";
+"menu.help.troubleshooting" = "Troubleshooting Guide";
+"menu.help.reportIssue" = "Report an Issue";
+"menu.about" = "About Velociraptor";
