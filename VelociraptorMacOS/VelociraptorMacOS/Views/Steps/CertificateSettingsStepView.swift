@@ -67,6 +67,8 @@ struct CertificateSettingsStepView: View {
         .accessibilityId(AccessibilityIdentifiers.WizardStep.certificateSettings)
     }
     
+    /// Maps an encryption type to the corresponding accessibility identifier.
+    /// - Returns: The accessibility identifier string associated with the provided encryption type.
     private func accessibilityIdForType(_ type: ConfigurationData.EncryptionType) -> String {
         switch type {
         case .selfSigned:

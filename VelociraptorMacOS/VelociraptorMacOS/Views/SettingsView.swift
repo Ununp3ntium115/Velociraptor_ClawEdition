@@ -213,6 +213,8 @@ struct AdvancedSettingsView: View {
         .padding()
     }
     
+    /// Presents a Save panel to let the user choose a location and exports the generated diagnostics as a plain-text file.
+    /// - Details: The save panel defaults the filename to `velociraptor-diagnostics.txt` and, when the user confirms, writes the string returned by `generateDiagnostics()` to the chosen URL as UTF-8 plain text.
     private func exportDiagnostics() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.plainText]
@@ -226,6 +228,8 @@ struct AdvancedSettingsView: View {
         }
     }
     
+    /// Creates a multiline diagnostics report containing system, application, and path information.
+    /// - Returns: A string with the generated date, macOS version, host name, processor count, physical memory in GB, application version and flags (`debugLogging`, `developerMode`), home directory path, and the current log file path or `"Unknown"` if unavailable.
     private func generateDiagnostics() -> String {
         let sysinfo = ProcessInfo.processInfo
         
@@ -253,10 +257,14 @@ struct AdvancedSettingsView: View {
         """
     }
     
+    /// Removes the app's entire user defaults domain, resetting all stored preferences to their defaults.  
+    /// - Note: This affects all keys stored in UserDefaults for the app's bundle identifier.
     private func resetAllSettings() {
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
     }
     
+    /// Removes the Velociraptor cache directory located at ~/Library/Caches/Velociraptor and recreates an empty directory.
+    /// Attempts to remove the directory and then create it; any errors during removal or creation are ignored.
     private func clearCache() {
         let cacheURL = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Caches/Velociraptor")
