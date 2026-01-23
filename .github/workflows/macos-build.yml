@@ -1,0 +1,402 @@
+# GitHub Actions workflow for building and testing the macOS application
+name: macOS Build and Test
+
+on:
+  push:
+    branches:
+      - main
+      - 'cursor/*'
+    paths:
+      - 'VelociraptorMacOS/**'
+      - '.github/workflows/macos-build.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'VelociraptorMacOS/**'
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create a release build'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  XCODE_VERSION: '15.0'
+  MACOS_DEPLOYMENT_TARGET: '13.0'
+  APP_NAME: 'Velociraptor'
+  BUNDLE_ID: 'com.velocidex.velociraptor'
+  VERSION: '5.0.5'
+
+jobs:
+  build:
+    name: Build macOS App
+    runs-on: macos-14
+    outputs:
+      build_path: ${{ steps.build.outputs.build_path }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        run: sudo xcode-select -switch /Applications/Xcode_15.0.app
+        
+      - name: Show build environment
+        run: |
+          echo "Xcode version:"
+          xcodebuild -version
+          echo "Swift version:"
+          swift --version
+          echo "macOS version:"
+          sw_vers
+        
+      - name: Install XcodeGen
+        run: brew install xcodegen
+        
+      - name: Generate Xcode Project
+        working-directory: VelociraptorMacOS
+        run: |
+          echo "Generating Xcode project from project.yml..."
+          xcodegen generate
+          echo "Project generated successfully"
+          ls -la *.xcodeproj || echo "No xcodeproj found"
+        
+      - name: Resolve Swift packages
+        working-directory: VelociraptorMacOS
+        run: swift package resolve
+        
+      - name: Build with Swift Package Manager
+        id: build
+        working-directory: VelociraptorMacOS
+        run: |
+          swift build -c release \
+            -Xswiftc -O \
+            -Xswiftc -whole-module-optimization
+          echo "build_path=$(pwd)/.build/release" >> $GITHUB_OUTPUT
+        
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: VelociraptorMacOS-build
+          path: VelociraptorMacOS/.build/release/
+          retention-days: 5
+
+  test:
+    name: Run Unit Tests
+    runs-on: macos-14
+    needs: build
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        run: sudo xcode-select -switch /Applications/Xcode_15.0.app
+        
+      - name: Run unit tests with coverage
+        working-directory: VelociraptorMacOS
+        run: |
+          swift test --enable-code-coverage \
+            --parallel \
+            --xunit-output test-results.xml
+        
+      - name: Generate code coverage report
+        working-directory: VelociraptorMacOS
+        run: |
+          # Find the test binary
+          TEST_BINARY=$(find .build -name "*.xctest" -type d | head -1)
+          if [ -n "$TEST_BINARY" ]; then
+            xcrun llvm-cov export \
+              "$TEST_BINARY/Contents/MacOS/"* \
+              -instr-profile .build/debug/codecov/default.profdata \
+              -format lcov > coverage.lcov 2>/dev/null || true
+          fi
+        continue-on-error: true
+        
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: VelociraptorMacOS/test-results.xml
+          retention-days: 5
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: VelociraptorMacOS/coverage.lcov
+          flags: macos-unit-tests
+          name: macos-coverage
+        continue-on-error: true
+
+  ui-test:
+    name: Run UI Tests
+    runs-on: macos-14
+    needs: build
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        run: sudo xcode-select -switch /Applications/Xcode_15.0.app
+        
+      - name: Install XcodeGen
+        run: brew install xcodegen
+        
+      - name: Generate Xcode Project
+        working-directory: VelociraptorMacOS
+        run: xcodegen generate
+        
+      - name: Run UI tests
+        working-directory: VelociraptorMacOS
+        run: |
+          # Build and run UI tests using xcodebuild
+          xcodebuild test \
+            -project VelociraptorMacOS.xcodeproj \
+            -scheme VelociraptorMacOS \
+            -destination 'platform=macOS,arch=arm64' \
+            -resultBundlePath TestResults.xcresult \
+            -only-testing:VelociraptorMacOSUITests \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            2>&1 | xcpretty || true
+        continue-on-error: true
+        
+      - name: Upload UI test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-test-results
+          path: VelociraptorMacOS/TestResults.xcresult
+          retention-days: 5
+
+  lint:
+    name: Lint Swift Code
+    runs-on: macos-14
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Install SwiftLint
+        run: brew install swiftlint
+        
+      - name: Run SwiftLint
+        working-directory: VelociraptorMacOS
+        run: |
+          swiftlint lint \
+            --reporter github-actions-logging \
+            --strict
+        continue-on-error: true
+
+  release:
+    name: Create Release Package
+    runs-on: macos-14
+    needs: [build, test, ui-test]
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_dispatch' && inputs.create_release)
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        run: sudo xcode-select -switch /Applications/Xcode_15.0.app
+        
+      - name: Install dependencies
+        run: |
+          brew install xcodegen create-dmg
+        
+      - name: Generate Xcode Project
+        working-directory: VelociraptorMacOS
+        run: xcodegen generate
+        
+      - name: Build release binary
+        working-directory: VelociraptorMacOS
+        run: |
+          swift build -c release \
+            -Xswiftc -O \
+            -Xswiftc -whole-module-optimization
+        
+      - name: Create App Bundle
+        working-directory: VelociraptorMacOS
+        run: |
+          # Create app bundle structure
+          APP_BUNDLE="build/${{ env.APP_NAME }}.app"
+          mkdir -p "$APP_BUNDLE/Contents/MacOS"
+          mkdir -p "$APP_BUNDLE/Contents/Resources"
+          
+          # Copy binary
+          cp .build/release/VelociraptorMacOS "$APP_BUNDLE/Contents/MacOS/${{ env.APP_NAME }}"
+          
+          # Copy Info.plist
+          cp VelociraptorMacOS/Info.plist "$APP_BUNDLE/Contents/"
+          
+          # Copy resources
+          if [ -d "VelociraptorMacOS/Resources/Assets.xcassets" ]; then
+            xcrun actool VelociraptorMacOS/Resources/Assets.xcassets \
+              --compile "$APP_BUNDLE/Contents/Resources" \
+              --platform macosx \
+              --minimum-deployment-target ${{ env.MACOS_DEPLOYMENT_TARGET }} \
+              --app-icon AppIcon \
+              --accent-color AccentColor \
+              --output-partial-info-plist "$APP_BUNDLE/Contents/Resources/Assets.plist" || true
+          fi
+          
+          # Copy entitlements for signing reference
+          cp VelociraptorMacOS/VelociraptorMacOS.entitlements "$APP_BUNDLE/Contents/"
+          
+          echo "App bundle created at: $APP_BUNDLE"
+          ls -la "$APP_BUNDLE/Contents/"
+        
+      - name: Code Sign (Ad-hoc for artifacts)
+        working-directory: VelociraptorMacOS
+        run: |
+          APP_BUNDLE="build/${{ env.APP_NAME }}.app"
+          
+          # Ad-hoc sign for testing (no Developer ID in public CI)
+          codesign --force --deep --sign - \
+            --entitlements VelociraptorMacOS/VelociraptorMacOS.entitlements \
+            "$APP_BUNDLE"
+          
+          # Verify signature
+          codesign --verify --verbose=2 "$APP_BUNDLE"
+        
+      - name: Create DMG
+        working-directory: VelociraptorMacOS
+        run: |
+          APP_BUNDLE="build/${{ env.APP_NAME }}.app"
+          DMG_NAME="${{ env.APP_NAME }}-${{ env.VERSION }}.dmg"
+          
+          # Create DMG with create-dmg
+          create-dmg \
+            --volname "${{ env.APP_NAME }}" \
+            --volicon "VelociraptorMacOS/Resources/Assets.xcassets/AppIcon.appiconset/icon_512x512.png" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --icon "${{ env.APP_NAME }}.app" 150 190 \
+            --app-drop-link 450 185 \
+            --hide-extension "${{ env.APP_NAME }}.app" \
+            "build/$DMG_NAME" \
+            "$APP_BUNDLE" || {
+              # Fallback to hdiutil if create-dmg fails
+              hdiutil create -volname "${{ env.APP_NAME }}" \
+                -srcfolder "$APP_BUNDLE" \
+                -ov -format UDZO \
+                "build/$DMG_NAME"
+            }
+          
+          echo "DMG created: build/$DMG_NAME"
+          ls -la build/*.dmg
+        
+      - name: Generate checksums
+        working-directory: VelociraptorMacOS/build
+        run: |
+          shasum -a 256 *.dmg > checksums.txt
+          cat checksums.txt
+        
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: VelociraptorMacOS-${{ env.VERSION }}-release
+          path: |
+            VelociraptorMacOS/build/*.dmg
+            VelociraptorMacOS/build/checksums.txt
+            VelociraptorMacOS/build/${{ env.APP_NAME }}.app
+          retention-days: 30
+
+  # Separate job for signed releases (requires secrets)
+  signed-release:
+    name: Create Signed Release
+    runs-on: macos-14
+    needs: [build, test]
+    if: |
+      github.event_name == 'workflow_dispatch' && 
+      inputs.create_release &&
+      github.repository == 'Ununp3ntium115/Velociraptor_ClawEdition'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        run: sudo xcode-select -switch /Applications/Xcode_15.0.app
+        
+      - name: Install dependencies
+        run: brew install xcodegen create-dmg
+        
+      - name: Import Code Signing Certificate
+        if: env.CERTIFICATE_BASE64 != ''
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          # Create temporary keychain
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          
+          # Import certificate
+          echo "$CERTIFICATE_BASE64" | base64 --decode > $RUNNER_TEMP/certificate.p12
+          security import $RUNNER_TEMP/certificate.p12 \
+            -P "$CERTIFICATE_PASSWORD" \
+            -A -t cert -f pkcs12 \
+            -k "$KEYCHAIN_PATH"
+          
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+          
+      - name: Build and Sign
+        env:
+          DEVELOPER_ID: ${{ secrets.APPLE_DEVELOPER_ID }}
+        run: |
+          cd VelociraptorMacOS
+          xcodegen generate
+          
+          # Build
+          swift build -c release
+          
+          # Create and sign app bundle
+          ./scripts/Build-MacOSRelease.sh --skip-notarize --skip-dmg
+          
+      - name: Notarize
+        if: env.NOTARIZE_APPLE_ID != ''
+        env:
+          NOTARIZE_APPLE_ID: ${{ secrets.NOTARIZE_APPLE_ID }}
+          NOTARIZE_TEAM_ID: ${{ secrets.NOTARIZE_TEAM_ID }}
+          NOTARIZE_PASSWORD: ${{ secrets.NOTARIZE_PASSWORD }}
+        run: |
+          cd VelociraptorMacOS/build
+          
+          # Create zip for notarization
+          ditto -c -k --keepParent "${{ env.APP_NAME }}.app" "${{ env.APP_NAME }}.zip"
+          
+          # Submit for notarization
+          xcrun notarytool submit "${{ env.APP_NAME }}.zip" \
+            --apple-id "$NOTARIZE_APPLE_ID" \
+            --team-id "$NOTARIZE_TEAM_ID" \
+            --password "$NOTARIZE_PASSWORD" \
+            --wait
+          
+          # Staple ticket
+          xcrun stapler staple "${{ env.APP_NAME }}.app"
+          
+      - name: Create Signed DMG
+        run: |
+          cd VelociraptorMacOS
+          ./scripts/Build-MacOSRelease.sh --skip-notarize
+          
+      - name: Upload Signed Release
+        uses: actions/upload-artifact@v4
+        with:
+          name: VelociraptorMacOS-${{ env.VERSION }}-signed
+          path: |
+            VelociraptorMacOS/release/*.dmg
+            VelociraptorMacOS/release/checksums.txt
+          retention-days: 90

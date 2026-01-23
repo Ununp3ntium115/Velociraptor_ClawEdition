@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIconFile</key>
+    <string></string>
+    <key>CFBundleIdentifier</key>
+    <string>com.velocidex.velociraptor</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>Velociraptor</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>5.0.5</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.developer-tools</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+    <key>NSMainStoryboardFile</key>
+    <string></string>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright © 2026 Velocidex. All rights reserved.</string>
+    <key>LSUIElement</key>
+    <false/>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Velociraptor needs to send Apple Events to control system processes.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Velociraptor may need calendar access for scheduling.</string>
+    <key>NSRemovableVolumesUsageDescription</key>
+    <string>Velociraptor needs access to removable volumes for forensic analysis.</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>Velociraptor needs access to the Documents folder for configuration storage.</string>
+    <key>NSDownloadsFolderUsageDescription</key>
+    <string>Velociraptor needs access to the Downloads folder for binary storage.</string>
+    <key>NSDesktopFolderUsageDescription</key>
+    <string>Velociraptor needs access to the Desktop folder for report output.</string>
+</dict>
+</plist>
