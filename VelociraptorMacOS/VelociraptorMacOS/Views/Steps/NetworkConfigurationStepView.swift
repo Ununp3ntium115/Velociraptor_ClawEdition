@@ -34,6 +34,7 @@ struct NetworkConfigurationStepView: View {
                             TextField("0.0.0.0", text: $configViewModel.data.bindAddress)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 150)
+                                .accessibilityId(AccessibilityIdentifiers.NetworkConfiguration.frontendAddressField)
                             
                             Text("Port:")
                                 .frame(width: 40, alignment: .trailing)
@@ -41,6 +42,7 @@ struct NetworkConfigurationStepView: View {
                             TextField("8000", value: $configViewModel.data.bindPort, format: .number)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 80)
+                                .accessibilityId(AccessibilityIdentifiers.NetworkConfiguration.frontendPortField)
                             
                             PortStatusView(port: configViewModel.data.bindPort)
                         }
@@ -70,6 +72,7 @@ struct NetworkConfigurationStepView: View {
                             TextField("127.0.0.1", text: $configViewModel.data.guiBindAddress)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 150)
+                                .accessibilityId(AccessibilityIdentifiers.NetworkConfiguration.guiAddressField)
                             
                             Text("Port:")
                                 .frame(width: 40, alignment: .trailing)
@@ -77,6 +80,7 @@ struct NetworkConfigurationStepView: View {
                             TextField("8889", value: $configViewModel.data.guiBindPort, format: .number)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 80)
+                                .accessibilityId(AccessibilityIdentifiers.NetworkConfiguration.guiPortField)
                             
                             PortStatusView(port: configViewModel.data.guiBindPort)
                         }
@@ -106,6 +110,7 @@ struct NetworkConfigurationStepView: View {
                             TextField("127.0.0.1", text: $configViewModel.data.apiBindAddress)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 150)
+                                .accessibilityId(AccessibilityIdentifiers.NetworkConfiguration.apiAddressField)
                             
                             Text("Port:")
                                 .frame(width: 40, alignment: .trailing)
@@ -113,6 +118,7 @@ struct NetworkConfigurationStepView: View {
                             TextField("8001", value: $configViewModel.data.apiBindPort, format: .number)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 80)
+                                .accessibilityId(AccessibilityIdentifiers.NetworkConfiguration.apiPortField)
                             
                             PortStatusView(port: configViewModel.data.apiBindPort)
                         }
@@ -158,6 +164,7 @@ struct NetworkConfigurationStepView: View {
                 .padding()
                 .background(Color.red.opacity(0.1))
                 .cornerRadius(8)
+                .accessibilityId(AccessibilityIdentifiers.NetworkConfiguration.portConflictWarning)
             }
             
             // Quick port presets
@@ -166,18 +173,22 @@ struct NetworkConfigurationStepView: View {
                     Button("Standard") {
                         applyPreset(.standard)
                     }
+                    .accessibilityId(AccessibilityIdentifiers.NetworkConfiguration.presetStandardButton)
                     
                     Button("Development") {
                         applyPreset(.development)
                     }
+                    .accessibilityId(AccessibilityIdentifiers.NetworkConfiguration.presetDevelopmentButton)
                     
                     Button("Custom Ports") {
                         applyPreset(.custom)
                     }
+                    .accessibilityId(AccessibilityIdentifiers.NetworkConfiguration.presetCustomButton)
                 }
                 .padding()
             }
         }
+        .accessibilityId(AccessibilityIdentifiers.WizardStep.networkConfiguration)
         .onChange(of: configViewModel.data.bindPort) { _, _ in checkPortConflicts() }
         .onChange(of: configViewModel.data.guiBindPort) { _, _ in checkPortConflicts() }
         .onChange(of: configViewModel.data.apiBindPort) { _, _ in checkPortConflicts() }
