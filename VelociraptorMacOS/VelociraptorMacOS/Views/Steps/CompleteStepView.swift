@@ -20,6 +20,7 @@ struct CompleteStepView: View {
                 Image(systemName: "checkmark.seal.fill")
                     .font(.system(size: 64))
                     .foregroundColor(.green)
+                    .accessibilityId(AccessibilityIdentifiers.Complete.successIcon)
                 
                 Text("Deployment Complete!")
                     .font(.title.bold())
@@ -72,7 +73,8 @@ struct CompleteStepView: View {
                     QuickActionButton(
                         title: "Open Web GUI",
                         icon: "safari",
-                        color: .blue
+                        color: .blue,
+                        accessibilityId: AccessibilityIdentifiers.Complete.openGUIButton
                     ) {
                         openWebGUI()
                     }
@@ -80,7 +82,8 @@ struct CompleteStepView: View {
                     QuickActionButton(
                         title: "View Logs",
                         icon: "doc.text.magnifyingglass",
-                        color: .orange
+                        color: .orange,
+                        accessibilityId: AccessibilityIdentifiers.Complete.viewLogsButton
                     ) {
                         openLogsFolder()
                     }
@@ -88,7 +91,8 @@ struct CompleteStepView: View {
                     QuickActionButton(
                         title: "Open Data Folder",
                         icon: "folder",
-                        color: .purple
+                        color: .purple,
+                        accessibilityId: AccessibilityIdentifiers.Complete.openDataFolderButton
                     ) {
                         openDataFolder()
                     }
@@ -96,7 +100,8 @@ struct CompleteStepView: View {
                     QuickActionButton(
                         title: "Copy Config Path",
                         icon: copied ? "checkmark" : "doc.on.doc",
-                        color: .green
+                        color: .green,
+                        accessibilityId: AccessibilityIdentifiers.Complete.copyConfigPathButton
                     ) {
                         copyConfigPath()
                     }
@@ -127,6 +132,7 @@ struct CompleteStepView: View {
                                 try? await deploymentManager.stopService()
                             }
                         }
+                        .accessibilityId(AccessibilityIdentifiers.Complete.stopServiceButton)
                     } else {
                         Button("Start Service") {
                             Task {
@@ -134,10 +140,12 @@ struct CompleteStepView: View {
                             }
                         }
                         .buttonStyle(.borderedProminent)
+                        .accessibilityId(AccessibilityIdentifiers.Complete.startServiceButton)
                     }
                 }
                 .padding()
             }
+            .accessibilityId(AccessibilityIdentifiers.Complete.serviceStatus)
             
             // Next steps
             VStack(alignment: .leading, spacing: 12) {
@@ -152,8 +160,10 @@ struct CompleteStepView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .accessibilityId(AccessibilityIdentifiers.Complete.nextSteps)
         }
         .padding()
+        .accessibilityId(AccessibilityIdentifiers.WizardStep.complete)
     }
     
     private func openWebGUI() {
@@ -229,6 +239,7 @@ struct QuickActionButton: View {
     let title: String
     let icon: String
     let color: Color
+    var accessibilityId: String = ""
     let action: () -> Void
     
     var body: some View {
@@ -247,6 +258,7 @@ struct QuickActionButton: View {
             .cornerRadius(8)
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(accessibilityId)
     }
 }
 

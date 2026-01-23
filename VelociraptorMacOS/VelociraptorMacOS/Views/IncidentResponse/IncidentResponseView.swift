@@ -44,6 +44,7 @@ struct IncidentResponseView: View {
                     }
                 }
                 .listStyle(.sidebar)
+                .accessibilityId(AccessibilityIdentifiers.IncidentResponse.categoryList)
                 
                 Divider()
                 
@@ -56,6 +57,7 @@ struct IncidentResponseView: View {
                         }
                     }
                     .listStyle(.plain)
+                    .accessibilityId(AccessibilityIdentifiers.IncidentResponse.incidentList)
                 }
             }
             .frame(minWidth: 300, maxWidth: 400)

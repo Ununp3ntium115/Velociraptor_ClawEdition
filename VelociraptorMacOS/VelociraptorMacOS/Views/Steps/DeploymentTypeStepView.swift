@@ -26,6 +26,7 @@ struct DeploymentTypeStepView: View {
                         configViewModel.data.deploymentType = type.rawValue
                     }
                 )
+                .accessibilityId(accessibilityIdForType(type))
             }
             
             // Help text
@@ -44,9 +45,22 @@ struct DeploymentTypeStepView: View {
             .padding()
             .background(Color.yellow.opacity(0.1))
             .cornerRadius(8)
+            .accessibilityId(AccessibilityIdentifiers.DeploymentType.tipBox)
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Deployment Type Selection")
+        .accessibilityId(AccessibilityIdentifiers.WizardStep.deploymentType)
+    }
+    
+    private func accessibilityIdForType(_ type: AppState.DeploymentType) -> String {
+        switch type {
+        case .server:
+            return AccessibilityIdentifiers.DeploymentType.serverCard
+        case .standalone:
+            return AccessibilityIdentifiers.DeploymentType.standaloneCard
+        case .client:
+            return AccessibilityIdentifiers.DeploymentType.clientCard
+        }
     }
 }
 

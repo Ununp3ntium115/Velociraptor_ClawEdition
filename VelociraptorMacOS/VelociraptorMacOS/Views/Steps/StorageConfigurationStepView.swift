@@ -29,10 +29,12 @@ struct StorageConfigurationStepView: View {
                     HStack {
                         TextField("Datastore path", text: $configViewModel.data.datastoreDirectory)
                             .textFieldStyle(.roundedBorder)
+                            .accessibilityId(AccessibilityIdentifiers.StorageConfiguration.datastorePathField)
                         
                         Button("Browse...") {
                             showDatastorePicker = true
                         }
+                        .accessibilityId(AccessibilityIdentifiers.StorageConfiguration.browseDatastoreButton)
                         
                         Button {
                             configViewModel.data.datastoreDirectory = ConfigurationData.defaultDatastorePath
@@ -40,6 +42,7 @@ struct StorageConfigurationStepView: View {
                             Image(systemName: "arrow.counterclockwise")
                         }
                         .help("Reset to default")
+                        .accessibilityId(AccessibilityIdentifiers.StorageConfiguration.resetDatastoreButton)
                     }
                     
                     DirectoryStatusView(path: configViewModel.data.datastoreDirectory)
@@ -57,10 +60,12 @@ struct StorageConfigurationStepView: View {
                     HStack {
                         TextField("Logs path", text: $configViewModel.data.logsDirectory)
                             .textFieldStyle(.roundedBorder)
+                            .accessibilityId(AccessibilityIdentifiers.StorageConfiguration.logsPathField)
                         
                         Button("Browse...") {
                             showLogsPicker = true
                         }
+                        .accessibilityId(AccessibilityIdentifiers.StorageConfiguration.browseLogsButton)
                         
                         Button {
                             configViewModel.data.logsDirectory = ConfigurationData.defaultLogsPath
@@ -68,6 +73,7 @@ struct StorageConfigurationStepView: View {
                             Image(systemName: "arrow.counterclockwise")
                         }
                         .help("Reset to default")
+                        .accessibilityId(AccessibilityIdentifiers.StorageConfiguration.resetLogsButton)
                     }
                     
                     DirectoryStatusView(path: configViewModel.data.logsDirectory)
@@ -85,10 +91,12 @@ struct StorageConfigurationStepView: View {
                     HStack {
                         TextField("Cache path", text: $configViewModel.data.cacheDirectory)
                             .textFieldStyle(.roundedBorder)
+                            .accessibilityId(AccessibilityIdentifiers.StorageConfiguration.cachePathField)
                         
                         Button("Browse...") {
                             showCachePicker = true
                         }
+                        .accessibilityId(AccessibilityIdentifiers.StorageConfiguration.browseCacheButton)
                         
                         Button {
                             configViewModel.data.cacheDirectory = ConfigurationData.defaultCachePath
@@ -96,6 +104,7 @@ struct StorageConfigurationStepView: View {
                             Image(systemName: "arrow.counterclockwise")
                         }
                         .help("Reset to default")
+                        .accessibilityId(AccessibilityIdentifiers.StorageConfiguration.resetCacheButton)
                     }
                     
                     DirectoryStatusView(path: configViewModel.data.cacheDirectory)
@@ -111,6 +120,7 @@ struct StorageConfigurationStepView: View {
                             Text("\(size.rawValue) - \(size.description)").tag(size)
                         }
                     }
+                    .accessibilityId(AccessibilityIdentifiers.StorageConfiguration.sizePicker)
                     
                     HStack {
                         Image(systemName: "externaldrive.fill")
@@ -125,7 +135,9 @@ struct StorageConfigurationStepView: View {
             
             // Disk space info
             DiskSpaceInfoView(path: configViewModel.data.datastoreDirectory)
+                .accessibilityId(AccessibilityIdentifiers.StorageConfiguration.diskSpaceInfo)
         }
+        .accessibilityId(AccessibilityIdentifiers.WizardStep.storageConfiguration)
         .fileImporter(
             isPresented: $showDatastorePicker,
             allowedContentTypes: [.folder],

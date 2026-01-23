@@ -40,6 +40,7 @@ struct ReviewStepView: View {
                 .padding()
                 .background(Color.green.opacity(0.1))
                 .cornerRadius(8)
+                .accessibilityId(AccessibilityIdentifiers.Review.validationStatus)
             } else {
                 HStack {
                     Image(systemName: "exclamationmark.triangle.fill")
@@ -120,12 +121,14 @@ struct ReviewStepView: View {
                 } label: {
                     Label("Preview YAML", systemImage: "doc.text")
                 }
+                .accessibilityId(AccessibilityIdentifiers.Review.previewYAMLButton)
                 
                 Button {
                     exportConfiguration()
                 } label: {
                     Label("Export Config", systemImage: "square.and.arrow.up")
                 }
+                .accessibilityId(AccessibilityIdentifiers.Review.exportConfigButton)
                 
                 Spacer()
                 
@@ -136,16 +139,20 @@ struct ReviewStepView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(!configViewModel.data.isValid || isDeploying)
+                .accessibilityId(AccessibilityIdentifiers.Review.deployButton)
             }
             
             // Deployment progress
             if isDeploying {
                 DeploymentProgressView()
                     .environmentObject(deploymentManager)
+                    .accessibilityId(AccessibilityIdentifiers.Review.deploymentProgress)
             }
         }
+        .accessibilityId(AccessibilityIdentifiers.WizardStep.review)
         .sheet(isPresented: $showYAMLPreview) {
             YAMLPreviewView(yaml: configViewModel.exportYAML())
+                .accessibilityId(AccessibilityIdentifiers.Dialog.yamlPreview)
         }
         .confirmationDialog("Deploy Configuration", isPresented: $showDeployConfirmation) {
             Button("Deploy") {

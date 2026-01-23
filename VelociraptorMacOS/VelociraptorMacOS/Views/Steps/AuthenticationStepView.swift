@@ -31,8 +31,10 @@ struct AuthenticationStepView: View {
                             .textFieldStyle(.roundedBorder)
                             .frame(width: 250)
                             .textContentType(.username)
+                            .accessibilityId(AccessibilityIdentifiers.Authentication.usernameField)
                         
                         UsernameValidationView(username: configViewModel.data.adminUsername)
+                            .accessibilityId(AccessibilityIdentifiers.Authentication.usernameValidation)
                     }
                     
                     Text("The admin account has full access to all Velociraptor features.")
@@ -60,6 +62,7 @@ struct AuthenticationStepView: View {
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 250)
                         .textContentType(.newPassword)
+                        .accessibilityId(AccessibilityIdentifiers.Authentication.passwordField)
                         
                         Button {
                             showPassword.toggle()
@@ -68,11 +71,13 @@ struct AuthenticationStepView: View {
                         }
                         .buttonStyle(.plain)
                         .help(showPassword ? "Hide password" : "Show password")
+                        .accessibilityId(AccessibilityIdentifiers.Authentication.showPasswordButton)
                     }
                     
                     // Password strength indicator
                     PasswordStrengthView(password: configViewModel.data.adminPassword)
                         .padding(.leading, 124)
+                        .accessibilityId(AccessibilityIdentifiers.Authentication.passwordStrengthIndicator)
                     
                     // Confirm password field
                     HStack {
@@ -89,6 +94,7 @@ struct AuthenticationStepView: View {
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 250)
                         .textContentType(.newPassword)
+                        .accessibilityId(AccessibilityIdentifiers.Authentication.confirmPasswordField)
                         
                         Button {
                             showConfirmPassword.toggle()
@@ -96,6 +102,7 @@ struct AuthenticationStepView: View {
                             Image(systemName: showConfirmPassword ? "eye.slash" : "eye")
                         }
                         .buttonStyle(.plain)
+                        .accessibilityId(AccessibilityIdentifiers.Authentication.showConfirmButton)
                         
                         // Match indicator
                         if !configViewModel.data.confirmPassword.isEmpty {
@@ -112,6 +119,7 @@ struct AuthenticationStepView: View {
                     // Password requirements
                     PasswordRequirementsView(password: configViewModel.data.adminPassword)
                         .padding(.leading, 124)
+                        .accessibilityId(AccessibilityIdentifiers.Authentication.passwordRequirements)
                 }
                 .padding()
             }
@@ -126,6 +134,7 @@ struct AuthenticationStepView: View {
                         TextField("VelociraptorOrg", text: $configViewModel.data.organizationName)
                             .textFieldStyle(.roundedBorder)
                             .frame(width: 300)
+                            .accessibilityId(AccessibilityIdentifiers.Authentication.organizationField)
                     }
                     
                     Text("This name will appear in generated certificates and configurations.")
@@ -141,6 +150,7 @@ struct AuthenticationStepView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         Toggle("Save credentials to Keychain", isOn: $saveToKeychain)
                             .toggleStyle(.switch)
+                            .accessibilityId(AccessibilityIdentifiers.Authentication.saveToKeychainToggle)
                         
                         if saveToKeychain {
                             HStack {
@@ -167,8 +177,10 @@ struct AuthenticationStepView: View {
                 } label: {
                     Label("Generate Secure Password", systemImage: "key.fill")
                 }
+                .accessibilityId(AccessibilityIdentifiers.Authentication.generatePasswordButton)
             }
         }
+        .accessibilityId(AccessibilityIdentifiers.WizardStep.authentication)
     }
     
     private func generateSecurePassword() -> String {
