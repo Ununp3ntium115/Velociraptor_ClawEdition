@@ -615,7 +615,38 @@ Test-ComplianceBaseline -ConfigPath "server.yaml" -ComplianceFramework @('SOX', 
 | **RHEL** | 7, 8, 9+ | YUM/DNF | firewalld | systemd |
 | **Fedora** | 35+ | DNF | firewalld | systemd |
 | **SUSE** | 15+ | Zypper | firewalld | systemd |
-| **macOS** | 11+ | Homebrew | pfctl | launchd |
+| **macOS** | 13+ | Homebrew | pfctl | launchd |
+
+### **macOS Native Application**
+
+**NEW!** Native macOS GUI application built with Swift/SwiftUI:
+
+```bash
+# Install via Homebrew (recommended)
+brew install --cask velociraptor-gui
+
+# Or build from source
+cd VelociraptorMacOS
+brew install xcodegen
+xcodegen generate
+swift build -c release
+```
+
+**macOS Features:**
+- 🍎 **Native SwiftUI Interface**: Modern macOS design with Dark Mode support
+- 🔐 **Keychain Integration**: Secure credential storage
+- 🚀 **8-Step Configuration Wizard**: Guided Velociraptor setup
+- 📦 **Incident Response Collector**: 100+ pre-configured scenarios
+- ⚡ **Emergency Mode**: Rapid 3-minute deployment
+- 🩺 **Health Monitor**: Real-time service status dashboard
+- 📋 **Log Viewer**: Built-in log search and filtering
+
+**macOS System Requirements:**
+- macOS 13.0 (Ventura) or later
+- Apple Silicon (M1/M2/M3) or Intel Mac
+- 200MB disk space
+
+See [VelociraptorMacOS/README.md](VelociraptorMacOS/README.md) for full documentation.
 
 ### **Linux Deployment**
 Native Linux support with auto-detection:
