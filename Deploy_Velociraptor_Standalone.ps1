@@ -249,7 +249,31 @@ try {
     if (-not (Test-AdminPrivileges)) {
         throw "This script must be run as Administrator. Please restart PowerShell as Administrator and try again."
     }
-    
+
+    # Heartbeat check - wait for any existing Velociraptor processes to complete before starting
+    if ($moduleLoaded -and (Get-Command Wait-VelociraptorProcessHeartbeat -ErrorAction SilentlyContinue)) {
+        Write-Log 'Checking for existing Velociraptor processes...'
+        $heartbeatResult = Wait-VelociraptorProcessHeartbeat -Action Check
+
+        if ($heartbeatResult.WasRunning) {
+            Write-Log "Found running Velociraptor process(es). Waiting for completion..." -Level 'Warning'
+            $heartbeatResult = Wait-VelociraptorProcessHeartbeat -TimeoutSeconds 120 -HeartbeatIntervalSeconds 5 -ShowProgress
+
+            if (-not $heartbeatResult.IsComplete) {
+                Write-Log "Previous process still running after timeout. Use -Force to override or stop existing processes manually." -Level 'Warning'
+                if (-not $Force) {
+                    throw "Existing Velociraptor process is still running. Please wait for it to complete or use -Force parameter."
+                }
+            }
+            else {
+                Write-Log "Previous process completed. Proceeding with deployment." -Level 'Success'
+            }
+        }
+        else {
+            Write-Log 'No existing Velociraptor processes detected. Safe to proceed.'
+        }
+    }
+
     Write-Log '==== Velociraptor Standalone Deployment Started ====' -Level 'Success'
     
     # Use module functions if available, otherwise use built-in functions
