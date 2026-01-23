@@ -1,0 +1,153 @@
+# GitHub Actions workflow for building and testing the macOS application
+name: macOS Build and Test
+
+on:
+  push:
+    branches:
+      - main
+      - 'cursor/*'
+    paths:
+      - 'VelociraptorMacOS/**'
+      - '.github/workflows/macos-build.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'VelociraptorMacOS/**'
+
+env:
+  XCODE_VERSION: '15.0'
+  MACOS_DEPLOYMENT_TARGET: '13.0'
+
+jobs:
+  build:
+    name: Build macOS App
+    runs-on: macos-14
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        run: sudo xcode-select -switch /Applications/Xcode_15.0.app
+        
+      - name: Show Xcode version
+        run: xcodebuild -version
+        
+      - name: Show Swift version
+        run: swift --version
+        
+      - name: Resolve Swift packages
+        working-directory: VelociraptorMacOS
+        run: swift package resolve
+        
+      - name: Build with Swift Package Manager
+        working-directory: VelociraptorMacOS
+        run: swift build -c release
+        
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: VelociraptorMacOS-build
+          path: VelociraptorMacOS/.build/release/
+          retention-days: 5
+
+  test:
+    name: Run Tests
+    runs-on: macos-14
+    needs: build
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        run: sudo xcode-select -switch /Applications/Xcode_15.0.app
+        
+      - name: Run unit tests
+        working-directory: VelociraptorMacOS
+        run: swift test --enable-code-coverage
+        
+      - name: Generate code coverage report
+        working-directory: VelociraptorMacOS
+        run: |
+          xcrun llvm-cov export \
+            .build/debug/VelociraptorMacOSPackageTests.xctest/Contents/MacOS/VelociraptorMacOSPackageTests \
+            -instr-profile .build/debug/codecov/default.profdata \
+            -format lcov > coverage.lcov
+        continue-on-error: true
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: VelociraptorMacOS/coverage.lcov
+          flags: macos
+          name: macos-coverage
+        continue-on-error: true
+
+  ui-test:
+    name: Run UI Tests
+    runs-on: macos-14
+    needs: build
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        run: sudo xcode-select -switch /Applications/Xcode_15.0.app
+        
+      - name: Build for testing
+        working-directory: VelociraptorMacOS
+        run: swift build
+        
+      # Note: UI tests require Xcode project, not just SPM
+      # This step would run if we had a proper xcodeproj
+      # - name: Run UI tests
+      #   run: xcodebuild test -scheme VelociraptorMacOS -destination 'platform=macOS'
+
+  lint:
+    name: Lint Swift Code
+    runs-on: macos-14
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Install SwiftLint
+        run: brew install swiftlint
+        
+      - name: Run SwiftLint
+        working-directory: VelociraptorMacOS
+        run: swiftlint lint --reporter github-actions-logging
+        continue-on-error: true
+
+  release:
+    name: Create Release Package
+    runs-on: macos-14
+    needs: [build, test]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        run: sudo xcode-select -switch /Applications/Xcode_15.0.app
+        
+      - name: Build release
+        working-directory: VelociraptorMacOS
+        run: swift build -c release
+        
+      - name: Create DMG
+        run: |
+          mkdir -p dist
+          # Would create DMG here with proper app bundle
+          echo "DMG creation would happen here with signed app"
+          
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: VelociraptorMacOS-release
+          path: dist/
+          retention-days: 30

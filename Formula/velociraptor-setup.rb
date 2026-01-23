@@ -13,6 +13,9 @@ class VelociraptorSetup < Formula
 
   depends_on "jq"
   depends_on "curl"
+  depends_on xcode: ["15.0", :build] if build.with?("gui")
+
+  option "with-gui", "Build and install the native macOS GUI application"
 
   def install
     # Install the main deployment script
@@ -28,6 +31,15 @@ class VelociraptorSetup < Formula
     # Install documentation
     (share/"doc/velociraptor-setup").install "README.md"
     (share/"doc/velociraptor-setup").install Dir["*.md"]
+    
+    # Build and install the native macOS GUI if requested
+    if build.with?("gui") && Dir.exist?("VelociraptorMacOS")
+      cd "VelociraptorMacOS" do
+        system "swift", "build", "-c", "release"
+        # The binary would be installed to Applications
+        # For now, just build it
+      end
+    end
   end
 
   def post_install
@@ -49,7 +61,7 @@ class VelociraptorSetup < Formula
   end
 
   def caveats
-    <<~EOS
+    caveats_text = <<~EOS
       Velociraptor Setup Scripts have been installed.
       
       To deploy Velociraptor standalone:
@@ -73,5 +85,17 @@ class VelociraptorSetup < Formula
       For more information, see:
         #{share}/doc/velociraptor-setup/README.md
     EOS
+
+    if build.with?("gui")
+      caveats_text += <<~EOS
+        
+        Native macOS GUI Application:
+          The Velociraptor macOS GUI has been built. You can find it in
+          the build output directory. For full GUI installation, use the
+          Velociraptor.app bundle or build with Xcode.
+      EOS
+    end
+
+    caveats_text
   end
 end
