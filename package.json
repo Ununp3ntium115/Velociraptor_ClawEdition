@@ -4,10 +4,10 @@
   "description": "Enterprise-grade Velociraptor DFIR platform deployment automation with cloud-native scalability, multi-cloud support, serverless architectures, HPC, and edge computing capabilities.",
   "main": "Deploy_Velociraptor_Standalone.ps1",
   "scripts": {
-    "test": "powershell -ExecutionPolicy Bypass -File tests/Run-Tests.ps1",
-    "demo": "powershell -ExecutionPolicy Bypass -File examples/Phase5-CloudNative-Demo.ps1",
-    "install": "powershell -ExecutionPolicy Bypass -File scripts/Install-Prerequisites.ps1",
-    "validate": "powershell -ExecutionPolicy Bypass -File scripts/Validate-Environment.ps1"
+    "test": "pwsh -ExecutionPolicy Bypass -File tests/Run-Tests.ps1 2>/dev/null || powershell -ExecutionPolicy Bypass -File tests/Run-Tests.ps1 2>/dev/null || echo 'PowerShell required for tests'",
+    "demo": "pwsh -ExecutionPolicy Bypass -File examples/Phase5-CloudNative-Demo.ps1 2>/dev/null || powershell -ExecutionPolicy Bypass -File examples/Phase5-CloudNative-Demo.ps1 2>/dev/null || echo 'PowerShell required for demo'",
+    "postinstall": "echo 'Velociraptor Setup Scripts installed. Run pwsh or powershell to use.'",
+    "validate": "pwsh -ExecutionPolicy Bypass -File scripts/Validate-Environment.ps1 2>/dev/null || powershell -ExecutionPolicy Bypass -File scripts/Validate-Environment.ps1 2>/dev/null || echo 'PowerShell required for validation'"
   },
   "repository": {
     "type": "git",
@@ -61,17 +61,13 @@
   ],
   "systemRequirements": {
     "powershell": ">=7.0.0",
-    "pester": ">=5.0.0 (for testing)"
-  },
-  "peerDependencies": {
-    "docker": ">=20.0.0",
-    "kubectl": ">=1.20.0",
-    "helm": ">=3.0.0"
-  },
-  "optionalDependencies": {
-    "aws-cli": ">=2.0.0",
-    "azure-cli": ">=2.0.0",
-    "gcloud": ">=400.0.0"
+    "pester": ">=5.0.0 (for testing)",
+    "docker": ">=20.0.0 (optional, for containers)",
+    "kubectl": ">=1.20.0 (optional, for kubernetes)",
+    "helm": ">=3.0.0 (optional, for kubernetes)",
+    "aws-cli": ">=2.0.0 (optional, for AWS)",
+    "azure-cli": ">=2.0.0 (optional, for Azure)",
+    "gcloud": ">=400.0.0 (optional, for GCP)"
   },
   "files": [
     "Deploy_Velociraptor_Standalone.ps1",

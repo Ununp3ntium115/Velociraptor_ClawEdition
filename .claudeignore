@@ -1,0 +1,8 @@
+# Large files that may cause memory issues
+*.zip
+*.csv
+*.pack
+release-assets/
+artifact_packs/
+temp_*/
+.git/objects/
