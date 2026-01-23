@@ -164,6 +164,11 @@ struct ReviewStepView: View {
         }
     }
     
+    /// Initiates deployment of the current configuration and updates related UI state.
+    /// 
+    /// While the asynchronous deployment is running, the view's `isDeploying` flag is set to `true`.
+    /// On successful completion the app advances to the next step; on error the error is presented via `appState.displayError(_:)`.
+    /// The `isDeploying` flag is reset to `false` after the operation finishes.
     private func startDeployment() {
         isDeploying = true
         
@@ -178,6 +183,9 @@ struct ReviewStepView: View {
         }
     }
     
+    /// Presents a save dialog for exporting the current configuration as a YAML file and saves it if the user confirms.
+    /// 
+    /// The save panel is preconfigured to accept YAML files and suggests the filename `velociraptor.config.yaml`. If the user confirms and a destination URL is obtained, the function delegates the write operation to `configViewModel.saveConfiguration(to:)`.
     private func exportConfiguration() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.yaml]
