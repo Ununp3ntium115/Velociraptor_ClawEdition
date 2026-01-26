@@ -62,20 +62,23 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m' # log_info prints an informational message prefixed with [INFO] in blue to stdout.
 
 log_info() {
     echo -e "${BLUE}[INFO]${NC} $1"
 }
 
+# log_success prints MESSAGE prefixed with a green "[SUCCESS]" tag.
 log_success() {
     echo -e "${GREEN}[SUCCESS]${NC} $1"
 }
 
+# log_warn prints a warning message prefixed with a yellow `[WARN]` tag to stdout.
 log_warn() {
     echo -e "${YELLOW}[WARN]${NC} $1"
 }
 
+# log_error writes an error message prefixed with "[ERROR]" in red coloring to stdout.
 log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }

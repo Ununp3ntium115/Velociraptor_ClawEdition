@@ -89,12 +89,16 @@ class ConfigurationExporter {
     
     // MARK: - Export Methods
     
-    /// Export configuration to YAML format
+    /// Serialize the provided configuration into a YAML-formatted string.
+    /// - Parameter config: The configuration to serialize.
+    /// - Returns: A YAML representation of `config`.
     static func exportToYAML(_ config: ConfigurationData) throws -> String {
         return config.toYAML()
     }
     
-    /// Export configuration to JSON format
+    /// Encode a ConfigurationData instance as pretty-printed JSON with sorted keys.
+    /// - Returns: JSON `Data` representing the configuration.
+    /// - Throws: `ExportError.encodingFailed` if the configuration cannot be encoded to JSON.
     static func exportToJSON(_ config: ConfigurationData) throws -> Data {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
@@ -106,7 +110,10 @@ class ConfigurationExporter {
         }
     }
     
-    /// Export configuration to PropertyList format
+    /// Encode a ConfigurationData instance into an XML property list.
+    /// - Parameter config: The configuration to encode.
+    /// - Returns: `Data` containing the configuration encoded as an XML property list.
+    /// - Throws: `ExportError.encodingFailed` if encoding the configuration to a property list fails.
     static func exportToPlist(_ config: ConfigurationData) throws -> Data {
         let encoder = PropertyListEncoder()
         encoder.outputFormat = .xml
@@ -118,7 +125,12 @@ class ConfigurationExporter {
         }
     }
     
-    /// Export configuration to file
+    /// Write the provided configuration to the given file URL using the specified export format.
+    /// - Parameters:
+    ///   - config: The configuration to export.
+    ///   - url: Destination file URL where the exported data will be written.
+    ///   - format: The export format to use (YAML, JSON, or plist).
+    /// - Throws: `ExportError.encodingFailed` or `ExportError.writeFailed(_)` for encoding or write failures, or other underlying file system errors propagated from the write operations.
     static func export(_ config: ConfigurationData, to url: URL, format: ExportFormat) throws {
         switch format {
         case .yaml:
@@ -137,7 +149,9 @@ class ConfigurationExporter {
         Logger.shared.success("Exported configuration to: \(url.path)", component: "Export")
     }
     
-    /// Generate default filename for export
+    /// Generate a timestamped default filename for a configuration export.
+    /// - Parameter format: The export format whose file extension will be appended.
+    /// - Returns: A filename of the form `velociraptor-config-YYYYMMDD-HHMMSS.{ext}` where `{ext}` is the format's file extension.
     static func defaultFilename(format: ExportFormat) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd-HHmmss"
@@ -148,7 +162,11 @@ class ConfigurationExporter {
     
     // MARK: - Import Methods
     
-    /// Import configuration from JSON
+    /// Decode JSON-encoded configuration data into a ConfigurationData instance.
+    /// - Parameters:
+    ///   - data: JSON-encoded bytes representing a Velociraptor configuration.
+    /// - Returns: A `ConfigurationData` decoded from the provided JSON data.
+    /// - Throws: `ImportError.decodingFailed` with the decoder's error message if decoding fails.
     static func importFromJSON(_ data: Data) throws -> ConfigurationData {
         let decoder = JSONDecoder()
         
@@ -159,7 +177,10 @@ class ConfigurationExporter {
         }
     }
     
-    /// Import configuration from PropertyList
+    /// Decodes a Property List into a ConfigurationData instance.
+    /// - Parameter data: Property list data containing a serialized ConfigurationData.
+    /// - Returns: A ConfigurationData populated from the provided plist.
+    /// - Throws: `ImportError.decodingFailed` with the decoder's error message if decoding fails.
     static func importFromPlist(_ data: Data) throws -> ConfigurationData {
         let decoder = PropertyListDecoder()
         
@@ -172,7 +193,9 @@ class ConfigurationExporter {
     
     /// Import configuration from YAML
     /// Note: Full YAML parsing would require a library like Yams
-    /// This is a simplified implementation that handles basic cases
+    /// Parses a minimal YAML document and produces a populated ConfigurationData instance.
+    /// - Parameter content: The YAML document as a UTF-8 string; supports simple section headers and key:value pairs, with '#' comments and empty lines ignored.
+    /// - Returns: A ConfigurationData populated from the parsed YAML content.
     static func importFromYAML(_ content: String) throws -> ConfigurationData {
         var config = ConfigurationData()
         
@@ -213,6 +236,32 @@ class ConfigurationExporter {
         return config
     }
     
+    /// Maps a parsed YAML section/key/value into the given ConfigurationData instance.
+    /// 
+    /// Recognizes specific sections and keys and updates the corresponding fields on `config`.
+    /// Supported mappings:
+    /// - Section "frontend":
+    ///   - "bind_address" -> `bindAddress`
+    ///   - "bind_port" -> `bindPort` (defaults to 8000 if value is not an integer)
+    /// - Section "gui":
+    ///   - "bind_address" -> `guiBindAddress`
+    ///   - "bind_port" -> `guiBindPort` (defaults to 8889 if value is not an integer)
+    /// - Section "api":
+    ///   - "bind_address" -> `apiBindAddress`
+    ///   - "bind_port" -> `apiBindPort` (defaults to 8001 if value is not an integer)
+    /// - Section "datastore":
+    ///   - "location" -> `datastoreDirectory`
+    /// - Section "logging":
+    ///   - "output_directory" -> `logsDirectory`
+    /// - Top-level keys:
+    ///   - "name" -> `organizationName`
+    ///
+    /// Unknown sections or keys are ignored.
+    /// - Parameters:
+    ///   - config: The configuration object to update.
+    ///   - section: The YAML section name (case-insensitive).
+    ///   - key: The YAML key name within the section (case-insensitive).
+    ///   - value: The string value to apply.
     private static func applyYAMLValue(to config: inout ConfigurationData, section: String, key: String, value: String) {
         switch section.lowercased() {
         case "frontend":
@@ -272,7 +321,15 @@ class ConfigurationExporter {
         }
     }
     
-    /// Import configuration from file
+    /// Import a Velociraptor configuration from the file at the given URL.
+    /// - Parameters:
+    ///   - url: A file URL pointing to a configuration file (JSON, plist, or YAML).
+    /// - Returns: The decoded `ConfigurationData` represented by the file.
+    /// - Throws:
+    ///   - `ImportError.fileNotFound` if the file does not exist at the URL.
+    ///   - `ImportError.invalidData` if the file cannot be interpreted as UTF-8 when required for parsing.
+    ///   - `ImportError.unsupportedFormat` if the format cannot be determined or is not supported.
+    ///   - `ImportError.decodingFailed` if decoding of the file content fails.
     static func importFrom(_ url: URL) throws -> ConfigurationData {
         guard FileManager.default.fileExists(atPath: url.path) else {
             throw ImportError.fileNotFound
@@ -313,7 +370,12 @@ class ConfigurationExporter {
     
     // MARK: - Backup Methods
     
-    /// Create a timestamped backup of current configuration
+    /// Creates a JSON backup of the provided configuration and stores it in the specified or default backup directory.
+    /// - Parameters:
+    ///   - config: The configuration to back up.
+    ///   - directory: Optional directory to store the backup. If `nil`, the `defaultBackupDirectory` is used.
+    /// - Returns: The file URL of the created backup.
+    /// - Throws: An error if the backup directory cannot be created or the configuration cannot be written to disk.
     static func createBackup(of config: ConfigurationData, in directory: URL? = nil) throws -> URL {
         let backupDir = directory ?? defaultBackupDirectory
         
@@ -335,7 +397,9 @@ class ConfigurationExporter {
             .appendingPathComponent("Library/Application Support/Velociraptor/Backups")
     }
     
-    /// List available backups
+    /// List backup file URLs in the default backup directory.
+    /// Only files with the `.json` extension are included; results are sorted by creation date with the newest first. If the directory cannot be read or an error occurs, an empty array is returned.
+    /// - Returns: An array of backup file URLs (JSON files) sorted by creation date, newest first; an empty array on error.
     static func listBackups() -> [URL] {
         do {
             let backupDir = defaultBackupDirectory
@@ -357,7 +421,11 @@ class ConfigurationExporter {
         }
     }
     
-    /// Delete old backups, keeping only the most recent N
+    /// Prunes stored backup files so only the most recent entries remain.
+    /// 
+    /// Deletes oldest backup files beyond the specified count. Deletion failures are ignored.
+    — Parameters:
+    ///   - count: The maximum number of newest backups to retain; older backups will be removed.
     static func pruneBackups(keeping count: Int = 10) {
         let backups = listBackups()
         

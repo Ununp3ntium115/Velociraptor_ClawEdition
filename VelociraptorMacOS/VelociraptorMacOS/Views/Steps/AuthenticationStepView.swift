@@ -183,6 +183,8 @@ struct AuthenticationStepView: View {
         .accessibilityId(AccessibilityIdentifiers.WizardStep.authentication)
     }
     
+    /// Generate a 16-character secure password that includes required character classes.
+    /// - Returns: A 16-character string containing at least one lowercase letter, one uppercase letter, one digit, and one special character from !@#$%^&*.
     private func generateSecurePassword() -> String {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         let numbers = "0123456789"
@@ -252,6 +254,9 @@ struct PasswordStrengthView: View {
         calculateScore()
     }
     
+    /// Computes a password strength score from 0 to 100 based on length and character variety.
+    /// The score increases with password length and the presence of uppercase letters, lowercase letters, digits, and non-alphanumeric characters.
+    /// - Returns: An integer strength score in the range 0...100; higher values indicate a stronger password.
     private func calculateScore() -> Int {
         var score = 0
         

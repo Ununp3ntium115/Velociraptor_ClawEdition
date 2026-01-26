@@ -34,6 +34,8 @@ class KeychainManager: ObservableObject {
         checkAvailability()
     }
     
+    /// Probes the system Keychain and updates `isAvailable` accordingly.
+    /// - Discussion: Performs a lightweight query for a generic password item for the configured service. Treats `errSecItemNotFound` as a valid reachable Keychain (no items present). Updates the `isAvailable` published property and logs the resulting availability.
     private func checkAvailability() {
         // Test Keychain availability by attempting a query
         let query: [String: Any] = [
@@ -100,7 +102,12 @@ class KeychainManager: ObservableObject {
     /// - Parameters:
     ///   - password: Password string to save
     ///   - account: Account identifier
-    ///   - label: Human-readable label (optional)
+    /// Save a password into the Keychain for the specified account.
+    /// - Parameters:
+    ///   - password: The password string to store. Must not be empty.
+    ///   - account: The account identifier under which to store the password.
+    ///   - label: An optional human-readable label for the Keychain item.
+    /// - Throws: `KeychainError.noPassword` if `password` is empty; `KeychainError.encodingFailed` if the password cannot be encoded as UTF-8; `KeychainError.accessDenied` if the Keychain rejects access; `KeychainError.unexpectedStatus(_:)` for other Keychain errors.
     func savePassword(_ password: String, for account: String, label: String? = nil) throws {
         guard !password.isEmpty else {
             throw KeychainError.noPassword
@@ -146,7 +153,13 @@ class KeychainManager: ObservableObject {
         }
     }
     
-    /// Update existing password in Keychain
+    /// Update the existing Keychain password stored for the specified account.
+    /// - Parameters:
+    ///   - password: The new password to store for the account.
+    ///   - account: The Keychain account identifier whose password will be replaced.
+    /// - Throws:
+    ///   - `KeychainError.encodingFailed` if the password cannot be encoded as UTF‑8.
+    ///   - `KeychainError.unexpectedStatus(_:)` if the Keychain update returns an unexpected OSStatus.
     private func updatePassword(_ password: String, for account: String) throws {
         guard let passwordData = password.data(using: .utf8) else {
             throw KeychainError.encodingFailed
@@ -174,7 +187,15 @@ class KeychainManager: ObservableObject {
     
     /// Retrieve password from Keychain
     /// - Parameter account: Account identifier
-    /// - Returns: Stored password string
+    /// Retrieve the password stored in the keychain for the specified account.
+    /// - Parameters:
+    ///   - account: The account identifier whose password to retrieve.
+    /// - Returns: The password string for the specified account.
+    /// - Throws:
+    ///   - `KeychainError.itemNotFound` if no item exists for the account.
+    ///   - `KeychainError.accessDenied` if keychain access is denied or authentication fails.
+    ///   - `KeychainError.invalidData` if the stored data cannot be decoded as UTF-8 text.
+    ///   - `KeychainError.unexpectedStatus(_:)` for any other Keychain `OSStatus` error.
     func getPassword(for account: String) throws -> String {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -207,7 +228,10 @@ class KeychainManager: ObservableObject {
     }
     
     /// Delete password from Keychain
-    /// - Parameter account: Account identifier
+    /// Remove the password stored for the specified account from the Keychain.
+    /// - Parameters:
+    ///   - account: The account identifier used as the Keychain item's account attribute.
+    /// - Throws: `KeychainError.unexpectedStatus` if the Keychain deletion fails with an unexpected OSStatus. The function treats "item not found" as success (no-op).
     func deletePassword(for account: String) throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -225,7 +249,10 @@ class KeychainManager: ObservableObject {
         lastOperationResult = "Password deleted"
     }
     
-    /// Check if password exists for account
+    /// Checks whether a password entry exists for the given account in the Keychain.
+    /// - Parameters:
+    ///   - account: The account identifier to look up in the Keychain service.
+    /// - Returns: `true` if a password entry exists for the account, `false` otherwise.
     func hasPassword(for account: String) -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -242,17 +269,26 @@ class KeychainManager: ObservableObject {
     
     // MARK: - API Key Operations
     
-    /// Save API key
+    /// Stores an API key in the Keychain using a namespaced account name.
+    /// - Parameters:
+    ///   - key: The API key value to store.
+    ///   - identifier: A unique identifier appended to `api_key_` to form the Keychain account name.
+    /// - Throws: `KeychainError` if the Keychain operation fails (for example: access denied, duplicate item, invalid data, or encoding failure).
     func saveAPIKey(_ key: String, identifier: String) throws {
         try savePassword(key, for: "api_key_\(identifier)", label: "Velociraptor API Key: \(identifier)")
     }
     
-    /// Retrieve API key
+    /// Retrieves the API key associated with the given identifier.
+    /// - Parameter identifier: The unique identifier for the API key (used to locate the stored key).
+    /// - Returns: The API key string for the specified identifier.
+    /// - Throws: `KeychainError` if the key cannot be found, is inaccessible, or another keychain error occurs.
     func getAPIKey(identifier: String) throws -> String {
         try getPassword(for: "api_key_\(identifier)")
     }
     
-    /// Delete API key
+    /// Deletes the API key associated with the provided identifier from the Keychain.
+    /// - Parameter identifier: The unique identifier for the API key (used to form the account name `api_key_<identifier>`).
+    /// - Throws: `KeychainError` if the deletion fails (for example, when the item is not found, access is denied, or an unexpected Keychain status occurs).
     func deleteAPIKey(identifier: String) throws {
         try deletePassword(for: "api_key_\(identifier)")
     }
@@ -262,7 +298,12 @@ class KeychainManager: ObservableObject {
     /// Save certificate to Keychain
     /// - Parameters:
     ///   - certData: Certificate data (DER or PEM encoded)
-    ///   - label: Human-readable label
+    /// Stores a DER-encoded X.509 certificate in the Keychain using the provided label.
+    /// If an item with the same label already exists it will be replaced.
+    /// - Parameters:
+    ///   - certData: DER-encoded certificate data.
+    ///   - label: Keychain item label to identify the certificate.
+    /// - Throws: `KeychainError.invalidData` if `certData` cannot be parsed as a certificate; `KeychainError.unexpectedStatus(_:)` for other Keychain failures.
     func saveCertificate(_ certData: Data, label: String) throws {
         // First try to create a SecCertificate from the data
         guard let certificate = SecCertificateCreateWithData(nil, certData as CFData) else {
@@ -301,7 +342,14 @@ class KeychainManager: ObservableObject {
         }
     }
     
-    /// Retrieve certificate from Keychain
+    /// Retrieve a certificate from the Keychain using its label.
+    /// - Parameters:
+    ///   - label: The Keychain item label used to locate the certificate.
+    /// - Returns: The `SecCertificate` matching the specified label.
+    /// - Throws:
+    ///   - `KeychainError.itemNotFound` if no certificate with the given label exists.
+    ///   - `KeychainError.unexpectedStatus(_:)` for any SecItemCopyMatching status other than success or not found.
+    ///   - `KeychainError.invalidData` if the retrieved item cannot be interpreted as a `SecCertificate`.
     func getCertificate(label: String) throws -> SecCertificate {
         let query: [String: Any] = [
             kSecClass as String: kSecClassCertificate,
@@ -327,7 +375,10 @@ class KeychainManager: ObservableObject {
         return certificate
     }
     
-    /// Delete certificate from Keychain
+    /// Deletes a certificate item from the Keychain that matches the provided label.
+    /// - Parameters:
+    ///   - label: The Keychain item's `kSecAttrLabel` value identifying the certificate to delete.
+    /// - Throws: `KeychainError.unexpectedStatus` containing the `OSStatus` when the deletion fails for any reason other than success or item not found.
     func deleteCertificate(label: String) throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassCertificate,
@@ -345,7 +396,9 @@ class KeychainManager: ObservableObject {
     
     // MARK: - Bulk Operations
     
-    /// Delete all Velociraptor items from Keychain
+    /// Removes all Velociraptor-related items from the user's Keychain.
+    /// 
+    /// Deletes generic password items stored under the Velociraptor service and certificates labeled "Velociraptor". Updates `lastOperationResult` and emits a warning log when completed.
     func deleteAllItems() throws {
         // Delete passwords
         let passwordQuery: [String: Any] = [
@@ -365,7 +418,8 @@ class KeychainManager: ObservableObject {
         lastOperationResult = "All items deleted"
     }
     
-    /// List all stored account names
+    /// Lists stored account names for the Velociraptor Keychain service.
+    /// - Returns: An array of account names; empty array if no accounts are found or if the query fails.
     func listAccounts() -> [String] {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -394,12 +448,16 @@ class KeychainManager: ObservableObject {
         case clientNonce = "velociraptor_client_nonce"
     }
     
-    /// Save admin password
+    /// Saves the Velociraptor admin password to the Keychain.
+    /// - Parameter password: The admin password to store.
+    /// - Throws: `KeychainError` if the save operation fails (for example: `accessDenied`, `encodingFailed`, `duplicateItem`, `unexpectedStatus`, or `itemNotFound`).
     func saveAdminPassword(_ password: String) throws {
         try savePassword(password, for: StandardAccount.adminPassword.rawValue, label: "Velociraptor Admin Password")
     }
     
-    /// Get admin password
+    /// Retrieves the Velociraptor admin password from the Keychain.
+    /// - Returns: The admin password as a UTF-8 string.
+    /// - Throws: `KeychainError` if the password is not found, access is denied, or another Keychain error occurs.
     func getAdminPassword() throws -> String {
         try getPassword(for: StandardAccount.adminPassword.rawValue)
     }

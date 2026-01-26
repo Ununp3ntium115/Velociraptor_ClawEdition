@@ -45,6 +45,8 @@ final class Logger {
         case error = 3
         case critical = 4
         
+        /// Determine whether one `LogLevel` is less than another by comparing their raw values.
+        /// - Returns: `true` if `lhs` has a smaller raw value than `rhs`, `false` otherwise.
         static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
             lhs.rawValue < rhs.rawValue
         }
@@ -90,6 +92,9 @@ final class Logger {
         try? fileHandle?.close()
     }
     
+    /// Prepares file-based logging by ensuring the Velociraptor log directory exists and opening/appending to a daily log file.
+    /// 
+    /// Sets `logFilePath` to a per-day file under `~/Library/Logs/Velociraptor/` (named `velociraptor-YYYY-MM-DD.log`) and opens `fileHandle` for appending. If the file does not exist it is created. Any setup failures are printed to the console.
     private func setupFileLogging() {
         let logDirectory = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Logs/Velociraptor")
@@ -119,7 +124,10 @@ final class Logger {
         }
     }
     
-    // MARK: - Logger Access
+    /// Retrieve or create a per-component `os.Logger`, caching it for reuse.
+    /// - Parameters:
+    ///   - component: The category name to associate with the logger.
+    /// - Returns: An `os.Logger` configured with the logger's subsystem and the specified component; subsequent calls with the same component return the cached instance.
     
     private func logger(for component: String) -> os.Logger {
         queue.sync {
@@ -134,42 +142,65 @@ final class Logger {
     
     // MARK: - Logging Methods
     
-    /// Log debug message
+    /// Logs a message at the debug level.
+    /// - Parameters:
+    ///   - message: The message to record.
+    ///   - component: The component or category for the log entry; defaults to "App".
     func debug(_ message: String, component: String = "App") {
         log(message, level: .debug, component: component)
     }
     
-    /// Log info message
+    /// Logs an informational message for a specific component.
+    /// - Parameters:
+    ///   - message: The message to log.
+    ///   - component: The component or category associated with this log entry. Defaults to "App".
     func info(_ message: String, component: String = "App") {
         log(message, level: .info, component: component)
     }
     
-    /// Log success message (info level with success indicator)
+    /// Logs a success message at the info level, prefixed with a visible success indicator.
+    /// - Parameters:
+    ///   - message: The success message to record.
+    ///   - component: The component/category used for the log entry; defaults to "App".
     func success(_ message: String, component: String = "App") {
         log("✅ \(message)", level: .info, component: component)
     }
     
-    /// Log warning message
+    /// Logs a message at the warning level.
+    /// - Parameters:
+    ///   - message: The text to record in the log entry.
+    ///   - component: The component or category for the log entry; defaults to `"App"`.
     func warning(_ message: String, component: String = "App") {
         log(message, level: .warning, component: component)
     }
     
-    /// Log error message
+    /// Logs the given text as an error-level entry.
+    /// - Parameters:
+    ///   - message: The message to record.
+    ///   - component: The component or category associated with the message; defaults to `"App"`.
     func error(_ message: String, component: String = "App") {
         log(message, level: .error, component: component)
     }
     
-    /// Log error with Error object
+    /// Logs the provided error's localized description at the error level.
+    /// - Parameters:
+    ///   - error: The error whose `localizedDescription` will be recorded.
+    ///   - component: The logging category or component name to associate with the entry (default: `"App"`).
     func error(_ error: Error, component: String = "App") {
         log(error.localizedDescription, level: .error, component: component)
     }
     
-    /// Log critical message
+    /// Logs a message with the critical severity level.
+    /// - Parameters:
+    ///   - message: The text to record in the log.
+    ///   - component: The component or category for the log entry; defaults to `"App"`.
     func critical(_ message: String, component: String = "App") {
         log(message, level: .critical, component: component)
     }
     
-    // MARK: - Core Logging
+    /// Dispatches a formatted log entry to the system logger, optionally appends it to the active log file, and prints to the console in debug builds.
+    /// 
+    /// The function respects the logger's `minimumLogLevel`, includes a timestamp when `includeTimestamp` is enabled, and maps the provided `level` to the appropriate system log type. When file logging is enabled and a file handle is available, the entry is written asynchronously to the file. In DEBUG builds the entry is printed with the level emoji.
     
     private func log(_ message: String, level: LogLevel, component: String) {
         guard level >= minimumLogLevel else { return }
@@ -210,12 +241,14 @@ final class Logger {
     
     // MARK: - Log File Management
     
-    /// Get path to current log file
+    /// Retrieve the URL of the currently active log file.
+    /// - Returns: The file URL of the active log file, or `nil` if file logging is disabled or no log file is available.
     func getCurrentLogFilePath() -> URL? {
         return logFilePath
     }
     
-    /// Get all log files
+    /// Returns the log files created by Velociraptor, ordered from newest to oldest.
+    /// - Returns: An array of file URLs for `.log` files in `~/Library/Logs/Velociraptor`, sorted by creation date with the newest first; returns an empty array if the directory cannot be read or an error occurs.
     func getAllLogFiles() -> [URL] {
         let logDirectory = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Logs/Velociraptor")
@@ -237,13 +270,17 @@ final class Logger {
         }
     }
     
-    /// Read contents of current log file
+    /// Load the contents of the active log file as a UTF-8 string.
+    /// - Returns: The log file contents, or `nil` if there is no active log file or the file cannot be read.
     func readCurrentLog() -> String? {
         guard let path = logFilePath else { return nil }
         return try? String(contentsOf: path, encoding: .utf8)
     }
     
-    /// Clear old log files (older than specified days)
+    /// Removes log files older than the specified number of days from the Velociraptor log directory.
+    /// 
+    /// Iterates the module's log files and deletes any whose creation date is earlier than the cutoff computed from `days`. Errors encountered while processing individual files are ignored so the method continues attempting to clean remaining files.
+    /// - Parameter days: Remove files created more than this many days ago. Default is 30.
     func clearOldLogs(olderThanDays days: Int = 30) {
         let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
         
@@ -261,7 +298,8 @@ final class Logger {
         }
     }
     
-    /// Flush file buffer
+    /// Forces any buffered log data for the active log file to be synchronized to storage.
+    /// - Note: If no log file is open this is a no-op. The synchronization is performed on the logger's internal queue.
     func flush() {
         queue.sync {
             try? fileHandle?.synchronize()

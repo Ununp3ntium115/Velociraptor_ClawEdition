@@ -17,6 +17,11 @@ class VelociraptorSetup < Formula
 
   option "with-gui", "Build and install the native macOS GUI application"
 
+  ##
+  # Installs Velociraptor setup artifacts into the Homebrew prefix.
+  # Places the main deploy script and optional helper scripts in `bin`, configuration templates into `share/velociraptor-setup`,
+  # and README/Markdown documentation into `share/doc/velociraptor-setup`. If built with the "gui" option and a `VelociraptorMacOS`
+  # directory exists, compiles the native macOS GUI in release mode without installing the application bundle.
   def install
     # Install the main deployment script
     bin.install "deploy-velociraptor-standalone.sh" => "velociraptor-deploy"
@@ -42,6 +47,9 @@ class VelociraptorSetup < Formula
     end
   end
 
+  ##
+  # Ensure runtime directories for Velociraptor exist under var.
+  # Creates `var/log/velociraptor` and `var/lib/velociraptor` if they do not already exist.
   def post_install
     # Create necessary directories
     (var/"log/velociraptor").mkpath
@@ -60,6 +68,9 @@ class VelociraptorSetup < Formula
     system "#{bin}/velociraptor-deploy", "--help"
   end
 
+  ##
+  # Provide post-installation caveats shown to the user, including install commands, configuration/log/data paths, and optional GUI notes when built with the "gui" option.
+  # @return [String] The formatted caveats text displayed to the user after installation; includes an additional native macOS GUI section when the formula was built with the "gui" option.
   def caveats
     caveats_text = <<~EOS
       Velociraptor Setup Scripts have been installed.

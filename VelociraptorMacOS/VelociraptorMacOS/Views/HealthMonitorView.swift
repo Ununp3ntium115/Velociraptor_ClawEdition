@@ -192,12 +192,18 @@ struct HealthMonitorView: View {
         }
     }
     
+    /// Opens the current user's Velociraptor logs directory in Finder.
+    /// 
+    /// Locates the "Velociraptor" folder inside `~/Library/Logs` and opens it so the user can view log files.
     private func openLogsFolder() {
         let logsPath = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Logs/Velociraptor")
         NSWorkspace.shared.open(logsPath)
     }
     
+    /// Presents a save panel for the user to export the diagnostics report and writes the report to the chosen file.
+    /// 
+    /// The panel is preconfigured to save plain-text files with a default filename of the form `velociraptor-diagnostics-<ISO8601 date>.txt`. If the user confirms the save, the function obtains the diagnostics text from `healthMonitor.generateDiagnosticsReport()` and attempts to write it to the selected URL; write failures are ignored (no error is propagated).
     private func exportDiagnostics() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.plainText]
@@ -280,6 +286,9 @@ class HealthMonitor: ObservableObject {
         }
     }
     
+    /// Triggers a full refresh of all health checks and updates the aggregated overall status.
+    /// 
+    /// While running, the monitor's `isRefreshing` flag is set to `true`. Performs checks for service, network, disk, memory, ports, and recent logs concurrently, then recalculates `overallStatus`.
     func refreshAll() async {
         isRefreshing = true
         defer { isRefreshing = false }
@@ -296,6 +305,12 @@ class HealthMonitor: ObservableObject {
         updateOverallStatus()
     }
     
+    /// Determines whether the Velociraptor service process is running and updates the published `serviceStatus` and `serviceDetail`.
+    /// 
+    /// - Behaviour:
+    ///   - Sets `serviceStatus` to `.healthy` and `serviceDetail` to `"Velociraptor is running"` when the service process is present.
+    ///   - Sets `serviceStatus` to `.critical` and `serviceDetail` to `"Velociraptor is not running"` when the process is not found.
+    ///   - Sets `serviceStatus` to `.unknown` and `serviceDetail` to `"Could not check status"` if an error occurs while checking.
     private func checkService() async {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/pgrep")
@@ -318,6 +333,8 @@ class HealthMonitor: ObservableObject {
         }
     }
     
+    /// Performs a simple internet connectivity check and updates `networkStatus` and `networkDetail`.
+    /// - Details: Sets `networkStatus` to `.healthy` with `networkDetail` "Internet connected" when an HTTP 200 response is received; sets `.warning` with `networkDetail` "Limited connectivity" for non-200 responses; sets `.critical` with `networkDetail` "No internet connection" on request errors.
     private func checkNetwork() async {
         let url = URL(string: "https://api.github.com")!
         do {
@@ -335,6 +352,9 @@ class HealthMonitor: ObservableObject {
         }
     }
     
+    /// Checks disk usage for the Velociraptor application data directory and updates the monitor's disk metrics and status.
+    /// 
+    /// Reads available and total capacity for ~/Library/Application Support/Velociraptor, computes used and total space in gigabytes, and updates `diskUsed` and `diskTotal`. Sets `diskStatus` and `diskDetail` according to the percent used: healthy when below 80%, warning when below 95%, and critical otherwise. On failure, sets `diskStatus` to `.unknown` and `diskDetail` to "Could not check disk".
     private func checkDisk() async {
         let dataPath = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Application Support/Velociraptor")
@@ -369,6 +389,13 @@ class HealthMonitor: ObservableObject {
         }
     }
     
+    /// Estimates current system memory usage and updates the monitor's memory metrics and status.
+    /// 
+    /// Updates the following published properties based on the estimate:
+    /// - `memoryUsed`: estimated used memory in GB.
+    /// - `memoryTotal`: total physical memory in GB.
+    /// - `memoryStatus`: `.healthy` when usage < 80%, `.warning` when usage >= 80% and < 95%, `.critical` when usage >= 95%, or `.unknown` if the measurement fails.
+    /// - `memoryDetail`: a formatted string describing used and total memory or total only when unknown.
     private func checkMemory() async {
         let info = ProcessInfo.processInfo
         let total = Double(info.physicalMemory) / 1_000_000_000
@@ -412,6 +439,9 @@ class HealthMonitor: ObservableObject {
         }
     }
     
+    /// Checks whether the local GUI and frontend ports are accepting connections and updates the corresponding status and detail properties.
+    /// 
+    /// The method updates `guiPortStatus` and `guiPortDetail` based on port 8889, and `frontendPortStatus` and `frontendPortDetail` based on port 8000. Each status is set to `.healthy` when the port is reachable and `.warning` when it is not; detail strings reflect whether the port is "Listening" or "Not listening".
     private func checkPorts() async {
         guiPortStatus = await checkPort(8889) ? .healthy : .warning
         guiPortDetail = guiPortStatus == .healthy ? "Listening on 8889" : "Not listening"
@@ -420,6 +450,9 @@ class HealthMonitor: ObservableObject {
         frontendPortDetail = frontendPortStatus == .healthy ? "Listening on 8000" : "Not listening"
     }
     
+    /// Checks whether a TCP listener is accepting connections on the localhost loopback for the specified port.
+    /// - Parameter port: The TCP port number on localhost to test.
+    /// - Returns: `true` if a connection to the specified localhost port succeeded, `false` otherwise.
     private func checkPort(_ port: Int) async -> Bool {
         let socket = socket(AF_INET, SOCK_STREAM, 0)
         guard socket >= 0 else { return false }
@@ -439,6 +472,11 @@ class HealthMonitor: ObservableObject {
         return result == 0
     }
     
+    /// Loads the most recent Velociraptor log and updates `recentLogs` with its last 10 non-empty lines.
+    /// 
+    /// Attempts to read log files from `~/Library/Logs/Velociraptor`, selects the most recently modified `.log` file,
+    /// and sets `recentLogs` to the final 10 non-empty lines of that file. If no log is found or an error occurs,
+    /// `recentLogs` is set to an empty array.
     private func loadRecentLogs() async {
         let logPath = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Logs/Velociraptor")
@@ -462,6 +500,9 @@ class HealthMonitor: ObservableObject {
         }
     }
     
+    /// Update the aggregated overallStatus based on individual component statuses.
+    /// 
+    /// Sets `overallStatus` to `.critical` if any component is `.critical`, to `.warning` if none are critical but at least one is `.warning`, to `.healthy` if all components are `.healthy`, and to `.unknown` otherwise.
     private func updateOverallStatus() {
         let statuses = [serviceStatus, networkStatus, diskStatus, memoryStatus]
         
@@ -476,6 +517,8 @@ class HealthMonitor: ObservableObject {
         }
     }
     
+    /// Creates a multi-section diagnostics report for Velociraptor on macOS containing system information, current health statuses, system metrics, and recent logs.
+    /// - Returns: A formatted string that includes a generation timestamp, system information (macOS version, host, processors, memory), per-component health statuses with details, CPU/memory/disk metrics, and the most recent log lines.
     func generateDiagnosticsReport() -> String {
         let sysinfo = ProcessInfo.processInfo
         
