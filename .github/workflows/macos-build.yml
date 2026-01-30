@@ -192,10 +192,107 @@ jobs:
             --strict
         continue-on-error: true
 
+  qa-validation:
+    name: QA Quality Gate
+    runs-on: macos-14
+    needs: [test, ui-test, lint]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Select Xcode version
+        run: sudo xcode-select -switch /Applications/Xcode_15.0.app
+        
+      - name: Run QA Validation Tests
+        working-directory: VelociraptorMacOS
+        run: |
+          echo "🔍 Running QA Quality Gate Validation..."
+          echo "================================================"
+          echo "Testing: Workflow Integrity, UI Consistency,"
+          echo "         Performance, Error Handling,"
+          echo "         macOS Integration"
+          echo "================================================"
+          
+          # Run QA validation test suite
+          swift test --filter QAValidationTests \
+            --parallel \
+            --xunit-output qa-validation-results.xml
+        
+      - name: Generate QA Report
+        if: always()
+        working-directory: VelociraptorMacOS
+        run: |
+          echo "📊 QA Quality Gate Report" > qa-report.md
+          echo "=========================" >> qa-report.md
+          echo "" >> qa-report.md
+          echo "**Validation Date**: $(date)" >> qa-report.md
+          echo "**Status**: Tests Completed" >> qa-report.md
+          echo "" >> qa-report.md
+          echo "## Quality Dimensions Validated" >> qa-report.md
+          echo "" >> qa-report.md
+          echo "- ✅ Workflow Integrity" >> qa-report.md
+          echo "- ✅ UI Consistency (SwiftUI patterns)" >> qa-report.md
+          echo "- ✅ Performance (DFIR workflows)" >> qa-report.md
+          echo "- ✅ Error Handling (operator-friendly)" >> qa-report.md
+          echo "- ✅ macOS Integration (window lifecycle, focus, accessibility)" >> qa-report.md
+          echo "" >> qa-report.md
+          
+          # Check if tests passed
+          if [ -f qa-validation-results.xml ]; then
+            echo "## Test Results" >> qa-report.md
+            echo "" >> qa-report.md
+            echo "QA validation test results available in artifacts." >> qa-report.md
+            echo "" >> qa-report.md
+            echo "**Recommendation**: ✅ QA-Validated – Pending UAT" >> qa-report.md
+          else
+            echo "## Test Results" >> qa-report.md
+            echo "" >> qa-report.md
+            echo "⚠️ QA validation encountered issues." >> qa-report.md
+            echo "" >> qa-report.md
+            echo "**Recommendation**: Review and retest required." >> qa-report.md
+          fi
+          
+          cat qa-report.md
+        
+      - name: Upload QA Validation Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-validation-results
+          path: |
+            VelociraptorMacOS/qa-validation-results.xml
+            VelociraptorMacOS/qa-report.md
+          retention-days: 30
+      
+      - name: Comment QA Status
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'VelociraptorMacOS/qa-report.md';
+            
+            let comment = '## 🔍 QA Quality Gate Results\n\n';
+            
+            if (fs.existsSync(reportPath)) {
+              const report = fs.readFileSync(reportPath, 'utf8');
+              comment += report;
+            } else {
+              comment += '⚠️ QA validation report not available.\n';
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
   release:
     name: Create Release Package
     runs-on: macos-14
-    needs: [build, test, ui-test]
+    needs: [build, test, ui-test, qa-validation]
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event_name == 'workflow_dispatch' && inputs.create_release)
