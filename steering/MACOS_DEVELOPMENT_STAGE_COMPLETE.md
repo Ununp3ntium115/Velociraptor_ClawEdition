@@ -34,7 +34,7 @@ The Velociraptor Claw Edition macOS native application has completed the Develop
 | Keychain Integration | ✅ Implemented - Pending Test | `KeychainManager.swift` | Security framework integration complete |
 | macOS Deployment Script | ✅ Implemented - Pending Test | `DeploymentManager.swift` | Deployment logic integrated |
 | launchd Service Management | ✅ Implemented - Pending Test | `DeploymentManager.swift` | launchd plist generation |
-| Basic QA/UA Test Suite | ✅ Implemented - Pending Test | `VelociraptorMacOSTests/`, `VelociraptorMacOSUITests/` | 100+ unit tests, 60+ UI tests |
+| Basic QA/UA Test Suite | ✅ Implemented - Pending Test | `VelociraptorMacOSTests/`, `VelociraptorMacOSUITests/` | 195+ tests across 16 test suites |
 
 ### High Priority Gaps (P1) - All Implemented
 
