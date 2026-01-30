@@ -272,7 +272,10 @@ enum AccessibilityIdentifiers {
 import SwiftUI
 
 extension View {
-    /// Apply an accessibility identifier
+    /// Applies an accessibility identifier to the view for UI testing and assistive technologies.
+    /// - Parameters:
+    ///   - identifier: A dot-separated identifier string used by UI tests and accessibility tools (e.g., VoiceOver).
+    /// - Returns: A view that has the specified accessibility identifier applied.
     func accessibilityId(_ identifier: String) -> some View {
         self.accessibilityIdentifier(identifier)
     }

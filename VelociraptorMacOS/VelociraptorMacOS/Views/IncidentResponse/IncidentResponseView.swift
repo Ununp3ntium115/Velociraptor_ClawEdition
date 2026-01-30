@@ -315,6 +315,8 @@ struct ActionButtonsView: View {
         }
     }
     
+    /// Initiates the collector build process and updates UI state based on the outcome.
+    /// - Discussion: On success delivers a macOS user notification titled "Collector Built" with an informative message. On failure stores the thrown error in `buildError` and sets `showError` to `true`.
     private func buildCollector() {
         Task {
             do {

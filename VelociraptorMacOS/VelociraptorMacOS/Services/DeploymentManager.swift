@@ -141,13 +141,17 @@ class DeploymentManager: ObservableObject {
         checkCurrentInstallation()
     }
     
+    /// Resets all deployment steps to the `pending` state by updating the internal stepStatus dictionary.
     private func resetStepStatus() {
         for step in DeploymentStep.allCases {
             stepStatus[step] = .pending
         }
     }
     
-    // MARK: - Installation Check
+    /// Checks for an existing Velociraptor binary at the default path and updates local state.
+    /// 
+    /// If the binary exists, updates `isRunning` to reflect whether the process is currently running
+    /// and sets `installedVersion` to the binary's reported version. No changes are made if the binary is absent.
     
     private func checkCurrentInstallation() {
         let binaryPath = ConfigurationData.defaultBinaryPath
@@ -157,6 +161,9 @@ class DeploymentManager: ObservableObject {
         }
     }
     
+    /// Reads the version string reported by the Velociraptor executable at the given path by invoking it with the `version` command.
+    /// - Parameter binaryPath: Filesystem path to the Velociraptor executable.
+    /// - Returns: The trimmed stdout produced by the executable (expected to be the version string), or `nil` if the process could not be executed or output could not be read.
     private func getInstalledVersion(binaryPath: String) -> String? {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: binaryPath)
@@ -178,6 +185,8 @@ class DeploymentManager: ObservableObject {
         }
     }
     
+    /// Determines whether a process named "velociraptor" is currently running on the system.
+    /// - Returns: `true` if a process named "velociraptor" is running, `false` otherwise.
     private func checkIfRunning() -> Bool {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/pgrep")
@@ -194,7 +203,16 @@ class DeploymentManager: ObservableObject {
     
     // MARK: - Full Deployment
     
-    /// Execute full deployment with given configuration
+    /// Orchestrates the full deployment workflow for Velociraptor using the provided configuration.
+    /// 
+    /// This method runs the deployment as a sequence of ordered steps (preparation, download,
+    /// directory setup, configuration generation, service installation, startup, and verification),
+    /// updating progress and per-step statuses as it proceeds. On success it marks the agent as running;
+    /// on failure it records the error and updates statusMessage and lastError.
+    /// - Parameters:
+    ///   - config: ConfigurationData containing deployment settings (datastore paths, GUI/network options, credentials, and other options) to use for this deployment.
+    /// - Throws: An error if any deployment step fails (propagates errors from preparation, download, configuration,
+    ///   service installation, startup, or verification).
     func deploy(config: ConfigurationData) async throws {
         isDeploying = true
         progress = 0.0
@@ -260,7 +278,12 @@ class DeploymentManager: ObservableObject {
         }
     }
     
-    /// Execute a deployment step with status tracking
+    /// Executes a deployment step by updating its status and running the provided action.
+    /// - Parameters:
+    ///   - step: The deployment step being executed; used to update `stepStatus` and `statusMessage`.
+    ///   - action: An asynchronous throwing closure that performs the work for the step.
+    /// - Returns: The value produced by `action`.
+    /// - Throws: Any error thrown by `action`; the step's status will be set to `.failed(error)` before the error is propagated.
     private func executeStep<T>(_ step: DeploymentStep, action: () async throws -> T) async throws -> T {
         stepStatus[step] = .inProgress
         statusMessage = "Step: \(step.rawValue)..."
@@ -277,7 +300,12 @@ class DeploymentManager: ObservableObject {
         }
     }
     
-    // MARK: - Deployment Steps
+    /// Validates prerequisites required to start a deployment.
+    /// - Parameters:
+    ///   - config: Configuration data whose `datastoreDirectory` is used to check available disk space.
+    /// - Throws:
+    ///   - `DeploymentError.networkUnavailable` if the network check fails.
+    ///   - `DeploymentError.insufficientDiskSpace` if there is less than 500 MB of free space at the datastore directory.
     
     private func prepareDeployment(config: ConfigurationData) async throws {
         statusMessage = "Checking prerequisites..."
@@ -298,6 +326,13 @@ class DeploymentManager: ObservableObject {
         Logger.shared.info("Prerequisites check passed", component: "Deploy")
     }
     
+    /// Downloads the latest Velociraptor macOS release, choosing an architecture-appropriate asset, and places the binary under the specified destination directory.
+    /// 
+    /// The method prefers an Apple Silicon (`darwin-arm64`) asset when the host reports `arm64`, falling back to `darwin-amd64` if necessary.
+    /// - Parameters:
+    ///   - destination: Filesystem directory path where the downloaded `velociraptor` binary will be moved.
+    /// - Returns: The file URL of the downloaded `velociraptor` binary at the destination.
+    /// - Throws: `DeploymentError.binaryNotFound` if no suitable macOS release asset is available.
     private func downloadVelociraptor(to destination: String) async throws -> URL {
         statusMessage = "Fetching latest release information..."
         
@@ -322,6 +357,11 @@ class DeploymentManager: ObservableObject {
         return try await downloadAsset(asset, to: destination)
     }
     
+    /// Download the given GitHub release asset and install it as the Velociraptor binary in the specified directory.
+    /// - Parameters:
+    ///   - asset: The GitHub release asset describing the downloadable binary (name and browserDownloadURL are used).
+    ///   - destination: Filesystem directory path where the `velociraptor` binary will be placed; the directory will be created if missing.
+    /// - Returns: The file URL of the installed `velociraptor` binary.
     private func downloadAsset(_ asset: GitHubRelease.Asset, to destination: String) async throws -> URL {
         statusMessage = "Downloading \(asset.name)..."
         Logger.shared.info("Downloading: \(asset.browserDownloadURL)", component: "Deploy")
@@ -353,6 +393,11 @@ class DeploymentManager: ObservableObject {
         return binaryPath
     }
     
+    /// Ensures required deployment directories exist and applies appropriate permissions.
+    /// 
+    /// Creates the datastore, logs, cache, and datastore/config directories if they do not exist, setting POSIX permissions to 0o750.
+    /// - Parameter config: Configuration data providing paths for datastoreDirectory, logsDirectory, and cacheDirectory.
+    /// - Throws: An error from FileManager if creating any directory fails.
     private func createDirectories(config: ConfigurationData) async throws {
         statusMessage = "Creating directories..."
         
@@ -375,6 +420,11 @@ class DeploymentManager: ObservableObject {
         }
     }
     
+    /// Generates a Velociraptor server YAML configuration from the provided configuration data and writes it to the datastore directory.
+    /// - Parameters:
+    ///   - config: Configuration values used to build the YAML configuration file.
+    ///   - binaryPath: URL of the Velociraptor executable (used as the binary reference for configuration generation).
+    /// - Returns: The file URL of the written configuration file (datastoreDirectory/config/server.config.yaml).
     private func generateConfiguration(config: ConfigurationData, binaryPath: URL) async throws -> URL {
         statusMessage = "Generating configuration..."
         
@@ -403,6 +453,12 @@ class DeploymentManager: ObservableObject {
         return configPath
     }
     
+    /// Installs or replaces the user LaunchAgent plist for Velociraptor in ~/Library/LaunchAgents.
+    /// - Parameters:
+    ///   - binaryPath: Filesystem URL of the Velociraptor binary to reference in the plist.
+    ///   - configPath: Filesystem URL of the configuration file to reference in the plist.
+    ///   - config: Deployment configuration used to configure the generated plist (e.g., launch-at-login setting and paths).
+    /// - Throws: File system errors if the LaunchAgents directory cannot be created, an existing plist cannot be removed, or the new plist cannot be written. Existing service plist (if present) is unloaded before replacement.
     private func installService(binaryPath: URL, configPath: URL, config: ConfigurationData) async throws {
         statusMessage = "Installing launchd service..."
         
@@ -427,6 +483,12 @@ class DeploymentManager: ObservableObject {
         Logger.shared.success("Launchd plist installed: \(plistPath.path)", component: "Deploy")
     }
     
+    /// Creates a LaunchAgent plist XML to run the Velociraptor frontend using the provided binary and configuration.
+    /// - Parameters:
+    ///   - binaryPath: Filesystem URL of the Velociraptor binary to execute.
+    ///   - configPath: Filesystem URL of the YAML configuration file to pass to the binary.
+    ///   - config: Deployment configuration used to populate RunAtLoad, log paths, working directory, and other plist fields.
+    /// - Returns: A String containing the plist XML for a user LaunchAgent (Label `com.velocidex.velociraptor`) that launches the frontend with the specified binary and configuration.
     private func generateLaunchdPlist(binaryPath: URL, configPath: URL, config: ConfigurationData) -> String {
         return """
         <?xml version="1.0" encoding="UTF-8"?>
@@ -465,6 +527,10 @@ class DeploymentManager: ObservableObject {
         """
     }
     
+    /// Load the user LaunchAgent plist for Velociraptor into launchd and wait briefly for the service to start.
+    /// 
+    /// Initiates `launchctl load` for ~/Library/LaunchAgents/com.velocidex.velociraptor.plist and pauses for 2 seconds to allow the service to initialize.
+    /// - Throws: `DeploymentError.startupFailed` if `launchctl` exits with a non-zero status.
     private func startService() async throws {
         statusMessage = "Starting Velociraptor service..."
         
@@ -488,6 +554,11 @@ class DeploymentManager: ObservableObject {
         Logger.shared.success("Service started", component: "Deploy")
     }
     
+    /// Verifies the deployed Velociraptor service and performs a brief GUI health check.
+    /// 
+    /// Attempts to confirm the Velociraptor process is running and sends an HTTPS request to the configured GUI address and port. If the process check succeeds, `isRunning` is set to `true`. Failures to connect to the GUI are logged but do not cause the verification to fail (the service may still be initializing).
+    /// - Parameter config: Configuration data containing the GUI bind address and port used for the verification request.
+    /// - Throws: `DeploymentError.verificationFailed` if the Velociraptor process is not running.
     private func verifyDeployment(config: ConfigurationData) async throws {
         statusMessage = "Verifying deployment..."
         
@@ -520,7 +591,10 @@ class DeploymentManager: ObservableObject {
     
     // MARK: - Service Management
     
-    /// Stop the Velociraptor service
+    /// Stops the Velociraptor LaunchAgent and updates the manager's running state.
+    /// 
+    /// The method invokes `/bin/launchctl unload -w` on `~/Library/LaunchAgents/com.velocidex.velociraptor.plist`, sets `statusMessage` to indicate shutdown progress, and sets `isRunning` to `false` when the unload completes.
+    /// - Throws: An error if starting or running the `launchctl` process fails.
     func stopService() async throws {
         statusMessage = "Stopping service..."
         
@@ -536,7 +610,9 @@ class DeploymentManager: ObservableObject {
         Logger.shared.info("Service stopped", component: "Deploy")
     }
     
-    /// Unload service without affecting run state
+    /// Attempts to unload the user LaunchAgent plist for Velociraptor using `launchctl`.
+    /// 
+    /// Runs `launchctl unload` on ~/Library/LaunchAgents/com.velocidex.velociraptor.plist and waits for the command to finish. Any errors from launching or running the process are ignored and not propagated; this method does not modify the manager's `isRunning` state.
     private func unloadService() async {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/launchctl")
@@ -547,7 +623,8 @@ class DeploymentManager: ObservableObject {
         process.waitUntilExit()
     }
     
-    /// Restart the Velociraptor service
+    /// Restarts the Velociraptor launch agent by stopping the service, waiting one second, then starting it again.
+    /// - Throws: An error if stopping or starting the service fails.
     func restartService() async throws {
         try await stopService()
         try await Task.sleep(nanoseconds: 1_000_000_000)
@@ -556,7 +633,11 @@ class DeploymentManager: ObservableObject {
     
     // MARK: - Emergency Deployment
     
-    /// Execute emergency rapid deployment
+    /// Creates a minimal standalone configuration with a generated admin password and performs an emergency deployment.
+    /// 
+    /// The configuration uses a user-home subdirectory "EmergencyVelociraptor" for datastore and logs, sets the deployment type to "Standalone",
+    /// and the encryption type to `.selfSigned`. An admin user "admin" is created with a short random password.
+    /// - Throws: Any error thrown by `deploy(config:)` when the emergency deployment fails.
     func emergencyDeploy() async throws {
         var config = ConfigurationData()
         config.deploymentType = "Standalone"
@@ -571,7 +652,9 @@ class DeploymentManager: ObservableObject {
         try await deploy(config: config)
     }
     
-    // MARK: - Helpers
+    /// Checks whether the machine can reach the GitHub API.
+    /// 
+    /// - Returns: `true` if the GitHub API responds with HTTP 200, `false` otherwise.
     
     private func checkNetworkConnectivity() async -> Bool {
         let url = URL(string: "https://api.github.com")!
@@ -583,6 +666,9 @@ class DeploymentManager: ObservableObject {
         }
     }
     
+    /// Get available disk space for the volume containing the given filesystem path.
+    /// - Parameter path: A filesystem path located on the volume to query.
+    /// - Returns: The number of free bytes available on that volume as `Int64`; returns `0` if the value cannot be determined.
     private func getAvailableDiskSpace(for path: String) -> Int64 {
         let url = URL(fileURLWithPath: path)
         do {
@@ -593,6 +679,8 @@ class DeploymentManager: ObservableObject {
         }
     }
     
+    /// Obtains the system's machine architecture identifier.
+    /// - Returns: The architecture identifier string from the system (for example "arm64" or "x86_64").
     private func getSystemArchitecture() -> String {
         var sysinfo = utsname()
         uname(&sysinfo)
@@ -635,6 +723,11 @@ class DeploymentManager: ObservableObject {
 
 /// Delegate that allows self-signed certificates (for local testing)
 class InsecureURLSessionDelegate: NSObject, URLSessionDelegate {
+    /// Allows a server-trust challenge to proceed by supplying a `URLCredential` created from the server trust when available.
+    /// - Parameters:
+    ///   - session: The `URLSession` that received the authentication challenge.
+    ///   - challenge: The authentication challenge to evaluate; if its protection space contains a `serverTrust`, a corresponding credential will be returned.
+    /// - Returns: A tuple containing the `AuthChallengeDisposition` and an optional `URLCredential`. Returns `(.useCredential, URLCredential(trust: serverTrust))` when a `serverTrust` is present; otherwise returns `(.performDefaultHandling, nil)`.
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
         if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
            let serverTrust = challenge.protectionSpace.serverTrust {

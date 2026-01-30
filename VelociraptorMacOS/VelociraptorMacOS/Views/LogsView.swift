@@ -291,6 +291,8 @@ struct LogEntryRow: View {
         }
     }
     
+    /// Extracts the timestamp substring from the current log `entry`.
+    /// - Returns: The timestamp in the format `[YYYY-MM-DD HH:MM:SS.mmm]` if present, `nil` otherwise.
     private func extractTimestamp() -> String? {
         // Match [YYYY-MM-DD HH:MM:SS.mmm] pattern
         let pattern = #"\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3})\]"#
@@ -300,6 +302,10 @@ struct LogEntryRow: View {
         return nil
     }
     
+    /// Extracts the log message by removing a leading timestamp if present.
+    /// 
+    /// If the entry begins with a timestamp in the form `[YYYY-MM-DD HH:MM:SS.mmm]`, that timestamp and any following whitespace are removed; otherwise the original entry is returned.
+    /// - Returns: The log message with any leading timestamp removed.
     private func extractMessage() -> String {
         // Remove timestamp if present
         let pattern = #"^\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}\]\s*"#
@@ -350,6 +356,12 @@ struct ExportLogsSheet: View {
         .frame(width: 300)
     }
     
+    /// Presents a save dialog and saves the currently displayed (filtered) logs to the chosen file.
+    /// - Details:
+    ///   - The save panel defaults to a plain-text file named "velociraptor-logs-<ISO8601 date>.txt".
+    ///   - If the user confirms, the view model's `filteredEntries` are joined with newline characters and written as UTF-8 plain text to the selected URL.
+    ///   - Write failures are ignored (no error is thrown or propagated).
+    ///   - The export sheet is dismissed after the save panel completes.
     private func exportLogs() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.plainText]
@@ -399,6 +411,10 @@ class LogsViewModel: ObservableObject {
         return ByteCountFormatter.string(fromByteCount: Int64(totalBytes), countStyle: .file)
     }
     
+    /// Refreshes the view model's list of available log files by reading the user's ~/Library/Logs/Velociraptor directory.
+    /// 
+    /// Updates `logFiles` with files that have a `.log` extension, sorted by modification date with the newest first.
+    /// On any error while reading the directory, `logFiles` is set to an empty array.
     func refreshLogFiles() {
         let logDir = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Logs/Velociraptor")
@@ -420,6 +436,10 @@ class LogsViewModel: ObservableObject {
         }
     }
     
+    /// Loads the given log file and updates the view model's entries.
+    /// 
+    /// While the file is being read the `isLoading` flag is set to true; on completion it is set to false. On success the file's UTF-8 contents are split into lines and any empty lines are removed before assigning to `logEntries`. On failure `logEntries` is set to a single error message describing the failure.
+    /// - Parameter file: The file URL of the log file to load.
     func loadLogFile(_ file: URL) {
         isLoading = true
         
@@ -434,6 +454,7 @@ class LogsViewModel: ObservableObject {
         }
     }
     
+    /// Deletes log files older than 30 days and refreshes the list of available log files.
     func clearLogs() {
         Logger.shared.clearOldLogs(olderThanDays: 30)
         refreshLogFiles()
