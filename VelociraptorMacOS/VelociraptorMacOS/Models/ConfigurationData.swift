@@ -260,7 +260,10 @@ struct ConfigurationData: Codable, Equatable {
     
     // MARK: - Validation
     
-    /// Validate the configuration and return any errors
+    /// Validate the current configuration and collect any detected validation issues.
+    /// 
+    /// Performs checks for administrator credentials, port ranges and conflicts, IP addresses, required filesystem paths, certificate-related settings based on encryption type, and organization name.
+    /// - Returns: An array of `ValidationError` describing each problem found; an empty array indicates no validation errors.
     func validate() -> [ValidationError] {
         var errors: [ValidationError] = []
         
@@ -359,7 +362,9 @@ struct ConfigurationData: Codable, Equatable {
         validate().isEmpty
     }
     
-    // MARK: - Validation Helpers
+    /// Checks whether a string is a valid IPv4 address in dotted-decimal notation.
+    /// - Parameter ip: The string to validate as an IPv4 address.
+    /// - Returns: `true` if `ip` contains exactly four numeric octets and each octet is between 0 and 255, `false` otherwise.
     
     private func isValidIPAddress(_ ip: String) -> Bool {
         let parts = ip.split(separator: ".")
@@ -370,6 +375,9 @@ struct ConfigurationData: Codable, Equatable {
         }
     }
     
+    /// Validates whether a string is a well-formed domain name with a top-level domain.
+    /// - Parameter domain: The domain to validate; may include subdomains and must end with a TLD (e.g., `example.com`).
+    /// - Returns: `true` if `domain` matches the expected domain-name pattern (labels start and end with alphanumeric characters, may contain hyphens, and end with a TLD of at least two letters), `false` otherwise.
     private func isValidDomain(_ domain: String) -> Bool {
         let domainRegex = #"^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$"#
         return domain.range(of: domainRegex, options: .regularExpression) != nil
@@ -433,7 +441,8 @@ struct ConfigurationData: Codable, Equatable {
     
     // MARK: - Password Strength
     
-    /// Calculate password strength score (0-100)
+    /// Estimates the strength of the admin password as a score from 0 to 100.
+    /// - Returns: An `Int` score between 0 and 100 where higher values indicate a stronger password; the score increases with password length (up to 40 points) and with use of varied character types (uppercase, lowercase, digits, and symbols).
     func passwordStrength() -> Int {
         var score = 0
         let password = adminPassword
@@ -481,7 +490,12 @@ struct ConfigurationData: Codable, Equatable {
 // MARK: - YAML Generation
 
 extension ConfigurationData {
-    /// Generate YAML configuration string
+    /// Renders the current configuration as a Velociraptor YAML configuration snippet.
+    /// 
+    /// The generated YAML includes a header with version and generation date, a `Client` section
+    /// (server URL, CA certificate placeholder, nonce, and writeback path), and, when `deploymentType`
+    /// is not `"Client"`, additional `Frontend`, `GUI`, `API`, `Datastore`, and `Logging` sections.
+    /// - Returns: A YAML-formatted `String` representing this configuration.
     func toYAML() -> String {
         var yaml = """
         # Velociraptor Configuration

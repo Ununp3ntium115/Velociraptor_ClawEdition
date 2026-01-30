@@ -55,23 +55,28 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
-# Logging functions
+# log_info prints an informational message prefixed with a blue "[INFO]" tag to stdout.
 log_info() {
     echo -e "${BLUE}[INFO]${NC} $1"
 }
 
+# log_success prints a message prefixed with a green [SUCCESS] label to stdout.
 log_success() {
     echo -e "${GREEN}[SUCCESS]${NC} $1"
 }
 
+# log_warn prints a warning message prefixed with [WARN] in yellow to stdout.
+# It takes one argument: the message to display.
 log_warn() {
     echo -e "${YELLOW}[WARN]${NC} $1"
 }
 
+# log_error prints an error message prefixed with a red "[ERROR]" tag to stdout.
 log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# log_step prints a boxed cyan header for a release step using the given title.
 log_step() {
     echo ""
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

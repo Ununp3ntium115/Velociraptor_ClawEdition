@@ -281,7 +281,10 @@ class IncidentResponseViewModel: ObservableObject {
     
     // MARK: - Methods
     
-    /// Build the collector package
+    /// Builds a collector package for the currently selected incident and writes the resulting configuration and package to the configured deployment path.
+    /// 
+    /// The method updates the view-model's progress and status properties, creates the output directory, writes a YAML collector configuration for the selected incident, and performs the packaging/finalization steps.
+    /// - Throws: `CollectorError.noIncidentSelected` if no incident is selected. May also throw file-system errors if directory creation or file writing fails.
     func buildCollector() async throws {
         isBuilding = true
         buildProgress = 0.0
@@ -322,7 +325,10 @@ class IncidentResponseViewModel: ObservableObject {
         Logger.shared.success("Collector built for: \(incident.name)", component: "IR")
     }
     
-    /// Generate collector configuration YAML
+    /// Generate a YAML collector configuration for the given incident.
+    /// The configuration includes header metadata, an artifacts list, runtime parameters, output settings (path, compress, encrypt) and options (offline_mode, portable, include_tools) populated from the current `collectorConfig`.
+    /// - Parameter incident: The IncidentScenario to base the configuration on.
+    /// - Returns: A YAML-formatted string representing the offline collector configuration.
     private func generateCollectorConfig(for incident: IncidentScenario) -> String {
         let artifacts = incident.artifacts.map { "  - \($0)" }.joined(separator: "\n")
         
@@ -354,7 +360,8 @@ class IncidentResponseViewModel: ObservableObject {
         """
     }
     
-    /// Reset collector state
+    /// Resets the view model's UI state to its default values.
+    /// Clears the selected category and incident, replaces the collector configuration with a fresh default, sets build progress and status to their initial values, and clears any stored error.
     func reset() {
         selectedCategory = nil
         selectedIncident = nil

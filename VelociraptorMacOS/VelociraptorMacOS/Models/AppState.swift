@@ -212,14 +212,17 @@ class AppState: ObservableObject {
     
     // MARK: - Navigation Methods
     
-    /// Move to the next wizard step
+    /// Advances the wizard to the next sequential step and pushes the current step onto the step history.
+    /// If the current step is the final one, the function does nothing.
     func nextStep() {
         guard let next = WizardStep(rawValue: currentStep.rawValue + 1) else { return }
         stepHistory.append(currentStep)
         currentStep = next
     }
     
-    /// Move to the previous wizard step
+    /// Navigates the wizard to the previous step.
+    /// 
+    /// If a visited step exists in the step history, the state moves to that step. Otherwise, it attempts to move to the immediately preceding `WizardStep` in sequence if one exists.
     func previousStep() {
         if let previous = stepHistory.popLast() {
             currentStep = previous
@@ -228,13 +231,15 @@ class AppState: ObservableObject {
         }
     }
     
-    /// Jump to a specific step (only if already visited)
+    /// Navigate the wizard to a previously visited step.
+    /// - Parameter step: The target wizard step to navigate to. If `step` comes after the current step in the wizard order, the call is ignored.
     func goToStep(_ step: WizardStep) {
         guard step.rawValue <= currentStep.rawValue else { return }
         currentStep = step
     }
     
-    /// Reset wizard to beginning
+    /// Resets the wizard to its initial state.
+    /// Clears navigation history, sets `currentStep` to `welcome`, resets `deploymentProgress` and `deploymentStatus`, and sets `isDeploying` to `false`.
     func resetWizard() {
         currentStep = .welcome
         stepHistory.removeAll()
@@ -245,7 +250,8 @@ class AppState: ObservableObject {
     
     // MARK: - Error Handling
     
-    /// Display an error to the user
+    /// Stores the provided error and updates UI state so an alert can present it to the user.
+    /// - Parameter error: The error to display; its `localizedDescription` will be used as the message.
     func displayError(_ error: Error) {
         lastError = error
         errorMessage = error.localizedDescription
@@ -253,14 +259,18 @@ class AppState: ObservableObject {
         Logger.shared.error("Error displayed: \(error.localizedDescription)", component: "AppState")
     }
     
-    /// Display a custom error message
+    /// Sets the current error message and marks the error alert to be shown.
+    /// - Parameters:
+    ///   - message: The error text to display to the user.
     func displayError(message: String) {
         errorMessage = message
         showError = true
         Logger.shared.error("Error displayed: \(message)", component: "AppState")
     }
     
-    /// Clear current error
+    /// Clears the current error state and any visible error UI.
+    /// 
+    /// Resets `errorMessage` to `nil`, sets `showError` to `false`, and clears `lastError`.
     func clearError() {
         errorMessage = nil
         showError = false
