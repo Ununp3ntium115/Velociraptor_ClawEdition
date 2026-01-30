@@ -198,6 +198,9 @@ struct EmergencyModeView: View {
         .accessibilityId(AccessibilityIdentifiers.EmergencyMode.sheet)
     }
     
+    /// Initiates an emergency deployment and updates view state to reflect progress, success, or failure.
+    /// 
+    /// Sets `isDeploying` to `true` while the deployment is in progress. On successful completion it sets `deploymentComplete` to `true`. If the deployment fails, it stores the encountered error in `error`. In all cases it resets `isDeploying` to `false` when finished.
     private func startEmergencyDeployment() {
         isDeploying = true
         

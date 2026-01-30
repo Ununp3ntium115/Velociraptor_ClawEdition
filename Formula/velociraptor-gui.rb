@@ -68,6 +68,9 @@ class VelociraptorGuiBuild < Formula
   depends_on xcode: ["15.0", :build]
   depends_on macos: :ventura
   
+  ##
+  # Builds the Velociraptor macOS GUI from source and assembles a runnable .app bundle in the formula prefix.
+  # Creates `Velociraptor.app` under the formula prefix, copies the built binary, `Info.plist`, and localization resources into the bundle, and performs an ad-hoc codesign. If `project.yml` is present, generates the Xcode project with XcodeGen before building.
   def install
     cd "VelociraptorMacOS" do
       # Install XcodeGen if project.yml exists
@@ -102,6 +105,12 @@ class VelociraptorGuiBuild < Formula
     end
   end
   
+  ##
+  # Notes and installation instructions shown to the user after building the app.
+  #
+  # The message includes the built app path, a copy command to install the app into /Applications,
+  # and an alternative recommendation to install the pre-built cask.
+  # @return [String] The caveats text containing the build location, installation command, and cask alternative.
   def caveats
     <<~EOS
       Velociraptor.app has been built at:
