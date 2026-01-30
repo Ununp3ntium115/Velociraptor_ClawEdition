@@ -42,6 +42,8 @@ class ConfigurationViewModel: ObservableObject {
         setupObservers()
     }
     
+    /// Subscribes to changes of `data` (ignoring the initial value) and sets `isModified` to `true` when `data` changes.
+    /// The subscription is stored in `cancellables`.
     private func setupObservers() {
         // Track modifications
         $data
@@ -54,13 +56,18 @@ class ConfigurationViewModel: ObservableObject {
     
     // MARK: - Validation
     
-    /// Validate current configuration
+    /// Validate current configuration data and record any validation errors.
+    /// 
+    /// Populates `validationErrors` with the results from `data.validate()`.
+    /// - Returns: `true` if no validation errors were found, `false` otherwise.
     func validate() -> Bool {
         validationErrors = data.validate()
         return validationErrors.isEmpty
     }
     
-    /// Check if a specific step is valid
+    /// Validates the configuration fields required for the specified wizard step.
+    /// - Parameter step: The wizard step whose required fields should be validated.
+    /// - Returns: `true` if the configuration satisfies the requirements for the given step, `false` otherwise.
     func validateStep(_ step: AppState.WizardStep) -> Bool {
         switch step {
         case .deploymentType:
@@ -99,7 +106,9 @@ class ConfigurationViewModel: ObservableObject {
         }
     }
     
-    /// Get validation errors for a specific step
+    /// Validation errors relevant to a specific wizard step.
+    /// - Parameter step: The wizard step whose related validation errors should be returned.
+    /// - Returns: An array of `ConfigurationData.ValidationError` containing errors applicable to the provided step; an empty array if there are no matching errors.
     func errorsForStep(_ step: AppState.WizardStep) -> [ConfigurationData.ValidationError] {
         let allErrors = data.validate()
         
@@ -152,7 +161,8 @@ class ConfigurationViewModel: ObservableObject {
     
     // MARK: - Reset
     
-    /// Reset configuration to defaults
+    /// Restores the view model's configuration state to default values.
+    /// Clears validation errors, marks the configuration as not modified, and removes the stored configuration path.
     func resetConfiguration() {
         data = ConfigurationData()
         validationErrors = []
@@ -163,7 +173,11 @@ class ConfigurationViewModel: ObservableObject {
     
     // MARK: - File Operations
     
-    /// Save configuration to file
+    /// Save current configuration as YAML to the specified file URL.
+    /// 
+    /// While saving, `isSaving` is set to `true` for the duration of the operation. On success the view model's `configurationPath` is updated to `url` and `isModified` is set to `false`.
+    /// - Parameter url: Destination file URL where the YAML representation of the current configuration will be written.
+    /// - Throws: An error if writing the YAML data to disk fails.
     func saveConfiguration(to url: URL) async throws {
         isSaving = true
         defer { isSaving = false }
@@ -182,7 +196,10 @@ class ConfigurationViewModel: ObservableObject {
         Logger.shared.success("Configuration saved successfully", component: "Config")
     }
     
-    /// Save configuration JSON (for persistence)
+    /// Save the current configuration as pretty-printed, sorted JSON to the specified file URL.
+    /// - Parameters:
+    ///   - url: Destination file URL where the JSON will be written.
+    /// - Throws: An error if encoding the configuration or writing the data to disk fails.
     func saveConfigurationJSON(to url: URL) async throws {
         isSaving = true
         defer { isSaving = false }
@@ -196,7 +213,9 @@ class ConfigurationViewModel: ObservableObject {
         Logger.shared.info("Configuration JSON saved", component: "Config")
     }
     
-    /// Load configuration from JSON file
+    /// Load configuration from a JSON file at the provided URL and replace the view model's current configuration.
+    /// - Parameter url: File URL pointing to a JSON-encoded `ConfigurationData` file.
+    /// - Throws: An error if the file cannot be read or the data cannot be decoded into `ConfigurationData`.
     func loadConfiguration(from url: URL) async throws {
         isLoading = true
         defer { isLoading = false }
@@ -213,14 +232,16 @@ class ConfigurationViewModel: ObservableObject {
         Logger.shared.success("Configuration loaded successfully", component: "Config")
     }
     
-    /// Export configuration as YAML
+    /// Generate a YAML representation of the current configuration data.
+    /// - Returns: A YAML-formatted `String` representing the current `ConfigurationData`.
     func exportYAML() -> String {
         return data.toYAML()
     }
     
     // MARK: - Directory Operations
     
-    /// Create required directories
+    /// Ensures the datastore, logs, and cache directories referenced by `data` exist, creating any that are missing with POSIX permissions 0o750.
+    /// - Throws: An error from `FileManager` if creating a required directory fails.
     func createDirectories() async throws {
         let directories = [
             data.datastoreDirectory,
@@ -240,7 +261,8 @@ class ConfigurationViewModel: ObservableObject {
         }
     }
     
-    /// Verify all directories exist and are writable
+    /// Checks that the datastore, logs, and cache directories exist, are directories, and are writable.
+    /// - Returns: `true` if all configured datastore, logs, and cache paths exist, are directories, and are writable; `false` otherwise.
     func verifyDirectories() -> Bool {
         let directories = [
             data.datastoreDirectory,
@@ -259,7 +281,8 @@ class ConfigurationViewModel: ObservableObject {
     
     // MARK: - Quick Configuration
     
-    /// Apply quick configuration preset
+    /// Applies a predefined configuration preset to the view model.
+    /// - Parameter preset: The preset to apply; updates environment, logging, certificate, storage, and admin settings according to the selected preset (development, production, testing, or emergency).
     func applyPreset(_ preset: ConfigurationPreset) {
         switch preset {
         case .development:

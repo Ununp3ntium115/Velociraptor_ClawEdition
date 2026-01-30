@@ -127,10 +127,12 @@ enum TestIDs {
     // MARK: - Emergency Mode
     enum EmergencyMode {
         static let sheet = "emergency.sheet"
+        static let sheetContainer = "emergency.sheet.container"
         static let title = "emergency.title"
         static let deployButton = "emergency.button.deploy"
         static let cancelButton = "emergency.button.cancel"
         static let progressIndicator = "emergency.progress"
+        static let progressView = "emergency.view.progress"
         static let successView = "emergency.view.success"
         static let errorView = "emergency.view.error"
         static let retryButton = "emergency.button.retry"
@@ -138,11 +140,15 @@ enum TestIDs {
     
     // MARK: - Incident Response
     enum IncidentResponse {
-        static let categoryList = "ir.list.categories"
-        static let incidentList = "ir.list.incidents"
-        static let detailsPanel = "ir.panel.details"
-        static let buildButton = "ir.button.build"
-        static let resetButton = "ir.button.reset"
+        static let categoryList = "incidentResponse.list.categories"
+        static let incidentList = "incidentResponse.list.incidents"
+        static let detailsPanel = "incidentResponse.panel.details"
+        static let buildButton = "incidentResponse.button.build"
+        static let resetButton = "incidentResponse.button.reset"
+        static let generateButton = "incidentResponse.button.generate"
+        static let exportButton = "incidentResponse.button.export"
+        static let searchField = "incidentResponse.field.search"
+        static let priorityFilter = "incidentResponse.filter.priority"
     }
     
     // MARK: - Settings
@@ -151,10 +157,13 @@ enum TestIDs {
         static let generalTab = "settings.tab.general"
         static let securityTab = "settings.tab.security"
         static let advancedTab = "settings.tab.advanced"
-        static let launchAtLoginToggle = "settings.toggle.launchAtLogin"
-        static let checkUpdatesToggle = "settings.toggle.checkUpdates"
-        static let notificationsToggle = "settings.toggle.notifications"
+        static let launchAtLogin = "settings.toggle.launchAtLogin"
+        static let checkForUpdates = "settings.toggle.checkForUpdates"
+        static let enableNotifications = "settings.toggle.enableNotifications"
         static let themePicker = "settings.picker.theme"
+        static let openLogFile = "settings.button.openLogFile"
+        static let clearLogs = "settings.button.clearLogs"
+        static let exportLogs = "settings.button.exportLogs"
     }
     
     // MARK: - Deployment Type

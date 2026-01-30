@@ -194,6 +194,9 @@ struct NetworkConfigurationStepView: View {
         .onChange(of: configViewModel.data.apiBindPort) { _, _ in checkPortConflicts() }
     }
     
+    /// Checks the configured ports for duplicates and updates the view state accordingly.
+    /// 
+    /// If any of `bindPort`, `guiBindPort`, or `apiBindPort` are the same, sets `portConflictWarning` to a descriptive message; otherwise clears `portConflictWarning`.
     private func checkPortConflicts() {
         let ports = [configViewModel.data.bindPort, configViewModel.data.guiBindPort, configViewModel.data.apiBindPort]
         let uniquePorts = Set(ports)
@@ -211,6 +214,12 @@ struct NetworkConfigurationStepView: View {
         case custom
     }
     
+    /// Apply a predefined port and address preset to the current configuration data.
+    /// 
+    /// - Parameter preset: The chosen `PortPreset`.
+    ///   - `.standard`: Sets bindPort = 8000, guiBindPort = 8889, apiBindPort = 8001; bindAddress = "0.0.0.0", guiBindAddress = "127.0.0.1", apiBindAddress = "127.0.0.1".
+    ///   - `.development`: Sets bindPort = 8000, guiBindPort = 8889, apiBindPort = 8001; bindAddress = "127.0.0.1", guiBindAddress = "127.0.0.1", apiBindAddress = "127.0.0.1".
+    ///   - `.custom`: Sets bindPort = 9000, guiBindPort = 9889, apiBindPort = 9001 (addresses unchanged).
     private func applyPreset(_ preset: PortPreset) {
         switch preset {
         case .standard:
@@ -265,6 +274,9 @@ struct PortStatusView: View {
         .onChange(of: port) { _, _ in checkPort() }
     }
     
+    /// Resets the current port-status state and asynchronously updates it by checking the configured port's availability.
+    /// 
+    /// This clears `isAvailable` (making the view show a loading state) and then sets `isAvailable` to `true` if the port is available or `false` if it appears in use.
     private func checkPort() {
         isAvailable = nil
         
@@ -274,6 +286,10 @@ struct PortStatusView: View {
         }
     }
     
+    /// Checks whether a TCP port on the local loopback address can be bound.
+    /// Attempts to bind a TCP socket to 127.0.0.1 at `port` and reports whether the bind succeeded.
+    /// - Parameter port: TCP port number to check.
+    /// - Returns: `true` if the bind succeeded (port is likely available), `false` if the bind failed (port may be in use). If a socket cannot be created, the function returns `true`.
     private func checkPortAvailable(_ port: Int) async -> Bool {
         // Try to create a socket on the port
         let socket = socket(AF_INET, SOCK_STREAM, 0)
