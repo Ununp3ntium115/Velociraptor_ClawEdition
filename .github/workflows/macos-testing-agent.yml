@@ -1,0 +1,207 @@
+name: macOS Testing Agent
+
+on:
+  push:
+    branches: 
+      - main
+      - 'cursor/mac-os-*'
+      - 'copilot/*'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      gap_id:
+        description: 'Specific gap to validate (e.g., GAP-003)'
+        required: false
+        type: string
+      format:
+        description: 'Report format'
+        required: false
+        default: 'markdown'
+        type: choice
+        options:
+          - console
+          - json
+          - markdown
+          - cdif
+
+jobs:
+  validate-gaps:
+    name: Validate Gap Closure
+    runs-on: macos-14
+    if: startsWith(github.head_ref, 'copilot/test-') || startsWith(github.ref, 'refs/heads/cursor/mac-os-')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Select Xcode
+      run: |
+        sudo xcode-select -s /Applications/Xcode_15.2.app || \
+        sudo xcode-select -s /Applications/Xcode.app
+        xcodebuild -version
+    
+    - name: Cache Swift dependencies
+      uses: actions/cache@v3
+      with:
+        path: VelociraptorMacOS/.build
+        key: ${{ runner.os }}-spm-${{ hashFiles('VelociraptorMacOS/**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-
+    
+    - name: Build Testing Agent
+      working-directory: VelociraptorMacOS
+      run: |
+        echo "Building Testing Agent..."
+        swift build --target TestingAgentCLI -c release
+        echo "✅ Build successful"
+    
+    - name: Run Testing Agent - Validate All Gaps
+      if: github.event.inputs.gap_id == ''
+      working-directory: VelociraptorMacOS
+      run: |
+        echo "Running Testing Agent for all gaps..."
+        swift run TestingAgentCLI --validate-all --format json > test-results.json
+        
+        echo "Generating markdown report..."
+        swift run TestingAgentCLI --validate-all --format markdown > test-report.md
+        
+        echo "Generating CDIF report..."
+        swift run TestingAgentCLI --validate-all --format cdif > cdif-report.yaml
+        
+        echo "✅ Testing Agent execution complete"
+    
+    - name: Run Testing Agent - Specific Gap
+      if: github.event.inputs.gap_id != ''
+      working-directory: VelociraptorMacOS
+      run: |
+        echo "Running Testing Agent for gap: ${{ github.event.inputs.gap_id }}"
+        swift run TestingAgentCLI \
+          --gap ${{ github.event.inputs.gap_id }} \
+          --format ${{ github.event.inputs.format || 'markdown' }} > test-report.md
+    
+    - name: Upload Test Results (JSON)
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: testing-agent-results-json
+        path: VelociraptorMacOS/test-results.json
+        retention-days: 90
+    
+    - name: Upload Test Report (Markdown)
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: testing-agent-results-markdown
+        path: VelociraptorMacOS/test-report.md
+        retention-days: 90
+    
+    - name: Upload CDIF Report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: testing-agent-results-cdif
+        path: VelociraptorMacOS/cdif-report.yaml
+        retention-days: 90
+    
+    - name: Display Test Summary
+      if: always()
+      working-directory: VelociraptorMacOS
+      run: |
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "Testing Agent Summary"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        if [ -f test-results.json ]; then
+          cat test-results.json | python3 -m json.tool || cat test-results.json
+        fi
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    
+    - name: Comment PR with Results
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          let report = '';
+          
+          try {
+            if (fs.existsSync('VelociraptorMacOS/test-report.md')) {
+              report = fs.readFileSync('VelociraptorMacOS/test-report.md', 'utf8');
+            } else {
+              report = '⚠️ No test report generated';
+            }
+          } catch (error) {
+            report = `❌ Error reading test report: ${error.message}`;
+          }
+          
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## 🧪 Testing Agent Results\n\n${report}`
+          });
+    
+    - name: Check Test Results
+      if: always()
+      working-directory: VelociraptorMacOS
+      run: |
+        if [ -f test-results.json ]; then
+          # Check if there are any failures in JSON
+          FAILED=$(cat test-results.json | grep -o '"failed":[0-9]*' | grep -o '[0-9]*' || echo "0")
+          if [ "$FAILED" -gt "0" ]; then
+            echo "❌ $FAILED gap(s) failed validation"
+            exit 1
+          else
+            echo "✅ All gaps validated successfully"
+          fi
+        else
+          echo "⚠️ No test results file found"
+          exit 1
+        fi
+
+  unit-tests:
+    name: Run Unit Tests
+    runs-on: macos-14
+    if: startsWith(github.head_ref, 'copilot/test-') || startsWith(github.ref, 'refs/heads/cursor/mac-os-')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Select Xcode
+      run: |
+        sudo xcode-select -s /Applications/Xcode_15.2.app || \
+        sudo xcode-select -s /Applications/Xcode.app
+        xcodebuild -version
+    
+    - name: Cache Swift dependencies
+      uses: actions/cache@v3
+      with:
+        path: VelociraptorMacOS/.build
+        key: ${{ runner.os }}-spm-tests-${{ hashFiles('VelociraptorMacOS/**/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-spm-tests-
+    
+    - name: Run Swift Tests
+      working-directory: VelociraptorMacOS
+      run: |
+        echo "Running unit tests..."
+        swift test --enable-code-coverage
+        echo "✅ Unit tests complete"
+    
+    - name: Generate Coverage Report
+      working-directory: VelociraptorMacOS
+      run: |
+        echo "Generating coverage report..."
+        xcrun llvm-cov export \
+          .build/debug/VelociraptorMacOSPackageTests.xctest/Contents/MacOS/VelociraptorMacOSPackageTests \
+          -instr-profile .build/debug/codecov/default.profdata \
+          -format lcov > coverage.lcov || true
+    
+    - name: Upload Coverage
+      uses: codecov/codecov-action@v3
+      if: always()
+      with:
+        files: VelociraptorMacOS/coverage.lcov
+        flags: unittests
+        name: macos-coverage
