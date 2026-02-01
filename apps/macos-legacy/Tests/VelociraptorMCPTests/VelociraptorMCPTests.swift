@@ -32,8 +32,8 @@ struct VelociraptorMCPTests {
         let tool = VelociraptorTools.generateVQL
         
         #expect(tool.name == "velociraptor_generate_vql")
-        #expect(tool.description.contains("VQL"))
-        #expect(tool.description.contains("forensics"))
+        #expect(tool.description?.contains("VQL") == true)
+        #expect(tool.description?.contains("forensics") == true)
     }
     
     @Test("Suggest artifacts tool has correct schema")
@@ -41,8 +41,8 @@ struct VelociraptorMCPTests {
         let tool = VelociraptorTools.suggestArtifacts
         
         #expect(tool.name == "velociraptor_suggest_artifacts")
-        #expect(tool.description.contains("artifacts"))
-        #expect(tool.description.contains("incident"))
+        #expect(tool.description?.contains("artifacts") == true)
+        #expect(tool.description?.contains("incident") == true)
     }
     
     // MARK: - Tool Handler Tests
@@ -165,10 +165,10 @@ struct VelociraptorMCPTests {
     @Test("Value stringValue works correctly")
     func testValueStringExtension() {
         let stringValue: Value = .string("test")
-        let numberValue: Value = .number(42)
+        let intValue: Value = .int(42)
         
         #expect(stringValue.stringValue == "test")
-        #expect(numberValue.stringValue == nil)
+        #expect(intValue.stringValue == nil)
     }
     
     @Test("Value boolValue works correctly")
@@ -182,10 +182,10 @@ struct VelociraptorMCPTests {
     
     @Test("Value intValue works correctly")
     func testValueIntExtension() {
-        let numberValue: Value = .number(42)
+        let intValue: Value = .int(42)
         let stringValue: Value = .string("42")
         
-        #expect(numberValue.intValue == 42)
+        #expect(intValue.intValue == 42)
         #expect(stringValue.intValue == nil)
     }
     

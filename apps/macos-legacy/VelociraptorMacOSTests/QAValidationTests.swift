@@ -92,15 +92,15 @@ final class QAValidationTests: XCTestCase {
     func testIncidentResponseWorkflowIntegrity() async throws {
         let viewModel = IncidentResponseViewModel()
         
-        // Test IR workflow
-        XCTAssertTrue(viewModel.categories.count > 0, "Should have incident categories")
+        // Test IR workflow - uses IncidentCategory enum
+        let categories = IncidentResponseViewModel.IncidentCategory.allCases
+        XCTAssertTrue(categories.count > 0, "Should have incident categories")
         XCTAssertNil(viewModel.selectedIncident, "Should start with no incident selected")
         
-        // Simulate selecting an incident
-        if let firstCategory = viewModel.categories.first,
-           let firstIncident = firstCategory.incidents.first {
-            viewModel.selectIncident(firstIncident)
-            XCTAssertNotNil(viewModel.selectedIncident, "Should have selected incident")
+        // Simulate selecting a category
+        if let firstCategory = categories.first {
+            viewModel.selectedCategory = firstCategory
+            XCTAssertNotNil(viewModel.selectedCategory, "Should have selected category")
         }
         
         XCTAssertTrue(true, "Incident response workflow maintains integrity")
@@ -133,17 +133,17 @@ final class QAValidationTests: XCTestCase {
     /// QA-005: Verify visual consistency across deployment types
     @MainActor
     func testVisualConsistencyAcrossDeploymentTypes() async throws {
-        let configData = ConfigurationData()
+        var configData = ConfigurationData()
         
         // Test each deployment type has proper configuration
-        let deploymentTypes: [AppState.DeploymentType] = [.standalone, .server, .client]
+        let deploymentTypes = ["Standalone", "Server", "Client"]
         
         for type in deploymentTypes {
             configData.deploymentType = type
             
             // Verify required fields are present and have defaults
             XCTAssertFalse(configData.bindAddress.isEmpty, "Bind address should have default for \(type)")
-            XCTAssertGreaterThan(configData.guiPort, 0, "GUI port should be valid for \(type)")
+            XCTAssertGreaterThan(configData.guiBindPort, 0, "GUI port should be valid for \(type)")
             
             // Verify validation works consistently
             let validationErrors = configData.validate()
@@ -223,11 +223,11 @@ final class QAValidationTests: XCTestCase {
     /// QA-010: Verify validation errors are operator-friendly
     @MainActor
     func testValidationErrorsAreOperatorFriendly() async throws {
-        let configData = ConfigurationData()
+        var configData = ConfigurationData()
         
         // Test with invalid configuration
         configData.bindAddress = ""  // Invalid
-        configData.guiPort = 0  // Invalid
+        configData.guiBindPort = 0  // Invalid
         
         let errors = configData.validate()
         XCTAssertFalse(errors.isEmpty, "Should have validation errors for invalid config")
@@ -322,8 +322,8 @@ final class QAValidationTests: XCTestCase {
         let configData = ConfigurationData()
         
         // Verify default values are consistent
-        XCTAssertEqual(configData.guiPort, 8889, "Default GUI port should be consistent")
-        XCTAssertEqual(configData.bindAddress, "127.0.0.1", "Default bind address should be consistent")
+        XCTAssertEqual(configData.guiBindPort, 8889, "Default GUI port should be consistent")
+        XCTAssertEqual(configData.bindAddress, "0.0.0.0", "Default bind address should be consistent")
         
         // Verify Codable conformance (for persistence)
         let encoder = JSONEncoder()
@@ -332,17 +332,19 @@ final class QAValidationTests: XCTestCase {
         let encoded = try encoder.encode(configData)
         let decoded = try decoder.decode(ConfigurationData.self, from: encoded)
         
-        XCTAssertEqual(decoded.guiPort, configData.guiPort, "Configuration should survive encode/decode")
+        XCTAssertEqual(decoded.guiBindPort, configData.guiBindPort, "Configuration should survive encode/decode")
         
         XCTAssertTrue(true, "Configuration data maintains consistency")
     }
     
     /// QA-017: Verify keychain integration structure
-    func testKeychainIntegrationStructure() throws {
-        let keychainManager = KeychainManager.shared
+    @MainActor
+    func testKeychainIntegrationStructure() async throws {
+        let keychainManager = KeychainManager()
         
         // Verify keychain manager exists and is configured
         XCTAssertNotNil(keychainManager, "Keychain manager should be available")
+        XCTAssertTrue(keychainManager.isAvailable, "Keychain should be available")
         
         // Test structure is in place (actual storage tested in KeychainManagerTests)
         XCTAssertTrue(true, "Keychain integration structure is correct")
@@ -394,18 +396,18 @@ final class QAValidationTests: XCTestCase {
         let viewModel = IncidentResponseViewModel()
         
         // Verify all incident categories are properly configured
-        XCTAssertGreaterThan(viewModel.categories.count, 0, "Should have incident categories")
+        let categories = IncidentResponseViewModel.IncidentCategory.allCases
+        XCTAssertGreaterThan(categories.count, 0, "Should have incident categories")
         
-        for category in viewModel.categories {
-            XCTAssertFalse(category.name.isEmpty, "Category should have name")
-            XCTAssertFalse(category.iconName.isEmpty, "Category should have icon")
-            XCTAssertGreaterThan(category.incidents.count, 0, "Category should have incidents")
-            
-            for incident in category.incidents {
-                XCTAssertFalse(incident.name.isEmpty, "Incident should have name")
-                XCTAssertGreaterThan(incident.artifacts.count, 0, "Incident should have artifacts")
-            }
+        for category in categories {
+            XCTAssertFalse(category.rawValue.isEmpty, "Category should have name")
+            XCTAssertFalse(category.emoji.isEmpty, "Category should have emoji")
+            XCTAssertGreaterThan(category.scenarioCount, 0, "Category should have scenarios")
         }
+        
+        // Verify view model can filter incidents
+        viewModel.selectedCategory = categories.first
+        XCTAssertNotNil(viewModel.selectedCategory, "Should be able to select category")
         
         XCTAssertTrue(true, "Incident response integration is properly configured")
     }

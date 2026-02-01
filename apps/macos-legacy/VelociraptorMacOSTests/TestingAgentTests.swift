@@ -316,6 +316,7 @@ final class DeterminismCheckerTests: XCTestCase {
 
 // MARK: - Xcode Test Runner Tests
 
+@MainActor
 final class XcodeTestRunnerTests: XCTestCase {
     
     var runner: XcodeTestRunner!

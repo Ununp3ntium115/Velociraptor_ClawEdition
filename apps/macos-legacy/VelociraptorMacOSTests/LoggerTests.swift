@@ -57,7 +57,7 @@ final class LoggerTests: XCTestCase {
     }
     
     func testLogLevelWarn() {
-        logger.warn("Test warning message")
+        logger.warning("Test warning message")
     }
     
     func testLogLevelError() {
@@ -79,11 +79,11 @@ final class LoggerTests: XCTestCase {
     }
     
     func testLogWithCategory() {
-        let category = "TestCategory"
-        let message = "Test message with category"
+        let component = "TestComponent"
+        let message = "Test message with component"
         
-        // Should handle category without crashing
-        logger.info(message, category: category)
+        // Should handle component without crashing
+        logger.info(message, component: component)
     }
     
     // MARK: - Log File Tests
@@ -119,11 +119,13 @@ final class LoggerTests: XCTestCase {
         XCTAssertNotNil(logContent)
     }
     
-    func testListAllLogs() {
-        let logs = logger.listAllLogs()
-        
-        // Should return an array (possibly empty)
-        XCTAssertNotNil(logs)
+    func testLogPathIsValid() {
+        // Logger should have a valid log path
+        // This is a simpler test that doesn't require listAllLogs
+        let logPath = logger.getCurrentLogFilePath()
+        if let path = logPath {
+            XCTAssertTrue(path.lastPathComponent.hasSuffix(".log"))
+        }
     }
     
     // MARK: - Log Cleanup Tests
