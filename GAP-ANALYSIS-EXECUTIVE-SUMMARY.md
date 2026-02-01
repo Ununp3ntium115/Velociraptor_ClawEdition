@@ -70,12 +70,12 @@
 | 4 | **VQL Terminal** | ✅ Query editor + execution | ✅ VQLEditorView.swift | **CLOSED** |
 | 5 | **Dashboard** | ✅ Widgets + activity | ✅ DashboardView.swift | **CLOSED** |
 
-### P1 - High Priority (Next Up)
+### P1 - High Priority ✅ COMPLETED
 
 | # | Feature | Electron | macOS | Status |
 |---|---------|----------|-------|--------|
-| 6 | **VFS Browser** | ✅ Full navigation | ❌ Not implemented | **NEXT** |
-| 7 | **Tools Integration** | ✅ 25+ DFIR tools | ❌ Not implemented | **NEXT** |
+| 6 | **VFS Browser** | ✅ Full navigation | ✅ VFSBrowserView.swift | **CLOSED** |
+| 7 | **Tools Integration** | ✅ 25+ DFIR tools | ✅ ToolsManagerView.swift | **CLOSED** |
 | 8 | **WebSocket Real-Time** | ✅ Hunt/client updates | ✅ WebSocketService.swift | **CLOSED** |
 | 9 | **Accessibility IDs** | N/A | ✅ All views | **CLOSED** |
 
