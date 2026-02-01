@@ -1,0 +1,52 @@
+{
+  // Parallels Desktop Integration
+  "parallels-desktop.defaultVm": "macOS-Development",
+  "parallels-desktop.showHiddenItems": false,
+  
+  // Parallels MCP Server Configuration
+  "parallelsMcp.autoStart": true,
+  "parallelsMcp.logLevel": "info",
+  "parallelsMcp.serverPort": 8080,
+  
+  // macOS VM Development Settings
+  "parallelsMcp.vmSettings": {
+    "name": "macOS-Development",
+    "sharedFolder": "/Volumes/Projects/Velociraptor_ClawEdition",
+    "buildCommand": "cd /Volumes/Projects/Velociraptor_ClawEdition/VelociraptorMacOS && swift build -c release",
+    "testCommand": "cd /Volumes/Projects/Velociraptor_ClawEdition/VelociraptorMacOS && swift test"
+  },
+
+  // PowerShell Configuration (Windows Host)
+  "powershell.powerShellDefaultVersion": "PowerShell (x64)",
+  "[powershell]": {
+    "editor.defaultFormatter": "ms-vscode.powershell",
+    "editor.formatOnSave": true
+  },
+
+  // Swift Configuration (for editing, builds happen in VM)
+  "[swift]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
+  },
+
+  // File Associations
+  "files.associations": {
+    "*.ps1": "powershell",
+    "*.psm1": "powershell",
+    "*.psd1": "powershell",
+    "*.swift": "swift",
+    "*.yml": "yaml",
+    "*.yaml": "yaml"
+  },
+
+  // Exclude from search (build artifacts)
+  "search.exclude": {
+    "**/VelociraptorMacOS/.build/**": true,
+    "**/VelociraptorMacOS/DerivedData/**": true,
+    "**/.DS_Store": true,
+    "**/node_modules/**": true
+  },
+
+  // Task Configuration
+  "task.autoDetect": "on"
+}

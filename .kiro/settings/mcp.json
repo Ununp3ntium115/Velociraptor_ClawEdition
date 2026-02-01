@@ -1,4 +1,15 @@
 {
   "mcpServers": {
+    "parallels-mcp": {
+      "command": "parallels-mcp",
+      "description": "Parallels Desktop MCP Server for VM management",
+      "enabled": true,
+      "settings": {
+        "autoStart": true,
+        "vmName": "macOS-Development",
+        "hostAddress": "localhost",
+        "port": 8080
+      }
+    }
   }
 }

@@ -1,0 +1,166 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Parallels: Start macOS VM",
+      "type": "shell",
+      "command": "prlctl",
+      "args": ["start", "macOS-Development"],
+      "problemMatcher": [],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Parallels: Stop macOS VM",
+      "type": "shell",
+      "command": "prlctl",
+      "args": ["stop", "macOS-Development"],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Parallels: Build Swift (Release)",
+      "type": "shell",
+      "command": "prlctl",
+      "args": [
+        "exec",
+        "macOS-Development",
+        "--",
+        "bash",
+        "-c",
+        "cd /Volumes/Projects/Velociraptor_ClawEdition/VelociraptorMacOS && swift build -c release"
+      ],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Parallels: Build Swift (Debug)",
+      "type": "shell",
+      "command": "prlctl",
+      "args": [
+        "exec",
+        "macOS-Development",
+        "--",
+        "bash",
+        "-c",
+        "cd /Volumes/Projects/Velociraptor_ClawEdition/VelociraptorMacOS && swift build"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Parallels: Run Swift Tests",
+      "type": "shell",
+      "command": "prlctl",
+      "args": [
+        "exec",
+        "macOS-Development",
+        "--",
+        "bash",
+        "-c",
+        "cd /Volumes/Projects/Velociraptor_ClawEdition/VelociraptorMacOS && swift test"
+      ],
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Parallels: Generate Xcode Project",
+      "type": "shell",
+      "command": "prlctl",
+      "args": [
+        "exec",
+        "macOS-Development",
+        "--",
+        "bash",
+        "-c",
+        "cd /Volumes/Projects/Velociraptor_ClawEdition/VelociraptorMacOS && xcodegen generate"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Parallels: Resolve Swift Packages",
+      "type": "shell",
+      "command": "prlctl",
+      "args": [
+        "exec",
+        "macOS-Development",
+        "--",
+        "bash",
+        "-c",
+        "cd /Volumes/Projects/Velociraptor_ClawEdition/VelociraptorMacOS && swift package resolve"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Parallels: Create Release DMG",
+      "type": "shell",
+      "command": "prlctl",
+      "args": [
+        "exec",
+        "macOS-Development",
+        "--",
+        "bash",
+        "-c",
+        "cd /Volumes/Projects/Velociraptor_ClawEdition/VelociraptorMacOS && ./scripts/create-release.sh"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Parallels: Run UI Tests",
+      "type": "shell",
+      "command": "prlctl",
+      "args": [
+        "exec",
+        "macOS-Development",
+        "--",
+        "bash",
+        "-c",
+        "cd /Volumes/Projects/Velociraptor_ClawEdition/VelociraptorMacOS && xcodebuild test -project VelociraptorMacOS.xcodeproj -scheme VelociraptorMacOS -destination 'platform=macOS'"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Parallels: SSH to VM",
+      "type": "shell",
+      "command": "prlctl",
+      "args": ["enter", "macOS-Development"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      }
+    },
+    {
+      "label": "Parallels: Get VM Status",
+      "type": "shell",
+      "command": "prlctl",
+      "args": ["status", "macOS-Development"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always"
+      }
+    }
+  ]
+}
