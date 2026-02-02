@@ -7,6 +7,26 @@ repository: "Velociraptor_ClawEdition"
 maintainer: "SDLC Governance Agent"
 
 # ============================================================
+# AGENT PROMPTS & ORCHESTRATION
+# ============================================================
+agents:
+  - id: CDIF_GOVERNANCE_AGENT
+    path: .claude/agents/CDIF_GOVERNANCE_AGENT.md
+    title: "CDIF Governance + Issue Close-Out Agent"
+    category: [governance, agent, orchestration]
+    authoritative: true
+    description: "Authoritative system prompt for governance enforcement"
+    last_updated: "2026-01-23"
+    
+  - id: MACOS_SDLC_AGENT
+    path: .claude/agents/MACOS_SDLC_AGENT_PROMPTS.md
+    title: "macOS SDLC Agent Prompts"
+    category: [macos, agent, sdlc]
+    authoritative: false
+    description: "Collection of macOS development agent prompts"
+    last_updated: "2026-01-23"
+
+# ============================================================
 # ISSUE CLOSE-OUT & PRODUCTION READINESS
 # ============================================================
 documents:

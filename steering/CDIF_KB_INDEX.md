@@ -8,6 +8,11 @@
 
 ## Document Categories
 
+### AGENT PROMPTS & ORCHESTRATION
+- `.claude/agents/CDIF_GOVERNANCE_AGENT.md` — Authoritative governance agent prompt
+- `.claude/agents/MACOS_SDLC_AGENT_PROMPTS.md` — macOS SDLC agent prompts
+- `.claude/agents/mcp/agent-configs.yaml` — MCP agent configurations
+
 ### ISSUE CLOSE-OUT & PRODUCTION READINESS
 - `steering/ISSUE_CLOSEOUT_TODO.md` — Authoritative close-out checklist
 - `steering/GITHUB_ISSUES_STATUS.md` — Evidence/status index
