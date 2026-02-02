@@ -5,10 +5,19 @@
 //  MCP (Model Context Protocol) integration for AI-powered features.
 //  Uses the official Swift MCP SDK: https://github.com/modelcontextprotocol/swift-sdk
 //
+//  BUILD NOTE: Run `swift package resolve` to download the MCP SDK before building.
+//  If MCP is not available, the service will compile with stub implementations.
+//
 
 import Foundation
 import SwiftUI
+
+#if canImport(MCP)
 import MCP
+private let mcpAvailable = true
+#else
+private let mcpAvailable = false
+#endif
 
 // MARK: - MCP Service
 
@@ -38,8 +47,10 @@ public final class MCPService: ObservableObject {
     
     // MARK: - Private Properties
     
+    #if canImport(MCP)
     private var client: Client?
     private var transport: (any Transport)?
+    #endif
     
     // MARK: - Initialization
     
@@ -56,6 +67,7 @@ public final class MCPService: ObservableObject {
     public func connect(endpoint: URL, streaming: Bool = true) async throws {
         print("[MCPService] Connecting to \(endpoint.absoluteString)")
         
+        #if canImport(MCP)
         // Create client
         let client = Client(name: "VelociraptorMacOS", version: "5.0.5")
         
@@ -85,12 +97,19 @@ public final class MCPService: ObservableObject {
         }
         
         print("[MCPService] Connected successfully")
+        #else
+        // MCP SDK not available - stub implementation
+        print("[MCPService] MCP SDK not available - run 'swift package resolve' to enable")
+        self.statusMessage = "MCP SDK not available"
+        throw MCPServiceError.connectionFailed("MCP SDK not imported. Run 'swift package resolve' first.")
+        #endif
     }
     
     /// Connect to an MCP server via stdio (for local subprocess)
     public func connectStdio() async throws {
         print("[MCPService] Connecting via stdio")
         
+        #if canImport(MCP)
         let client = Client(name: "VelociraptorMacOS", version: "5.0.5")
         let transport = StdioTransport()
         
@@ -107,18 +126,24 @@ public final class MCPService: ObservableObject {
         }
         
         print("[MCPService] Connected via stdio successfully")
+        #else
+        throw MCPServiceError.connectionFailed("MCP SDK not available")
+        #endif
     }
     
     /// Disconnect from the MCP server
     public func disconnect() async {
         print("[MCPService] Disconnecting")
         
+        #if canImport(MCP)
         if let transport = transport {
             await transport.disconnect()
         }
         
         client = nil
         transport = nil
+        #endif
+        
         isConnected = false
         statusMessage = "Disconnected"
         availableTools = []
@@ -133,11 +158,16 @@ public final class MCPService: ObservableObject {
     ///   - arguments: Tool arguments as key-value pairs
     /// - Returns: Tool result content
     public func callTool(name: String, arguments: [String: Any]) async throws -> [ToolContent] {
-        guard let client = client, isConnected else {
+        guard isConnected else {
             throw MCPServiceError.notConnected
         }
         
         print("[MCPService] Calling tool: \(name)")
+        
+        #if canImport(MCP)
+        guard let client = client else {
+            throw MCPServiceError.notConnected
+        }
         
         // Convert arguments to Value type
         var valueArgs: [String: Value] = [:]
@@ -163,6 +193,9 @@ public final class MCPService: ObservableObject {
                 return .resource(uri: uri, mimeType: mimeType, text: text)
             }
         }
+        #else
+        throw MCPServiceError.connectionFailed("MCP SDK not available")
+        #endif
     }
     
     // MARK: - Prompt Operations
@@ -173,11 +206,16 @@ public final class MCPService: ObservableObject {
     ///   - arguments: Prompt arguments
     /// - Returns: Prompt description and messages
     public func getPrompt(name: String, arguments: [String: String]) async throws -> (description: String?, messages: [PromptMessage]) {
-        guard let client = client, isConnected else {
+        guard isConnected else {
             throw MCPServiceError.notConnected
         }
         
         print("[MCPService] Getting prompt: \(name)")
+        
+        #if canImport(MCP)
+        guard let client = client else {
+            throw MCPServiceError.notConnected
+        }
         
         var valueArgs: [String: Value] = [:]
         for (key, value) in arguments {
@@ -195,6 +233,9 @@ public final class MCPService: ObservableObject {
         }
         
         return (description, promptMessages)
+        #else
+        throw MCPServiceError.connectionFailed("MCP SDK not available")
+        #endif
     }
     
     // MARK: - Resource Operations
@@ -202,28 +243,45 @@ public final class MCPService: ObservableObject {
     /// List available resources
     /// - Returns: Array of resource URIs
     public func listResources() async throws -> [String] {
-        guard let client = client, isConnected else {
+        guard isConnected else {
+            throw MCPServiceError.notConnected
+        }
+        
+        #if canImport(MCP)
+        guard let client = client else {
             throw MCPServiceError.notConnected
         }
         
         let (resources, _) = try await client.listResources()
         return resources.map { $0.uri }
+        #else
+        throw MCPServiceError.connectionFailed("MCP SDK not available")
+        #endif
     }
     
     /// Read a resource
     /// - Parameter uri: Resource URI
     /// - Returns: Resource content
     public func readResource(uri: String) async throws -> String {
-        guard let client = client, isConnected else {
+        guard isConnected else {
+            throw MCPServiceError.notConnected
+        }
+        
+        #if canImport(MCP)
+        guard let client = client else {
             throw MCPServiceError.notConnected
         }
         
         let contents = try await client.readResource(uri: uri)
         return contents.map { $0.description }.joined(separator: "\n")
+        #else
+        throw MCPServiceError.connectionFailed("MCP SDK not available")
+        #endif
     }
     
     // MARK: - Helper Methods
     
+    #if canImport(MCP)
     private func convertToValue(_ any: Any) -> Value {
         switch any {
         case let string as String:
@@ -242,6 +300,7 @@ public final class MCPService: ObservableObject {
             return .string(String(describing: any))
         }
     }
+    #endif
 }
 
 // MARK: - Error Types
