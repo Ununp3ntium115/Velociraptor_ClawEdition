@@ -268,12 +268,12 @@ class DeploymentManager: ObservableObject {
             
             statusMessage = "Deployment completed successfully!"
             isRunning = true
-            Logger.shared.success("Deployment completed successfully", component: "Deploy")
+            SyncLogger.shared.success("Deployment completed successfully", component: "Deploy")
             
         } catch {
             lastError = error
             statusMessage = "Deployment failed: \(error.localizedDescription)"
-            Logger.shared.error("Deployment failed: \(error)", component: "Deploy")
+            SyncLogger.shared.error("Deployment failed: \(error)", component: "Deploy")
             throw error
         }
     }
@@ -287,12 +287,12 @@ class DeploymentManager: ObservableObject {
     private func executeStep<T>(_ step: DeploymentStep, action: () async throws -> T) async throws -> T {
         stepStatus[step] = .inProgress
         statusMessage = "Step: \(step.rawValue)..."
-        Logger.shared.info("Starting step: \(step.rawValue)", component: "Deploy")
+        SyncLogger.shared.info("Starting step: \(step.rawValue)", component: "Deploy")
         
         do {
             let result = try await action()
             stepStatus[step] = .completed
-            Logger.shared.success("Completed step: \(step.rawValue)", component: "Deploy")
+            SyncLogger.shared.success("Completed step: \(step.rawValue)", component: "Deploy")
             return result
         } catch {
             stepStatus[step] = .failed(error)
@@ -323,7 +323,7 @@ class DeploymentManager: ObservableObject {
             throw DeploymentError.insufficientDiskSpace
         }
         
-        Logger.shared.info("Prerequisites check passed", component: "Deploy")
+        SyncLogger.shared.info("Prerequisites check passed", component: "Deploy")
     }
     
     /// Downloads the latest Velociraptor macOS release, choosing an architecture-appropriate asset, and places the binary under the specified destination directory.
@@ -364,7 +364,7 @@ class DeploymentManager: ObservableObject {
     /// - Returns: The file URL of the installed `velociraptor` binary.
     private func downloadAsset(_ asset: GitHubRelease.Asset, to destination: String) async throws -> URL {
         statusMessage = "Downloading \(asset.name)..."
-        Logger.shared.info("Downloading: \(asset.browserDownloadURL)", component: "Deploy")
+        SyncLogger.shared.info("Downloading: \(asset.browserDownloadURL)", component: "Deploy")
         
         let downloadURL = URL(string: asset.browserDownloadURL)!
         let (localURL, _) = try await URLSession.shared.download(from: downloadURL)
@@ -388,7 +388,7 @@ class DeploymentManager: ObservableObject {
         try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: binaryPath.path)
         
         installedVersion = getInstalledVersion(binaryPath: binaryPath.path)
-        Logger.shared.success("Downloaded and installed binary", component: "Deploy")
+        SyncLogger.shared.success("Downloaded and installed binary", component: "Deploy")
         
         return binaryPath
     }
@@ -415,7 +415,7 @@ class DeploymentManager: ObservableObject {
                     withIntermediateDirectories: true,
                     attributes: [.posixPermissions: 0o750]
                 )
-                Logger.shared.info("Created directory: \(directory)", component: "Deploy")
+                SyncLogger.shared.info("Created directory: \(directory)", component: "Deploy")
             }
         }
     }
@@ -448,7 +448,7 @@ class DeploymentManager: ObservableObject {
         // Set proper permissions
         try fileManager.setAttributes([.posixPermissions: 0o640], ofItemAtPath: configPath.path)
         
-        Logger.shared.success("Configuration generated: \(configPath.path)", component: "Deploy")
+        SyncLogger.shared.success("Configuration generated: \(configPath.path)", component: "Deploy")
         
         return configPath
     }
@@ -480,7 +480,7 @@ class DeploymentManager: ObservableObject {
         // Write new plist
         try plistContent.write(to: plistPath, atomically: true, encoding: .utf8)
         
-        Logger.shared.success("Launchd plist installed: \(plistPath.path)", component: "Deploy")
+        SyncLogger.shared.success("Launchd plist installed: \(plistPath.path)", component: "Deploy")
     }
     
     /// Creates a LaunchAgent plist XML to run the Velociraptor frontend using the provided binary and configuration.
@@ -551,7 +551,7 @@ class DeploymentManager: ObservableObject {
         // Wait for service to start
         try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
         
-        Logger.shared.success("Service started", component: "Deploy")
+        SyncLogger.shared.success("Service started", component: "Deploy")
     }
     
     /// Verifies the deployed Velociraptor service and performs a brief GUI health check.
@@ -578,15 +578,15 @@ class DeploymentManager: ObservableObject {
         do {
             let (_, response) = try await session.data(for: request)
             if let httpResponse = response as? HTTPURLResponse {
-                Logger.shared.info("GUI responded with status: \(httpResponse.statusCode)", component: "Deploy")
+                SyncLogger.shared.info("GUI responded with status: \(httpResponse.statusCode)", component: "Deploy")
             }
         } catch {
-            Logger.shared.warning("Could not connect to GUI (may still be starting): \(error)", component: "Deploy")
+            SyncLogger.shared.warning("Could not connect to GUI (may still be starting): \(error)", component: "Deploy")
             // Don't throw - service might still be initializing
         }
         
         isRunning = true
-        Logger.shared.success("Deployment verified", component: "Deploy")
+        SyncLogger.shared.success("Deployment verified", component: "Deploy")
     }
     
     // MARK: - Service Management
@@ -607,7 +607,7 @@ class DeploymentManager: ObservableObject {
         process.waitUntilExit()
         
         isRunning = false
-        Logger.shared.info("Service stopped", component: "Deploy")
+        SyncLogger.shared.info("Service stopped", component: "Deploy")
     }
     
     /// Attempts to unload the user LaunchAgent plist for Velociraptor using `launchctl`.

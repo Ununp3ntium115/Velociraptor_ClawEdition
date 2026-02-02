@@ -183,7 +183,7 @@ struct HeaderView: View {
             
             // Current step info
             VStack(alignment: .trailing, spacing: 4) {
-                Text("Step \(appState.currentStep.rawValue + 1) of \(AppState.WizardStep.allCases.count)")
+                Text(Strings.Format.stepProgress(current: appState.currentStep.rawValue + 1, total: AppState.WizardStep.allCases.count))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 

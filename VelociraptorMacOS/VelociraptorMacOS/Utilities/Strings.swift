@@ -207,6 +207,50 @@ enum Strings {
     }
 }
 
+    // MARK: - Format Strings
+    enum Format {
+        /// Returns "Step X of Y" format string
+        static func stepProgress(current: Int, total: Int) -> String {
+            String(format: NSLocalizedString("format.step.progress", comment: ""), current, total)
+        }
+        
+        /// Returns "Step X" format string
+        static func stepCurrent(_ step: Int) -> String {
+            String(format: NSLocalizedString("format.step.current", comment: ""), step)
+        }
+        
+        /// Returns "X items" format string
+        static func itemsCount(_ count: Int) -> String {
+            String(format: NSLocalizedString("format.items.count", comment: ""), count)
+        }
+        
+        /// Returns "X files" format string
+        static func filesCount(_ count: Int) -> String {
+            String(format: NSLocalizedString("format.files.count", comment: ""), count)
+        }
+        
+        /// Returns percentage format string
+        static func percentage(_ value: Int) -> String {
+            String(format: NSLocalizedString("format.percentage", comment: ""), value)
+        }
+        
+        /// Returns "Version X.Y.Z" format string
+        static func version(_ version: String) -> String {
+            String(format: NSLocalizedString("format.version", comment: ""), version)
+        }
+        
+        /// Returns "Port X: status" format string
+        static func portStatus(port: Int, status: String) -> String {
+            String(format: NSLocalizedString("format.port.status", comment: ""), port, status)
+        }
+        
+        /// Returns "Error X: message" format string
+        static func errorCode(_ code: Int, message: String) -> String {
+            String(format: NSLocalizedString("format.error.code", comment: ""), code, message)
+        }
+    }
+}
+
 // MARK: - String Extension for non-SwiftUI contexts
 
 extension String {

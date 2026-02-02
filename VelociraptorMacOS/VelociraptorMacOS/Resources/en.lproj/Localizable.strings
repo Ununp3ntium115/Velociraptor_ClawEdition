@@ -325,3 +325,21 @@
 "menu.help.troubleshooting" = "Troubleshooting Guide";
 "menu.help.reportIssue" = "Report an Issue";
 "menu.about" = "About Velociraptor";
+
+// MARK: - Format Strings
+"format.step.progress" = "Step %d of %d";
+"format.step.current" = "Step %d";
+"format.items.count" = "%d items";
+"format.files.count" = "%d files";
+"format.size.bytes" = "%@ bytes";
+"format.size.kb" = "%@ KB";
+"format.size.mb" = "%@ MB";
+"format.size.gb" = "%@ GB";
+"format.time.remaining" = "%@ remaining";
+"format.time.elapsed" = "%@ elapsed";
+"format.percentage" = "%d%%";
+"format.date.created" = "Created: %@";
+"format.date.modified" = "Modified: %@";
+"format.version" = "Version %@";
+"format.port.status" = "Port %d: %@";
+"format.error.code" = "Error %d: %@";

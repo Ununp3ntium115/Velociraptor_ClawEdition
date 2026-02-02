@@ -202,7 +202,7 @@ class AppState: ObservableObject {
         lastError = error
         errorMessage = error.localizedDescription
         showError = true
-        Logger.shared.error("Error displayed: \(error.localizedDescription)", component: "AppState")
+        SyncLogger.shared.error("Error displayed: \(error.localizedDescription)", component: "AppState")
     }
     
     /// Sets the current error message and marks the error alert to be shown.
@@ -211,7 +211,7 @@ class AppState: ObservableObject {
     func displayError(message: String) {
         errorMessage = message
         showError = true
-        Logger.shared.error("Error displayed: \(message)", component: "AppState")
+        SyncLogger.shared.error("Error displayed: \(message)", component: "AppState")
     }
     
     /// Clears the current error state and any visible error UI.

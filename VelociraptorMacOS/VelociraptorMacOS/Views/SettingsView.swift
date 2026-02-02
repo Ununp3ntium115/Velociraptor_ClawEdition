@@ -86,7 +86,7 @@ struct GeneralSettingsView: View {
                     Text("Log Files:")
                     Spacer()
                     Button("Open in Finder") {
-                        if let path = Logger.shared.getCurrentLogFilePath() {
+                        if let path = SyncLogger.shared.getCurrentLogFilePath() {
                             NSWorkspace.shared.selectFile(path.path, inFileViewerRootedAtPath: path.deletingLastPathComponent().path)
                         }
                     }
@@ -97,7 +97,7 @@ struct GeneralSettingsView: View {
                     Text("Clear Old Logs:")
                     Spacer()
                     Button("Clear (> 30 days)") {
-                        Logger.shared.clearOldLogs(olderThanDays: 30)
+                        SyncLogger.shared.clearOldLogs(olderThanDays: 30)
                     }
                     .accessibilityId(AccessibilityIdentifiers.Settings.clearOldLogsButton)
                 }
@@ -251,7 +251,7 @@ struct AdvancedSettingsView: View {
         
         Paths:
         - Home: \(FileManager.default.homeDirectoryForCurrentUser.path)
-        - Logs: \(Logger.shared.getCurrentLogFilePath()?.path ?? "Unknown")
+        - Logs: \(SyncLogger.shared.getCurrentLogFilePath()?.path ?? "Unknown")
         
         End of Diagnostics
         """

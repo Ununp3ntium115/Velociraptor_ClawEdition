@@ -5,6 +5,9 @@
 //  Copy of accessibility identifiers for test target
 //  (Test target cannot access main app's internal types directly)
 //
+//  IMPORTANT: Keep this file in sync with AccessibilityIdentifiers.swift
+//  Last synced: 2026-01-23
+//
 
 import Foundation
 
@@ -32,6 +35,23 @@ enum TestIDs {
         static let authentication = "wizard.step.authentication"
         static let review = "wizard.step.review"
         static let complete = "wizard.step.complete"
+    }
+    
+    // MARK: - Welcome Step
+    enum Welcome {
+        static let title = "welcome.title"
+        static let description = "welcome.description"
+        static let standardSetupButton = "welcome.button.standardSetup"
+        static let emergencyModeButton = "welcome.button.emergencyMode"
+        static let featureCard = "welcome.featureCard"
+    }
+    
+    // MARK: - Deployment Type
+    enum DeploymentType {
+        static let serverCard = "deploymentType.card.server"
+        static let standaloneCard = "deploymentType.card.standalone"
+        static let clientCard = "deploymentType.card.client"
+        static let tipBox = "deploymentType.tipBox"
     }
     
     // MARK: - Certificate Settings
@@ -62,6 +82,21 @@ enum TestIDs {
         static let autoUpdateToggle = "security.toggle.autoUpdate"
     }
     
+    // MARK: - Storage Configuration
+    enum StorageConfiguration {
+        static let datastorePathField = "storage.field.datastorePath"
+        static let logsPathField = "storage.field.logsPath"
+        static let cachePathField = "storage.field.cachePath"
+        static let browseDatastoreButton = "storage.button.browseDatastore"
+        static let browseLogsButton = "storage.button.browseLogs"
+        static let browseCacheButton = "storage.button.browseCache"
+        static let resetDatastoreButton = "storage.button.resetDatastore"
+        static let resetLogsButton = "storage.button.resetLogs"
+        static let resetCacheButton = "storage.button.resetCache"
+        static let sizePicker = "storage.picker.size"
+        static let diskSpaceInfo = "storage.info.diskSpace"
+    }
+    
     // MARK: - Network Configuration
     enum NetworkConfiguration {
         static let frontendAddressField = "network.field.frontendAddress"
@@ -77,19 +112,6 @@ enum TestIDs {
         static let portConflictWarning = "network.warning.portConflict"
     }
     
-    // MARK: - Storage Configuration
-    enum StorageConfiguration {
-        static let datastorePathField = "storage.field.datastorePath"
-        static let logsPathField = "storage.field.logsPath"
-        static let cachePathField = "storage.field.cachePath"
-        static let browseDatastoreButton = "storage.button.browseDatastore"
-        static let browseLogsButton = "storage.button.browseLogs"
-        static let browseCacheButton = "storage.button.browseCache"
-        static let resetDatastoreButton = "storage.button.resetDatastore"
-        static let sizePicker = "storage.picker.size"
-        static let diskSpaceInfo = "storage.info.diskSpace"
-    }
-    
     // MARK: - Authentication
     enum Authentication {
         static let usernameField = "auth.field.username"
@@ -101,20 +123,25 @@ enum TestIDs {
         static let organizationField = "auth.field.organization"
         static let saveToKeychainToggle = "auth.toggle.saveToKeychain"
         static let generatePasswordButton = "auth.button.generatePassword"
+        static let usernameValidation = "auth.validation.username"
+        static let passwordRequirements = "auth.requirements.password"
     }
     
     // MARK: - Review Step
     enum Review {
         static let validationStatus = "review.status.validation"
+        static let configSummary = "review.summary.config"
         static let previewYAMLButton = "review.button.previewYAML"
         static let exportConfigButton = "review.button.exportConfig"
         static let deployButton = "review.button.deploy"
         static let deploymentProgress = "review.progress.deployment"
+        static let stepIndicator = "review.indicator.step"
     }
     
     // MARK: - Complete Step
     enum Complete {
         static let successIcon = "complete.icon.success"
+        static let accessInfo = "complete.info.access"
         static let openGUIButton = "complete.button.openGUI"
         static let viewLogsButton = "complete.button.viewLogs"
         static let openDataFolderButton = "complete.button.openDataFolder"
@@ -122,6 +149,7 @@ enum TestIDs {
         static let serviceStatus = "complete.status.service"
         static let stopServiceButton = "complete.button.stopService"
         static let startServiceButton = "complete.button.startService"
+        static let nextSteps = "complete.list.nextSteps"
     }
     
     // MARK: - Emergency Mode
@@ -140,15 +168,46 @@ enum TestIDs {
     
     // MARK: - Incident Response
     enum IncidentResponse {
-        static let categoryList = "incidentResponse.list.categories"
-        static let incidentList = "incidentResponse.list.incidents"
-        static let detailsPanel = "incidentResponse.panel.details"
-        static let buildButton = "incidentResponse.button.build"
-        static let resetButton = "incidentResponse.button.reset"
-        static let generateButton = "incidentResponse.button.generate"
-        static let exportButton = "incidentResponse.button.export"
-        static let searchField = "incidentResponse.field.search"
-        static let priorityFilter = "incidentResponse.filter.priority"
+        static let window = "ir.window"
+        static let categoryList = "ir.list.categories"
+        static let incidentList = "ir.list.incidents"
+        static let detailsPanel = "ir.panel.details"
+        static let artifactsList = "ir.list.artifacts"
+        static let configPanel = "ir.panel.config"
+        static let outputPathField = "ir.field.outputPath"
+        static let browseOutputButton = "ir.button.browseOutput"
+        static let offlineModeToggle = "ir.toggle.offlineMode"
+        static let portablePackageToggle = "ir.toggle.portablePackage"
+        static let encryptPackageToggle = "ir.toggle.encryptPackage"
+        static let includeToolsToggle = "ir.toggle.includeTools"
+        static let compressOutputToggle = "ir.toggle.compressOutput"
+        static let buildButton = "ir.button.build"
+        static let resetButton = "ir.button.reset"
+        static let buildProgress = "ir.progress.build"
+        // Legacy aliases for backward compatibility
+        static let generateButton = "ir.button.build"
+        static let exportButton = "ir.button.browseOutput"
+        static let searchField = "ir.field.search"
+        static let priorityFilter = "ir.filter.priority"
+    }
+    
+    // MARK: - Health Monitor
+    enum HealthMonitor {
+        static let window = "health.window"
+        static let refreshButton = "health.button.refresh"
+        static let overallStatus = "health.status.overall"
+        static let serviceStatus = "health.status.service"
+        static let networkStatus = "health.status.network"
+        static let diskStatus = "health.status.disk"
+        static let memoryStatus = "health.status.memory"
+        static let guiPortStatus = "health.status.guiPort"
+        static let frontendPortStatus = "health.status.frontendPort"
+        static let metricsPanel = "health.panel.metrics"
+        static let logsPanel = "health.panel.logs"
+        static let viewLogsButton = "health.button.viewLogs"
+        static let exportDiagnosticsButton = "health.button.exportDiagnostics"
+        static let stopServiceButton = "health.button.stopService"
+        static let startServiceButton = "health.button.startService"
     }
     
     // MARK: - Settings
@@ -157,26 +216,51 @@ enum TestIDs {
         static let generalTab = "settings.tab.general"
         static let securityTab = "settings.tab.security"
         static let advancedTab = "settings.tab.advanced"
-        static let launchAtLogin = "settings.toggle.launchAtLogin"
-        static let checkForUpdates = "settings.toggle.checkForUpdates"
-        static let enableNotifications = "settings.toggle.enableNotifications"
+        static let launchAtLoginToggle = "settings.toggle.launchAtLogin"
+        static let checkUpdatesToggle = "settings.toggle.checkUpdates"
+        static let notificationsToggle = "settings.toggle.notifications"
         static let themePicker = "settings.picker.theme"
-        static let openLogFile = "settings.button.openLogFile"
-        static let clearLogs = "settings.button.clearLogs"
-        static let exportLogs = "settings.button.exportLogs"
+        static let openLogsFolderButton = "settings.button.openLogsFolder"
+        static let clearOldLogsButton = "settings.button.clearOldLogs"
+        static let useKeychainToggle = "settings.toggle.useKeychain"
+        static let viewKeychainButton = "settings.button.viewKeychain"
+        static let enforceTLSToggle = "settings.toggle.enforceTLS"
+        static let deleteCredentialsButton = "settings.button.deleteCredentials"
+        static let debugLoggingToggle = "settings.toggle.debugLogging"
+        static let verboseOutputToggle = "settings.toggle.verboseOutput"
+        static let developerModeToggle = "settings.toggle.developerMode"
+        static let openDevConsoleButton = "settings.button.openDevConsole"
+        static let exportDiagnosticsButton = "settings.button.exportDiagnostics"
+        static let resetAllButton = "settings.button.resetAll"
+        static let clearCacheButton = "settings.button.clearCache"
+        // Legacy aliases
+        static let launchAtLogin = "settings.toggle.launchAtLogin"
+        static let checkForUpdates = "settings.toggle.checkUpdates"
+        static let enableNotifications = "settings.toggle.notifications"
+        static let openLogFile = "settings.button.openLogsFolder"
+        static let clearLogs = "settings.button.clearOldLogs"
+        static let exportLogs = "settings.button.exportDiagnostics"
     }
     
-    // MARK: - Deployment Type
-    enum DeploymentType {
-        static let serverCard = "deploymentType.card.server"
-        static let standaloneCard = "deploymentType.card.standalone"
-        static let clientCard = "deploymentType.card.client"
-        static let tipBox = "deploymentType.tipBox"
+    // MARK: - Menu Items
+    enum Menu {
+        static let newConfiguration = "menu.file.newConfiguration"
+        static let openConfiguration = "menu.file.openConfiguration"
+        static let saveConfiguration = "menu.file.saveConfiguration"
+        static let emergencyDeployment = "menu.file.emergencyDeployment"
+        static let velociraptorHelp = "menu.help.velociraptorHelp"
+        static let troubleshooting = "menu.help.troubleshooting"
+        static let reportIssue = "menu.help.reportIssue"
+        static let about = "menu.about"
     }
     
     // MARK: - Dialogs
     enum Dialog {
+        static let about = "dialog.about"
         static let yamlPreview = "dialog.yamlPreview"
         static let cancelConfirmation = "dialog.cancelConfirmation"
+        static let deployConfirmation = "dialog.deployConfirmation"
+        static let deleteCredentialsConfirmation = "dialog.deleteCredentialsConfirmation"
+        static let error = "dialog.error"
     }
 }

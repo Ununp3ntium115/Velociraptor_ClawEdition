@@ -50,7 +50,7 @@ class KeychainManager: ObservableObject {
         // errSecItemNotFound is fine - Keychain is available but no items yet
         isAvailable = status == errSecSuccess || status == errSecItemNotFound
         
-        Logger.shared.info("Keychain availability: \(isAvailable)", component: "Keychain")
+        SyncLogger.shared.info("Keychain availability: \(isAvailable)", component: "Keychain")
     }
     
     // MARK: - Error Types
@@ -138,7 +138,7 @@ class KeychainManager: ObservableObject {
         
         switch status {
         case errSecSuccess:
-            Logger.shared.success("Saved password for account: \(account)", component: "Keychain")
+            SyncLogger.shared.success("Saved password for account: \(account)", component: "Keychain")
             lastOperationResult = "Password saved successfully"
             
         case errSecDuplicateItem:
@@ -181,7 +181,7 @@ class KeychainManager: ObservableObject {
             throw KeychainError.unexpectedStatus(status)
         }
         
-        Logger.shared.success("Updated password for account: \(account)", component: "Keychain")
+        SyncLogger.shared.success("Updated password for account: \(account)", component: "Keychain")
         lastOperationResult = "Password updated successfully"
     }
     
@@ -245,7 +245,7 @@ class KeychainManager: ObservableObject {
             throw KeychainError.unexpectedStatus(status)
         }
         
-        Logger.shared.info("Deleted password for account: \(account)", component: "Keychain")
+        SyncLogger.shared.info("Deleted password for account: \(account)", component: "Keychain")
         lastOperationResult = "Password deleted"
     }
     
@@ -321,7 +321,7 @@ class KeychainManager: ObservableObject {
         
         switch status {
         case errSecSuccess:
-            Logger.shared.success("Saved certificate: \(label)", component: "Keychain")
+            SyncLogger.shared.success("Saved certificate: \(label)", component: "Keychain")
             
         case errSecDuplicateItem:
             // Delete existing and re-add
@@ -335,7 +335,7 @@ class KeychainManager: ObservableObject {
             guard retryStatus == errSecSuccess else {
                 throw KeychainError.unexpectedStatus(retryStatus)
             }
-            Logger.shared.info("Updated certificate: \(label)", component: "Keychain")
+            SyncLogger.shared.info("Updated certificate: \(label)", component: "Keychain")
             
         default:
             throw KeychainError.unexpectedStatus(status)
@@ -391,7 +391,7 @@ class KeychainManager: ObservableObject {
             throw KeychainError.unexpectedStatus(status)
         }
         
-        Logger.shared.info("Deleted certificate: \(label)", component: "Keychain")
+        SyncLogger.shared.info("Deleted certificate: \(label)", component: "Keychain")
     }
     
     // MARK: - Bulk Operations
@@ -414,7 +414,7 @@ class KeychainManager: ObservableObject {
         ]
         SecItemDelete(certQuery as CFDictionary)
         
-        Logger.shared.warning("Deleted all Velociraptor Keychain items", component: "Keychain")
+        SyncLogger.shared.warning("Deleted all Velociraptor Keychain items", component: "Keychain")
         lastOperationResult = "All items deleted"
     }
     

@@ -3,23 +3,71 @@
 //  VelociraptorMacOS
 //
 //  Unified logging utility with os_log integration
+//  Refactored to use Swift 6 actor pattern for thread-safe concurrency
 //
 
 import Foundation
 import os.log
 
-/// Unified logging utility for Velociraptor macOS
-/// Integrates with Apple's unified logging system (os_log)
-final class Logger {
-    // MARK: - Singleton
+// MARK: - Log Level Enum (remains outside actor for accessibility)
+
+/// Log severity levels with corresponding emoji and os_log types
+enum LogLevel: Int, Comparable, Sendable {
+    case debug = 0
+    case info = 1
+    case warning = 2
+    case error = 3
+    case critical = 4
     
+    static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
+    
+    var emoji: String {
+        switch self {
+        case .debug: return "🔍"
+        case .info: return "ℹ️"
+        case .warning: return "⚠️"
+        case .error: return "❌"
+        case .critical: return "🚨"
+        }
+    }
+    
+    var name: String {
+        switch self {
+        case .debug: return "DEBUG"
+        case .info: return "INFO"
+        case .warning: return "WARN"
+        case .error: return "ERROR"
+        case .critical: return "CRITICAL"
+        }
+    }
+    
+    var osLogType: OSLogType {
+        switch self {
+        case .debug: return .debug
+        case .info: return .info
+        case .warning: return .default
+        case .error: return .error
+        case .critical: return .fault
+        }
+    }
+}
+
+// MARK: - Logger Actor
+
+/// Unified logging utility for Velociraptor macOS
+/// Uses Swift actor for thread-safe concurrent access
+actor Logger {
+    // MARK: - Shared Instance
+    
+    /// Shared logger instance
     static let shared = Logger()
     
     // MARK: - Properties
     
     private let subsystem = "com.velocidex.velociraptor"
     private var loggers: [String: os.Logger] = [:]
-    private let queue = DispatchQueue(label: "com.velocidex.velociraptor.logger")
     
     /// File handle for writing to log file
     private var fileHandle: FileHandle?
@@ -36,55 +84,9 @@ final class Logger {
     /// Whether to include timestamps
     var includeTimestamp: Bool = true
     
-    // MARK: - Log Level
-    
-    enum LogLevel: Int, Comparable {
-        case debug = 0
-        case info = 1
-        case warning = 2
-        case error = 3
-        case critical = 4
-        
-        /// Determine whether one `LogLevel` is less than another by comparing their raw values.
-        /// - Returns: `true` if `lhs` has a smaller raw value than `rhs`, `false` otherwise.
-        static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
-            lhs.rawValue < rhs.rawValue
-        }
-        
-        var emoji: String {
-            switch self {
-            case .debug: return "🔍"
-            case .info: return "ℹ️"
-            case .warning: return "⚠️"
-            case .error: return "❌"
-            case .critical: return "🚨"
-            }
-        }
-        
-        var name: String {
-            switch self {
-            case .debug: return "DEBUG"
-            case .info: return "INFO"
-            case .warning: return "WARN"
-            case .error: return "ERROR"
-            case .critical: return "CRITICAL"
-            }
-        }
-        
-        var osLogType: OSLogType {
-            switch self {
-            case .debug: return .debug
-            case .info: return .info
-            case .warning: return .default
-            case .error: return .error
-            case .critical: return .fault
-            }
-        }
-    }
-    
     // MARK: - Initialization
     
-    private init() {
+    init() {
         setupFileLogging()
     }
     
@@ -92,9 +94,9 @@ final class Logger {
         try? fileHandle?.close()
     }
     
-    /// Prepares file-based logging by ensuring the Velociraptor log directory exists and opening/appending to a daily log file.
-    /// 
-    /// Sets `logFilePath` to a per-day file under `~/Library/Logs/Velociraptor/` (named `velociraptor-YYYY-MM-DD.log`) and opens `fileHandle` for appending. If the file does not exist it is created. Any setup failures are printed to the console.
+    // MARK: - Setup
+    
+    /// Prepares file-based logging by ensuring the Velociraptor log directory exists
     private func setupFileLogging() {
         let logDirectory = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Logs/Velociraptor")
@@ -112,96 +114,72 @@ final class Logger {
             
             logFilePath = logDirectory.appendingPathComponent("velociraptor-\(dateString).log")
             
-            if !FileManager.default.fileExists(atPath: logFilePath!.path) {
-                FileManager.default.createFile(atPath: logFilePath!.path, contents: nil)
+            if let path = logFilePath, !FileManager.default.fileExists(atPath: path.path) {
+                FileManager.default.createFile(atPath: path.path, contents: nil)
             }
             
-            fileHandle = try FileHandle(forWritingTo: logFilePath!)
-            fileHandle?.seekToEndOfFile()
+            if let path = logFilePath {
+                fileHandle = try FileHandle(forWritingTo: path)
+                fileHandle?.seekToEndOfFile()
+            }
             
         } catch {
             print("Failed to setup file logging: \(error)")
         }
     }
     
-    /// Retrieve or create a per-component `os.Logger`, caching it for reuse.
-    /// - Parameters:
-    ///   - component: The category name to associate with the logger.
-    /// - Returns: An `os.Logger` configured with the logger's subsystem and the specified component; subsequent calls with the same component return the cached instance.
+    // MARK: - Logger Cache
     
+    /// Retrieve or create a per-component os.Logger, caching it for reuse
     private func logger(for component: String) -> os.Logger {
-        queue.sync {
-            if let existing = loggers[component] {
-                return existing
-            }
-            let newLogger = os.Logger(subsystem: subsystem, category: component)
-            loggers[component] = newLogger
-            return newLogger
+        if let existing = loggers[component] {
+            return existing
         }
+        let newLogger = os.Logger(subsystem: subsystem, category: component)
+        loggers[component] = newLogger
+        return newLogger
     }
     
     // MARK: - Logging Methods
     
-    /// Logs a message at the debug level.
-    /// - Parameters:
-    ///   - message: The message to record.
-    ///   - component: The component or category for the log entry; defaults to "App".
+    /// Logs a message at the debug level
     func debug(_ message: String, component: String = "App") {
         log(message, level: .debug, component: component)
     }
     
-    /// Logs an informational message for a specific component.
-    /// - Parameters:
-    ///   - message: The message to log.
-    ///   - component: The component or category associated with this log entry. Defaults to "App".
+    /// Logs an informational message
     func info(_ message: String, component: String = "App") {
         log(message, level: .info, component: component)
     }
     
-    /// Logs a success message at the info level, prefixed with a visible success indicator.
-    /// - Parameters:
-    ///   - message: The success message to record.
-    ///   - component: The component/category used for the log entry; defaults to "App".
+    /// Logs a success message at the info level
     func success(_ message: String, component: String = "App") {
         log("✅ \(message)", level: .info, component: component)
     }
     
-    /// Logs a message at the warning level.
-    /// - Parameters:
-    ///   - message: The text to record in the log entry.
-    ///   - component: The component or category for the log entry; defaults to `"App"`.
+    /// Logs a message at the warning level
     func warning(_ message: String, component: String = "App") {
         log(message, level: .warning, component: component)
     }
     
-    /// Logs the given text as an error-level entry.
-    /// - Parameters:
-    ///   - message: The message to record.
-    ///   - component: The component or category associated with the message; defaults to `"App"`.
+    /// Logs the given text as an error-level entry
     func error(_ message: String, component: String = "App") {
         log(message, level: .error, component: component)
     }
     
-    /// Logs the provided error's localized description at the error level.
-    /// - Parameters:
-    ///   - error: The error whose `localizedDescription` will be recorded.
-    ///   - component: The logging category or component name to associate with the entry (default: `"App"`).
+    /// Logs the provided error's localized description
     func error(_ error: Error, component: String = "App") {
         log(error.localizedDescription, level: .error, component: component)
     }
     
-    /// Logs a message with the critical severity level.
-    /// - Parameters:
-    ///   - message: The text to record in the log.
-    ///   - component: The component or category for the log entry; defaults to `"App"`.
+    /// Logs a message with the critical severity level
     func critical(_ message: String, component: String = "App") {
         log(message, level: .critical, component: component)
     }
     
-    /// Dispatches a formatted log entry to the system logger, optionally appends it to the active log file, and prints to the console in debug builds.
-    /// 
-    /// The function respects the logger's `minimumLogLevel`, includes a timestamp when `includeTimestamp` is enabled, and maps the provided `level` to the appropriate system log type. When file logging is enabled and a file handle is available, the entry is written asynchronously to the file. In DEBUG builds the entry is printed with the level emoji.
+    // MARK: - Core Logging
     
+    /// Core logging function that handles all log entries
     private func log(_ message: String, level: LogLevel, component: String) {
         guard level >= minimumLogLevel else { return }
         
@@ -224,12 +202,10 @@ final class Logger {
         let osLogger = logger(for: component)
         osLogger.log(level: level.osLogType, "\(logEntry)")
         
-        // Log to file
+        // Log to file (actor ensures thread safety)
         if writeToFile, let fileHandle = fileHandle {
-            queue.async {
-                if let data = "\(logEntry)\n".data(using: .utf8) {
-                    fileHandle.write(data)
-                }
+            if let data = "\(logEntry)\n".data(using: .utf8) {
+                fileHandle.write(data)
             }
         }
         
@@ -241,14 +217,12 @@ final class Logger {
     
     // MARK: - Log File Management
     
-    /// Retrieve the URL of the currently active log file.
-    /// - Returns: The file URL of the active log file, or `nil` if file logging is disabled or no log file is available.
+    /// Retrieve the URL of the currently active log file
     func getCurrentLogFilePath() -> URL? {
         return logFilePath
     }
     
-    /// Returns the log files created by Velociraptor, ordered from newest to oldest.
-    /// - Returns: An array of file URLs for `.log` files in `~/Library/Logs/Velociraptor`, sorted by creation date with the newest first; returns an empty array if the directory cannot be read or an error occurs.
+    /// Returns the log files created by Velociraptor, ordered from newest to oldest
     func getAllLogFiles() -> [URL] {
         let logDirectory = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Logs/Velociraptor")
@@ -270,18 +244,14 @@ final class Logger {
         }
     }
     
-    /// Load the contents of the active log file as a UTF-8 string.
-    /// - Returns: The log file contents, or `nil` if there is no active log file or the file cannot be read.
+    /// Load the contents of the active log file as a UTF-8 string
     func readCurrentLog() -> String? {
         guard let path = logFilePath else { return nil }
         return try? String(contentsOf: path, encoding: .utf8)
     }
     
-    /// Removes log files older than the specified number of days from the Velociraptor log directory.
-    /// 
-    /// Iterates the module's log files and deletes any whose creation date is earlier than the cutoff computed from `days`. Errors encountered while processing individual files are ignored so the method continues attempting to clean remaining files.
-    /// - Parameter days: Remove files created more than this many days ago. Default is 30.
-    func clearOldLogs(olderThanDays days: Int = 30) {
+    /// Removes log files older than the specified number of days
+    func clearOldLogs(olderThanDays days: Int = 30) async {
         let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date()) ?? Date()
         
         for logFile in getAllLogFiles() {
@@ -298,11 +268,113 @@ final class Logger {
         }
     }
     
-    /// Forces any buffered log data for the active log file to be synchronized to storage.
-    /// - Note: If no log file is open this is a no-op. The synchronization is performed on the logger's internal queue.
+    /// Forces any buffered log data to be synchronized to storage
     func flush() {
-        queue.sync {
-            try? fileHandle?.synchronize()
+        try? fileHandle?.synchronize()
+    }
+}
+
+// MARK: - Convenience Extension for Non-Async Contexts
+
+extension Logger {
+    /// Non-isolated wrapper for quick logging from any context
+    nonisolated func logSync(_ message: String, level: LogLevel = .info, component: String = "App") {
+        Task {
+            await self.log(message, level: level, component: component)
         }
+    }
+}
+
+// MARK: - Backward Compatibility Wrapper
+
+/// Synchronous logger wrapper for backward compatibility
+/// Wraps actor calls in Tasks for non-async contexts
+final class SyncLogger: @unchecked Sendable {
+    static let shared = SyncLogger()
+    
+    private let actor = Logger.shared
+    
+    private init() {}
+    
+    /// Minimum log level - updates actor asynchronously
+    var minimumLogLevel: LogLevel {
+        get { LogLevel.info } // Default, actual value is in actor
+        set { Task { await actor.setMinimumLogLevel(newValue) } }
+    }
+    
+    /// Whether to write logs to file
+    var writeToFile: Bool {
+        get { true }
+        set { Task { await actor.setWriteToFile(newValue) } }
+    }
+    
+    /// Whether to include timestamps
+    var includeTimestamp: Bool {
+        get { true }
+        set { Task { await actor.setIncludeTimestamp(newValue) } }
+    }
+    
+    func debug(_ message: String, component: String = "App") {
+        Task { await actor.debug(message, component: component) }
+    }
+    
+    func info(_ message: String, component: String = "App") {
+        Task { await actor.info(message, component: component) }
+    }
+    
+    func success(_ message: String, component: String = "App") {
+        Task { await actor.success(message, component: component) }
+    }
+    
+    func warning(_ message: String, component: String = "App") {
+        Task { await actor.warning(message, component: component) }
+    }
+    
+    func error(_ message: String, component: String = "App") {
+        Task { await actor.error(message, component: component) }
+    }
+    
+    func error(_ error: Error, component: String = "App") {
+        Task { await actor.error(error, component: component) }
+    }
+    
+    func critical(_ message: String, component: String = "App") {
+        Task { await actor.critical(message, component: component) }
+    }
+    
+    func getCurrentLogFilePath() async -> URL? {
+        await actor.getCurrentLogFilePath()
+    }
+    
+    func getAllLogFiles() async -> [URL] {
+        await actor.getAllLogFiles()
+    }
+    
+    func readCurrentLog() async -> String? {
+        await actor.readCurrentLog()
+    }
+    
+    func clearOldLogs(olderThanDays days: Int = 30) {
+        Task { await actor.clearOldLogs(olderThanDays: days) }
+    }
+    
+    func flush() {
+        Task { await actor.flush() }
+    }
+}
+
+// MARK: - Actor Property Setters
+
+extension Logger {
+    func setMinimumLogLevel(_ level: LogLevel) {
+        minimumLogLevel = level
+    }
+    
+    func setWriteToFile(_ enabled: Bool) {
+        writeToFile = enabled
+    }
+    
+    func setIncludeTimestamp(_ enabled: Bool) {
+        includeTimestamp = enabled
     }
 }

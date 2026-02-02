@@ -168,7 +168,7 @@ class ConfigurationViewModel: ObservableObject {
         validationErrors = []
         isModified = false
         configurationPath = nil
-        Logger.shared.info("Configuration reset to defaults", component: "Config")
+        SyncLogger.shared.info("Configuration reset to defaults", component: "Config")
     }
     
     // MARK: - File Operations
@@ -182,7 +182,7 @@ class ConfigurationViewModel: ObservableObject {
         isSaving = true
         defer { isSaving = false }
         
-        Logger.shared.info("Saving configuration to: \(url.path)", component: "Config")
+        SyncLogger.shared.info("Saving configuration to: \(url.path)", component: "Config")
         
         // Generate YAML content
         let yamlContent = data.toYAML()
@@ -193,7 +193,7 @@ class ConfigurationViewModel: ObservableObject {
         configurationPath = url
         isModified = false
         
-        Logger.shared.success("Configuration saved successfully", component: "Config")
+        SyncLogger.shared.success("Configuration saved successfully", component: "Config")
     }
     
     /// Save the current configuration as pretty-printed, sorted JSON to the specified file URL.
@@ -210,7 +210,7 @@ class ConfigurationViewModel: ObservableObject {
         let jsonData = try encoder.encode(data)
         try jsonData.write(to: url)
         
-        Logger.shared.info("Configuration JSON saved", component: "Config")
+        SyncLogger.shared.info("Configuration JSON saved", component: "Config")
     }
     
     /// Load configuration from a JSON file at the provided URL and replace the view model's current configuration.
@@ -220,7 +220,7 @@ class ConfigurationViewModel: ObservableObject {
         isLoading = true
         defer { isLoading = false }
         
-        Logger.shared.info("Loading configuration from: \(url.path)", component: "Config")
+        SyncLogger.shared.info("Loading configuration from: \(url.path)", component: "Config")
         
         let jsonData = try Data(contentsOf: url)
         let decoder = JSONDecoder()
@@ -229,7 +229,7 @@ class ConfigurationViewModel: ObservableObject {
         configurationPath = url
         isModified = false
         
-        Logger.shared.success("Configuration loaded successfully", component: "Config")
+        SyncLogger.shared.success("Configuration loaded successfully", component: "Config")
     }
     
     /// Generate a YAML representation of the current configuration data.
@@ -256,7 +256,7 @@ class ConfigurationViewModel: ObservableObject {
                     withIntermediateDirectories: true,
                     attributes: [.posixPermissions: 0o750]
                 )
-                Logger.shared.info("Created directory: \(directory)", component: "Config")
+                SyncLogger.shared.info("Created directory: \(directory)", component: "Config")
             }
         }
     }
@@ -312,7 +312,7 @@ class ConfigurationViewModel: ObservableObject {
             data.adminUsername = "admin"
         }
         
-        Logger.shared.info("Applied preset: \(preset.rawValue)", component: "Config")
+        SyncLogger.shared.info("Applied preset: \(preset.rawValue)", component: "Config")
     }
     
     /// Emergency datastore path

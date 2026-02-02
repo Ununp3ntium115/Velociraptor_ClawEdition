@@ -146,7 +146,7 @@ class ConfigurationExporter {
             try plist.write(to: url)
         }
         
-        Logger.shared.success("Exported configuration to: \(url.path)", component: "Export")
+        SyncLogger.shared.success("Exported configuration to: \(url.path)", component: "Export")
     }
     
     /// Generate a timestamped default filename for a configuration export.
@@ -386,7 +386,7 @@ class ConfigurationExporter {
         
         try export(config, to: backupURL, format: .json)
         
-        Logger.shared.info("Created backup: \(backupURL.path)", component: "Export")
+        SyncLogger.shared.info("Created backup: \(backupURL.path)", component: "Export")
         
         return backupURL
     }
@@ -433,7 +433,7 @@ class ConfigurationExporter {
         
         for backup in backups.dropFirst(count) {
             try? FileManager.default.removeItem(at: backup)
-            Logger.shared.debug("Deleted old backup: \(backup.lastPathComponent)", component: "Export")
+            SyncLogger.shared.debug("Deleted old backup: \(backup.lastPathComponent)", component: "Export")
         }
     }
 }
