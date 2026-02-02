@@ -15,10 +15,18 @@ let package = Package(
             targets: ["VelociraptorMacOS"]
         )
     ],
-    dependencies: [],
+    dependencies: [
+        // Model Context Protocol Swift SDK
+        // Official SDK: https://github.com/modelcontextprotocol/swift-sdk
+        // Enables AI/ML integration and communication with MCP servers
+        .package(url: "https://github.com/modelcontextprotocol/swift-sdk.git", from: "0.10.0")
+    ],
     targets: [
         .executableTarget(
             name: "VelociraptorMacOS",
+            dependencies: [
+                .product(name: "MCP", package: "swift-sdk")
+            ],
             path: "VelociraptorMacOS"
         ),
         .testTarget(
