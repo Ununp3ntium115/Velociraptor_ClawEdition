@@ -2,6 +2,20 @@
 
 This guide explains how to set up the Parallels MCP (Model Context Protocol) Server for developing the Velociraptor macOS application from a Windows host using Parallels Desktop.
 
+## VS Code Sidebar Views
+
+The Parallels Desktop extension provides these views in the VS Code sidebar:
+
+| View ID | Name | Description |
+|---------|------|-------------|
+| `parallels-desktop-my-machines` | My Virtual Machines | List and manage all VMs |
+| `parallels-desktop-remote-catalog` | My Catalogs | Browse VM templates/images |
+| `parallels-desktop-remote-hosts` | My Remote Hosts | Manage remote Parallels hosts |
+| `parallels-desktop-vagrant` | My Vagrant Boxes | Manage Vagrant environments |
+| `parallels-desktop-help` | Helpful Links | Documentation and support |
+
+**To access:** Click the Parallels icon in the VS Code Activity Bar (left sidebar).
+
 ## Overview
 
 The Parallels MCP Server enables VS Code on Windows to:
@@ -129,12 +143,29 @@ Add to your workspace settings:
 
 ## Development Workflow
 
+### Using the Sidebar Views
+
+1. **Click Parallels icon** in the Activity Bar (left side)
+2. **My Virtual Machines** view shows your VMs:
+   - Right-click VM → Start/Stop/Pause
+   - Right-click VM → Get inside VM (terminal)
+   - Right-click VM → View VM details
+3. **My Catalogs** view for downloading VM templates
+4. **My Remote Hosts** for managing remote Parallels servers
+
 ### 1. Start Development Session
 
+**Option A: Using Sidebar**
+1. Open Parallels view in sidebar
+2. Find `macOS-Development` in "My Virtual Machines"
+3. Right-click → Start VM
+
+**Option B: Using Command Palette**
 ```powershell
-# From Windows Command Palette
+# From Windows Command Palette (Ctrl+Shift+P)
 Parallels MCP: Start Server
-Start VM (select macOS-Development)
+# Then run task:
+Tasks: Run Task → Parallels: Start macOS VM
 ```
 
 ### 2. Build in macOS VM
