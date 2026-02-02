@@ -296,12 +296,12 @@ case .unexpectedStatus(let status):
 4. [x] Simplify IP validation using system APIs ✅ (Uses inet_pton now)
 5. [x] Wire remaining hardcoded strings ✅ (HeaderView, AboutView updated)
 
-### Short-Term (Next Sprint)
-6. [ ] Convert Logger to Swift 6 actor
+### Short-Term (Next Sprint) - PARTIALLY COMPLETED
+6. [x] Convert Logger to Swift 6 actor ✅ (Done - Logger.swift now uses actor pattern)
 7. [ ] Complete MCP integration on macOS (requires Parallels build)
 
 ### Long-Term (Future Releases)
-8. [ ] Add offline deployment mode
+8. [x] Add offline deployment mode ✅ (Done - offlineMode in ConfigurationData)
 9. [ ] Implement UndoManager for configuration
 10. [ ] Add Sparkle for auto-updates
 11. [ ] Integrate crash reporting
