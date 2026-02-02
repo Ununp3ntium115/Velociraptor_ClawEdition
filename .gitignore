@@ -1,1 +1,9 @@
 .DS_Store
+.!*
+tests/results/
+node_modules/
+.build/
+.swiftpm/
+DerivedData/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/

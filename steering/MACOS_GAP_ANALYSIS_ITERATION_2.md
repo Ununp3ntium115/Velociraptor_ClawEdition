@@ -79,11 +79,11 @@ The application has comprehensive code coverage (~12,000 lines of Swift) with al
 ### 1. Architecture & Structure (✅ Solid)
 
 ```
-VelociraptorMacOS/
+apps/macos-legacy/
 ├── Package.swift                    ✅ Valid SPM manifest
 ├── VelociraptorMacOS/
 │   ├── Models/         (4 files)    ✅ MVVM architecture
-│   ├── Services/       (3 files)    ✅ Service layer complete
+│   ├── Services/       (5 files)    ✅ Service layer complete (API + WebSocket included)
 │   ├── Views/          (13 files)   ✅ All wizard steps implemented
 │   ├── Utilities/      (4 files)    ✅ Logging, export, accessibility
 │   └── Resources/                   ⚠️ Assets incomplete
@@ -151,9 +151,8 @@ VelociraptorMacOS/
 
 1. **Generate Xcode Project** (GAP-001)
    ```bash
-   cd VelociraptorMacOS
-   swift package generate-xcodeproj
-   # Or use tuist/xcodegen for modern approach
+   cd apps/macos-legacy
+   xcodegen generate
    ```
 
 2. **Create App Icons** (GAP-002)
@@ -234,12 +233,12 @@ The codebase quality is high, architecture is sound, and all major features are 
 
 | Gap | Fix Applied | Files |
 |-----|-------------|-------|
-| GAP-001 | Created `project.yml` for XcodeGen | `VelociraptorMacOS/project.yml` |
-| GAP-002 | Created icon generation script | `VelociraptorMacOS/scripts/generate-icons.sh` |
+| GAP-001 | Created `project.yml` for XcodeGen | `apps/macos-legacy/project.yml` |
+| GAP-002 | Created icon generation script | `apps/macos-legacy/scripts/generate-icons.sh` |
 | GAP-003 | Applied 119 accessibility identifiers | 10+ view files updated |
-| GAP-004 | Created type-safe localization | `VelociraptorMacOS/VelociraptorMacOS/Utilities/Strings.swift` |
+| GAP-004 | Created type-safe localization | `apps/macos-legacy/VelociraptorMacOS/Utilities/Strings.swift` |
 | GAP-005 | CI/CD compilation verification | `.github/workflows/macos-build.yml` |
-| GAP-006 | Automated DMG creation | `scripts/create-release.sh`, CI workflow |
+| GAP-006 | Automated DMG creation | `apps/macos-legacy/scripts/create-release.sh`, CI workflow |
 | GAP-007 | Entitlements in build | `scripts/create-release.sh` |
 | GAP-008 | Fixed UI test selectors | `VelociraptorMacOSUITests/TestAccessibilityIdentifiers.swift` |
 | GAP-013 | Homebrew Cask | `Formula/velociraptor-gui.rb` |
@@ -250,7 +249,7 @@ The codebase quality is high, architecture is sound, and all major features are 
 |----------|---------|
 | **Unit Tests** | Added NotificationManagerTests (12 tests), LoggerTests (18 tests) |
 | **UI Tests** | Added SettingsUITests, EmergencyModeUITests, IncidentResponseUITests, ConfigurationWizardUITests |
-| **Documentation** | Updated VelociraptorMacOS/README.md, created MACOS_CONTRIBUTING.md |
+| **Documentation** | Updated `apps/macos-legacy/README.md`, created MACOS_CONTRIBUTING.md |
 | **Main README** | Added macOS Native Application section |
 | **Steering** | Created MACOS_PRODUCTION_COMPLETE.md |
 
@@ -279,7 +278,7 @@ The codebase quality is high, architecture is sound, and all major features are 
 The following commands complete production release:
 
 ```bash
-cd VelociraptorMacOS
+cd apps/macos-legacy
 
 # Generate Xcode project
 xcodegen generate

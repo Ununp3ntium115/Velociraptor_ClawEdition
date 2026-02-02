@@ -132,14 +132,14 @@ This document summarizes what was verified in a non-macOS environment and what r
 **Triggers Verified**:
 - Push to main and cursor/* branches
 - Pull requests to main
-- Paths filter: VelociraptorMacOS/**
+- Paths filter: apps/macos-legacy/**
 - Manual workflow dispatch
 
 ### 10. Documentation
 
 | Document | Purpose | Status |
 |----------|---------|--------|
-| VelociraptorMacOS/README.md | User documentation | ✅ Complete |
+| apps/macos-legacy/README.md | User documentation | ✅ Complete |
 | MACOS_PRODUCTION_READINESS_GAP_ANALYSIS.md | Gap analysis | ✅ Complete |
 | MACOS_MASTER_ITERATION_PLAN.md | Implementation plan | ✅ Complete |
 | MACOS_IMPLEMENTATION_COMPLETE.md | Implementation summary | ✅ Complete |
@@ -306,7 +306,7 @@ This document summarizes what was verified in a non-macOS environment and what r
 
 **Priority 1: Build Verification**
 ```bash
-cd VelociraptorMacOS
+cd apps/macos-legacy
 brew install xcodegen
 xcodegen generate
 swift build -c release

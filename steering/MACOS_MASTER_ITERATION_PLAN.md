@@ -39,7 +39,7 @@ This plan follows a **circular iteration pattern**:
 **Files to Create**:
 
 ```swift
-// File: VelociraptorMacOS/VelociraptorMacOSApp.swift
+// File: apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOSApp.swift
 // Line 1-35: Main application entry point
 
 import SwiftUI
@@ -73,7 +73,7 @@ struct VelociraptorMacOSApp: App {
 ```
 
 ```swift
-// File: VelociraptorMacOS/Models/AppState.swift
+// File: apps/macos-legacy/VelociraptorMacOS/Models/AppState.swift
 // Line 1-50: Application state management
 
 import SwiftUI
@@ -152,7 +152,7 @@ final class AppStateTests: XCTestCase {
 **Objective**: Create comprehensive configuration model
 
 ```swift
-// File: VelociraptorMacOS/Models/ConfigurationData.swift
+// File: apps/macos-legacy/VelociraptorMacOS/Models/ConfigurationData.swift
 // Line 1-120: Configuration data model
 
 import Foundation
@@ -313,7 +313,7 @@ final class ConfigurationDataTests: XCTestCase {
 **Objective**: Create main navigation structure
 
 ```swift
-// File: VelociraptorMacOS/Views/ContentView.swift
+// File: apps/macos-legacy/VelociraptorMacOS/Views/ContentView.swift
 // Line 1-100: Main content view with navigation
 
 import SwiftUI
@@ -452,7 +452,7 @@ struct NavigationButtonsView: View {
 **Objective**: Implement secure credential storage
 
 ```swift
-// File: VelociraptorMacOS/Services/KeychainManager.swift
+// File: apps/macos-legacy/VelociraptorMacOS/Services/KeychainManager.swift
 // Line 1-150: Keychain integration for macOS
 
 import Foundation
@@ -613,7 +613,7 @@ final class KeychainManagerTests: XCTestCase {
 **Objective**: Implement core deployment logic
 
 ```swift
-// File: VelociraptorMacOS/Services/DeploymentManager.swift
+// File: apps/macos-legacy/VelociraptorMacOS/Services/DeploymentManager.swift
 // Line 1-200: Deployment management for macOS
 
 import Foundation
@@ -831,7 +831,7 @@ class DeploymentManager: ObservableObject {
 Each step view follows this pattern:
 
 ```swift
-// File: VelociraptorMacOS/Views/Steps/DeploymentTypeView.swift
+// File: apps/macos-legacy/VelociraptorMacOS/Views/Steps/DeploymentTypeStepView.swift
 import SwiftUI
 
 struct DeploymentTypeView: View {
@@ -894,7 +894,7 @@ struct DeploymentTypeCard: View {
 ### Iteration 10-12: Incident Response Views
 
 ```swift
-// File: VelociraptorMacOS/Views/IncidentResponse/IncidentResponseView.swift
+// File: apps/macos-legacy/VelociraptorMacOS/Views/IncidentResponse/IncidentResponseView.swift
 import SwiftUI
 
 struct IncidentResponseView: View {
@@ -1070,7 +1070,7 @@ final class AccessibilityUITests: XCTestCase {
 # Execute in project directory
 
 # Create entitlements file
-cat > VelociraptorMacOS/VelociraptorMacOS.entitlements << 'EOF'
+cat > apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOS.entitlements << 'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">

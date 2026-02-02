@@ -137,7 +137,7 @@ Run from terminal:
 
 ```bash
 # Navigate to project
-cd VelociraptorMacOS
+cd apps/macos-legacy
 
 # Run Testing Agent for all gaps
 swift run TestingAgentCLI --validate-all
@@ -339,14 +339,14 @@ Add to GitHub Actions workflow:
 ```yaml
 - name: Run Testing Agent
   run: |
-    cd VelociraptorMacOS
+    cd apps/macos-legacy
     swift run TestingAgentCLI --validate-all --format json > test-results.json
 
 - name: Upload Test Results
   uses: actions/upload-artifact@v4
   with:
     name: testing-agent-results
-    path: test-results.json
+    path: apps/macos-legacy/test-results.json
 ```
 
 ## Reports Location

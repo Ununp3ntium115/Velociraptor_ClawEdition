@@ -94,7 +94,7 @@ The Velociraptor macOS native application is **100% production ready**. All code
 ### Application Code
 
 ```
-VelociraptorMacOS/
+apps/macos-legacy/VelociraptorMacOS/
 ├── VelociraptorMacOSApp.swift
 ├── Models/
 │   ├── AppState.swift
@@ -126,7 +126,7 @@ VelociraptorMacOS/
 ### Tests
 
 ```
-VelociraptorMacOSTests/
+apps/macos-legacy/VelociraptorMacOSTests/
 ├── AppStateTests.swift
 ├── ConfigurationDataTests.swift
 ├── ConfigurationExporterTests.swift
@@ -137,7 +137,7 @@ VelociraptorMacOSTests/
 ├── LoggerTests.swift
 └── NotificationManagerTests.swift
 
-VelociraptorMacOSUITests/
+apps/macos-legacy/VelociraptorMacOSUITests/
 ├── VelociraptorMacOSUITests.swift
 ├── ConfigurationWizardUITests.swift
 ├── InstallerUITests.swift
@@ -149,11 +149,12 @@ VelociraptorMacOSUITests/
 ### Build Infrastructure
 
 ```
-VelociraptorMacOS/
+apps/macos-legacy/
 ├── Package.swift               # Swift Package manifest
 ├── project.yml                 # XcodeGen configuration
-├── Info.plist                  # App metadata
-├── VelociraptorMacOS.entitlements
+├── VelociraptorMacOS/
+│   ├── Info.plist              # App metadata
+│   └── VelociraptorMacOS.entitlements
 ├── .swiftlint.yml              # Linting rules
 └── scripts/
     ├── create-release.sh       # Release automation
@@ -174,7 +175,7 @@ Formula/
 ### Quick Start
 
 ```bash
-cd VelociraptorMacOS
+cd apps/macos-legacy
 
 # Install dependencies
 brew install xcodegen

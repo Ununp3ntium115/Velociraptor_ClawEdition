@@ -186,7 +186,7 @@ tests/
 #### GUI Tests Needed (XCTest/XCUITest)
 
 ```
-VelociraptorMacOS/
+apps/macos-legacy/
 ├── VelociraptorMacOSTests/
 │   ├── DeploymentViewTests.swift
 │   ├── ConfigurationViewTests.swift

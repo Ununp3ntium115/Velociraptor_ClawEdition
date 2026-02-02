@@ -1,0 +1,408 @@
+# MCP Agent Configurations
+# Velociraptor Claw Edition - macOS SDLC Agent Swarm
+# Version: 1.0.0
+
+metadata:
+  version: "1.0.0"
+  generated: "2026-01-31"
+  framework: "CDIF/CEDIF + Master Iteration Framework"
+  target: "Velociraptor Claw Edition (macOS)"
+
+# Repository Anchors (shared across all agents)
+repository:
+  root: "/Velociraptor_ClawEdition"
+  # Canonical macOS build + tests live under apps/macos-legacy (SPM + Xcodegen).
+  # A lightweight copy also exists at VelociraptorMacOS/ (not canonical for SPM builds).
+  app_source: "apps/macos-legacy/VelociraptorMacOS"
+  app_source_root_snapshot: "VelociraptorMacOS/VelociraptorMacOS"
+  unit_tests: "apps/macos-legacy/VelociraptorMacOSTests"
+  ui_tests: "apps/macos-legacy/VelociraptorMacOSUITests"
+  mcp_source: "apps/macos-legacy/Sources/VelociraptorMCP"
+  
+  steering:
+    gap_registry: "Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md"
+    implementation_guide: "Velociraptor_macOS_App/steering/MACOS-IMPLEMENTATION-GUIDE.md"
+    cdif_archetypes: "apps/macos-legacy/CDIF_TEST_ARCHETYPES.md"
+    kb_index: "steering/CDIF_KB_INDEX.md"
+    kb_manifest: "steering/CDIF_KB_MANIFEST.yaml"
+    workspace_path_index: "docs/WORKSPACE_PATH_INDEX.md"
+  
+  documentation:
+    executive_summary: "docs/GAP-ANALYSIS-EXECUTIVE-SUMMARY.md"
+    full_analysis: "docs/MASSIVE-GAP-ANALYSIS-MACOS-VS-ELECTRON-2026-01-31.md"
+    agent_prompts: ".claude/agents/MACOS_SDLC_AGENT_PROMPTS.md"
+
+# Constraints (shared across all agents)
+constraints:
+  swift:
+    version: 6
+    concurrency_mode: "strict"
+  
+  platform:
+    minimum_deployment: "macOS 14.0"
+    sdk: "current"
+  
+  build_system:
+    type: "swift_package_manager"
+    manifest: "apps/macos-legacy/Package.swift"
+    xcodegen: "apps/macos-legacy/project.yml"
+  
+  sandbox:
+    enabled: true
+    entitlements: "apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOS.entitlements"
+  
+  hardened_runtime:
+    enabled: true
+    exceptions: "none"
+  
+  distribution:
+    notarization: "required"
+    app_store: "optional"
+
+# Agent Definitions
+agents:
+  # Stage Authority (not an agent, but context all agents inherit)
+  stage_authority:
+    id: "sdlc-stage-authority"
+    type: "context"
+    description: "Development stage charter and governance rules"
+    prompt_file: "prompts/00-stage-authority.md"
+
+  # 1. Development Agent
+  development_agent:
+    id: "development-agent"
+    type: "worker"
+    description: "Swift 6 / SwiftUI / AppKit Implementation Agent"
+    prompt_file: "prompts/01-development-agent.md"
+    
+    capabilities:
+      - swift_code_generation
+      - file_creation
+      - package_manifest_update
+      - accessibility_id_assignment
+    
+    tools:
+      - file_read
+      - file_write
+      - shell_execute
+      - grep_search
+    
+    allowed_paths:
+      - "apps/macos-legacy/VelociraptorMacOS/**"
+      - "apps/macos-legacy/Package.swift"
+    
+    status_transitions:
+      input: "OPEN"
+      output: "Implemented – Pending Test"
+    
+    cdif_actions:
+      - READ  # Check existing patterns
+      - ANNOTATE  # Mark new patterns for review
+
+  # 2. Testing Agent
+  testing_agent:
+    id: "testing-agent"
+    type: "worker"
+    description: "Xcode Test Runner + Deterministic Verification Agent"
+    prompt_file: "prompts/02-testing-agent.md"
+    
+    capabilities:
+      - test_execution
+      - determinism_checking
+      - archetype_validation
+    
+    tools:
+      - file_read
+      - file_write
+      - shell_execute
+      - xcode_test_runner
+    
+    allowed_paths:
+      - "apps/macos-legacy/VelociraptorMacOSTests/**"
+      - "apps/macos-legacy/VelociraptorMacOSUITests/**"
+    
+    status_transitions:
+      input: "Implemented – Pending Test"
+      output: "Tested – Pending QA"
+    
+    cdif_actions:
+      - READ  # Apply archetypes
+      - SUGGEST  # Propose new archetypes
+
+  # 3. QA Agent
+  qa_agent:
+    id: "qa-agent"
+    type: "worker"
+    description: "Holistic Quality Gate Agent"
+    prompt_file: "prompts/03-qa-agent.md"
+    
+    capabilities:
+      - regression_testing
+      - performance_validation
+      - ui_consistency_review
+    
+    tools:
+      - file_read
+      - shell_execute
+      - performance_profiler
+    
+    allowed_paths:
+      - "apps/macos-legacy/**"  # Read-only analysis
+    
+    status_transitions:
+      input: "Tested – Pending QA"
+      output: "QA-Validated – Pending UAT"
+    
+    can_create_gaps: true  # QA can discover new issues
+
+  # 4. UAT Agent
+  uat_agent:
+    id: "uat-agent"
+    type: "worker"
+    description: "Real-World Workflow Validation Agent"
+    prompt_file: "prompts/04-uat-agent.md"
+    
+    capabilities:
+      - workflow_validation
+      - usability_assessment
+      - accessibility_testing
+    
+    tools:
+      - app_launcher
+      - ui_automation
+      - screenshot_capture
+    
+    status_transitions:
+      input: "QA-Validated – Pending UAT"
+      output: "UAT-Approved – Pending Platform QA"
+    
+    rejection_style: "user-impact"  # No technical jargon
+
+  # 5. macOS Platform QA Agent
+  platform_qa_agent:
+    id: "platform-qa-agent"
+    type: "worker"
+    description: "Apple-Strict Platform Compliance Agent"
+    prompt_file: "prompts/05-platform-qa-agent.md"
+    
+    capabilities:
+      - accessibility_audit
+      - hig_compliance_check
+      - sdk_compatibility_check
+    
+    tools:
+      - voiceover_navigation
+      - accessibility_inspector
+      - codesign_verify
+    
+    status_transitions:
+      input: "UAT-Approved – Pending Platform QA"
+      output: "Platform-Validated – Pending Security"
+    
+    rejection_risks:
+      - app_store_rejection
+      - notarization_failure
+
+  # 6. Security Agent
+  security_agent:
+    id: "security-agent"
+    type: "worker"
+    description: "Sandbox / Hardened Runtime / Evidence Integrity Agent"
+    prompt_file: "prompts/06-security-agent.md"
+    
+    capabilities:
+      - entitlements_audit
+      - hardened_runtime_check
+      - credential_security_review
+      - evidence_integrity_validation
+    
+    tools:
+      - codesign
+      - spctl
+      - notarytool
+      - entitlements_parser
+    
+    status_transitions:
+      input: "Platform-Validated – Pending Security"
+      output: "Production-Eligible"
+    
+    can_block: true  # Security can halt production
+    finding_severity: "P0"  # All findings are critical
+
+  # 7. Gap Analysis Agent
+  gap_analysis_agent:
+    id: "gap-analysis-agent"
+    type: "analyst"
+    description: "CDIF Registrar + MCP Gap Publisher"
+    prompt_file: "prompts/07-gap-analysis-agent.md"
+    
+    capabilities:
+      - requirements_comparison
+      - code_audit
+      - electron_parity_check
+      - gap_classification
+    
+    tools:
+      - file_read
+      - grep_search
+      - ast_analysis
+      - line_counter
+    
+    outputs:
+      - gap_registry_yaml
+      - gap_registry_md
+      - cdif_updates
+      - mcp_task_payloads
+    
+    cdif_actions:
+      - READ
+      - CREATE_CHILD
+      - UPDATE_CHILD
+
+  # 8. Orchestrator Agent
+  orchestrator_agent:
+    id: "orchestrator-agent"
+    type: "conductor"
+    description: "Master Iteration Framework Conductor + Swarm Dispatcher"
+    prompt_file: "prompts/08-orchestrator-agent.md"
+    
+    capabilities:
+      - gap_normalization
+      - task_planning
+      - agent_dispatch
+      - gate_enforcement
+      - iteration_management
+    
+    orchestrates:
+      - development-agent
+      - testing-agent
+      - qa-agent
+      - uat-agent
+      - platform-qa-agent
+      - security-agent
+    
+    triggers:
+      - gap_analysis_complete
+      - manual_invocation
+    
+    outputs:
+      - master_iteration_document
+      - swarm_dispatch_plan
+      - gap_closure_ledger
+      - iteration_summary
+
+  # 9. Foreman Agent (Meta-Agent)
+  foreman_agent:
+    id: "foreman-agent"
+    type: "meta"
+    description: "Gap-Analyze-Then-Execute Meta-Agent"
+    prompt_file: "prompts/09-foreman-agent.md"
+    
+    combines:
+      - gap-analysis-agent
+      - orchestrator-agent
+    
+    execution_mode: "unified_cycle"
+    
+    convergence_criteria:
+      P0_gaps: 0
+      P1_gaps: 0  # Or explicit acceptance
+      security_gate: "PASS"
+      notarization: "READY"
+
+# Phase Gate Definitions
+phase_gates:
+  dev_to_test:
+    requires:
+      - build_success: true
+      - files_created: true
+      - gap_status: "Implemented – Pending Test"
+  
+  test_to_qa:
+    requires:
+      - unit_tests_pass: true
+      - determinism_verified: true
+      - gap_status: "Tested – Pending QA"
+  
+  qa_to_uat:
+    requires:
+      - no_regressions: true
+      - performance_acceptable: true
+      - gap_status: "QA-Validated – Pending UAT"
+  
+  uat_to_platform:
+    requires:
+      - workflow_accepted: true
+      - gap_status: "UAT-Approved – Pending Platform QA"
+  
+  platform_to_security:
+    requires:
+      - accessibility_pass: true
+      - hig_compliance: true
+      - gap_status: "Platform-Validated – Pending Security"
+  
+  security_to_production:
+    requires:
+      - sandbox_compliant: true
+      - hardened_runtime_pass: true
+      - notarization_ready: true
+      - gap_status: "Production-Eligible"
+
+# Convergence Criteria
+convergence:
+  mvp:
+    description: "Minimum Viable Product - Core DFIR workflows"
+    gaps_scope: ["0x01", "0x02", "0x03", "0x04", "0x05", "0x09"]
+    P0_allowed: 0
+    P1_allowed: 0
+  
+  full:
+    description: "Full Electron Parity"
+    gaps_scope: ["0x01", "0x02", "0x03", "0x04", "0x05", "0x06", "0x07", "0x08", "0x09", "0x0A", "0x0B", "0x0C", "0x0D", "0x0E", "0x0F", "0x10", "0x11", "0x12"]
+    P0_allowed: 0
+    P1_allowed: 0
+    P2_allowed: 0
+
+# CDIF Integration
+cdif:
+  registry_location: "apps/macos-legacy/CDIF_TEST_ARCHETYPES.md"
+  
+  archetype_categories:
+    - FC: "Functional Correctness"
+    - MAC: "macOS Correctness"
+    - DET: "Determinism"
+    - ACC: "Accessibility"
+    - PERF: "Performance"
+    - SEC: "Security"
+  
+  update_protocol:
+    on_gap_close:
+      - update_implementation_details
+      - record_patterns_used
+      - document_future_risks
+    
+    on_new_pattern:
+      - annotate_in_code
+      - create_cdif_child
+      - link_to_parent
+
+# MCP Task Schema
+mcp_task_schema:
+  task:
+    id: "string"  # e.g., "MAC-GAP-0x01"
+    source: "gap-analysis"
+    gap_id: "string"  # e.g., "0x01"
+    title: "string"
+    priority: "integer"  # 0=P0, 1=P1, 2=P2
+    status: "enum"  # OPEN, IN_PROGRESS, BLOCKED, CLOSED
+    assigned_to: "string"  # agent ID
+    
+    closure_criteria: "array"
+    evidence_required: "array"
+    
+    transitions:
+      - from: "status"
+        to: "status"
+        agent: "agent_id"
+        timestamp: "ISO8601"
+        evidence: "array"

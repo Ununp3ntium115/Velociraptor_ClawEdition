@@ -42,7 +42,7 @@ The Velociraptor Claw Edition macOS native application has completed the Develop
 |-----|--------|--------|----------------|
 | Apple Silicon (arm64) Optimization | ✅ Implemented - Pending Test | `project.yml` | Universal binary support |
 | Comprehensive Unit/Integration Tests | ✅ Implemented - Pending Test | Test suites | 9 test files, 160+ tests |
-| macOS-specific Documentation | ✅ Implemented - Pending Test | `VelociraptorMacOS/README.md` | Complete documentation |
+| macOS-specific Documentation | ✅ Implemented - Pending Test | `apps/macos-legacy/README.md` | Complete documentation |
 | Enhanced Homebrew Formula | ✅ Implemented - Pending Test | `Formula/` | CLI and GUI formulas |
 | Accessibility (VoiceOver) Support | ✅ Implemented - Pending Test | `AccessibilityIdentifiers.swift` | 119 accessibility IDs |
 | Error Handling Enhancement | ✅ Implemented - Pending Test | Throughout codebase | Comprehensive error handling |
@@ -178,7 +178,7 @@ The Velociraptor Claw Edition macOS native application has completed the Develop
 
 ### ✅ App Sandbox and Entitlements
 
-- **File**: `VelociraptorMacOS/VelociraptorMacOS.entitlements`
+- **File**: `apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOS.entitlements`
 - **Entitlements**:
   - App Sandbox: Disabled (required for DFIR operations)
   - File Access: User-selected, Downloads (read-write)
@@ -217,7 +217,7 @@ The Velociraptor Claw Edition macOS native application has completed the Develop
 ### Local Build (Swift Package Manager)
 
 ```bash
-cd VelociraptorMacOS
+cd apps/macos-legacy
 swift build -c release
 ```
 
@@ -226,7 +226,7 @@ swift build -c release
 ### Xcode Build (via XcodeGen)
 
 ```bash
-cd VelociraptorMacOS
+cd apps/macos-legacy
 xcodegen generate
 xcodebuild -project VelociraptorMacOS.xcodeproj \
   -scheme VelociraptorMacOS \
@@ -380,4 +380,4 @@ All implemented features are traceable:
 - `MACOS_MASTER_ITERATION_PLAN.md`
 - `MACOS_IMPLEMENTATION_COMPLETE.md`
 - `MACOS_PRODUCTION_COMPLETE.md`
-- `VelociraptorMacOS/README.md`
+- `apps/macos-legacy/README.md`

@@ -57,30 +57,30 @@ Invoke-WebRequest -Uri "https://github.com/Ununp3ntium115/Velociraptor_Setup_Scr
 Expand-Archive -Path "velociraptor-scripts.zip" -DestinationPath "."
 cd Velociraptor_Setup_Scripts-main
 
-# Deploy Velociraptor standalone
-.\Deploy_Velociraptor_Standalone.ps1
+# Deploy Velociraptor standalone (from repo root; see docs/WORKSPACE_PATH_INDEX.md)
+.\scripts\Deploy_Velociraptor_Standalone.ps1
 ```
 
 ### **Git Clone**
 ```bash
 git clone https://github.com/Ununp3ntium115/Velociraptor_Setup_Scripts.git
 cd Velociraptor_Setup_Scripts
-pwsh -ExecutionPolicy Bypass -File Deploy_Velociraptor_Standalone.ps1
+pwsh -ExecutionPolicy Bypass -File scripts/Deploy_Velociraptor_Standalone.ps1
 ```
 
 ### **GUI Configuration Wizard**
 ```powershell
-# Launch the Velociraptor configuration wizard
-powershell.exe -ExecutionPolicy Bypass -File "gui\VelociraptorGUI.ps1"
+# Launch the Velociraptor configuration wizard (canonical GUI in apps/gui)
+powershell.exe -ExecutionPolicy Bypass -File "apps\gui\VelociraptorGUI.ps1"
 
 # Alternative: Launch minimized
-powershell.exe -ExecutionPolicy Bypass -File "gui\VelociraptorGUI.ps1" -StartMinimized
+powershell.exe -ExecutionPolicy Bypass -File "apps\gui\VelociraptorGUI.ps1" -StartMinimized
 ```
 
 ### **🚀 Enterprise Moonshot Integration**
 ```powershell
 # Deploy Velociraptor server with advanced options
-.\Deploy_Velociraptor_Server.ps1 -GuiPort 8889 -EnableSSL
+.\scripts\Deploy_Velociraptor_Server.ps1 -GuiPort 8889 -EnableSSL
 
 # Deploy standalone with custom configuration
 .\Deploy_Velociraptor_Standalone.ps1 -InstallDir "C:\Velociraptor" -DataStore "D:\VelociraptorData"
@@ -626,7 +626,7 @@ Test-ComplianceBaseline -ConfigPath "server.yaml" -ComplianceFramework @('SOX', 
 brew install --cask velociraptor-gui
 
 # Or build from source
-cd VelociraptorMacOS
+cd apps/macos-legacy
 brew install xcodegen
 xcodegen generate
 swift build -c release
@@ -646,7 +646,7 @@ swift build -c release
 - Apple Silicon (M1/M2/M3) or Intel Mac
 - 200MB disk space
 
-See [VelociraptorMacOS/README.md](VelociraptorMacOS/README.md) for full documentation.
+See [apps/macos-legacy/README.md](apps/macos-legacy/README.md) for full documentation.
 
 ### **Linux Deployment**
 Native Linux support with auto-detection:

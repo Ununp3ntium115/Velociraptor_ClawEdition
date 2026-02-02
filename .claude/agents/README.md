@@ -1,241 +1,150 @@
-# Claude Agents for Velociraptor Setup Scripts
+# macOS SDLC Agent System
 
-This directory contains specialized Claude agents that provide expert guidance across different domains of the project.
+## Quick Reference
 
-## Available Agents
+This directory contains the complete HiQ Agent Swarm system for Velociraptor Claw Edition (macOS).
 
-### 🔍 macos-qa-agent
-**Purpose**: Holistic Quality Gate validation for macOS features  
-**When to Use**: When features have passed testing and need quality validation before UAT  
-**Expertise**:
-- Workflow integrity and regression testing
-- UI consistency (SwiftUI patterns, AppKit integration)
-- Performance validation for DFIR workflows
-- Operator-friendly error handling
-- macOS-specific integrations (window lifecycle, focus, accessibility)
-
-**Example Usage**:
-```
-The Emergency Mode feature has passed all tests. 
-Can you perform QA validation to check if it's ready for UAT?
-```
-
-**Output**: Approve/reject decision with concrete quality assessment across 5 dimensions
-
----
-
-### 🛡️ velociraptor-dfir-expert
-**Purpose**: DFIR methodology and Velociraptor platform expertise  
-**When to Use**: When you need guidance on digital forensics, incident response, or Velociraptor-specific features  
-**Expertise**:
-- Digital forensics and incident response best practices
-- Velociraptor architecture and features
-- Artifact development and VQL queries
-- DFIR workflow optimization
-- Evidence handling and chain of custody
-
-**Example Usage**:
-```
-How should we structure the incident response workflow for 
-ransomware detection using Velociraptor artifacts?
-```
-
----
-
-### 🎨 ui-ux-engineer
-**Purpose**: User interface and user experience design  
-**When to Use**: When designing or improving UI, optimizing workflows, or enhancing accessibility  
-**Expertise**:
-- User experience design and journey mapping
-- Interface design principles and visual hierarchy
-- Accessibility standards (WCAG 2.1 AA)
-- Design systems and component libraries
-- Enterprise software UX patterns
-- Security tool interface design
-
-**Example Usage**:
-```
-The configuration wizard feels clunky. Can you help improve 
-the user flow and make it more intuitive?
-```
-
----
-
-### 💻 powershell-expert
-**Purpose**: PowerShell development and automation  
-**When to Use**: When writing, debugging, or optimizing PowerShell scripts  
-**Expertise**:
-- PowerShell scripting best practices
-- Module development and distribution
-- Cross-platform PowerShell (Core)
-- Error handling and debugging
-- Performance optimization
-- Windows automation and system administration
-
-**Example Usage**:
-```
-I need to create a PowerShell module that handles certificate 
-management for Velociraptor deployments.
-```
-
----
-
-### 🔧 dfir-code-engineer
-**Purpose**: Code engineering for DFIR tools  
-**When to Use**: When implementing DFIR-specific features or optimizing forensic data handling  
-**Expertise**:
-- DFIR tool development
-- Forensic data processing and analysis
-- Performance optimization for large datasets
-- Evidence integrity and validation
-- Integration with forensic frameworks
-
-**Example Usage**:
-```
-How can we optimize the artifact collection process for 
-systems with millions of files?
-```
-
----
-
-### 📊 velociraptor-project-coordinator
-**Purpose**: Project management and coordination  
-**When to Use**: When planning features, managing releases, or coordinating development efforts  
-**Expertise**:
-- Project planning and roadmap management
-- Release coordination and versioning
-- Documentation and communication
-- Quality assurance coordination
-- Stakeholder management
-
-**Example Usage**:
-```
-We're planning the v5.1 release. Can you help prioritize 
-features and create a release checklist?
-```
-
----
-
-### 🔍 velociraptor-vql-engineer
-**Purpose**: VQL (Velociraptor Query Language) development  
-**When to Use**: When writing, optimizing, or debugging VQL queries and artifacts  
-**Expertise**:
-- VQL syntax and best practices
-- Artifact development
-- Query optimization
-- Plugin development
-- Custom data collection
-
-**Example Usage**:
-```
-I need to create a VQL artifact that detects persistence 
-mechanisms across Windows, Linux, and macOS.
-```
-
----
-
-## Agent Selection Guide
-
-Choose the right agent based on your task:
-
-| Task Type | Recommended Agent |
-|-----------|------------------|
-| Quality validation before UAT | **macos-qa-agent** |
-| UI/UX design and improvement | **ui-ux-engineer** |
-| PowerShell script development | **powershell-expert** |
-| DFIR methodology questions | **velociraptor-dfir-expert** |
-| Code implementation for DFIR | **dfir-code-engineer** |
-| VQL query development | **velociraptor-vql-engineer** |
-| Project planning and releases | **velociraptor-project-coordinator** |
-
-## How to Use Agents
-
-### In Claude Code Chat
-
-Simply mention what you need help with, and Claude will automatically select the appropriate agent:
+## Files
 
 ```
-user: "Can you validate the quality of the new Emergency Mode feature?"
-→ Uses: macos-qa-agent
-
-user: "How do I write a PowerShell function to download artifacts?"
-→ Uses: powershell-expert
-
-user: "The wizard UI needs better navigation flow"
-→ Uses: ui-ux-engineer
+.claude/agents/
+├── MACOS_SDLC_AGENT_PROMPTS.md    # All 9 agent system prompts
+├── README.md                       # This file
+├── mcp/
+│   └── agent-configs.yaml          # MCP-ready agent configurations
+└── scripts/
+    ├── run-gap-analysis.sh         # Gap analysis execution script
+    └── fix-all-gaps-iterative.sh   # Iterative gap closure orchestrator
 ```
 
-### Explicit Agent Invocation
+## Agent Summary
 
-You can also explicitly request a specific agent:
+| # | Agent | Role | Input → Output |
+|---|-------|------|----------------|
+| 0 | Stage Authority | Context charter | N/A (shared context) |
+| 1 | Development | Swift implementation | Gap → Code |
+| 2 | Testing | Xcode test execution | Code → Test Results |
+| 3 | QA | Quality validation | Tests → Quality Verdict |
+| 4 | UAT | Workflow validation | Quality → User Verdict |
+| 5 | Platform QA | Apple compliance | User → Platform Verdict |
+| 6 | Security | Security validation | Platform → Security Verdict |
+| 7 | Gap Analysis | Gap discovery | Repo → Gap Registry |
+| 8 | Orchestrator | Swarm conductor | Registry → Closed Gaps |
+| 9 | Foreman | Unified meta-agent | Requirements → Production |
 
-```
-Use the macos-qa-agent to validate the incident response feature
-```
+## Quick Start
 
-### Agent Workflow
+### 1. Run Gap Analysis
 
-1. **Development** → Create feature
-2. **Testing** → Unit/Integration tests (pass)
-3. **QA Validation** → macos-qa-agent (approve/reject)
-4. **UAT** → User acceptance testing
-5. **Release** → Production deployment
-
-## Agent Collaboration
-
-Agents can work together on complex tasks:
-
-```
-Example: New DFIR Feature Development
-
-1. velociraptor-dfir-expert
-   → Define requirements and methodology
-
-2. dfir-code-engineer
-   → Implement the feature
-
-3. ui-ux-engineer
-   → Design the user interface
-
-4. powershell-expert
-   → Create PowerShell integration
-
-5. macos-qa-agent
-   → Validate quality before UAT
+```bash
+cd /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition
+./.claude/agents/scripts/run-gap-analysis.sh
 ```
 
-## Adding New Agents
+### 2. Run Iterative Gap Closure
 
-To add a new specialized agent:
+```bash
+# MVP scope (P0 gaps only)
+SCOPE=mvp ./.claude/agents/scripts/fix-all-gaps-iterative.sh
 
-1. Create `[agent-name].md` in this directory
-2. Follow the existing agent structure:
-   ```markdown
-   ---
-   name: agent-name
-   description: Brief description with examples
-   model: inherit
-   ---
-   
-   [Agent system prompt and instructions]
-   ```
-3. Update this README with the new agent
-4. Add to `.claude/settings.local.json` if needed
+# Full scope (all gaps)
+SCOPE=full ./.claude/agents/scripts/fix-all-gaps-iterative.sh
+```
 
-## Best Practices
+### 3. Use Agent Prompts
 
-1. **Use the right agent** - Choose based on expertise needed
-2. **Provide context** - Give agents relevant background information
-3. **Be specific** - Clear requests get better results
-4. **Iterate** - Refine based on agent feedback
-5. **Validate output** - Always review agent suggestions before implementing
+Copy the relevant prompt from `MACOS_SDLC_AGENT_PROMPTS.md` and use it as a system prompt for your HiQ agent or Claude session.
 
-## Resources
+## SDLC Flow
 
-- Agent definitions: `.claude/agents/*.md`
-- Claude settings: `.claude/settings.local.json`
-- Main documentation: `CLAUDE.md` (project root)
+```
+Gap Analysis → Master Iteration Document → Agent Dispatch
+    ↓
+Development (Swift 6 / SwiftUI / AppKit)
+    ↓ "Implemented – Pending Test"
+Testing (Xcode tests, determinism check)
+    ↓ "Tested – Pending QA"
+QA (Regression, performance, UI consistency)
+    ↓ "QA-Validated – Pending UAT"
+UAT (Real-world workflow validation)
+    ↓ "UAT-Approved – Pending Platform QA"
+macOS Platform QA (Accessibility, HIG, SDK)
+    ↓ "Platform-Validated – Pending Security"
+Security (Sandbox, hardened runtime, notarization)
+    ↓ "Production-Eligible"
+    
+Re-run Gap Analysis → Repeat until convergence
+```
 
----
+## Key Concepts
 
-**Note**: These agents are specialized assistants that provide expert guidance within their domains. They help maintain high quality standards and best practices across the Velociraptor Setup Scripts project.
+### CDIF/CEDIF (read structure first)
+CryptEx Intelligence Document Framework - canonical patterns and implementations.
+- **Location**: `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md`
+- **Read first**: Open that file and read the **CDIF Structure (read first)** section. It defines the document layout, test archetypes (FC-*, MAC-*), parent/child registry (in `MACOS_SDLC_AGENT_PROMPTS.md`), and path resolution. Use the **Path Reference Index** in the catalog and `docs/WORKSPACE_PATH_INDEX.md` for all canonical paths.
+- **KB entrypoint**: `steering/CDIF_KB_INDEX.md` (curated index + exclusions like `tests/results/` and `node_modules/`)
+
+### Gap Registry
+Authoritative list of gaps with hexadecimal IDs.
+- Location: `Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md`
+
+### Master Iteration Document
+Line-by-line task breakdown for the current iteration.
+- Location: `Velociraptor_macOS_App/steering/MACOS-IMPLEMENTATION-GUIDE.md`
+
+### MCP Integration
+Model Context Protocol for task orchestration.
+- Config: `.claude/agents/mcp/agent-configs.yaml`
+
+## Current Gap Status (2026-01-31)
+
+| Gap | Title | Priority | Status |
+|-----|-------|----------|--------|
+| 0x01 | Velociraptor API Client | P0 | 🔴 OPEN |
+| 0x02 | Client Management Interface | P0 | 🔴 OPEN |
+| 0x03 | Hunt Management Interface | P0 | 🔴 OPEN |
+| 0x04 | VQL Terminal | P0 | 🔴 OPEN |
+| 0x05 | Dashboard with Widgets | P0 | 🔴 OPEN |
+| 0x06 | VFS Browser | P1 | 🔴 OPEN |
+| 0x07 | DFIR Tools Integration | P1 | 🔴 OPEN |
+| 0x08 | WebSocket Real-Time | P1 | 🔴 OPEN |
+| 0x09 | Accessibility Identifiers | P0 | 🔴 OPEN |
+
+## MVP Scope
+
+To reach MVP (functional DFIR platform), close these 6 P0 gaps:
+- 0x01: API Client (blocks everything)
+- 0x02: Client Management
+- 0x03: Hunt Management
+- 0x04: VQL Terminal
+- 0x05: Dashboard
+- 0x09: Accessibility
+
+**Estimated Effort**: 116-142 hours
+
+## Repository Structure
+
+```
+apps/macos-legacy/
+├── VelociraptorMacOS/
+│   ├── Models/          # Data models
+│   ├── Views/           # SwiftUI views
+│   │   └── Steps/       # Wizard step views
+│   ├── Services/        # Business logic
+│   ├── Utilities/       # Helpers
+│   └── TestingAgent/    # Built-in test framework
+├── VelociraptorMacOSTests/      # Unit tests
+└── VelociraptorMacOSUITests/    # UI tests
+```
+
+## Convergence Criteria
+
+### MVP
+- P0 gaps = 0
+- P1 gaps = 0 (or accepted)
+- Security gate = PASS
+- Notarization = READY
+
+### Full Parity
+- All gaps (0x01-0x12) = CLOSED
+- Full Electron feature parity

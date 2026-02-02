@@ -1,29 +1,32 @@
 # Project Structure & Organization
 
+**Path index**: See `docs/WORKSPACE_PATH_INDEX.md` for canonical paths (post-reorganization). Root holds only entry docs and config; no loose scripts or modules at root.
+
+**CDIF/Steering KB index**: `steering/CDIF_KB_INDEX.md` (entrypoints + exclusions like `node_modules/` and `tests/results/`)
+
 ## Root Level Structure
-- **Core Scripts**: Main deployment scripts at root level (`Deploy_Velociraptor_*.ps1`)
-- **Module Definition**: PowerShell module files (`VelociraptorSetupScripts.psd1`, `.psm1`)
-- **Package Configuration**: `package.json` for npm-style metadata and scripts
-- **Documentation**: Comprehensive markdown files for guides and roadmaps
+- **Package Configuration**: `package.json`, `VERSION`, `.gitignore` at root
+- **Entry Documentation**: `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `CLAUDE.md`
+- **Top-level directories only**: `apps/`, `build/`, `cloud/`, `containers/`, `docs/`, `examples/`, `lib/`, `scripts/`, `steering/`, `tests/`, `tools/`, `archive/`
 
 ## Key Directories
 
-### `/modules/`
-PowerShell modules with nested structure:
-- `VelociraptorDeployment/` - Core deployment functionality
-- `VelociraptorGovernance/` - Compliance and governance features
+### `/lib/`
+PowerShell root module and nested modules:
+- `VelociraptorSetupScripts.psd1`, `.psm1` - Root module
+- `modules/VelociraptorDeployment/` - Core deployment functionality
+- `modules/VelociraptorGovernance/` - Compliance and governance features
 
 ### `/scripts/`
-Utility and automation scripts organized by function:
-- `configuration-management/` - Environment and cluster management
-- `cross-platform/` - Linux/macOS deployment scripts
-- `monitoring/` - Health checks and performance monitoring
-- `security/` - Security hardening and compliance testing
+Deployment and utility scripts (canonical location for Deploy_*, GUI helpers, automation):
+- `Deploy_Velociraptor_Standalone.ps1`, `Deploy_Velociraptor_Server.ps1` - Main deployment
+- `VelociraptorGUI-InstallClean.ps1`, `IncidentResponseGUI-*.ps1` - GUI scripts
+- `configuration-management/`, `cross-platform/`, `monitoring/`, `security/` - By function
 
-### `/gui/`
-Desktop GUI applications:
+### `/apps/gui/`
+Desktop GUI applications (canonical GUI source):
 - `VelociraptorGUI.ps1` - Main configuration wizard
-- `IncidentResponseGUI.ps1` - Incident response interface
+- Incident response and other GUIs also under `scripts/` (e.g. `IncidentResponseGUI-*.ps1`)
 
 ### `/cloud/`
 Cloud provider specific deployments:
@@ -50,7 +53,7 @@ Configuration templates:
 Demonstration scripts:
 - Phase-specific demo scripts showing advanced features
 
-### `/incident-packages/`
+### `/tools/incident-packages/`
 Pre-built incident response packages:
 - Scenario-specific artifact collections (APT, Ransomware, etc.)
 - Each package includes artifacts, tools, and documentation
@@ -69,13 +72,13 @@ Pre-built incident response packages:
 - **Runtime Data**: Temporary files in `/temp_*` directories (gitignored)
 
 ## Deployment Patterns
-- **Standalone**: Single-file deployments at root level
-- **Modular**: Complex deployments use `/modules/` and `/scripts/`
+- **Standalone**: Run `scripts/Deploy_Velociraptor_Standalone.ps1` from repo root
+- **Modular**: Complex deployments use `lib/modules/` and `scripts/`
 - **Cloud**: Provider-specific scripts in `/cloud/[provider]/`
 - **Container**: Orchestration files in `/containers/[platform]/`
 
 ## Documentation Structure
-- **README.md**: Comprehensive feature overview and quick start
-- **ROADMAP.md**: Development phases and future plans
-- **CONTRIBUTING.md**: Development guidelines and processes
-- **Phase Documentation**: `PHASE[N]_*.md` for major release documentation
+- **Root**: `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `CLAUDE.md`
+- **docs/**: All other project docs (roadmaps, guides, gap analysis, release notes)
+- **steering/**: Iteration plans, macOS implementation, gap analysis references
+- **Phase Documentation**: `docs/` (e.g. PHASE[N]_*.md, ROADMAP.md)
