@@ -1,0 +1,170 @@
+# CDIF Knowledge Base Manifest
+# Velociraptor Claw Edition - Document Registry
+# Last Updated: January 23, 2026
+
+version: "1.0"
+repository: "Velociraptor_ClawEdition"
+maintainer: "SDLC Governance Agent"
+
+# ============================================================
+# ISSUE CLOSE-OUT & PRODUCTION READINESS
+# ============================================================
+documents:
+  - id: ISSUE_CLOSEOUT_TODO
+    path: steering/ISSUE_CLOSEOUT_TODO.md
+    title: "Issue Close-Out Todo List"
+    category: [governance, closeout, production-readiness]
+    authoritative: true
+    description: "Canonical close-out checklist for all verified issues"
+    last_updated: "2026-01-23"
+    
+  - id: GITHUB_ISSUES_STATUS
+    path: steering/GITHUB_ISSUES_STATUS.md
+    title: "GitHub Issues Status Tracking"
+    category: [evidence, status, tracking]
+    authoritative: true
+    description: "Evidence and verification status for all issues"
+    last_updated: "2026-01-23"
+    
+  - id: ISSUE_CLOSEOUT_GOVERNANCE
+    path: steering/ISSUE_CLOSEOUT_GOVERNANCE.md
+    title: "Issue Close-Out Governance Policy"
+    category: [governance, policy, sdlc]
+    authoritative: true
+    description: "Governance rules for issue closure"
+    last_updated: "2026-01-23"
+
+# ============================================================
+# MACOS IMPLEMENTATION
+# ============================================================
+  - id: MACOS_PRODUCTION_COMPLETE
+    path: steering/MACOS_PRODUCTION_COMPLETE.md
+    title: "macOS Production Complete"
+    category: [macos, production, status]
+    authoritative: true
+    description: "Final production status declaration"
+    last_updated: "2026-01-23"
+    
+  - id: MACOS_MASTER_ITERATION_PLAN
+    path: steering/MACOS_MASTER_ITERATION_PLAN.md
+    title: "macOS Master Iteration Plan"
+    category: [macos, planning, implementation]
+    authoritative: false
+    description: "Line-by-line implementation plan"
+    last_updated: "2026-01-23"
+    
+  - id: MACOS_CODE_REVIEW_ANALYSIS
+    path: steering/MACOS_CODE_REVIEW_ANALYSIS.md
+    title: "macOS Code Review Analysis"
+    category: [macos, review, quality]
+    authoritative: false
+    description: "MCP-assisted code review findings"
+    last_updated: "2026-01-23"
+    
+  - id: MACOS_GAP_ANALYSIS
+    path: steering/MACOS_GAP_ANALYSIS_ITERATION_2.md
+    title: "macOS Gap Analysis"
+    category: [macos, gaps, analysis]
+    authoritative: false
+    description: "Production readiness gap analysis"
+    last_updated: "2026-01-23"
+
+# ============================================================
+# QA & TESTING
+# ============================================================
+  - id: MACOS_QA_TEST_PLAN
+    path: steering/MACOS_QA_TEST_PLAN.md
+    title: "macOS QA Test Plan"
+    category: [qa, testing, macos]
+    authoritative: true
+    description: "Comprehensive QA test plan"
+    last_updated: "2026-01-23"
+    
+  - id: MACOS_UI_CONTROL_INVENTORY
+    path: steering/MACOS_UI_CONTROL_INVENTORY.md
+    title: "macOS UI Control Inventory"
+    category: [ui, testing, inventory]
+    authoritative: false
+    description: "Complete UI control inventory for testing"
+    last_updated: "2026-01-23"
+    
+  - id: QA_QUALITY_GATE
+    path: docs/QA_QUALITY_GATE.md
+    title: "QA Quality Gate"
+    category: [qa, gate, criteria]
+    authoritative: true
+    description: "Quality gate criteria for releases"
+    last_updated: "2026-01-23"
+
+# ============================================================
+# PRODUCT & STRATEGY
+# ============================================================
+  - id: PRODUCT_DEFINITION
+    path: steering/product.md
+    title: "Product Definition"
+    category: [product, strategy]
+    authoritative: true
+    description: "Core product definition"
+    last_updated: "2026-01-23"
+    
+  - id: TECH_ARCHITECTURE
+    path: steering/tech.md
+    title: "Technical Architecture"
+    category: [tech, architecture]
+    authoritative: true
+    description: "Technical architecture overview"
+    last_updated: "2026-01-23"
+    
+  - id: REPO_STRUCTURE
+    path: steering/structure.md
+    title: "Repository Structure"
+    category: [structure, organization]
+    authoritative: true
+    description: "Repository organization guide"
+    last_updated: "2026-01-23"
+
+# ============================================================
+# DEVELOPER DOCUMENTATION
+# ============================================================
+  - id: MACOS_CONTRIBUTING
+    path: docs/MACOS_CONTRIBUTING.md
+    title: "macOS Contributing Guide"
+    category: [contributing, macos, developer]
+    authoritative: false
+    description: "How to contribute to macOS app"
+    last_updated: "2026-01-23"
+    
+  - id: PARALLELS_MCP_SETUP
+    path: docs/PARALLELS_MCP_SETUP.md
+    title: "Parallels MCP Setup"
+    category: [mcp, parallels, setup]
+    authoritative: false
+    description: "Parallels VM and MCP configuration"
+    last_updated: "2026-01-23"
+
+# ============================================================
+# KB METADATA
+# ============================================================
+kb_index: steering/CDIF_KB_INDEX.md
+kb_manifest: steering/CDIF_KB_MANIFEST.yaml
+
+categories:
+  - governance
+  - closeout
+  - production-readiness
+  - macos
+  - qa
+  - testing
+  - product
+  - strategy
+  - tech
+  - contributing
+  - mcp
+
+tags:
+  - authoritative
+  - evidence
+  - tracking
+  - implementation
+  - planning
+  - review
