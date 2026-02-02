@@ -7,13 +7,72 @@
 
 import Foundation
 
+// MARK: - Shared Deployment Type Enum
+
+/// Deployment type options shared across the application
+/// Used by both AppState and ConfigurationData
+enum DeploymentType: String, Codable, CaseIterable, Identifiable {
+    case server = "Server"
+    case standalone = "Standalone"
+    case client = "Client"
+    
+    var id: String { rawValue }
+    
+    /// Display description
+    var description: String {
+        switch self {
+        case .server:
+            return "Full server deployment with client management capabilities. Ideal for centralized DFIR operations."
+        case .standalone:
+            return "Single-node deployment for local analysis. Perfect for individual investigators and testing."
+        case .client:
+            return "Client-only configuration for connecting to an existing server. Used for endpoint deployment."
+        }
+    }
+    
+    /// SF Symbol icon
+    var iconName: String {
+        switch self {
+        case .server: return "server.rack"
+        case .standalone: return "desktopcomputer"
+        case .client: return "laptopcomputer"
+        }
+    }
+    
+    /// Recommended use cases
+    var useCases: [String] {
+        switch self {
+        case .server:
+            return [
+                "Enterprise DFIR operations",
+                "Multi-endpoint investigations",
+                "Centralized artifact collection",
+                "Team collaboration"
+            ]
+        case .standalone:
+            return [
+                "Individual investigations",
+                "Local testing and development",
+                "Offline forensic analysis",
+                "Training and education"
+            ]
+        case .client:
+            return [
+                "Endpoint deployment",
+                "Remote collection agents",
+                "Distributed investigations"
+            ]
+        }
+    }
+}
+
 /// Complete configuration data for Velociraptor deployment
 /// Handles all settings from the configuration wizard
 struct ConfigurationData: Codable, Equatable {
     // MARK: - Deployment Settings
     
     /// Type of deployment (Server, Standalone, Client)
-    var deploymentType: String = "Standalone"
+    var deploymentType: DeploymentType = .standalone
     
     /// Organization name for certificate generation
     var organizationName: String = "VelociraptorOrg"
@@ -362,17 +421,24 @@ struct ConfigurationData: Codable, Equatable {
         validate().isEmpty
     }
     
-    /// Checks whether a string is a valid IPv4 address in dotted-decimal notation.
-    /// - Parameter ip: The string to validate as an IPv4 address.
-    /// - Returns: `true` if `ip` contains exactly four numeric octets and each octet is between 0 and 255, `false` otherwise.
-    
+    /// Checks whether a string is a valid IPv4 or IPv6 address using system APIs.
+    /// - Parameter ip: The string to validate as an IP address.
+    /// - Returns: `true` if `ip` is a valid IPv4 or IPv6 address, `false` otherwise.
     private func isValidIPAddress(_ ip: String) -> Bool {
-        let parts = ip.split(separator: ".")
-        guard parts.count == 4 else { return false }
-        return parts.allSatisfy { part in
-            guard let num = Int(part) else { return false }
-            return num >= 0 && num <= 255
+        var sin = sockaddr_in()
+        var sin6 = sockaddr_in6()
+        
+        // Try IPv4 first
+        if ip.withCString({ inet_pton(AF_INET, $0, &sin.sin_addr) }) == 1 {
+            return true
         }
+        
+        // Try IPv6
+        if ip.withCString({ inet_pton(AF_INET6, $0, &sin6.sin6_addr) }) == 1 {
+            return true
+        }
+        
+        return false
     }
     
     /// Validates whether a string is a well-formed domain name with a top-level domain.
@@ -515,7 +581,7 @@ extension ConfigurationData {
           
         """
         
-        if deploymentType != "Client" {
+        if deploymentType != .client {
             yaml += """
             
             Frontend:

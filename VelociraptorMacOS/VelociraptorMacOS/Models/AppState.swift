@@ -135,61 +135,7 @@ class AppState: ObservableObject {
         }
     }
     
-    /// Deployment type options
-    enum DeploymentType: String, CaseIterable, Identifiable {
-        case server = "Server"
-        case standalone = "Standalone"
-        case client = "Client"
-        
-        var id: String { rawValue }
-        
-        /// Display description
-        var description: String {
-            switch self {
-            case .server:
-                return "Full server deployment with client management capabilities. Ideal for centralized DFIR operations."
-            case .standalone:
-                return "Single-node deployment for local analysis. Perfect for individual investigators and testing."
-            case .client:
-                return "Client-only configuration for connecting to an existing server. Used for endpoint deployment."
-            }
-        }
-        
-        /// SF Symbol icon
-        var iconName: String {
-            switch self {
-            case .server: return "server.rack"
-            case .standalone: return "desktopcomputer"
-            case .client: return "laptopcomputer"
-            }
-        }
-        
-        /// Recommended use cases
-        var useCases: [String] {
-            switch self {
-            case .server:
-                return [
-                    "Enterprise DFIR operations",
-                    "Multi-endpoint investigations",
-                    "Centralized artifact collection",
-                    "Team collaboration"
-                ]
-            case .standalone:
-                return [
-                    "Individual investigations",
-                    "Local testing and development",
-                    "Offline forensic analysis",
-                    "Training and education"
-                ]
-            case .client:
-                return [
-                    "Endpoint deployment",
-                    "Remote collection agents",
-                    "Distributed investigations"
-                ]
-            }
-        }
-    }
+    // Note: DeploymentType enum is defined in ConfigurationData.swift and shared across the app
     
     /// Sidebar navigation items
     enum SidebarItem: String, CaseIterable, Identifiable {

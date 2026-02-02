@@ -13,10 +13,16 @@ enum Strings {
     // MARK: - App General
     enum App {
         static let name = LocalizedStringKey("app.name")
+        static let nameRaw = "VELOCIRAPTOR"
         static let tagline = LocalizedStringKey("app.tagline")
+        static let taglineRaw = "DFIR Framework Configuration Wizard"
         static let version = LocalizedStringKey("app.version")
+        static let versionNumber = "5.0.5"
         static let copyright = LocalizedStringKey("app.copyright")
+        static let copyrightRaw = "© 2026 Velocidex Enterprises"
         static let freeForAll = LocalizedStringKey("app.freeForAll")
+        static let freeForAllRaw = "Free For All First Responders"
+        static let dfirMacOS = "DFIR Framework for macOS"
     }
     
     // MARK: - Common Actions
