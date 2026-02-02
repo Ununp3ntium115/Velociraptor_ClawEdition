@@ -77,6 +77,20 @@ struct ConfigurationData: Codable, Equatable {
     /// Organization name for certificate generation
     var organizationName: String = "VelociraptorOrg"
     
+    // MARK: - Offline Mode Settings
+    
+    /// Enable offline deployment (use bundled/local binary instead of downloading)
+    var offlineMode: Bool = false
+    
+    /// Path to local Velociraptor binary (used when offlineMode is true)
+    var localBinaryPath: String = ""
+    
+    /// Use bundled binary from app resources if available
+    var useBundledBinary: Bool = true
+    
+    /// Skip version check when using offline mode
+    var skipVersionCheck: Bool = false
+    
     // MARK: - Storage Settings
     
     /// Directory for datastore

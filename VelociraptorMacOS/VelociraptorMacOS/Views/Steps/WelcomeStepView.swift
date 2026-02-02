@@ -88,6 +88,44 @@ struct WelcomeStepView: View {
                 }
             }
             
+            // Offline mode toggle
+            GroupBox {
+                VStack(alignment: .leading, spacing: 8) {
+                    Toggle(isOn: $appState.configurationData.offlineMode) {
+                        HStack {
+                            Image(systemName: "wifi.slash")
+                                .foregroundColor(.orange)
+                            VStack(alignment: .leading) {
+                                Text("Offline Mode")
+                                    .font(.subheadline.bold())
+                                Text("Use local binary instead of downloading from GitHub")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                    .accessibilityIdentifier("welcome.toggle.offlineMode")
+                    
+                    if appState.configurationData.offlineMode {
+                        HStack {
+                            TextField("Local binary path", text: $appState.configurationData.localBinaryPath)
+                                .textFieldStyle(.roundedBorder)
+                                .accessibilityIdentifier("welcome.field.localBinaryPath")
+                            
+                            Button("Browse...") {
+                                selectLocalBinary()
+                            }
+                            .accessibilityIdentifier("welcome.button.browseLocalBinary")
+                        }
+                        
+                        Toggle("Use bundled binary if available", isOn: $appState.configurationData.useBundledBinary)
+                            .font(.caption)
+                            .accessibilityIdentifier("welcome.toggle.useBundledBinary")
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+            
             // System info
             if let version = deploymentManager.installedVersion {
                 HStack {
@@ -102,6 +140,22 @@ struct WelcomeStepView: View {
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Welcome to Velociraptor Configuration Wizard")
         .accessibilityId(AccessibilityIdentifiers.WizardStep.welcome)
+    }
+    
+    // MARK: - Private Methods
+    
+    /// Opens a file picker to select local Velociraptor binary
+    private func selectLocalBinary() {
+        let panel = NSOpenPanel()
+        panel.title = "Select Velociraptor Binary"
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.canChooseFiles = true
+        panel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
+        
+        if panel.runModal() == .OK, let url = panel.url {
+            appState.configurationData.localBinaryPath = url.path
+        }
     }
 }
 
