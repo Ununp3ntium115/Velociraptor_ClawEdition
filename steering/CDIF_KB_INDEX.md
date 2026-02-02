@@ -17,6 +17,8 @@
 - `steering/ISSUE_CLOSEOUT_TODO.md` — Authoritative close-out checklist
 - `steering/GITHUB_ISSUES_STATUS.md` — Evidence/status index
 - `steering/ISSUE_CLOSEOUT_GOVERNANCE.md` — Governance policy
+- `steering/PRODUCTION_READINESS_DECLARATION.md` — Production release declaration
+- `steering/MACOS_REINDEX_ANALYSIS.md` — Gap reindex analysis
 
 ### MACOS IMPLEMENTATION
 - `steering/MACOS_MASTER_ITERATION_PLAN.md` — Master implementation plan

@@ -31,14 +31,33 @@ class ConfigurationViewModel: ObservableObject {
     /// Whether load operation is in progress
     @Published var isLoading: Bool = false
     
+    // MARK: - Undo/Redo Support
+    
+    /// UndoManager for configuration changes
+    var undoManager: UndoManager?
+    
+    /// Whether undo is available
+    var canUndo: Bool {
+        undoManager?.canUndo ?? false
+    }
+    
+    /// Whether redo is available
+    var canRedo: Bool {
+        undoManager?.canRedo ?? false
+    }
+    
     // MARK: - Private Properties
     
     private var cancellables = Set<AnyCancellable>()
     private let fileManager = FileManager.default
     
+    /// Previous configuration state for undo
+    private var previousData: ConfigurationData?
+    
     // MARK: - Initialization
     
-    init() {
+    init(undoManager: UndoManager? = nil) {
+        self.undoManager = undoManager
         setupObservers()
     }
     
@@ -52,6 +71,53 @@ class ConfigurationViewModel: ObservableObject {
                 self?.isModified = true
             }
             .store(in: &cancellables)
+    }
+    
+    // MARK: - Undo/Redo Methods
+    
+    /// Register an undo action for a configuration change
+    /// - Parameters:
+    ///   - oldValue: The previous configuration state
+    ///   - actionName: Description of the action for the Edit menu
+    func registerUndo(oldValue: ConfigurationData, actionName: String) {
+        guard let undoManager = undoManager else { return }
+        
+        let currentValue = data
+        
+        undoManager.registerUndo(withTarget: self) { target in
+            // Save current state for redo
+            target.registerUndo(oldValue: currentValue, actionName: actionName)
+            // Restore old state
+            target.data = oldValue
+        }
+        
+        undoManager.setActionName(actionName)
+        SyncLogger.shared.debug("Registered undo: \(actionName)", component: "Config")
+    }
+    
+    /// Update configuration with undo support
+    /// - Parameters:
+    ///   - keyPath: The key path to the property being changed
+    ///   - value: The new value
+    ///   - actionName: Description of the action
+    func updateWithUndo<T: Equatable>(_ keyPath: WritableKeyPath<ConfigurationData, T>, 
+                                       value: T, 
+                                       actionName: String) {
+        let oldValue = data
+        guard data[keyPath: keyPath] != value else { return }
+        
+        registerUndo(oldValue: oldValue, actionName: actionName)
+        data[keyPath: keyPath] = value
+    }
+    
+    /// Perform undo
+    func undo() {
+        undoManager?.undo()
+    }
+    
+    /// Perform redo
+    func redo() {
+        undoManager?.redo()
     }
     
     // MARK: - Validation
@@ -71,7 +137,8 @@ class ConfigurationViewModel: ObservableObject {
     func validateStep(_ step: AppState.WizardStep) -> Bool {
         switch step {
         case .deploymentType:
-            return !data.deploymentType.isEmpty
+            // DeploymentType is always valid (it's an enum with a default value)
+            return true
             
         case .certificateSettings:
             switch data.encryptionType {
