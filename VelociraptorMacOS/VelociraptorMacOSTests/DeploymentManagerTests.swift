@@ -10,19 +10,19 @@ import XCTest
 
 final class DeploymentManagerTests: XCTestCase {
     var deploymentManager: DeploymentManager!
-    
+
     @MainActor
     override func setUp() async throws {
         deploymentManager = DeploymentManager()
     }
-    
+
     @MainActor
     override func tearDown() async throws {
         deploymentManager = nil
     }
-    
+
     // MARK: - Initial State Tests
-    
+
     @MainActor
     func testInitialState() {
         XCTAssertFalse(deploymentManager.isDeploying)
@@ -30,7 +30,7 @@ final class DeploymentManagerTests: XCTestCase {
         XCTAssertTrue(deploymentManager.statusMessage.isEmpty)
         XCTAssertNil(deploymentManager.lastError)
     }
-    
+
     @MainActor
     func testInitialStepStatus() {
         for step in DeploymentManager.DeploymentStep.allCases {
@@ -41,18 +41,18 @@ final class DeploymentManagerTests: XCTestCase {
             }
         }
     }
-    
+
     // MARK: - Deployment Step Tests
-    
+
     func testDeploymentStepProperties() {
         for step in DeploymentManager.DeploymentStep.allCases {
             XCTAssertFalse(step.rawValue.isEmpty)
             XCTAssertFalse(step.iconName.isEmpty)
         }
     }
-    
+
     // MARK: - Error Tests
-    
+
     func testDeploymentErrorDescriptions() {
         let errors: [DeploymentManager.DeploymentError] = [
             .binaryNotFound,
@@ -67,21 +67,21 @@ final class DeploymentManagerTests: XCTestCase {
             .networkUnavailable,
             .insufficientDiskSpace
         ]
-        
+
         for error in errors {
             XCTAssertNotNil(error.errorDescription)
             XCTAssertFalse(error.errorDescription!.isEmpty)
         }
     }
-    
+
     func testDeploymentErrorRecoverySuggestions() {
         XCTAssertNotNil(DeploymentManager.DeploymentError.permissionDenied.recoverySuggestion)
         XCTAssertNotNil(DeploymentManager.DeploymentError.networkUnavailable.recoverySuggestion)
         XCTAssertNotNil(DeploymentManager.DeploymentError.insufficientDiskSpace.recoverySuggestion)
     }
-    
+
     // MARK: - GitHub Release Parsing Tests
-    
+
     func testGitHubReleaseDecoding() throws {
         let json = """
         {
@@ -101,19 +101,19 @@ final class DeploymentManagerTests: XCTestCase {
             ]
         }
         """
-        
+
         let data = json.data(using: .utf8)!
         let release = try JSONDecoder().decode(DeploymentManager.GitHubRelease.self, from: data)
-        
+
         XCTAssertEqual(release.tagName, "v0.73.0")
         XCTAssertEqual(release.name, "Release 0.73.0")
         XCTAssertEqual(release.assets.count, 2)
         XCTAssertTrue(release.assets.contains(where: { $0.name.contains("darwin-amd64") }))
         XCTAssertTrue(release.assets.contains(where: { $0.name.contains("darwin-arm64") }))
     }
-    
+
     // MARK: - Step Status Tests
-    
+
     func testStepStatusValues() {
         // Test that step status enum cases exist
         let pending: DeploymentManager.StepStatus = .pending
@@ -121,7 +121,7 @@ final class DeploymentManagerTests: XCTestCase {
         let completed: DeploymentManager.StepStatus = .completed
         let failed: DeploymentManager.StepStatus = .failed(DeploymentManager.DeploymentError.cancelled)
         let skipped: DeploymentManager.StepStatus = .skipped
-        
+
         // Just verify they can be created
         _ = pending
         _ = inProgress
@@ -129,30 +129,31 @@ final class DeploymentManagerTests: XCTestCase {
         _ = failed
         _ = skipped
     }
-    
+
     // MARK: - Launchd Plist Generation Tests
-    
+
     @MainActor
     func testLaunchdPlistFormat() async {
         // The plist generation is private, but we can test the deployment
         // creates proper launchd configuration by checking expected paths
         let expectedPlistPath = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/LaunchAgents/com.velocidex.velociraptor.plist")
-        
+
         // Just verify the path is constructed correctly
         XCTAssertTrue(expectedPlistPath.path.contains("LaunchAgents"))
         XCTAssertTrue(expectedPlistPath.path.contains("com.velocidex.velociraptor"))
     }
-    
+
     // MARK: - Progress Update Tests
-    
+
     @MainActor
     func testProgressUpdatesDuringDeployment() async {
         // Progress should be 0 initially
         XCTAssertEqual(deploymentManager.progress, 0.0)
-        
+
         // After deployment starts, progress should update
         // Note: We can't fully test deployment without network access
         // but we can verify the state management
     }
 }
+
