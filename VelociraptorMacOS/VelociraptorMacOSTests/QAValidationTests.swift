@@ -159,8 +159,8 @@ final class QAValidationTests: XCTestCase {
     func testAppLaunchPerformance() throws {
         measure(metrics: [XCTClockMetric()]) {
             // Simulate app initialization
-            let _ = AppState()
-            let _ = ConfigurationData()
+            _ = AppState()
+            _ = ConfigurationData()
         }
         
         // Performance should be < 0.1 seconds for initialization
@@ -172,7 +172,7 @@ final class QAValidationTests: XCTestCase {
         let configData = ConfigurationData()
         
         measure(metrics: [XCTClockMetric()]) {
-            let _ = configData.validate()
+            _ = configData.validate()
         }
         
         // Validation should be near-instant

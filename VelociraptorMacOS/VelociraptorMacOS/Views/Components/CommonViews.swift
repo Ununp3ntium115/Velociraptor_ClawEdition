@@ -356,13 +356,13 @@ extension View {
 #Preview("Selection Card") {
     VStack {
         SelectionCard(isSelected: true) {
-            print("Selected")
+            // Selection action
         } content: {
             Label("Server Deployment", systemImage: "server.rack")
         }
         
         SelectionCard(isSelected: false) {
-            print("Selected")
+            // Selection action
         } content: {
             Label("Standalone", systemImage: "desktopcomputer")
         }

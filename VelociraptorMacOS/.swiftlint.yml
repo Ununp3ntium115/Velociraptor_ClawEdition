@@ -14,13 +14,11 @@ opt_in_rules:
   - contains_over_range_nil_comparison
   - discouraged_object_literal
   - empty_collection_literal
-  - empty_count
   - empty_string
   - enum_case_associated_values_count
   - explicit_init
   - fallthrough
   - fatal_error_message
-  - file_name
   - first_where
   - flatmap_over_map_reduce
   - identical_operands
@@ -33,7 +31,6 @@ opt_in_rules:
   - modifier_order
   - nimble_operator
   - nslocalizedstring_key
-  - number_separator
   - operator_usage_whitespace
   - optional_enum_case_matching
   - overridden_super_call
@@ -45,19 +42,14 @@ opt_in_rules:
   - reduce_into
   - redundant_nil_coalescing
   - redundant_type_annotation
-  - single_test_class
   - sorted_first_last
   - static_operator
   - toggle_bool
-  - trailing_closure
   - unavailable_function
   - unneeded_parentheses_in_closure_argument
   - unowned_variable_capture
   - untyped_error_in_catch
   - vertical_parameter_alignment_on_call
-  - vertical_whitespace_closing_braces
-  - vertical_whitespace_opening_braces
-  - xct_specific_matcher
   - yoda_condition
 
 # Disabled rules
@@ -69,6 +61,13 @@ disabled_rules:
   - line_length
   - todo
   - nesting
+  - number_separator
+  - vertical_whitespace_opening_braces
+  - vertical_whitespace_closing_braces
+  - single_test_class
+  - trailing_closure
+  - xct_specific_matcher
+  - redundant_discardable_let
 
 # Paths to include
 included:
@@ -138,6 +137,15 @@ custom_rules:
     severity: warning
     match_kinds:
       - identifier
+    excluded:
+      - ".*Logger\\.swift$"
+      - ".*CLI\\.swift$"
+      - ".*TestReporter\\.swift$"
+      - ".*TestingAgent\\.swift$"
+      - ".*DeterminismChecker\\.swift$"
+      - ".*XcodeTestRunner\\.swift$"
+      - ".*Tests\\.swift$"
+      - ".*MCPService\\.swift$"
   
   no_nslog:
     name: "No NSLog Statements"
