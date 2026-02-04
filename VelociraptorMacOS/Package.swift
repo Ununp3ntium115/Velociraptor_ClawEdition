@@ -6,6 +6,7 @@ import PackageDescription
 
 let package = Package(
     name: "VelociraptorMacOS",
+    defaultLocalization: "en",
     platforms: [
         .macOS(.v13)
     ],
