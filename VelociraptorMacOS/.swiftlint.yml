@@ -45,6 +45,11 @@ disabled_rules:
   - legacy_multiple
   - syntactic_sugar
   - for_where
+  - trailing_newline
+  - vertical_parameter_alignment
+  - non_optional_string_data_conversion
+  - redundant_string_enum_value
+  - implicit_optional_initialization
 
 # Paths to include
 included:
