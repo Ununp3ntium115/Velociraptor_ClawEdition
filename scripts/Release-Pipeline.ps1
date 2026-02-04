@@ -162,10 +162,10 @@ function Invoke-IntegrationTests {
     Write-PipelineLog "Running integration tests..." "INFO"
 
     $integrationTests = @(
-        @{ Name = "Standalone Deployment"; Script = ".\Deploy_Velociraptor_Standalone.ps1"; Args = @("-WhatIf") },
-        @{ Name = "Server Deployment"; Script = ".\Deploy_Velociraptor_Server.ps1"; Args = @("-WhatIf") },
-        @{ Name = "GUI Launch"; Script = ".\gui\VelociraptorGUI.ps1"; Args = @("-StartMinimized", "-TestMode") },
-        @{ Name = "Module Import"; Script = { Import-Module .\VelociraptorSetupScripts.psd1 -Force -ErrorAction SilentlyContinue } }
+        @{ Name = "Standalone Deployment"; Script = ".\scripts\Deploy_Velociraptor_Standalone.ps1"; Args = @("-WhatIf") },
+        @{ Name = "Server Deployment"; Script = ".\scripts\Deploy_Velociraptor_Server.ps1"; Args = @("-WhatIf") },
+        @{ Name = "GUI Launch"; Script = ".\apps\gui\VelociraptorGUI.ps1"; Args = @("-StartMinimized", "-TestMode") },
+        @{ Name = "Module Import"; Script = { Import-Module .\lib\VelociraptorSetupScripts.psd1 -Force -ErrorAction SilentlyContinue } }
     )
 
     $results = @()
@@ -249,7 +249,7 @@ function Invoke-PerformanceTests {
             Name = "Module Load Time"
             Script = {
                 $start = Get-Date
-                Import-Module .\VelociraptorSetupScripts.psd1 -Force -ErrorAction SilentlyContinue
+                Import-Module .\lib\VelociraptorSetupScripts.psd1 -Force -ErrorAction SilentlyContinue
                 $end = Get-Date
                 return ($end - $start).TotalSeconds
             }

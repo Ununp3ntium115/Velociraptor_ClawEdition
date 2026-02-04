@@ -231,33 +231,45 @@ function Copy-VelociraptorCore {
 
     Write-Host "📦 Adding Velociraptor core components..." -ForegroundColor Cyan
 
-    # Copy main deployment scripts
-    $coreFiles = @(
-        "Deploy_Velociraptor_Standalone.ps1",
-        "Deploy_Velociraptor_Server.ps1",
-        "VelociraptorSetupScripts.psd1",
-        "VelociraptorSetupScripts.psm1"
-    )
+    # Resolve repo root (script may be run from repo root or scripts/)
+    $repoRoot = if (Test-Path "lib\VelociraptorSetupScripts.psd1") { Get-Location } elseif (Test-Path "..\lib\VelociraptorSetupScripts.psd1") { (Resolve-Path "..").Path } else { (Resolve-Path "..\..").Path }
 
-    foreach ($file in $coreFiles) {
-        if (Test-Path $file) {
-            Copy-Item $file -Destination $PackagePath -Force -ErrorAction SilentlyContinue
+    # Copy main deployment scripts from scripts/ to package root (flat layout for packages)
+    $deploySources = @(
+        @{ Source = Join-Path $repoRoot "scripts\Deploy_Velociraptor_Standalone.ps1"; DestName = "Deploy_Velociraptor_Standalone.ps1" },
+        @{ Source = Join-Path $repoRoot "scripts\Deploy_Velociraptor_Server.ps1"; DestName = "Deploy_Velociraptor_Server.ps1" }
+    )
+    foreach ($item in $deploySources) {
+        if (Test-Path $item.Source) {
+            Copy-Item $item.Source -Destination (Join-Path $PackagePath $item.DestName) -Force -ErrorAction SilentlyContinue
         }
     }
 
-    # Copy modules directory
-    if (Test-Path "modules") {
-        Copy-Item "modules" -Destination $PackagePath -Recurse -Force -ErrorAction SilentlyContinue
+    # Copy root module from lib/ to package root
+    $moduleFiles = @("VelociraptorSetupScripts.psd1", "VelociraptorSetupScripts.psm1")
+    foreach ($name in $moduleFiles) {
+        $src = Join-Path $repoRoot "lib\$name"
+        if (Test-Path $src) {
+            Copy-Item $src -Destination (Join-Path $PackagePath $name) -Force -ErrorAction SilentlyContinue
+        }
     }
 
-    # Copy scripts directory
-    if (Test-Path "scripts") {
-        Copy-Item "scripts" -Destination $PackagePath -Recurse -Force -ErrorAction SilentlyContinue
+    # Copy modules directory (lib/modules -> package modules)
+    $modulesSrc = Join-Path $repoRoot "lib\modules"
+    if (Test-Path $modulesSrc) {
+        Copy-Item $modulesSrc -Destination (Join-Path $PackagePath "modules") -Recurse -Force -ErrorAction SilentlyContinue
     }
 
-    # Copy GUI
-    if (Test-Path "gui") {
-        Copy-Item "gui" -Destination $PackagePath -Recurse -Force -ErrorAction SilentlyContinue
+    # Copy scripts directory (subset or full as needed)
+    $scriptsSrc = Join-Path $repoRoot "scripts"
+    if (Test-Path $scriptsSrc) {
+        Copy-Item $scriptsSrc -Destination (Join-Path $PackagePath "scripts") -Recurse -Force -ErrorAction SilentlyContinue
+    }
+
+    # Copy GUI (apps/gui -> package gui)
+    $guiSrc = Join-Path $repoRoot "apps\gui"
+    if (Test-Path $guiSrc) {
+        Copy-Item $guiSrc -Destination (Join-Path $PackagePath "gui") -Recurse -Force -ErrorAction SilentlyContinue
     }
 }
 
@@ -534,7 +546,7 @@ This package contains a specialized Velociraptor deployment for $($PackageInfo.D
 # Deploy the package
 .\Deploy-$PackageType.ps1 -InstallDir "C:\Velociraptor" -Offline
 
-# Or use the GUI
+# Or use the GUI (package has gui/ copied from repo)
 .\gui\VelociraptorGUI.ps1
 ``````
 

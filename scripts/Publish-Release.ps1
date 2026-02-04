@@ -78,18 +78,18 @@ function Test-Prerequisites {
         $errors += "Git is required but not found"
     }
     
-    # Test required files
+    # Test required files (module in lib/ after reorganization; see docs/WORKSPACE_PATH_INDEX.md)
     $requiredFiles = @(
-        "VelociraptorSetupScripts.psd1",
-        "VelociraptorSetupScripts.psm1",
-        "package.json",
-        "README.md"
+        @{ Path = "lib\VelociraptorSetupScripts.psd1"; Name = "VelociraptorSetupScripts.psd1" },
+        @{ Path = "lib\VelociraptorSetupScripts.psm1"; Name = "VelociraptorSetupScripts.psm1" },
+        @{ Path = "package.json"; Name = "package.json" },
+        @{ Path = "README.md"; Name = "README.md" }
     )
     
-    foreach ($file in $requiredFiles) {
-        $filePath = Join-Path $script:RootPath $file
+    foreach ($item in $requiredFiles) {
+        $filePath = Join-Path $script:RootPath $item.Path
         if (-not (Test-Path $filePath)) {
-            $errors += "Required file not found: $file"
+            $errors += "Required file not found: $($item.Name) (expected $($item.Path))"
         }
     }
     
@@ -119,8 +119,8 @@ function Set-ModuleVersion {
     
     Write-Host "📝 Updating module version to $NewVersion..." -ForegroundColor Cyan
     
-    # Update PowerShell module manifest
-    $manifestPath = Join-Path $script:RootPath "VelociraptorSetupScripts.psd1"
+    # Update PowerShell module manifest (lib/ after reorganization)
+    $manifestPath = Join-Path $script:RootPath "lib\VelociraptorSetupScripts.psd1"
     $manifestContent = Get-Content $manifestPath -Raw
     
     # Update ModuleVersion
@@ -146,8 +146,8 @@ function Set-ModuleVersion {
         $packageJson | ConvertTo-Json -Depth 10 | Set-Content -Path $packageJsonPath -Encoding UTF8
     }
     
-    # Update main module file
-    $moduleFilePath = Join-Path $script:RootPath "VelociraptorSetupScripts.psm1"
+    # Update main module file (lib/ after reorganization)
+    $moduleFilePath = Join-Path $script:RootPath "lib\VelociraptorSetupScripts.psm1"
     $moduleContent = Get-Content $moduleFilePath -Raw
     $moduleContent = $moduleContent -replace '\$script:ModuleVersion = "[^"]*"', "`$script:ModuleVersion = `"$NewVersion`""
     
@@ -161,7 +161,7 @@ function Set-ModuleVersion {
 function Test-ModuleManifest {
     Write-Host "🧪 Testing module manifest..." -ForegroundColor Cyan
     
-    $manifestPath = Join-Path $script:RootPath "VelociraptorSetupScripts.psd1"
+    $manifestPath = Join-Path $script:RootPath "lib\VelociraptorSetupScripts.psd1"
     
     try {
         $manifest = Microsoft.PowerShell.Core\Test-ModuleManifest -Path $manifestPath -ErrorAction Stop

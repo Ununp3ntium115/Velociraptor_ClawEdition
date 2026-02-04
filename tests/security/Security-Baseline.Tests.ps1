@@ -11,15 +11,16 @@
 
 BeforeAll {
     # Set up test environment
+    $RepoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
     $ScriptPaths = @(
-        (Join-Path $PSScriptRoot '..\..\Deploy_Velociraptor_Standalone.ps1'),
-        (Join-Path $PSScriptRoot '..\..\Deploy_Velociraptor_Server.ps1'),
-        (Join-Path $PSScriptRoot '..\..\Cleanup_Velociraptor.ps1'),
-        (Join-Path $PSScriptRoot '..\..\Prepare_OfflineCollector_Env.ps1')
+        (Join-Path $RepoRoot 'scripts\Deploy_Velociraptor_Standalone.ps1'),
+        (Join-Path $RepoRoot 'scripts\Deploy_Velociraptor_Server.ps1'),
+        (Join-Path $RepoRoot 'scripts\Cleanup_Velociraptor.ps1'),
+        (Join-Path $RepoRoot 'scripts\Prepare_OfflineCollector_Env.ps1')
     )
     
-    # Import the module for testing
-    $ModulePath = Join-Path $PSScriptRoot '..\..\modules\VelociraptorDeployment\VelociraptorDeployment.psd1'
+    # Import the module for testing (lib/modules/ after reorganization)
+    $ModulePath = Join-Path $RepoRoot 'lib\modules\VelociraptorDeployment\VelociraptorDeployment.psd1'
     if (Test-Path $ModulePath) {
         Import-Module $ModulePath -Force
     }

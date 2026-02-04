@@ -35,17 +35,17 @@
 # Install from PowerShell Gallery
 Install-Module VelociraptorSetupScripts -AllowPrerelease
 
-# Local development setup
-Import-Module .\VelociraptorSetupScripts.psm1 -Force
+# Local development (module in lib/)
+Import-Module .\lib\VelociraptorSetupScripts.psd1 -Force
 ```
 
-### Deployment Testing
+### Deployment Testing (from repo root)
 ```powershell
 # Quick deployment test
-.\Deploy_Velociraptor_Standalone.ps1
+.\scripts\Deploy_Velociraptor_Standalone.ps1
 
-# GUI configuration wizard
-.\gui\VelociraptorGUI.ps1
+# GUI configuration wizard (canonical: apps/gui)
+.\apps\gui\VelociraptorGUI.ps1
 
 # Health checks
 Test-VelociraptorHealth -ConfigPath "server.yaml"
