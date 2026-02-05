@@ -15,6 +15,7 @@
 		AICHATVIEW1BUILD2REF3456 /* AIChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AICHATVIEW1FILE2REF34567 /* AIChatView.swift */; };
 		TERMVIEW1BUILD2REF345678 /* TerminalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = TERMVIEW1FILE2REF3456789 /* TerminalView.swift */; };
 		BINLIFECYCLE1BUILD2REF34 /* BinaryLifecycleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BINLIFECYCLE1FILE2REF345 /* BinaryLifecycleView.swift */; };
+		CLAWBRAND1BUILD2REF34567 /* ClawBrandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CLAWBRAND1FILE2REF345678 /* ClawBrandingView.swift */; };
 		0CFC81511134864263F50ADD /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D7C361F7D3DF7DF4B875B5 /* NotificationManagerTests.swift */; };
 		0FFC585E14A27D778AFE0ABE /* PackageManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543827AF529761C8ED1CB9F9 /* PackageManagerView.swift */; };
 		1042733B1E5694F09FA42E61 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38014CE37ACAF2C32497903 /* WebSocketService.swift */; };
@@ -176,6 +177,7 @@
 		AICHATVIEW1FILE2REF34567 /* AIChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIChatView.swift; sourceTree = "<group>"; };
 		TERMVIEW1FILE2REF3456789 /* TerminalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalView.swift; sourceTree = "<group>"; };
 		BINLIFECYCLE1FILE2REF345 /* BinaryLifecycleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryLifecycleView.swift; sourceTree = "<group>"; };
+		CLAWBRAND1FILE2REF345678 /* ClawBrandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClawBrandingView.swift; sourceTree = "<group>"; };
 		91ABD7CBFF1F74A6CDC824A3 /* VelociraptorBinaryBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelociraptorBinaryBridge.swift; sourceTree = "<group>"; };
 		96945F126AED0E91CF065EA3 /* APIAuthenticationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIAuthenticationServiceTests.swift; sourceTree = "<group>"; };
 		9B157F227D01A8C275388335 /* APIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIModels.swift; sourceTree = "<group>"; };
@@ -409,6 +411,7 @@
 				AICHATVIEW1FILE2REF34567 /* AIChatView.swift */,
 				TERMVIEW1FILE2REF3456789 /* TerminalView.swift */,
 				BINLIFECYCLE1FILE2REF345 /* BinaryLifecycleView.swift */,
+				CLAWBRAND1FILE2REF345678 /* ClawBrandingView.swift */,
 				E789986EE9660BAA5AB15F01 /* SIEMIntegrationsView.swift */,
 				B43E6A2A7063B5D2D3DB0B09 /* TimelineView.swift */,
 				1417AA5DB02E56D98B1244D6 /* ToolsManagerView.swift */,
@@ -604,6 +607,7 @@
 				AICHATVIEW1BUILD2REF3456 /* AIChatView.swift in Sources */,
 				TERMVIEW1BUILD2REF345678 /* TerminalView.swift in Sources */,
 				BINLIFECYCLE1BUILD2REF34 /* BinaryLifecycleView.swift in Sources */,
+				CLAWBRAND1BUILD2REF34567 /* ClawBrandingView.swift in Sources */,
 				9C298BB2A3C9FF81463A7DB7 /* ConfigurationExporter.swift in Sources */,
 				90CF461B7CEEDB020885F675 /* ConfigurationViewModel.swift in Sources */,
 				D2C47A21301ED5F36C12870A /* ContentView.swift in Sources */,

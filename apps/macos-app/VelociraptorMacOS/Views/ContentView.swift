@@ -229,16 +229,19 @@ struct HeaderView: View {
     
     var body: some View {
         HStack(spacing: 16) {
-            // Logo
-            Image(systemName: "shield.checkered")
-                .font(.system(size: 40))
-                .foregroundColor(.accentColor)
+            // Velociraptor Claw Edition Logo
+            ClawLogoInline(size: 44)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text("VELOCIRAPTOR")
-                    .font(.title.bold())
+                HStack(spacing: 4) {
+                    Text("VELOCIRAPTOR")
+                        .font(.title.bold())
+                    Text("CLAW EDITION")
+                        .font(.title3.bold())
+                        .foregroundStyle(.secondary)
+                }
                 
-                Text("DFIR Framework Configuration Wizard")
+                Text("DFIR Platform Configuration Wizard")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -463,14 +466,17 @@ struct AboutView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            Image(systemName: "shield.checkered")
-                .font(.system(size: 64))
-                .foregroundColor(.accentColor)
+            ClawLogoInline(size: 80)
             
-            Text("Velociraptor")
-                .font(.largeTitle.bold())
+            HStack(spacing: 8) {
+                Text("Velociraptor")
+                    .font(.largeTitle.bold())
+                Text("Claw Edition")
+                    .font(.title2)
+                    .foregroundStyle(.secondary)
+            }
             
-            Text("DFIR Framework for macOS")
+            Text("DFIR Platform for macOS")
                 .font(.title3)
                 .foregroundColor(.secondary)
             
