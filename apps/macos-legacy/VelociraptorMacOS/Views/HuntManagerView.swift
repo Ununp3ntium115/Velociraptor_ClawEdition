@@ -141,7 +141,7 @@ struct HuntRow: View {
     var body: some View {
         HStack(spacing: 12) {
             // Status Icon
-            Image(systemName: hunt.state.iconName)
+            Image(systemName: (hunt.state ?? .unset).iconName)
                 .font(.title2)
                 .foregroundColor(stateColor)
                 .frame(width: 32)
@@ -181,11 +181,11 @@ struct HuntRow: View {
     }
     
     private var stateColor: Color {
-        switch hunt.state {
+        switch hunt.state ?? .unset {
         case .running: return .orange
         case .stopped, .paused: return .yellow
         case .archived: return .gray
-        case .unspecified: return .secondary
+        case .unspecified, .unset: return .secondary
         }
     }
 }
@@ -265,7 +265,7 @@ struct HuntDetailHeader: View {
     var body: some View {
         HStack(spacing: 16) {
             // Status Icon
-            Image(systemName: hunt.state.iconName)
+            Image(systemName: (hunt.state ?? .unset).iconName)
                 .font(.largeTitle)
                 .foregroundColor(stateColor)
             
@@ -283,7 +283,7 @@ struct HuntDetailHeader: View {
                     Text("•")
                         .foregroundColor(.secondary)
                     
-                    Text(hunt.state.displayName)
+                    Text((hunt.state ?? .unset).displayName)
                         .font(.caption)
                         .foregroundColor(stateColor)
                 }
@@ -342,11 +342,11 @@ struct HuntDetailHeader: View {
     }
     
     private var stateColor: Color {
-        switch hunt.state {
+        switch hunt.state ?? .unset {
         case .running: return .orange
         case .stopped, .paused: return .yellow
         case .archived: return .gray
-        case .unspecified: return .secondary
+        case .unspecified, .unset: return .secondary
         }
     }
 }
@@ -529,7 +529,7 @@ struct HuntCreationWizard: View {
             Group {
                 switch currentStep {
                 case 0:
-                    ArtifactSelectionStep(
+                    HuntArtifactSelectionStep(
                         artifacts: availableArtifacts,
                         selectedArtifacts: $selectedArtifacts,
                         searchQuery: $searchQuery
@@ -629,7 +629,7 @@ struct HuntCreationWizard: View {
 
 // MARK: - Wizard Steps
 
-struct ArtifactSelectionStep: View {
+struct HuntArtifactSelectionStep: View {
     let artifacts: [Artifact]
     @Binding var selectedArtifacts: Set<String>
     @Binding var searchQuery: String
@@ -877,14 +877,6 @@ class HuntManagerViewModel: ObservableObject {
         } catch {
             Logger.shared.error("Failed to load hunt results: \(error)", component: "Hunts")
         }
-    }
-}
-
-// MARK: - HuntState Extension
-
-extension HuntState: CaseIterable {
-    static var allCases: [HuntState] {
-        [.running, .paused, .stopped, .archived]
     }
 }
 

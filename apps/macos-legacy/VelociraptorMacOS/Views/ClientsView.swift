@@ -11,6 +11,27 @@
 import SwiftUI
 import Combine
 
+// MARK: - ClientOS Type
+
+/// Client operating system type for filtering
+enum ClientOS: String, CaseIterable {
+    case windows = "Windows"
+    case linux = "Linux"
+    case darwin = "macOS"
+    case unknown = "Unknown"
+    
+    var displayName: String { rawValue }
+    
+    var iconName: String {
+        switch self {
+        case .windows: return "pc"
+        case .linux: return "terminal"
+        case .darwin: return "laptopcomputer"
+        case .unknown: return "questionmark.circle"
+        }
+    }
+}
+
 // MARK: - Clients View
 
 /// Main clients management view with list and detail panels
@@ -452,9 +473,9 @@ struct ClientOverviewTab: View {
                     
                     if let osInfo = client.osInfo {
                         GridRow {
-                            Text("Version")
+                            Text("Release")
                                 .foregroundColor(.secondary)
-                            Text(osInfo.version ?? "Unknown")
+                            Text(osInfo.release ?? "Unknown")
                         }
                         
                         GridRow {
@@ -478,7 +499,7 @@ struct ClientOverviewTab: View {
             }
             
             // Agent Information
-            if let agentInfo = client.agentInfo {
+            if let agentInfo = client.agentInformation {
                 GroupBox("Agent Information") {
                     Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 8) {
                         GridRow {
@@ -577,7 +598,7 @@ struct FlowRow: View {
                 .foregroundColor(flow.state == .running ? .orange : .green)
             
             VStack(alignment: .leading) {
-                Text(flow.artifacts.joined(separator: ", "))
+                Text(flow.artifacts?.joined(separator: ", ") ?? "No artifacts")
                     .font(.headline)
                     .lineLimit(1)
                 
@@ -590,7 +611,7 @@ struct FlowRow: View {
             
             Spacer()
             
-            Text(flow.state.displayName)
+            Text((flow.state ?? .unset).displayName)
                 .font(.caption)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 2)
@@ -640,13 +661,13 @@ struct ClientLabelsTab: View {
             }
             
             // Current Labels
-            if client.labels.isEmpty {
+            if client.labels?.isEmpty ?? true {
                 Text("No labels")
                     .foregroundColor(.secondary)
                     .italic()
             } else {
                 FlowLayout(spacing: 8) {
-                    ForEach(client.labels, id: \.self) { label in
+                    ForEach(client.labels ?? [], id: \.self) { label in
                         LabelPill(
                             label: label,
                             onRemove: {
@@ -801,7 +822,7 @@ class ClientsViewModel: ObservableObject {
             result = result.filter { client in
                 client.hostname.lowercased().contains(query) ||
                 client.clientId.lowercased().contains(query) ||
-                client.labels.contains { $0.lowercased().contains(query) }
+                (client.labels ?? []).contains { $0.lowercased().contains(query) }
             }
         }
         
@@ -817,7 +838,8 @@ class ClientsViewModel: ObservableObject {
         
         // OS filter
         if let osFilter = osFilter {
-            result = result.filter { $0.os == osFilter }
+            // Compare rawValue of client OS type with filter
+            result = result.filter { $0.os.rawValue == osFilter.rawValue }
         }
         
         filteredClients = result
@@ -885,14 +907,6 @@ class ClientsViewModel: ObservableObject {
         } catch {
             Logger.shared.error("Failed to remove label: \(error)", component: "Clients")
         }
-    }
-}
-
-// MARK: - ClientOS Extension
-
-extension ClientOS: CaseIterable {
-    static var allCases: [ClientOS] {
-        [.windows, .linux, .darwin]
     }
 }
 

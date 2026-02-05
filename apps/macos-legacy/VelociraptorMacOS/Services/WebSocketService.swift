@@ -399,11 +399,10 @@ final class WebSocketService: ObservableObject {
         let event = ActivityEvent(
             id: UUID().uuidString,
             type: type,
-            timestamp: Date(),
             message: message,
+            timestamp: Date(),
             clientId: clientId,
-            huntId: huntId,
-            user: nil
+            huntId: huntId
         )
         
         recentEvents.insert(event, at: 0)

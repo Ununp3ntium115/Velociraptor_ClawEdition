@@ -8,7 +8,7 @@
 
 import XCTest
 import SwiftUI
-@testable import VelociraptorMacOS
+@testable import Velociraptor
 
 /// QA Validation Tests for Holistic Quality Gate
 /// These tests validate quality dimensions beyond functional correctness:

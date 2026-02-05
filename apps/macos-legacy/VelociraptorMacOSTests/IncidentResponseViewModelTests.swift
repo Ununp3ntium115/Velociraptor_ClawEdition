@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import VelociraptorMacOS
+@testable import Velociraptor
 
 final class IncidentResponseViewModelTests: XCTestCase {
     var viewModel: IncidentResponseViewModel!

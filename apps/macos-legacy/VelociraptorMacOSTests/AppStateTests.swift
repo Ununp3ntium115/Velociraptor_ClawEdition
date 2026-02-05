@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import VelociraptorMacOS
+@testable import Velociraptor
 
 final class AppStateTests: XCTestCase {
     var appState: AppState!

@@ -141,7 +141,7 @@ enum ConnectionState: Sendable, Equatable {
 // MARK: - API Errors
 
 /// API client errors
-enum APIError: LocalizedError, Sendable {
+enum APIError: LocalizedError, Sendable, Equatable {
     case notConfigured
     case connectionFailed(String)
     case authenticationFailed
@@ -222,6 +222,9 @@ final class VelociraptorAPIClient: ObservableObject {
     private let encoder: JSONEncoder
     private var requestCounter: Int = 0
     
+    // Authentication service
+    private let authService = APIAuthenticationService.shared
+    
     // Retry configuration
     private let maxRetryAttempts = 3
     private let retryDelayBase: TimeInterval = 1.0
@@ -280,29 +283,58 @@ final class VelociraptorAPIClient: ObservableObject {
     /// - Parameters:
     ///   - serverURL: The Velociraptor server URL
     ///   - apiKey: API key for authentication
-    func configure(serverURL: URL, apiKey: String) {
+    func configure(serverURL: URL, apiKey: String) async throws {
+        // Save credentials via auth service
+        try authService.saveAPIKeyCredentials(serverURL: serverURL, apiKey: apiKey)
+        
         self.authConfig = APIAuthConfig(
             serverURL: serverURL,
             authMethod: .apiKey(apiKey)
         )
+        
+        // Recreate session with new auth
+        self.session = try authService.createAuthenticatedURLSession()
+        
         Logger.shared.info("API client configured for: \(serverURL)", component: "API")
     }
     
     /// Configure with basic auth
-    func configure(serverURL: URL, username: String, password: String) {
+    func configure(serverURL: URL, username: String, password: String) async throws {
+        // Save credentials via auth service
+        try authService.saveBasicAuthCredentials(
+            serverURL: serverURL,
+            username: username,
+            password: password
+        )
+        
         self.authConfig = APIAuthConfig(
             serverURL: serverURL,
             authMethod: .basicAuth(username: username, password: password)
         )
+        
+        // Recreate session with new auth
+        self.session = try authService.createAuthenticatedURLSession()
+        
         Logger.shared.info("API client configured with basic auth for: \(serverURL)", component: "API")
     }
     
     /// Configure with mTLS
-    func configure(serverURL: URL, certificatePath: String, keyPath: String) {
+    func configure(serverURL: URL, certificatePath: String, keyPath: String) async throws {
+        // Save credentials via auth service
+        try authService.saveMTLSCredentials(
+            serverURL: serverURL,
+            certificatePath: certificatePath,
+            keyPath: keyPath
+        )
+        
         self.authConfig = APIAuthConfig(
             serverURL: serverURL,
             authMethod: .mtls(certificatePath: certificatePath, keyPath: keyPath)
         )
+        
+        // Recreate session with mTLS support
+        self.session = try authService.createAuthenticatedURLSession()
+        
         Logger.shared.info("API client configured with mTLS for: \(serverURL)", component: "API")
     }
     
@@ -326,9 +358,13 @@ final class VelociraptorAPIClient: ObservableObject {
     }
     
     /// Disconnect from server
-    func disconnect() {
+    func disconnect() async throws {
         connectionState = .disconnected
         serverInfo = nil
+        
+        // Clear credentials
+        try authService.clearCredentials()
+        
         Logger.shared.info("Disconnected from server", component: "API")
     }
     
@@ -518,17 +554,36 @@ final class VelociraptorAPIClient: ObservableObject {
         return try await performRequest(endpoint: .executeQuery, body: body)
     }
     
-    /// Execute VQL and stream results
+    /// Execute VQL and stream results via binary bridge or REST API
+    /// Returns results as they become available for large queries
     func executeQueryStreaming(vql: String) -> AsyncThrowingStream<VQLResult, Error> {
         AsyncThrowingStream { continuation in
-            Task {
+            Task { @MainActor in
                 do {
-                    // For now, just return single result
-                    // TODO: Implement true streaming with chunked responses
-                    let result = try await executeQuery(vql: vql)
+                    // Use binary bridge for true streaming if available
+                    let bridge = VelociraptorBinaryBridge.shared
+                    if bridge.state.isConnected {
+                        Logger.shared.info("Using binary bridge for streaming query", component: "API")
+                        
+                        for try await streamResult in bridge.executeQueryStreaming(vql: vql) {
+                            if streamResult.isComplete {
+                                continuation.finish()
+                                return
+                            }
+                            
+                            let vqlResult = VQLResult(columns: streamResult.columns, rows: [streamResult.row])
+                            continuation.yield(vqlResult)
+                        }
+                        return
+                    }
+                    
+                    // Fallback to REST API (returns all results at once)
+                    Logger.shared.info("Using REST API for query (no streaming)", component: "API")
+                    let result = try await self.executeQuery(vql: vql)
                     continuation.yield(result)
                     continuation.finish()
                 } catch {
+                    Logger.shared.error("Streaming query failed: \(error)", component: "API")
                     continuation.finish(throwing: error)
                 }
             }
@@ -807,19 +862,8 @@ final class VelociraptorAPIClient: ObservableObject {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        // Add authentication
-        switch config.authMethod {
-        case .apiKey(let key):
-            request.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
-            
-        case .basicAuth(let username, let password):
-            let credentials = "\(username):\(password)".data(using: .utf8)!.base64EncodedString()
-            request.setValue("Basic \(credentials)", forHTTPHeaderField: "Authorization")
-            
-        case .mtls:
-            // mTLS is handled at session level
-            break
-        }
+        // Apply authentication via auth service
+        try authService.authenticateRequest(&request)
         
         if let body = body {
             request.httpBody = try JSONSerialization.data(withJSONObject: body)

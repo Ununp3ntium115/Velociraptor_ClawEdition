@@ -11,6 +11,77 @@
 import SwiftUI
 import Combine
 
+// MARK: - Dashboard Types
+
+/// Dashboard statistics
+struct DashboardStats {
+    var totalClients: Int
+    var onlineClients: Int
+    var activeHunts: Int
+    var completedHunts: Int
+    var totalArtifacts: Int
+    var alertCount: Int
+    
+    var onlinePercentage: Double {
+        guard totalClients > 0 else { return 0 }
+        return Double(onlineClients) / Double(totalClients) * 100
+    }
+    
+    init(totalClients: Int = 0, onlineClients: Int = 0, activeHunts: Int = 0, 
+         completedHunts: Int = 0, totalArtifacts: Int = 0, alertCount: Int = 0) {
+        self.totalClients = totalClients
+        self.onlineClients = onlineClients
+        self.activeHunts = activeHunts
+        self.completedHunts = completedHunts
+        self.totalArtifacts = totalArtifacts
+        self.alertCount = alertCount
+    }
+}
+
+/// Activity event for the dashboard timeline
+struct ActivityEvent: Identifiable, Sendable {
+    let id: String
+    let type: ActivityType
+    let message: String
+    let timestamp: Date
+    let clientId: String?
+    let huntId: String?
+    
+    init(id: String = UUID().uuidString, type: ActivityType, message: String, 
+         timestamp: Date = Date(), clientId: String? = nil, huntId: String? = nil) {
+        self.id = id
+        self.type = type
+        self.message = message
+        self.timestamp = timestamp
+        self.clientId = clientId
+        self.huntId = huntId
+    }
+    
+    enum ActivityType: String, Sendable {
+        case huntCreated
+        case huntCompleted
+        case clientConnected
+        case clientDisconnected
+        case collectionCompleted
+        case alertTriggered
+        case userLogin
+        case systemEvent
+        
+        var iconName: String {
+            switch self {
+            case .huntCreated: return "scope"
+            case .huntCompleted: return "checkmark.circle"
+            case .clientConnected: return "network"
+            case .clientDisconnected: return "network.slash"
+            case .collectionCompleted: return "archivebox"
+            case .alertTriggered: return "exclamationmark.triangle"
+            case .userLogin: return "person.fill"
+            case .systemEvent: return "gear"
+            }
+        }
+    }
+}
+
 // MARK: - Dashboard View
 
 /// Main dashboard view with statistics, activity, and quick actions

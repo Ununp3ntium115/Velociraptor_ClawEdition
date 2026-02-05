@@ -647,7 +647,7 @@ class VFSBrowserViewModel: ObservableObject {
 
 extension VFSEntry {
     var icon: String {
-        if isDir {
+        if isDir == true {
             return "folder.fill"
         }
         
@@ -676,7 +676,7 @@ extension VFSEntry {
     }
     
     var iconColor: Color {
-        if isDir {
+        if isDir == true {
             return .blue
         }
         
@@ -693,10 +693,10 @@ extension VFSEntry {
         }
     }
     
-    var isDirectory: Bool { isDir }
+    var isDirectory: Bool { isDir ?? false }
     
     var formattedSize: String? {
-        guard let size = size, !isDir else { return nil }
+        guard let size = size, isDir != true else { return nil }
         return ByteCountFormatter.string(fromByteCount: size, countStyle: .file)
     }
     

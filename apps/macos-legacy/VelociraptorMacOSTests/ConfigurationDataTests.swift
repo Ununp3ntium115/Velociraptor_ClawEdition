@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import VelociraptorMacOS
+@testable import Velociraptor
 
 final class ConfigurationDataTests: XCTestCase {
     
@@ -194,18 +194,20 @@ final class ConfigurationDataTests: XCTestCase {
     
     func testPasswordStrengthMedium() {
         var config = ConfigurationData()
-        config.adminPassword = "abcd1234"
+        // Password scoring: length(6*4=24) + lowercase(15) = 39 → medium (30-60)
+        config.adminPassword = "abcdef"
         
         let level = config.passwordStrengthLevel
-        XCTAssertTrue(level == .medium || level == .weak)
+        XCTAssertTrue(level == .medium, "Expected medium for 6-char lowercase password, got \(level)")
     }
     
     func testPasswordStrengthStrong() {
         var config = ConfigurationData()
-        config.adminPassword = "SecurePass123"
+        // Password scoring: length(10*4=40) + uppercase(15) + lowercase(15) = 70 → strong (60-80)
+        config.adminPassword = "SecurePass"
         
         let level = config.passwordStrengthLevel
-        XCTAssertTrue(level == .strong || level == .medium)
+        XCTAssertTrue(level == .strong, "Expected strong for mixed-case 10-char password, got \(level)")
     }
     
     func testPasswordStrengthVeryStrong() {

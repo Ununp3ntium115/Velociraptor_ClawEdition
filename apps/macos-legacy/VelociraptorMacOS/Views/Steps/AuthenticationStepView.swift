@@ -61,7 +61,6 @@ struct AuthenticationStepView: View {
                         }
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 250)
-                        .textContentType(.newPassword)
                         .accessibilityId(AccessibilityIdentifiers.Authentication.passwordField)
                         
                         Button {
@@ -93,7 +92,6 @@ struct AuthenticationStepView: View {
                         }
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 250)
-                        .textContentType(.newPassword)
                         .accessibilityId(AccessibilityIdentifiers.Authentication.confirmPasswordField)
                         
                         Button {

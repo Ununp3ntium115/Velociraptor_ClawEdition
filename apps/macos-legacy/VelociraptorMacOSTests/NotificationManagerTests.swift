@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import VelociraptorMacOS
+@testable import Velociraptor
 
 @MainActor
 final class NotificationManagerTests: XCTestCase {

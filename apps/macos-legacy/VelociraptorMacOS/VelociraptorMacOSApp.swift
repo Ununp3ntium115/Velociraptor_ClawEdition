@@ -126,6 +126,15 @@ struct VelociraptorMacOSApp: App {
         .windowStyle(.titleBar)
         .windowToolbarStyle(.unified)
         
+        // Artifact Manager Window
+        Window("Artifact Manager", id: "artifact-manager") {
+            ArtifactManagerView()
+                .frame(minWidth: 1200, minHeight: 800)
+        }
+        .windowStyle(.titleBar)
+        .windowToolbarStyle(.unified)
+        .defaultSize(width: 1400, height: 900)
+        
         // Settings Window
         Settings {
             SettingsView()
