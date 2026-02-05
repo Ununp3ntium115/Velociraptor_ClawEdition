@@ -207,6 +207,8 @@ class AppState: ObservableObject {
         case health = "Health Monitor"
         case integrations = "Integrations"
         case offlinePackages = "Offline Packages"
+        case aiChat = "AI Assistant"
+        case terminal = "Terminal"
         case logs = "Logs"
         
         var id: String { rawValue }
@@ -219,6 +221,8 @@ class AppState: ObservableObject {
             case .health: return "heart.text.square.fill"
             case .integrations: return "link.circle"
             case .offlinePackages: return "externaldrive.connected.to.line.below"
+            case .aiChat: return "brain.head.profile"
+            case .terminal: return "terminal"
             case .logs: return "doc.text.magnifyingglass"
             }
         }

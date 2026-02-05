@@ -36,6 +36,12 @@ struct ContentView: View {
             case .offlinePackages:
                 OfflinePackageBuilderView()
                     .accessibilityIdentifier("offlinePackages.main")
+            case .aiChat:
+                AIChatView()
+                    .accessibilityIdentifier("aiChat.main")
+            case .terminal:
+                TerminalView()
+                    .accessibilityIdentifier("terminal.main")
             case .logs:
                 LogsView()
             }
@@ -102,7 +108,7 @@ struct SidebarView: View {
         List {
             // Main navigation section
             Section("Main") {
-                ForEach([AppState.SidebarItem.dashboard, .health, .incidentResponse, .integrations, .offlinePackages, .logs], id: \.self) { item in
+                ForEach([AppState.SidebarItem.dashboard, .health, .incidentResponse, .integrations, .offlinePackages, .aiChat, .terminal, .logs], id: \.self) { item in
                     Button {
                         appState.selectedSidebarItem = item
                     } label: {
