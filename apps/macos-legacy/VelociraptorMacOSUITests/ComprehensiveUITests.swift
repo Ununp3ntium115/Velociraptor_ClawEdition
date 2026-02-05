@@ -21,6 +21,7 @@ final class ComprehensiveUITests: XCTestCase {
     
     override func setUpWithError() throws {
         continueAfterFailure = false
+        app = XCUIApplication()
         app.launch()
     }
     
@@ -577,6 +578,7 @@ final class WorkflowUITests: XCTestCase {
     
     override func setUpWithError() throws {
         continueAfterFailure = false
+        app = XCUIApplication()
         app.launch()
     }
     

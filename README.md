@@ -7,6 +7,21 @@
 
 ---
 
+## Important: Terminology Clarification
+
+This project uses specific terminology to avoid confusion:
+
+| Term | Description |
+|------|-------------|
+| **Velociraptor** | The official [Velocidex Velociraptor](https://www.velocidex.com/) DFIR binary - the core forensics tool |
+| **Velociraptor Claw Edition** | **This project** - a deployment, management, and automation platform for Velociraptor |
+| **Velociraptor binary** | The executable file (`velociraptor.exe` / `velociraptor`) from Velocidex |
+| **Claw Edition GUI** | The desktop applications (Electron/SwiftUI) provided by this project |
+
+> **Note**: Velociraptor Claw Edition does **NOT** replace the Velociraptor binary. It provides tools to deploy, configure, and manage Velociraptor installations.
+
+---
+
 ## Downloads
 
 ### Latest Beta Release (v1.0.0-beta.2)
@@ -26,16 +41,18 @@
 
 ---
 
-## What is This?
+## What is Velociraptor Claw Edition?
 
-A comprehensive, cross-platform DFIR deployment framework featuring:
+**Velociraptor Claw Edition** is a comprehensive deployment and management platform for the [Velociraptor DFIR tool](https://www.velocidex.com/). It provides:
 
-- **Cross-Platform Electron GUI** - Modern desktop app for Windows, macOS, and Linux
-- **31+ Deployment Modes** - Standalone, Server, Cloud (AWS/Azure/GCP), Containers, HPC
+- **Claw Edition Desktop Apps** - Cross-platform GUI applications (Electron + native SwiftUI for macOS) for managing Velociraptor deployments
+- **Automated Deployment** - 31+ deployment modes: Standalone, Server, Cloud (AWS/Azure/GCP), Containers, HPC
 - **25+ DFIR Tools Integration** - Volatility3, YARA, Chainsaw, WinPmem, and more
-- **8 Training Scenarios** - Ransomware, APT, lateral movement, credential theft simulations
+- **Training Scenarios** - 8 incident simulation scenarios for hands-on DFIR training
 - **Offline Worker Deployment** - USB/ISO packages for air-gapped environments
-- **Complete Package Repository** - 1.03 GB self-hosted Velociraptor binaries
+- **Velociraptor Binary Management** - Automatic download and configuration of the Velociraptor binary
+
+> **Relationship to Velociraptor**: This platform **deploys and manages** the official Velociraptor binary from Velocidex. It does not modify or replace the core Velociraptor functionality.
 
 ---
 

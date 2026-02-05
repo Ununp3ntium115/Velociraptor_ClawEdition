@@ -28,6 +28,7 @@ final class WizardUITests: XCTestCase {
         
         try? FileManager.default.createDirectory(at: evidencePath, withIntermediateDirectories: true)
         
+        app = XCUIApplication()
         app.launch()
     }
     

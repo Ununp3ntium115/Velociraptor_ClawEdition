@@ -89,6 +89,8 @@ targets:
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Velociraptor.app/Contents/MacOS/Velociraptor"
         BUNDLE_LOADER: "$(TEST_HOST)"
         GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
 
   VelociraptorMacOSUITests:
     type: bundle.ui-testing
@@ -104,6 +106,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.velocidex.velociraptor.uitests
         TEST_TARGET_NAME: VelociraptorMacOS
         GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
 
 schemes:
   VelociraptorMacOS:

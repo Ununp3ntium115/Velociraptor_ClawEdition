@@ -2,11 +2,25 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Terminology (IMPORTANT)
+
+| Term | Description |
+|------|-------------|
+| **Velociraptor** | The official [Velocidex Velociraptor](https://www.velocidex.com/) DFIR binary/tool |
+| **Velociraptor binary** | The executable (`velociraptor.exe` / `velociraptor`) from Velocidex |
+| **Velociraptor Claw Edition** | **THIS PROJECT** - deployment/management platform for Velociraptor |
+| **Claw Edition** | Short form of "Velociraptor Claw Edition" (this project) |
+| **Claw Edition GUI** | The desktop applications (Electron/SwiftUI) from this project |
+
+> **CRITICAL**: When writing code or documentation, always distinguish between the Velociraptor binary (external dependency) and Velociraptor Claw Edition (this project).
+
 ## Repository Overview
 
-**Velociraptor Claw Edition** - A comprehensive PowerShell and Electron framework for Velociraptor DFIR platform deployment, management, automation, and testing. Provides production-ready scripts, GUI applications (WinForms + Electron), expert agent systems, MCP server integration, and extensive testing frameworks for enterprise incident response.
+**Velociraptor Claw Edition** - A comprehensive PowerShell and Electron framework for deploying, managing, and automating the [Velociraptor DFIR platform](https://www.velocidex.com/). Provides production-ready scripts, GUI applications (WinForms + Electron + native SwiftUI), expert agent systems, MCP server integration, and extensive testing frameworks for enterprise incident response.
 
-**Status**: v1.0.0-alpha | **Platforms**: Windows PowerShell 5.1+, PowerShell Core 7+, Node.js 18+ | **QA**: 87.5% pass rate
+This project **does not replace** the Velociraptor binary - it provides tools to deploy, configure, and manage Velociraptor installations.
+
+**Status**: v1.0.0-alpha | **Platforms**: Windows PowerShell 5.1+, PowerShell Core 7+, Node.js 18+, macOS 14+ | **QA**: 87.5% pass rate
 
 ## High-Level Architecture
 
@@ -226,18 +240,27 @@ The Electron app uses a native child_process bridge to execute PowerShell:
 - **Alternatives**: `powershell-bridge-v5.js` (node-powershell) or `powershell-bridge-ionica.js`
 - See `VelociraptorPlatform-Electron/START-HERE.md` for bridge documentation
 
-## Binary and Tool Management
+## Velociraptor Binary Management
 
-### Local Package Repository
+> **Note**: The "Velociraptor binary" refers to the official Velocidex executable, NOT Claw Edition code.
+
+### Local Package Repository (Velociraptor Binaries)
 - **Location**: `velociraptor-packages/` (1.1GB)
-- **30 Windows binaries**: EXE files (v0.75.1-v0.75.4)
+- **30 Windows binaries**: Official Velociraptor EXE files (v0.75.1-v0.75.4)
 - **8 MSI installers**: Enterprise deployment packages
 - **Package map**: `package-map-v0.75.json` with SHA-256 hashes
 
-### Default Locations
-- **Velociraptor binary**: `C:\tools\velociraptor.exe` (Windows) or detected via PATH
-- **Tool repository**: `tools-repository/` for offline packages
+### Default Velociraptor Binary Locations
+- **Windows**: `C:\tools\velociraptor.exe` or detected via PATH
+- **macOS**: `velociraptor-v0.75.3-darwin-amd64` in project root
+- **Tool repository**: `tools-repository/` for offline DFIR tool packages
 - **Electron tools**: `VelociraptorPlatform-Electron/tools/`
+
+### Claw Edition Components (This Project)
+- **Electron GUI**: `VelociraptorPlatform-Electron/`
+- **macOS Native App**: `apps/macos-legacy/` (SwiftUI)
+- **PowerShell GUIs**: `VelociraptorUnified-Platform/`
+- **Deployment Scripts**: `Velociraptor_Setup_Scripts/`
 
 ## Directory Structure
 

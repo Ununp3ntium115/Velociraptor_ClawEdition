@@ -13,6 +13,7 @@ final class VelociraptorMacOSUITests: XCTestCase {
     
     override func setUpWithError() throws {
         continueAfterFailure = false
+        app = XCUIApplication()
         app.launch()
     }
     

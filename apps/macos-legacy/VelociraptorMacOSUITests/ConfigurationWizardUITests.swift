@@ -26,6 +26,7 @@ final class ConfigurationWizardUITests: XCTestCase {
             .appendingPathComponent(timestamp)
         try? FileManager.default.createDirectory(at: evidencePath, withIntermediateDirectories: true)
         
+        app = XCUIApplication()
         app.launch()
     }
     

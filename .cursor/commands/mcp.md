@@ -7,6 +7,17 @@
 
 ---
 
+## Terminology
+
+| Term | Meaning |
+|------|---------|
+| **Velociraptor** | The official [Velocidex](https://www.velocidex.com/) DFIR binary |
+| **Velociraptor Claw Edition** | THIS project - deployment/management platform |
+| **VelociraptorMCPServer** | The MCP server from Claw Edition (NOT the Velociraptor binary) |
+| **Velociraptor binary** | The `velociraptor.exe` / `velociraptor` executable from Velocidex |
+
+---
+
 ## Quick Start
 
 ### 1. Start Windows VM (if needed)
