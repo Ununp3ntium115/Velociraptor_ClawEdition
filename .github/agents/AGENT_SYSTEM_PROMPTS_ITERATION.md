@@ -71,4 +71,22 @@
 
 ---
 
-**Next Step**: Run validation checks and record results.
+## Validation Results
+1. **Agent Doc Presence**: PASS
+   - Files present under `.github/agents/` for all planned roles.
+2. **Section Completeness**: PASS
+   - Each doc includes Agent Purpose, Implementation Context, Platform/Hard Rules,
+     Workflow, Required Outputs, and Quick Reference.
+3. **README Listing**: PASS
+   - `.github/agents/README.md` lists all added agents.
+4. **Prompt Fidelity**: PASS
+   - Content mirrors the provided system prompts without scope expansion.
+
+## Test / CI Notes
+- `pwsh -v`: FAILED (pwsh not installed in environment)
+- `powershell -v`: FAILED (PowerShell not installed in environment)
+- `gh workflow run test-scripts.yml --ref cursor/gap-resolution-framework-fe5c`: FAILED (HTTP 403)
+
+---
+
+**Next Step**: None (documentation-only change set complete).
