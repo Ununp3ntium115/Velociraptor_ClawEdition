@@ -59,7 +59,6 @@ targets:
           - "*.entitlements"
           - "TestingAgent/**"
     dependencies:
-      - package: MCP
       - package: swift-log
         product: Logging
     settings:

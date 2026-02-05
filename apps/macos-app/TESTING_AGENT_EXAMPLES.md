@@ -16,7 +16,7 @@ This document provides practical examples of using the macOS Testing Agent in va
 ### Validate All Known Gaps
 
 ```bash
-cd apps/macos-legacy
+cd apps/macos-app
 swift run TestingAgentCLI --validate-all
 ```
 
@@ -313,7 +313,7 @@ struct GapValidationView: View {
 # In your workflow file
 - name: Validate Gaps
   run: |
-    cd apps/macos-legacy
+    cd apps/macos-app
     swift run TestingAgentCLI --validate-all --format json > results.json
     
     # Parse results
@@ -329,7 +329,7 @@ struct GapValidationView: View {
 ```yaml
 validate-gaps:
   script:
-    - cd apps/macos-legacy
+    - cd apps/macos-app
     - swift run TestingAgentCLI --validate-all --format json | tee results.json
   artifacts:
     reports:

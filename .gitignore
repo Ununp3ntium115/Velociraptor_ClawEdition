@@ -7,3 +7,13 @@ node_modules/
 DerivedData/
 *.xcodeproj/xcuserdata/
 *.xcworkspace/xcuserdata/
+
+# Local secrets / certificates (never commit)
+AppleCert.p12
+
+# Downloaded binaries / installers (never commit)
+velociraptor-v*
+velociraptor-*.zip
+velociraptor*.msi
+velociraptor*.exe
+Cryptomator-*.exe

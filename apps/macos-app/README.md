@@ -116,7 +116,7 @@ VelociraptorMacOS/
 ### Quick Start
 
 ```bash
-cd apps/macos-legacy
+cd apps/macos-app
 
 # Install XcodeGen (one-time setup)
 brew install xcodegen
@@ -143,7 +143,7 @@ open VelociraptorMacOS.xcodeproj
 ### Using Swift Package Manager
 
 ```bash
-cd apps/macos-legacy
+cd apps/macos-app
 swift build
 swift test
 ```

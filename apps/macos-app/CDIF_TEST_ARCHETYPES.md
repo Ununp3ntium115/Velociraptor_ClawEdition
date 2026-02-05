@@ -421,7 +421,7 @@ After workspace reorganization, **all** canonical paths. Code and docs must refe
 
 | Reference | Path (from repo root) |
 |-----------|------------------------|
-| **CDIF catalog (this file)** | `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md` |
+| **CDIF catalog (this file)** | `apps/macos-app/CDIF_TEST_ARCHETYPES.md` |
 | **Workspace path index** | `docs/WORKSPACE_PATH_INDEX.md` |
 | **CDIF parent/child registry** | `.claude/agents/MACOS_SDLC_AGENT_PROMPTS.md` (CDIF-ARCH-*, CDIF-IMPL-*) |
 
@@ -438,9 +438,9 @@ After workspace reorganization, **all** canonical paths. Code and docs must refe
 
 | Reference | Path (from repo root) |
 |-----------|------------------------|
-| **macOS app (canonical build + tests)** | `apps/macos-legacy/VelociraptorMacOS/` (app + TestingAgent) |
-| **macOS unit tests (Swift)** | `apps/macos-legacy/VelociraptorMacOSTests/` |
-| **macOS UI tests (Swift)** | `apps/macos-legacy/VelociraptorMacOSUITests/` |
+| **macOS app (canonical build + tests)** | `apps/macos-app/VelociraptorMacOS/` (app + TestingAgent) |
+| **macOS unit tests (Swift)** | `apps/macos-app/VelociraptorMacOSTests/` |
+| **macOS UI tests (Swift)** | `apps/macos-app/VelociraptorMacOSUITests/` |
 | **macOS app (root snapshot / lightweight copy)** | `VelociraptorMacOS/` (not the SPM/Xcodegen canonical build) |
 | **Gap registry (hex)** | `Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md` |
 | **macOS implementation guide** | `Velociraptor_macOS_App/steering/MACOS-IMPLEMENTATION-GUIDE.md`, `steering/macos-app/macOS-Implementation-Guide.md` |
@@ -486,5 +486,5 @@ Use `docs/WORKSPACE_PATH_INDEX.md` for the full list and for updating code that 
 - [macOS QA/UA Testing Plan](../../steering/MACOS_QA_TEST_PLAN.md)
 - [Gap Analysis Documentation](../../steering/MACOS_GAP_ANALYSIS_ITERATION_2.md)
 - [Gap Registry (hex)](../../Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md)
-- [Testing Agent Documentation](VelociraptorMacOS/TestingAgent/README.md) (within macos-legacy)
+- [Testing Agent Documentation](VelociraptorMacOS/TestingAgent/README.md) (within macos-app)
 - [Workspace Path Index](../../docs/WORKSPACE_PATH_INDEX.md) — **read first** for path resolution

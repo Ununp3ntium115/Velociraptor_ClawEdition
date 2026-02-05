@@ -258,7 +258,7 @@ The Electron app uses a native child_process bridge to execute PowerShell:
 
 ### Claw Edition Components (This Project)
 - **Electron GUI**: `VelociraptorPlatform-Electron/`
-- **macOS Native App**: `apps/macos-legacy/` (SwiftUI)
+- **macOS Native App**: `apps/macos-app/` (SwiftUI)
 - **PowerShell GUIs**: `VelociraptorUnified-Platform/`
 - **Deployment Scripts**: `Velociraptor_Setup_Scripts/`
 

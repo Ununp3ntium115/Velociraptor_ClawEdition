@@ -34,17 +34,17 @@ jobs:
     - name: Cache Swift dependencies
       uses: actions/cache@v3
       with:
-        path: apps/macos-legacy/.build
+        path: apps/macos-app/.build
         key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
         restore-keys: |
           ${{ runner.os }}-spm-
     
     - name: Build Testing Agent
-      working-directory: apps/macos-legacy
+      working-directory: apps/macos-app
       run: swift build --target TestingAgentCLI
     
     - name: Run Testing Agent - Validate All Gaps
-      working-directory: apps/macos-legacy
+      working-directory: apps/macos-app
       run: |
         swift run TestingAgentCLI --validate-all --format json > test-results.json
     
@@ -52,11 +52,11 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: testing-agent-results
-        path: apps/macos-legacy/test-results.json
+        path: apps/macos-app/test-results.json
     
     - name: Generate Markdown Report
       if: always()
-      working-directory: apps/macos-legacy
+      working-directory: apps/macos-app
       run: |
         swift run TestingAgentCLI --validate-all --format markdown > test-report.md
     
@@ -66,7 +66,7 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          const report = fs.readFileSync('apps/macos-legacy/test-report.md', 'utf8');
+          const report = fs.readFileSync('apps/macos-app/test-report.md', 'utf8');
           
           github.rest.issues.createComment({
             issue_number: context.issue.number,
@@ -95,14 +95,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Run Swift Tests
-      working-directory: apps/macos-legacy
+      working-directory: apps/macos-app
       run: swift test --enable-code-coverage
     
     - name: Generate Coverage Report
       run: |
         xcrun llvm-cov export \
-          apps/macos-legacy/.build/debug/VelociraptorMacOSPackageTests.xctest/Contents/MacOS/VelociraptorMacOSPackageTests \
-          -instr-profile apps/macos-legacy/.build/debug/codecov/default.profdata \
+          apps/macos-app/.build/debug/VelociraptorMacOSPackageTests.xctest/Contents/MacOS/VelociraptorMacOSPackageTests \
+          -instr-profile apps/macos-app/.build/debug/codecov/default.profdata \
           -format lcov > coverage.lcov
     
     - name: Upload Coverage
@@ -120,11 +120,11 @@ jobs:
       run: brew install xcodegen
     
     - name: Generate Xcode Project
-      working-directory: apps/macos-legacy
+      working-directory: apps/macos-app
       run: xcodegen generate
     
     - name: Run UI Tests
-      working-directory: apps/macos-legacy
+      working-directory: apps/macos-app
       run: |
         xcodebuild test \
           -project VelociraptorMacOS.xcodeproj \
@@ -138,7 +138,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ui-test-results
-        path: apps/macos-legacy/TestResults/
+        path: apps/macos-app/TestResults/
   
   # Job 3: Gap Validation
   gap-validation:
@@ -152,7 +152,7 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Validate Gap ${{ matrix.gap }}
-      working-directory: apps/macos-legacy
+      working-directory: apps/macos-app
       run: |
         swift run TestingAgentCLI \
           --gap ${{ matrix.gap }} \
@@ -163,7 +163,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: gap-${{ matrix.gap }}-result
-        path: apps/macos-legacy/gap-${{ matrix.gap }}-result.json
+        path: apps/macos-app/gap-${{ matrix.gap }}-result.json
   
   # Job 4: Generate CDIF Report
   cdif-report:
@@ -174,7 +174,7 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Generate CDIF Report
-      working-directory: apps/macos-legacy
+      working-directory: apps/macos-app
       run: |
         swift run TestingAgentCLI \
           --validate-all \
@@ -184,12 +184,12 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: cdif-report
-        path: apps/macos-legacy/cdif-report.yaml
+        path: apps/macos-app/cdif-report.yaml
     
     - name: Archive CDIF Report
       run: |
         mkdir -p reports
-        cp apps/macos-legacy/cdif-report.yaml reports/cdif-$(date +%Y%m%d-%H%M%S).yaml
+        cp apps/macos-app/cdif-report.yaml reports/cdif-$(date +%Y%m%d-%H%M%S).yaml
     
     - name: Commit CDIF Report
       if: github.ref == 'refs/heads/main'
@@ -220,11 +220,11 @@ build-testing-agent:
   tags:
     - macos
   script:
-    - cd apps/macos-legacy
+    - cd apps/macos-app
     - swift build --target TestingAgentCLI
   artifacts:
     paths:
-      - apps/macos-legacy/.build/
+      - apps/macos-app/.build/
     expire_in: 1 hour
 
 unit-tests:
@@ -232,11 +232,11 @@ unit-tests:
   tags:
     - macos
   script:
-    - cd apps/macos-legacy
+    - cd apps/macos-app
     - swift test --enable-code-coverage
   artifacts:
     reports:
-      junit: apps/macos-legacy/test-results.xml
+      junit: apps/macos-app/test-results.xml
 
 validate-gaps:
   stage: validate
@@ -246,13 +246,13 @@ validate-gaps:
     - build-testing-agent
     - unit-tests
   script:
-    - cd apps/macos-legacy
+    - cd apps/macos-app
     - swift run TestingAgentCLI --validate-all --format json | tee test-results.json
   artifacts:
     paths:
-      - apps/macos-legacy/test-results.json
+      - apps/macos-app/test-results.json
     reports:
-      junit: apps/macos-legacy/test-results.xml
+      junit: apps/macos-app/test-results.xml
 
 generate-cdif-report:
   stage: report
@@ -261,11 +261,11 @@ generate-cdif-report:
   needs:
     - validate-gaps
   script:
-    - cd apps/macos-legacy
+    - cd apps/macos-app
     - swift run TestingAgentCLI --validate-all --format cdif > cdif-report.yaml
   artifacts:
     paths:
-      - apps/macos-legacy/cdif-report.yaml
+      - apps/macos-app/cdif-report.yaml
     expire_in: 30 days
 ```
 
@@ -292,7 +292,7 @@ pipeline {
         
         stage('Build Testing Agent') {
             steps {
-                dir('apps/macos-legacy') {
+                dir('apps/macos-app') {
                     sh 'swift build --target TestingAgentCLI'
                 }
             }
@@ -302,7 +302,7 @@ pipeline {
             parallel {
                 stage('Unit Tests') {
                     steps {
-                        dir('apps/macos-legacy') {
+                        dir('apps/macos-app') {
                             sh 'swift test --enable-code-coverage'
                         }
                     }
@@ -310,7 +310,7 @@ pipeline {
                 
                 stage('UI Tests') {
                     steps {
-                        dir('apps/macos-legacy') {
+                        dir('apps/macos-app') {
                             sh '''
                                 xcodegen generate
                                 xcodebuild test \
@@ -327,7 +327,7 @@ pipeline {
         
         stage('Validate Gaps') {
             steps {
-                dir('apps/macos-legacy') {
+                dir('apps/macos-app') {
                     sh '''
                         swift run TestingAgentCLI \
                             --validate-all \
@@ -339,7 +339,7 @@ pipeline {
         
         stage('Generate Reports') {
             steps {
-                dir('apps/macos-legacy') {
+                dir('apps/macos-app') {
                     sh '''
                         swift run TestingAgentCLI \
                             --validate-all \
@@ -356,7 +356,7 @@ pipeline {
     
     post {
         always {
-            archiveArtifacts artifacts: 'apps/macos-legacy/test-results.json, apps/macos-legacy/test-report.md, apps/macos-legacy/cdif-report.yaml', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'apps/macos-app/test-results.json, apps/macos-app/test-report.md, apps/macos-app/cdif-report.yaml', allowEmptyArchive: true
         }
         
         success {
@@ -381,7 +381,7 @@ Create `.git/hooks/pre-commit`:
 
 echo "Running Testing Agent pre-commit validation..."
 
-cd apps/macos-legacy
+cd apps/macos-app
 
 # Run critical gap validations
 swift run TestingAgentCLI --gap GAP-003 --format console
@@ -409,7 +409,7 @@ Create `.git/hooks/pre-push`:
 
 echo "Running comprehensive gap validation before push..."
 
-cd apps/macos-legacy
+cd apps/macos-app
 
 # Run all gap validations
 swift run TestingAgentCLI --validate-all --format console
@@ -449,7 +449,7 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Run Daily Validation
-      working-directory: apps/macos-legacy
+      working-directory: apps/macos-app
       run: |
         swift run TestingAgentCLI --validate-all --format markdown > daily-report.md
     
@@ -459,7 +459,7 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          const report = fs.readFileSync('apps/macos-legacy/daily-report.md', 'utf8');
+          const report = fs.readFileSync('apps/macos-app/daily-report.md', 'utf8');
           
           github.rest.issues.create({
             owner: context.repo.owner,
@@ -480,9 +480,9 @@ jobs:
   with:
     name: test-reports-${{ github.run_number }}
     path: |
-      apps/macos-legacy/test-results.json
-      apps/macos-legacy/test-report.md
-      apps/macos-legacy/cdif-report.yaml
+      apps/macos-app/test-results.json
+      apps/macos-app/test-report.md
+      apps/macos-app/cdif-report.yaml
     retention-days: 90
 ```
 
@@ -492,10 +492,10 @@ jobs:
 - name: Upload Reports to S3
   if: always()
   run: |
-    aws s3 cp apps/macos-legacy/test-results.json \
+    aws s3 cp apps/macos-app/test-results.json \
       s3://my-bucket/test-reports/$(date +%Y/%m/%d)/test-results-${{ github.run_number }}.json
     
-    aws s3 cp apps/macos-legacy/cdif-report.yaml \
+    aws s3 cp apps/macos-app/cdif-report.yaml \
       s3://my-bucket/test-reports/$(date +%Y/%m/%d)/cdif-report-${{ github.run_number }}.yaml
   env:
     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

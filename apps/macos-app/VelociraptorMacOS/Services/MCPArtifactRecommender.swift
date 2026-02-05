@@ -4,17 +4,15 @@
 //
 //  MCP-powered artifact recommendation service
 //  Gap: 0x08 - MCP Integration for Artifact Recommendations
+//  Note: MCP package temporarily disabled pending Swift 6 compatibility fixes
 //
 
 import Foundation
-import MCP
-import Logging
 
 // MARK: - MCP Artifact Recommender
 
 /// Service for getting AI-powered artifact recommendations via MCP
 actor MCPArtifactRecommender {
-    private var mcpClient: VelociraptorMCPClient?
     private var isConnected = false
     
     init() {
@@ -34,7 +32,6 @@ actor MCPArtifactRecommender {
     /// Disconnect from MCP server
     func disconnect() async {
         isConnected = false
-        mcpClient = nil
         Logger.shared.info("MCP Artifact Recommender disconnected", component: "MCP")
     }
     
@@ -355,35 +352,5 @@ actor MCPArtifactRecommender {
         }
         
         return "1-3 min"
-    }
-}
-
-// MARK: - Mock MCP Client
-
-/// Lightweight MCP client for artifact recommendations (uses VelociraptorMCPClient)
-private actor VelociraptorMCPClient {
-    private let logger: Logger
-    
-    init(logger: Logger) {
-        self.logger = logger
-    }
-    
-    func callTool(name: String, arguments: [String: Value]) async throws -> (content: [Tool.Content], isError: Bool?) {
-        // Stub implementation - in production this would call the actual MCP server
-        logger.info("MCP tool call: \(name)")
-        return (content: [.text("MCP recommendation generated")], isError: false)
-    }
-}
-
-// MARK: - MCP Value Type Extension
-
-extension Value {
-    var stringValue: String? {
-        // Simplified value extraction - full implementation in VelociraptorMCP
-        return nil
-    }
-    
-    var boolValue: Bool? {
-        return nil
     }
 }
