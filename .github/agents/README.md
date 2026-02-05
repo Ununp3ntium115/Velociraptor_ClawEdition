@@ -33,6 +33,46 @@ Agent documentation provides:
 - Implementing macOS-specific features
 - Writing tests for macOS application
 
+### 2. Implementation Agent (Electron + PowerShell + Offline-First DFIR)
+**File**: `implementation-agent.md`  
+**Role**: Implements atomic GAP items across Electron + PowerShell stack  
+**Scope**: Electron GUI, PowerShell modules, bridge IPC (gap-scoped only)
+
+### 3. Testing Agent (Deterministic Testing)
+**File**: `testing-agent.md`  
+**Role**: Validates gap closures with deterministic unit/integration/E2E tests  
+**Scope**: Jest/Spectron, Pester, offline-first test execution
+
+### 4. QA Agent (Holistic QA Gate)
+**File**: `qa-agent.md`  
+**Role**: Regression, clarity, performance, and observability validation  
+**Scope**: Cross-component QA after tests pass
+
+### 5. UAT Agent (Operator Workflow)
+**File**: `uat-agent.md`  
+**Role**: End-to-end operator workflow validation  
+**Scope**: 8 UAT scenarios and user-impact acceptance checks
+
+### 6. macOS Platform QA Agent
+**File**: `macos-platform-qa-agent.md`  
+**Role**: macOS-specific platform validation for Electron + PowerShell Core  
+**Scope**: Bridge initialization, offline-first flows, macOS conventions
+
+### 7. Security Testing Agent
+**File**: `security-testing-agent.md`  
+**Role**: Security and integrity gate before production eligibility  
+**Scope**: IPC validation, input validation, SHA-256 package trust
+
+### 8. Gap Analysis Agent
+**File**: `gap-analysis-agent.md`  
+**Role**: Produces authoritative gap registry with CDIF backing  
+**Scope**: Gap identification, classification, verification gates
+
+### 9. Fix-All-Gaps Orchestrator
+**File**: `fix-all-gaps-orchestrator.md`  
+**Role**: Master iteration conductor and swarm dispatcher  
+**Scope**: Gap normalization, dispatch, gate enforcement, convergence
+
 ## Agent Conventions
 
 All agent documentation follows this structure:
@@ -77,6 +117,7 @@ These agents are designed to work in a HiQ (High Intelligence Quotient) swarm ar
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | 2026-01-30 | Initial agents directory with macOS Development Agent |
+| 1.1 | 2026-02-05 | Added core HiQ swarm agent system prompts |
 
 ---
 
