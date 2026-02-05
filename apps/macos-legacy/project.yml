@@ -28,10 +28,10 @@ settings:
     PRODUCT_NAME: Velociraptor
     SWIFT_VERSION: "6.0"
     MACOSX_DEPLOYMENT_TARGET: "14.0"
-    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_STYLE: Manual
     DEVELOPMENT_TEAM: ""
-    ENABLE_HARDENED_RUNTIME: YES
-    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGN_IDENTITY: "Apple Development"
+    PROVISIONING_PROFILE_SPECIFIER: ""
     INFOPLIST_FILE: VelociraptorMacOS/Info.plist
     CODE_SIGN_ENTITLEMENTS: VelociraptorMacOS/VelociraptorMacOS.entitlements
     ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -41,6 +41,13 @@ settings:
     LD_RUNPATH_SEARCH_PATHS:
       - "$(inherited)"
       - "@executable_path/../Frameworks"
+  configs:
+    Debug:
+      ENABLE_HARDENED_RUNTIME: NO
+      CODE_SIGN_IDENTITY: "-"
+    Release:
+      ENABLE_HARDENED_RUNTIME: YES
+      CODE_SIGN_IDENTITY: "Apple Development"
 
 targets:
   VelociraptorMacOS:
@@ -58,8 +65,15 @@ targets:
     settings:
       base:
         INFOPLIST_FILE: VelociraptorMacOS/Info.plist
-        CODE_SIGN_ENTITLEMENTS: VelociraptorMacOS/VelociraptorMacOS.entitlements
         PRODUCT_BUNDLE_IDENTIFIER: com.velocidex.velociraptor
+      configs:
+        Debug:
+          CODE_SIGN_IDENTITY: "-"
+          CODE_SIGN_ENTITLEMENTS: ""
+          ENABLE_HARDENED_RUNTIME: NO
+        Release:
+          CODE_SIGN_ENTITLEMENTS: VelociraptorMacOS/VelociraptorMacOS.entitlements
+          ENABLE_HARDENED_RUNTIME: YES
     entitlements:
       path: VelociraptorMacOS/VelociraptorMacOS.entitlements
     info:
@@ -89,7 +103,7 @@ targets:
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Velociraptor.app/Contents/MacOS/Velociraptor"
         BUNDLE_LOADER: "$(TEST_HOST)"
         GENERATE_INFOPLIST_FILE: YES
-        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_STYLE: Manual
         CODE_SIGN_IDENTITY: "-"
 
   VelociraptorMacOSUITests:
@@ -106,7 +120,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.velocidex.velociraptor.uitests
         TEST_TARGET_NAME: VelociraptorMacOS
         GENERATE_INFOPLIST_FILE: YES
-        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_STYLE: Manual
         CODE_SIGN_IDENTITY: "-"
 
 schemes:
