@@ -543,7 +543,9 @@ function Install-LaunchdService {
         try {
             & launchctl unload $script:LaunchdPlistPath 2>&1 | Out-Null
         }
-        catch { }
+        catch {
+            Write-VelociraptorLog "Warning: Failed to unload launchd service at $script:LaunchdPlistPath. $($_.Exception.Message)" -Level WARNING
+        }
         Remove-Item $script:LaunchdPlistPath -Force
     }
     
