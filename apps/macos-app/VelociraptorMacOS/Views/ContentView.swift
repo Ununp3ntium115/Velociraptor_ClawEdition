@@ -19,31 +19,25 @@ struct ContentView: View {
             SidebarView()
                 .accessibilityId(AccessibilityIdentifiers.Navigation.sidebar)
         } detail: {
-            VStack(spacing: 0) {
-                // Header
-                HeaderView()
-                
-                Divider()
-                
-                // Main content area
-                ScrollView {
-                    StepContentView()
-                        .padding()
-                }
-                
-                Divider()
-                
-                // Progress bar
-                ProgressView(value: appState.wizardProgress)
-                    .progressViewStyle(.linear)
-                    .padding(.horizontal)
-                    .padding(.vertical, 4)
-                    .accessibilityId(AccessibilityIdentifiers.Navigation.progressBar)
-                
-                // Navigation buttons
-                NavigationButtonsView()
-                    .padding()
-                    .background(Color(NSColor.controlBackgroundColor))
+            // Switch between wizard mode and other views
+            switch appState.selectedSidebarItem {
+            case .dashboard:
+                DashboardView()
+                    .environmentObject(configViewModel)
+            case .wizard:
+                wizardContent
+            case .health:
+                HealthMonitorView()
+            case .incidentResponse:
+                IncidentResponseView()
+            case .integrations:
+                IntegrationsSettingsView()
+                    .accessibilityIdentifier("integrations.main")
+            case .offlinePackages:
+                OfflinePackageBuilderView()
+                    .accessibilityIdentifier("offlinePackages.main")
+            case .logs:
+                LogsView()
             }
         }
         .navigationTitle("")
@@ -66,6 +60,37 @@ struct ContentView: View {
                 .accessibilityId(AccessibilityIdentifiers.Dialog.about)
         }
     }
+    
+    /// Wizard content with header, steps, and navigation
+    @ViewBuilder
+    var wizardContent: some View {
+        VStack(spacing: 0) {
+            // Header
+            HeaderView()
+            
+            Divider()
+            
+            // Main content area
+            ScrollView {
+                StepContentView()
+                    .padding()
+            }
+            
+            Divider()
+            
+            // Progress bar
+            ProgressView(value: appState.wizardProgress)
+                .progressViewStyle(.linear)
+                .padding(.horizontal)
+                .padding(.vertical, 4)
+                .accessibilityId(AccessibilityIdentifiers.Navigation.progressBar)
+            
+            // Navigation buttons
+            NavigationButtonsView()
+                .padding()
+                .background(Color(NSColor.controlBackgroundColor))
+        }
+    }
 }
 
 // MARK: - Sidebar View
@@ -74,14 +99,44 @@ struct SidebarView: View {
     @EnvironmentObject var appState: AppState
     
     var body: some View {
-        List(selection: Binding(
-            get: { appState.currentStep },
-            set: { if let step = $0 { appState.goToStep(step) } }
-        )) {
+        List {
+            // Main navigation section
+            Section("Main") {
+                ForEach([AppState.SidebarItem.dashboard, .health, .incidentResponse, .integrations, .offlinePackages, .logs], id: \.self) { item in
+                    Button {
+                        appState.selectedSidebarItem = item
+                    } label: {
+                        Label(item.rawValue, systemImage: item.iconName)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.vertical, 4)
+                    .background(appState.selectedSidebarItem == item ? Color.accentColor.opacity(0.2) : Color.clear)
+                    .cornerRadius(6)
+                }
+            }
+            
+            // Configuration Wizard section
             Section("Configuration Wizard") {
-                ForEach(AppState.WizardStep.allCases) { step in
-                    SidebarStepRow(step: step, currentStep: appState.currentStep)
-                        .tag(step)
+                Button {
+                    appState.selectedSidebarItem = .wizard
+                } label: {
+                    Label("Wizard", systemImage: "wand.and.stars")
+                }
+                .buttonStyle(.plain)
+                .padding(.vertical, 4)
+                .background(appState.selectedSidebarItem == .wizard ? Color.accentColor.opacity(0.2) : Color.clear)
+                .cornerRadius(6)
+                
+                // Only show wizard steps when in wizard mode
+                if appState.selectedSidebarItem == .wizard {
+                    ForEach(AppState.WizardStep.allCases) { step in
+                        SidebarStepRow(step: step, currentStep: appState.currentStep)
+                            .onTapGesture {
+                                if step.rawValue <= appState.currentStep.rawValue {
+                                    appState.goToStep(step)
+                                }
+                            }
+                    }
                 }
             }
         }
@@ -245,6 +300,10 @@ struct StepContentView: View {
             NetworkConfigurationStepView()
         case .authentication:
             AuthenticationStepView()
+        case .aiConfiguration:
+            AIConfigurationStepView()
+        case .mdmConfiguration:
+            MDMConfigurationStepView()
         case .review:
             ReviewStepView()
         case .complete:

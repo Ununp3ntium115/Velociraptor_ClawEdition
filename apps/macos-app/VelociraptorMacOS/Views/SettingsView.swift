@@ -19,6 +19,7 @@ struct SettingsView: View {
         case general
         case security
         case server
+        case integrations
         case advanced
     }
     
@@ -48,6 +49,13 @@ struct SettingsView: View {
                 .tag(Tab.server)
                 .accessibilityIdentifier("settings.server.tab")
             
+            IntegrationsSettingsView()
+                .tabItem {
+                    Label("Integrations", systemImage: "link.circle")
+                }
+                .tag(Tab.integrations)
+                .accessibilityIdentifier("settings.integrations.tab")
+            
             AdvancedSettingsView()
                 .tabItem {
                     Label("Advanced", systemImage: "gearshape.2")
@@ -55,7 +63,8 @@ struct SettingsView: View {
                 .tag(Tab.advanced)
                 .accessibilityId(AccessibilityIdentifiers.Settings.advancedTab)
         }
-        .frame(width: 550, height: 500)
+        .frame(width: 900, height: 600)
+        .accessibilityIdentifier("settings.main")
         .accessibilityId(AccessibilityIdentifiers.Settings.window)
     }
 }

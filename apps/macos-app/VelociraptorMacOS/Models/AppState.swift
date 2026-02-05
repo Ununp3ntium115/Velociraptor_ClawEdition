@@ -76,8 +76,10 @@ class AppState: ObservableObject {
         case storageConfiguration = 4
         case networkConfiguration = 5
         case authentication = 6
-        case review = 7
-        case complete = 8
+        case aiConfiguration = 7
+        case mdmConfiguration = 8
+        case review = 9
+        case complete = 10
         
         var id: Int { rawValue }
         
@@ -91,6 +93,8 @@ class AppState: ObservableObject {
             case .storageConfiguration: return "Storage Configuration"
             case .networkConfiguration: return "Network Configuration"
             case .authentication: return "Authentication"
+            case .aiConfiguration: return "AI Configuration"
+            case .mdmConfiguration: return "MDM Integration"
             case .review: return "Review & Generate"
             case .complete: return "Complete"
             }
@@ -106,6 +110,8 @@ class AppState: ObservableObject {
             case .storageConfiguration: return "Configure data storage locations"
             case .networkConfiguration: return "Set network bindings and ports"
             case .authentication: return "Configure admin credentials"
+            case .aiConfiguration: return "Configure AI assistant integration"
+            case .mdmConfiguration: return "Set up MDM provider integration"
             case .review: return "Review and generate configuration"
             case .complete: return "Configuration complete"
             }
@@ -121,6 +127,8 @@ class AppState: ObservableObject {
             case .storageConfiguration: return "externaldrive.fill"
             case .networkConfiguration: return "network"
             case .authentication: return "person.badge.key.fill"
+            case .aiConfiguration: return "brain.head.profile"
+            case .mdmConfiguration: return "rectangle.stack.person.crop"
             case .review: return "checklist"
             case .complete: return "checkmark.seal.fill"
             }
@@ -129,7 +137,7 @@ class AppState: ObservableObject {
         /// Whether this step can be skipped
         var isSkippable: Bool {
             switch self {
-            case .certificateSettings, .securitySettings: return true
+            case .certificateSettings, .securitySettings, .aiConfiguration, .mdmConfiguration: return true
             default: return false
             }
         }
@@ -194,8 +202,11 @@ class AppState: ObservableObject {
     /// Sidebar navigation items
     enum SidebarItem: String, CaseIterable, Identifiable {
         case wizard = "Configuration Wizard"
+        case dashboard = "Control Panel"
         case incidentResponse = "Incident Response"
         case health = "Health Monitor"
+        case integrations = "Integrations"
+        case offlinePackages = "Offline Packages"
         case logs = "Logs"
         
         var id: String { rawValue }
@@ -203,8 +214,11 @@ class AppState: ObservableObject {
         var iconName: String {
             switch self {
             case .wizard: return "wand.and.stars"
+            case .dashboard: return "rectangle.3.group.fill"
             case .incidentResponse: return "exclamationmark.shield.fill"
             case .health: return "heart.text.square.fill"
+            case .integrations: return "link.circle"
+            case .offlinePackages: return "externaldrive.connected.to.line.below"
             case .logs: return "doc.text.magnifyingglass"
             }
         }
