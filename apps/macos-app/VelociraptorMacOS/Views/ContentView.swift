@@ -42,6 +42,9 @@ struct ContentView: View {
             case .terminal:
                 TerminalView()
                     .accessibilityIdentifier("terminal.main")
+            case .binaryLifecycle:
+                BinaryLifecycleView()
+                    .accessibilityIdentifier("binaryLifecycle.main")
             case .logs:
                 LogsView()
             }
@@ -108,7 +111,7 @@ struct SidebarView: View {
         List {
             // Main navigation section
             Section("Main") {
-                ForEach([AppState.SidebarItem.dashboard, .health, .incidentResponse, .integrations, .offlinePackages, .aiChat, .terminal, .logs], id: \.self) { item in
+                ForEach([AppState.SidebarItem.dashboard, .health, .incidentResponse, .integrations, .offlinePackages, .aiChat, .terminal, .binaryLifecycle, .logs], id: \.self) { item in
                     Button {
                         appState.selectedSidebarItem = item
                     } label: {

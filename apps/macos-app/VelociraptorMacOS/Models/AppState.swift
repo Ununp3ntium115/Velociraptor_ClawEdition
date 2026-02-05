@@ -209,6 +209,7 @@ class AppState: ObservableObject {
         case offlinePackages = "Offline Packages"
         case aiChat = "AI Assistant"
         case terminal = "Terminal"
+        case binaryLifecycle = "Binary Manager"
         case logs = "Logs"
         
         var id: String { rawValue }
@@ -223,6 +224,7 @@ class AppState: ObservableObject {
             case .offlinePackages: return "externaldrive.connected.to.line.below"
             case .aiChat: return "brain.head.profile"
             case .terminal: return "terminal"
+            case .binaryLifecycle: return "cpu"
             case .logs: return "doc.text.magnifyingglass"
             }
         }
