@@ -10,17 +10,37 @@ import SwiftUI
 struct CompleteStepView: View {
     @EnvironmentObject var configViewModel: ConfigurationViewModel
     @EnvironmentObject var deploymentManager: DeploymentManager
+    @EnvironmentObject var appState: AppState
     
     @State private var copied = false
+    @State private var showPassword = false
+    @State private var passwordCopied = false
     
     var body: some View {
         VStack(spacing: 32) {
-            // Success indicator
+            // Success indicator with branding icon
             VStack(spacing: 16) {
-                Image(systemName: "checkmark.seal.fill")
-                    .font(.system(size: 64))
-                    .foregroundColor(.green)
-                    .accessibilityId(AccessibilityIdentifiers.Complete.successIcon)
+                ZStack {
+                    // App branding icon
+                    if let appIcon = NSImage(named: "AppIcon") {
+                        Image(nsImage: appIcon)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 80, height: 80)
+                    } else {
+                        Image(systemName: "checkmark.seal.fill")
+                            .font(.system(size: 64))
+                            .foregroundColor(.green)
+                    }
+                    
+                    // Success checkmark overlay
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 24))
+                        .foregroundColor(.green)
+                        .background(Circle().fill(.white))
+                        .offset(x: 30, y: 30)
+                }
+                .accessibilityId(AccessibilityIdentifiers.Complete.successIcon)
                 
                 Text("Deployment Complete!")
                     .font(.title.bold())
@@ -49,12 +69,48 @@ struct CompleteStepView: View {
                         value: configViewModel.data.adminUsername
                     )
                     
-                    AccessInfoRow(
-                        icon: "key.fill",
-                        label: "Password",
-                        value: "••••••••",
-                        note: "Use the password you configured"
-                    )
+                    // Password row with show/copy functionality
+                    HStack {
+                        Image(systemName: "key.fill")
+                            .foregroundColor(.accentColor)
+                            .frame(width: 24)
+                        
+                        Text("Password:")
+                            .font(.subheadline)
+                            .frame(width: 100, alignment: .trailing)
+                        
+                        Text(showPassword ? configViewModel.data.adminPassword : "••••••••••••")
+                            .font(.subheadline.monospaced())
+                        
+                        Button {
+                            showPassword.toggle()
+                        } label: {
+                            Image(systemName: showPassword ? "eye.slash" : "eye")
+                        }
+                        .buttonStyle(.plain)
+                        .help(showPassword ? "Hide password" : "Show password")
+                        
+                        Button {
+                            NSPasteboard.general.clearContents()
+                            NSPasteboard.general.setString(configViewModel.data.adminPassword, forType: .string)
+                            passwordCopied = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                passwordCopied = false
+                            }
+                        } label: {
+                            Image(systemName: passwordCopied ? "checkmark" : "doc.on.doc")
+                        }
+                        .buttonStyle(.plain)
+                        .help("Copy password to clipboard")
+                        
+                        if passwordCopied {
+                            Text("Copied!")
+                                .font(.caption)
+                                .foregroundColor(.green)
+                        }
+                        
+                        Spacer()
+                    }
                     
                     if let version = deploymentManager.installedVersion {
                         AccessInfoRow(
@@ -66,6 +122,22 @@ struct CompleteStepView: View {
                 }
                 .padding()
             }
+            
+            // Primary action - Go to Dashboard
+            Button {
+                appState.selectedSidebarItem = .dashboard
+            } label: {
+                HStack {
+                    Image(systemName: "rectangle.3.group.fill")
+                    Text("Go to Control Panel")
+                }
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+                .padding()
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .accessibilityIdentifier("complete.gotoDashboard")
             
             // Quick actions
             GroupBox("Quick Actions") {

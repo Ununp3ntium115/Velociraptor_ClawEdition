@@ -49,7 +49,7 @@ All references to "Velociraptor Setup Scripts" changed to "Velociraptor Claw Edi
   - `VelociraptorMCP/`, `VelociraptorML/`, `ZeroTrustSecurity/`
 - **Status**: Operational - core deployment infrastructure survived mass deletion
 
-### macOS Swift App (apps/macos-legacy) ✅ **COMPLETE**
+### macOS Swift App (apps/macos-app) ✅ **COMPLETE**
 - **Views**: 26 Swift files
   - Main: `ContentView.swift`, `DashboardView.swift`, `ClientsView.swift`, `HuntManagerView.swift`
   - VQL: `VQLEditorView.swift`
@@ -156,7 +156,7 @@ All references to "Velociraptor Setup Scripts" changed to "Velociraptor Claw Edi
 #### 0x01 - Velociraptor API Client Missing
 - **Current Status**: **PARTIAL CLOSURE via MCP**
 - **Electron API Client**: ✅ EXISTS (`apps/electron/backend/velociraptor-api-client.js`)
-- **macOS API Client**: 📝 EXISTS in skeleton form (`apps/macos-legacy/VelociraptorMacOS/Services/VelociraptorAPIClient.swift`)
+- **macOS API Client**: 📝 EXISTS in skeleton form (`apps/macos-app/VelociraptorMacOS/Services/VelociraptorAPIClient.swift`)
 - **MCP Impact**: MCP server provides VQL generation, artifact suggestions, deployment planning - supplements but doesn't replace direct API integration
 - **Gap Closure**: 40% (Electron complete, macOS partial, MCP supplemental)
 
@@ -270,10 +270,10 @@ None identified as critical. Deletions were cleanup of:
 
 ### MCP Infrastructure ✅ **FULLY COMPLIANT**
 
-**Canonical Paths**: ✅ All in `apps/macos-legacy/`
+**Canonical Paths**: ✅ All in `apps/macos-app/`
 ```yaml
-mcp_server_source:   apps/macos-legacy/Sources/VelociraptorMCPServer/
-mcp_library_source:  apps/macos-legacy/Sources/VelociraptorMCP/
+mcp_server_source:   apps/macos-app/Sources/VelociraptorMCPServer/
+mcp_library_source:  apps/macos-app/Sources/VelociraptorMCP/
 mcp_runbook:         .cursor/commands/mcp.md
 ```
 
@@ -286,7 +286,7 @@ mcp_runbook:         .cursor/commands/mcp.md
 **Evidence**:
 ```bash
 # Build verification
-cd apps/macos-legacy
+cd apps/macos-app
 swift build --product VelociraptorMCPServer  # ✅ SUCCESS
 
 # Capability verification

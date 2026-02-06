@@ -29,6 +29,8 @@ final class WizardUITests: XCTestCase {
         try? FileManager.default.createDirectory(at: evidencePath, withIntermediateDirectories: true)
         
         app = XCUIApplication()
+        // Position window on 3rd monitor (portrait) for UI testing
+        app.launchArguments.append("-UITestMode")
         app.launch()
     }
     

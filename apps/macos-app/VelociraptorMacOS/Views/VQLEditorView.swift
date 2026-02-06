@@ -41,6 +41,7 @@ struct VQLEditorView: View {
                     .frame(minWidth: 280, maxWidth: 400)
             }
         }
+        .accessibilityIdentifier("vql.main")
         .navigationTitle("VQL Terminal")
         .toolbar {
             ToolbarItem(placement: .automatic) {

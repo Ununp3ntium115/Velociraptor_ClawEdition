@@ -11,7 +11,7 @@
 - Documented VM control commands in MCP runbook
 
 ### 2. ✅ MCP Server Built & Operational
-- Built from canonical location: `apps/macos-legacy/`
+- Built from canonical location: `apps/macos-app/`
 - Binary: `.build/debug/VelociraptorMCPServer`
 - Build time: ~17.8 seconds
 - **Capabilities**:
@@ -123,7 +123,7 @@ MCP Contribution:      +23-27% gap closure
      - Analyze forensic timelines
 
 3. **Canonical Path Enforcement**
-   - All macOS Swift work anchored to `apps/macos-legacy/`
+   - All macOS Swift work anchored to `apps/macos-app/`
    - No more legacy path confusion
    - KB search optimized with exclusions
 
@@ -167,7 +167,7 @@ MCP Contribution:      +23-27% gap closure
 5. `.cursor/commands/MCP_SETUP_SUMMARY.md` - Header updated
 
 ### Built Artifacts (1)
-1. `apps/macos-legacy/.build/debug/VelociraptorMCPServer` - MCP server binary
+1. `apps/macos-app/.build/debug/VelociraptorMCPServer` - MCP server binary
 
 ---
 
@@ -178,16 +178,16 @@ MCP Contribution:      +23-27% gap closure
 repo_root: /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/
 
 # macOS Swift (canonical)
-macos_canonical:     apps/macos-legacy/
-swift_package:       apps/macos-legacy/Package.swift
-app_source:          apps/macos-legacy/VelociraptorMacOS/
-mcp_server:          apps/macos-legacy/Sources/VelociraptorMCPServer/
+macos_canonical:     apps/macos-app/
+swift_package:       apps/macos-app/Package.swift
+app_source:          apps/macos-app/VelociraptorMacOS/
+mcp_server:          apps/macos-app/Sources/VelociraptorMCPServer/
 
 # Steering/KB
 kb_index:            steering/CDIF_KB_INDEX.md
 kb_manifest:         steering/CDIF_KB_MANIFEST.yaml
 gap_registry:        Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md
-cdif_catalog:        apps/macos-legacy/CDIF_TEST_ARCHETYPES.md
+cdif_catalog:        apps/macos-app/CDIF_TEST_ARCHETYPES.md
 
 # MCP runbook
 mcp_runbook:         .cursor/commands/mcp.md
@@ -252,7 +252,7 @@ MCP Capabilities:
 - Forensic timeline analysis
 - IR package specification generation
 
-All paths anchored to apps/macos-legacy/ per CDIF KB manifest."
+All paths anchored to apps/macos-app/ per CDIF KB manifest."
 ```
 
 ### For Development
@@ -273,7 +273,7 @@ All paths anchored to apps/macos-legacy/ per CDIF KB manifest."
 ### For Testing
 1. **Test MCP Server**
    ```bash
-   cd apps/macos-legacy
+   cd apps/macos-app
    ./.build/debug/VelociraptorMCPServer --verbose
    # Test each tool with sample inputs
    ```

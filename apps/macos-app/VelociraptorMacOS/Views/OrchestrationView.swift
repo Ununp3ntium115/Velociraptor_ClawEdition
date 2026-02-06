@@ -375,6 +375,7 @@ struct OrchestrationView: View {
                 OrchestrationDashboard(viewModel: viewModel)
             }
         }
+        .accessibilityIdentifier("orchestration.main")
         .task {
             await viewModel.loadWorkflows()
         }

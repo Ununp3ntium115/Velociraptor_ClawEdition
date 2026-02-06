@@ -108,6 +108,26 @@ struct ReviewStepView: View {
                         ConfigRow("Use Keychain", value: configViewModel.data.useKeychain ? "Yes" : "No")
                         ConfigRow("Notifications", value: configViewModel.data.enableNotifications ? "Yes" : "No")
                     }
+                    
+                    ConfigSectionView(title: "AI Integration", icon: "brain.head.profile") {
+                        ConfigRow("Enabled", value: configViewModel.data.aiEnabled ? "Yes" : "No")
+                        if configViewModel.data.aiEnabled {
+                            ConfigRow("Provider", value: configViewModel.data.aiProvider.displayName)
+                            if !configViewModel.data.aiModel.isEmpty {
+                                ConfigRow("Model", value: configViewModel.data.aiModel)
+                            }
+                            ConfigRow("API Key", value: configViewModel.data.aiApiKey.isEmpty ? "Not set" : "••••••••")
+                        }
+                    }
+                    
+                    ConfigSectionView(title: "MDM Integration", icon: "rectangle.stack.person.crop") {
+                        ConfigRow("Enabled", value: configViewModel.data.mdmEnabled ? "Yes" : "No")
+                        if configViewModel.data.mdmEnabled {
+                            ConfigRow("Provider", value: configViewModel.data.mdmProvider.displayName)
+                            ConfigRow("Tenant URL", value: configViewModel.data.mdmTenantUrl.isEmpty ? "Not set" : configViewModel.data.mdmTenantUrl)
+                            ConfigRow("Client ID", value: configViewModel.data.mdmClientId.isEmpty ? "Not set" : "••••••••")
+                        }
+                    }
                 }
             }
             .frame(maxHeight: 300)

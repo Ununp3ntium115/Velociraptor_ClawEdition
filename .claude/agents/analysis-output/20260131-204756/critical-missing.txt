@@ -1,0 +1,7 @@
+6 critical files missing
+Services/VelociraptorAPIClient.swift
+Services/WebSocketService.swift
+Views/ClientsView.swift
+Views/HuntManagerView.swift
+Views/VQLEditorView.swift
+Views/DashboardView.swift

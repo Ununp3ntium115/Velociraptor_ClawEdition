@@ -45,14 +45,14 @@ These issues document code improvements that have been fully implemented.
 ### Issue #23: App foundation + Xcode CI
 
 **Acceptance Criteria:**
-- [x] macOS app builds from Xcode - `apps/macos-legacy/Package.swift` + `apps/macos-legacy/project.yml` for XcodeGen
-- [x] XCUITest target exists - 7 UI test files in `apps/macos-legacy/VelociraptorMacOSUITests/`
+- [x] macOS app builds from Xcode - `Package.swift` + `project.yml` for XcodeGen
+- [x] XCUITest target exists - 7 UI test files in `VelociraptorMacOSUITests/`
 - [x] CI workflow runs xcodebuild test - `.github/workflows/macos-build.yml`
 - [x] Evidence artifacts stored - Workflow uploads artifacts
 
 **Files:**
 ```
-apps/macos-legacy/
+VelociraptorMacOS/
 ├── Package.swift
 ├── project.yml
 ├── VelociraptorMacOS/
@@ -175,11 +175,11 @@ func deploy(config: ConfigurationData) async throws {
 ### Issue #32: Docs: macOS usage, UAT, troubleshooting
 
 **Acceptance Criteria:**
-- [x] macOS README - `apps/macos-legacy/README.md`
+- [x] macOS README - `VelociraptorMacOS/README.md`
 - [x] Contributing guide - `docs/MACOS_CONTRIBUTING.md`
 - [x] Parallels setup - `docs/PARALLELS_MCP_SETUP.md`
 - [x] QA documentation - `docs/QA_QUALITY_GATE.md`, `docs/QA_QUICK_REFERENCE.md`
-- [x] Testing guides - `apps/macos-legacy/TESTING_AGENT_CI_CD_GUIDE.md`, `apps/macos-legacy/TESTING_AGENT_EXAMPLES.md`, `apps/macos-legacy/VelociraptorMacOS/TestingAgent/README.md`
+- [x] Testing guides - Multiple in `VelociraptorMacOS/`
 
 ---
 

@@ -332,6 +332,7 @@ struct TrainingView: View {
                 TrainingDashboard(viewModel: viewModel)
             }
         }
+        .accessibilityIdentifier("training.main")
         .task {
             await viewModel.loadModules()
         }

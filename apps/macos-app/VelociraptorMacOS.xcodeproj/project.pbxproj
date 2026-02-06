@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		01068FF3BFF4EFFD26E3DA75 /* DeploymentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6FA9C721B2A993DCCC3702 /* DeploymentManager.swift */; };
+		EMGLOCKDOWN1BUILD2REF34 /* EmergencyLockdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EMGLOCKDOWN1FILE2REF345 /* EmergencyLockdownView.swift */; };
+		PORTLOCK1BUILD2REF345678 /* PortLockdownManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = PORTLOCK1FILE2REF3456789 /* PortLockdownManager.swift */; };
 		02299BE26872924EFEC8B0BB /* CertificateSetupViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71557D1A4DC8040F69309F0 /* CertificateSetupViewModelTests.swift */; };
 		043B770147FC1D032EE7EED0 /* ConfigurationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC628EB3789B9DAE2F6AD56 /* ConfigurationData.swift */; };
 		INTEG1PROVIDERS2BUILD3REF /* IntegrationProviders.swift in Sources */ = {isa = PBXBuildFile; fileRef = INTEG1PROVIDERS2FILE3REF4 /* IntegrationProviders.swift */; };
@@ -16,6 +18,7 @@
 		TERMVIEW1BUILD2REF345678 /* TerminalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = TERMVIEW1FILE2REF3456789 /* TerminalView.swift */; };
 		BINLIFECYCLE1BUILD2REF34 /* BinaryLifecycleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BINLIFECYCLE1FILE2REF345 /* BinaryLifecycleView.swift */; };
 		CLAWBRAND1BUILD2REF34567 /* ClawBrandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CLAWBRAND1FILE2REF345678 /* ClawBrandingView.swift */; };
+		EMGTCHBAR1BUILD2REF3456 /* EmergencyTouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EMGTCHBAR1FILE2REF34567 /* EmergencyTouchBar.swift */; };
 		0CFC81511134864263F50ADD /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D7C361F7D3DF7DF4B875B5 /* NotificationManagerTests.swift */; };
 		0FFC585E14A27D778AFE0ABE /* PackageManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543827AF529761C8ED1CB9F9 /* PackageManagerView.swift */; };
 		1042733B1E5694F09FA42E61 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38014CE37ACAF2C32497903 /* WebSocketService.swift */; };
@@ -61,6 +64,7 @@
 		876C9A8633F8FE093CE90497 /* EvidenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB5F651192DAE1D3057B5ED /* EvidenceView.swift */; };
 		8B0412BBE4B6E288AA1A77B3 /* SIEMIntegrationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E789986EE9660BAA5AB15F01 /* SIEMIntegrationsView.swift */; };
 		8C55FCA99B40677745C09572 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239E51F967C4BAE1AC887FA7 /* NotificationManager.swift */; };
+		MENUBAR1BUILD2REF3456789 /* MenuBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = MENUBAR1FILE2REF34567890 /* MenuBarManager.swift */; };
 		8D223B278B7124516C306F99 /* ToolsManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1417AA5DB02E56D98B1244D6 /* ToolsManagerView.swift */; };
 		8F079E70A91046D5CB3232C7 /* ReviewStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05CA4B851E6802FF0FB44C1 /* ReviewStepView.swift */; };
 		8F53215182DF75320F7EDE30 /* APIAuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F268593FF71C93A526EF9C4A /* APIAuthenticationService.swift */; };
@@ -73,9 +77,11 @@
 		INTEGUITEST1BUILD2REF345 /* IntegrationsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = INTEGUITEST1FILE2REF3456 /* IntegrationsUITests.swift */; };
 		AICHATTEST1BUILD2REF3456 /* AIChatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AICHATTEST1FILE2REF34567 /* AIChatUITests.swift */; };
 		BINLCUITEST1BUILD2REF345 /* BinaryLifecycleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BINLCUITEST1FILE2REF3456 /* BinaryLifecycleUITests.swift */; };
+		EMGTCHBARUITEST1BUILD /* EmergencyTouchBarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EMGTCHBARUITEST1FILE /* EmergencyTouchBarUITests.swift */; };
 		9EB899E25A6C51E7FB655E26 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EC531391F0851D61F38FB879 /* Localizable.strings */; };
 		A34D3F7C089031DB6B9E0D34 /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 5A513212690F21CD202E939D /* Logging */; };
 		A567A69032A8FD3D27D81A55 /* EmergencyModeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 561A5057EE100F4C21AF2BB0 /* EmergencyModeUITests.swift */; };
+		EMGCOMPUIT1BUILD2REF345 /* EmergencyModeComprehensiveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EMGCOMPUIT1FILE2REF3456 /* EmergencyModeComprehensiveUITests.swift */; };
 		A5731145DBC67D50D3A86484 /* APIAuthenticationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96945F126AED0E91CF065EA3 /* APIAuthenticationServiceTests.swift */; };
 		A79C99B069E909146A839478 /* ArtifactSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A26677F643090CD95CE562 /* ArtifactSearchService.swift */; };
 		AB53032A3A0E175B2DDBA03A /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BCE9A9EC0A0A00FE9B1F2 /* ReportsView.swift */; };
@@ -91,6 +97,7 @@
 		CD9CBB32FCBC43C4E57AE4DF /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1D84F989E7224E54EFC2DD7 /* AppState.swift */; };
 		CF71928DE95E2D9C25D35B35 /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43E6A2A7063B5D2D3DB0B09 /* TimelineView.swift */; };
 		CF9A96176DABAB4C0CA1213F /* DeploymentManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA5E6175F0EDAAF06084996 /* DeploymentManagerTests.swift */; };
+		PORTLOCKTEST1BUILD2REF34 /* PortLockdownManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = PORTLOCKTEST1FILE2REF345 /* PortLockdownManagerTests.swift */; };
 		D2C47A21301ED5F36C12870A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4ECB4ED28D51070647EC841 /* ContentView.swift */; };
 		D5C1E3E4EA9AF21612B47627 /* IncidentResponseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB091C6BCC979771A540B8FF /* IncidentResponseViewModel.swift */; };
 		D6ACBEE67309FDF990EC2702 /* IncidentResponseViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D775B40FF555FD60746640FF /* IncidentResponseViewModelTests.swift */; };
@@ -131,6 +138,7 @@
 		0A7FA251A9AA047687359209 /* AccessibilityIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifiers.swift; sourceTree = "<group>"; };
 		0AB5F651192DAE1D3057B5ED /* EvidenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvidenceView.swift; sourceTree = "<group>"; };
 		0BA5E6175F0EDAAF06084996 /* DeploymentManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeploymentManagerTests.swift; sourceTree = "<group>"; };
+		PORTLOCKTEST1FILE2REF345 /* PortLockdownManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortLockdownManagerTests.swift; sourceTree = "<group>"; };
 		1417AA5DB02E56D98B1244D6 /* ToolsManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsManagerView.swift; sourceTree = "<group>"; };
 		14D7C361F7D3DF7DF4B875B5 /* NotificationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTests.swift; sourceTree = "<group>"; };
 		173516B95E7451CA317987D6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -151,12 +159,14 @@
 		INTEGUITEST1FILE2REF3456 /* IntegrationsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationsUITests.swift; sourceTree = "<group>"; };
 		AICHATTEST1FILE2REF34567 /* AIChatUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIChatUITests.swift; sourceTree = "<group>"; };
 		BINLCUITEST1FILE2REF3456 /* BinaryLifecycleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryLifecycleUITests.swift; sourceTree = "<group>"; };
+		EMGTCHBARUITEST1FILE /* EmergencyTouchBarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyTouchBarUITests.swift; sourceTree = "<group>"; };
 		450EB1698C4C0B4F5CAC2EDD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		INTSETTINGS1FILE2REFABC /* IntegrationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationsSettingsView.swift; sourceTree = "<group>"; };
 		OFFPKGBUILDER1FILEREF12 /* OfflinePackageBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflinePackageBuilderView.swift; sourceTree = "<group>"; };
 		458E9952DC284961E4050E77 /* HuntManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HuntManagerView.swift; sourceTree = "<group>"; };
 		543827AF529761C8ED1CB9F9 /* PackageManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageManagerView.swift; sourceTree = "<group>"; };
 		561A5057EE100F4C21AF2BB0 /* EmergencyModeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyModeUITests.swift; sourceTree = "<group>"; };
+		EMGCOMPUIT1FILE2REF3456 /* EmergencyModeComprehensiveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyModeComprehensiveUITests.swift; sourceTree = "<group>"; };
 		586B186DDF5B752EA698720D /* IntegrationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationsView.swift; sourceTree = "<group>"; };
 		5BC400D356EE7C3A5B543E46 /* VelociraptorAPIClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelociraptorAPIClientTests.swift; sourceTree = "<group>"; };
 		63C375AA22BF0D03870583C6 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
@@ -178,6 +188,7 @@
 		TERMVIEW1FILE2REF3456789 /* TerminalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalView.swift; sourceTree = "<group>"; };
 		BINLIFECYCLE1FILE2REF345 /* BinaryLifecycleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryLifecycleView.swift; sourceTree = "<group>"; };
 		CLAWBRAND1FILE2REF345678 /* ClawBrandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClawBrandingView.swift; sourceTree = "<group>"; };
+		EMGTCHBAR1FILE2REF34567 /* EmergencyTouchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyTouchBar.swift; sourceTree = "<group>"; };
 		91ABD7CBFF1F74A6CDC824A3 /* VelociraptorBinaryBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelociraptorBinaryBridge.swift; sourceTree = "<group>"; };
 		96945F126AED0E91CF065EA3 /* APIAuthenticationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIAuthenticationServiceTests.swift; sourceTree = "<group>"; };
 		9B157F227D01A8C275388335 /* APIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIModels.swift; sourceTree = "<group>"; };
@@ -208,6 +219,8 @@
 		E75B46781F79E9AE000F43A2 /* ClientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientsView.swift; sourceTree = "<group>"; };
 		E789986EE9660BAA5AB15F01 /* SIEMIntegrationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIEMIntegrationsView.swift; sourceTree = "<group>"; };
 		EB018EB2C2501475E3DFC112 /* EmergencyModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyModeView.swift; sourceTree = "<group>"; };
+		EMGLOCKDOWN1FILE2REF345 /* EmergencyLockdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyLockdownView.swift; sourceTree = "<group>"; };
+		PORTLOCK1FILE2REF3456789 /* PortLockdownManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortLockdownManager.swift; sourceTree = "<group>"; };
 		F05D2E192C8F6AC66A81A79E /* WizardUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WizardUITests.swift; sourceTree = "<group>"; };
 		F1D84F989E7224E54EFC2DD7 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		F268593FF71C93A526EF9C4A /* APIAuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIAuthenticationService.swift; sourceTree = "<group>"; };
@@ -245,10 +258,12 @@
 				FC6FA9C721B2A993DCCC3702 /* DeploymentManager.swift */,
 				19E04D595620BF7D22BAA061 /* KeychainManager.swift */,
 				26B3831A6C564879767ECF12 /* MCPArtifactRecommender.swift */,
+				MENUBAR1FILE2REF34567890 /* MenuBarManager.swift */,
 				239E51F967C4BAE1AC887FA7 /* NotificationManager.swift */,
 				7871F52BD2FC123D07C7ECD5 /* VelociraptorAPIClient.swift */,
 				91ABD7CBFF1F74A6CDC824A3 /* VelociraptorBinaryBridge.swift */,
 				F38014CE37ACAF2C32497903 /* WebSocketService.swift */,
+				PORTLOCK1FILE2REF3456789 /* PortLockdownManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -275,6 +290,7 @@
 				AB1CAEE8373E56AEFE435A47 /* ComprehensiveUITests.swift */,
 				D38885428786174B911A279B /* ConfigurationWizardUITests.swift */,
 				561A5057EE100F4C21AF2BB0 /* EmergencyModeUITests.swift */,
+				EMGCOMPUIT1FILE2REF3456 /* EmergencyModeComprehensiveUITests.swift */,
 				E22730B810FBC8371C91779E /* IncidentResponseUITests.swift */,
 				CB79D32DEC9E7D9C9BFB8616 /* InstallerUITests.swift */,
 				E5323825C749D12A33DA06E6 /* SettingsUITests.swift */,
@@ -283,6 +299,7 @@
 				INTEGUITEST1FILE2REF3456 /* IntegrationsUITests.swift */,
 				AICHATTEST1FILE2REF34567 /* AIChatUITests.swift */,
 				BINLCUITEST1FILE2REF3456 /* BinaryLifecycleUITests.swift */,
+				EMGTCHBARUITEST1FILE /* EmergencyTouchBarUITests.swift */,
 				F05D2E192C8F6AC66A81A79E /* WizardUITests.swift */,
 			);
 			path = VelociraptorMacOSUITests;
@@ -364,6 +381,7 @@
 				D2F2F5BA2146A94254CADAF8 /* ConfigurationDataTests.swift */,
 				E4AD71B1A802959F2EB123E1 /* ConfigurationExporterTests.swift */,
 				0BA5E6175F0EDAAF06084996 /* DeploymentManagerTests.swift */,
+				PORTLOCKTEST1FILE2REF345 /* PortLockdownManagerTests.swift */,
 				6867269DF74A2A119F8930E1 /* HealthMonitorTests.swift */,
 				D775B40FF555FD60746640FF /* IncidentResponseViewModelTests.swift */,
 				F580CE94011233319BE9ED0A /* KeychainManagerTests.swift */,
@@ -395,6 +413,7 @@
 				F4ECB4ED28D51070647EC841 /* ContentView.swift */,
 				A1C7F355344D2F124DF1AE14 /* DashboardView.swift */,
 				EB018EB2C2501475E3DFC112 /* EmergencyModeView.swift */,
+				EMGLOCKDOWN1FILE2REF345 /* EmergencyLockdownView.swift */,
 				0AB5F651192DAE1D3057B5ED /* EvidenceView.swift */,
 				03BBEBB4F842B201CC5DD9C2 /* HealthMonitorView.swift */,
 				458E9952DC284961E4050E77 /* HuntManagerView.swift */,
@@ -412,6 +431,7 @@
 				TERMVIEW1FILE2REF3456789 /* TerminalView.swift */,
 				BINLIFECYCLE1FILE2REF345 /* BinaryLifecycleView.swift */,
 				CLAWBRAND1FILE2REF345678 /* ClawBrandingView.swift */,
+				EMGTCHBAR1FILE2REF34567 /* EmergencyTouchBar.swift */,
 				E789986EE9660BAA5AB15F01 /* SIEMIntegrationsView.swift */,
 				B43E6A2A7063B5D2D3DB0B09 /* TimelineView.swift */,
 				1417AA5DB02E56D98B1244D6 /* ToolsManagerView.swift */,
@@ -431,6 +451,8 @@
 				8DC628EB3789B9DAE2F6AD56 /* ConfigurationData.swift */,
 				INTEG1PROVIDERS2FILE3REF4 /* IntegrationProviders.swift */,
 				EMRGCTRL1FILE2REF3456789 /* EmergencyController.swift */,
+				EMGPHASE1FILE2REF345678 /* EmergencyPhase.swift */,
+				EMGMODEVM1FILE2REF34567 /* EmergencyModeViewModel.swift */,
 				A9AA394521AB21957021D68C /* ConfigurationViewModel.swift */,
 				BB091C6BCC979771A540B8FF /* IncidentResponseViewModel.swift */,
 			);
@@ -604,10 +626,12 @@
 				043B770147FC1D032EE7EED0 /* ConfigurationData.swift in Sources */,
 				INTEG1PROVIDERS2BUILD3REF /* IntegrationProviders.swift in Sources */,
 				EMRGCTRL1BUILD2REF345678 /* EmergencyController.swift in Sources */,
+				PORTLOCK1BUILD2REF345678 /* PortLockdownManager.swift in Sources */,
 				AICHATVIEW1BUILD2REF3456 /* AIChatView.swift in Sources */,
 				TERMVIEW1BUILD2REF345678 /* TerminalView.swift in Sources */,
 				BINLIFECYCLE1BUILD2REF34 /* BinaryLifecycleView.swift in Sources */,
 				CLAWBRAND1BUILD2REF34567 /* ClawBrandingView.swift in Sources */,
+				EMGTCHBAR1BUILD2REF3456 /* EmergencyTouchBar.swift in Sources */,
 				9C298BB2A3C9FF81463A7DB7 /* ConfigurationExporter.swift in Sources */,
 				90CF461B7CEEDB020885F675 /* ConfigurationViewModel.swift in Sources */,
 				D2C47A21301ED5F36C12870A /* ContentView.swift in Sources */,
@@ -615,6 +639,7 @@
 				01068FF3BFF4EFFD26E3DA75 /* DeploymentManager.swift in Sources */,
 				6DF794672E58C57F3FF3E7A1 /* DeploymentTypeStepView.swift in Sources */,
 				7122D321505A780028A9D2DC /* EmergencyModeView.swift in Sources */,
+				EMGLOCKDOWN1BUILD2REF34 /* EmergencyLockdownView.swift in Sources */,
 				876C9A8633F8FE093CE90497 /* EvidenceView.swift in Sources */,
 				95EC1F239C139EB8AD746511 /* HealthMonitorView.swift in Sources */,
 				58AD0A489C8D0A8FA34A8E3D /* HuntManagerView.swift in Sources */,
@@ -628,6 +653,7 @@
 				E92DEC22540FBB3F4E9A0E2F /* NetworkConfigurationStepView.swift in Sources */,
 				5B4A826DDF14477752F1CFC2 /* NotebooksView.swift in Sources */,
 				8C55FCA99B40677745C09572 /* NotificationManager.swift in Sources */,
+				MENUBAR1BUILD2REF3456789 /* MenuBarManager.swift in Sources */,
 				53BF4E036BC5513E01C43568 /* OfflineCollectorView.swift in Sources */,
 				25504F2C5642B7233C2844E5 /* OrchestrationView.swift in Sources */,
 				0FFC585E14A27D778AFE0ABE /* PackageManagerView.swift in Sources */,
@@ -661,6 +687,7 @@
 				49840DEA932B4A0F5DDE09E7 /* ComprehensiveUITests.swift in Sources */,
 				2E6AAFF846EF2E5FC2FF5133 /* ConfigurationWizardUITests.swift in Sources */,
 				A567A69032A8FD3D27D81A55 /* EmergencyModeUITests.swift in Sources */,
+				EMGCOMPUIT1BUILD2REF345 /* EmergencyModeComprehensiveUITests.swift in Sources */,
 				3ED15A8A8B47386F95A05ECF /* IncidentResponseUITests.swift in Sources */,
 				9A64B3CF8B0A0E68FD7D19BF /* InstallerUITests.swift in Sources */,
 				FB156AB71E6797122496F0EF /* SettingsUITests.swift in Sources */,
@@ -669,6 +696,7 @@
 				INTEGUITEST1BUILD2REF345 /* IntegrationsUITests.swift in Sources */,
 				AICHATTEST1BUILD2REF3456 /* AIChatUITests.swift in Sources */,
 				BINLCUITEST1BUILD2REF345 /* BinaryLifecycleUITests.swift in Sources */,
+				EMGTCHBARUITEST1BUILD /* EmergencyTouchBarUITests.swift in Sources */,
 				588EF4835019B38B6A2A26D6 /* WizardUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -684,6 +712,7 @@
 				33B9DCDEBEE9F9E14EBE2894 /* ConfigurationDataTests.swift in Sources */,
 				C9F928627EE69CDF7E32E0C5 /* ConfigurationExporterTests.swift in Sources */,
 				CF9A96176DABAB4C0CA1213F /* DeploymentManagerTests.swift in Sources */,
+				PORTLOCKTEST1BUILD2REF34 /* PortLockdownManagerTests.swift in Sources */,
 				3170F6C425F88A08862078BE /* HealthMonitorTests.swift in Sources */,
 				D6ACBEE67309FDF990EC2702 /* IncidentResponseViewModelTests.swift in Sources */,
 				539A76569151F75807EEB3D5 /* KeychainManagerTests.swift in Sources */,

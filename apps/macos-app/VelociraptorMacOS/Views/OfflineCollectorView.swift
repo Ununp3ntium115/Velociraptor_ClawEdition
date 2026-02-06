@@ -32,6 +32,7 @@ struct OfflineCollectorView: View {
             // Navigation Footer
             CollectorWizardFooter(viewModel: viewModel)
         }
+        .accessibilityIdentifier("offlineCollector.main")
         .navigationTitle("Offline Collector")
         .accessibilityIdentifier("collector.view")
     }

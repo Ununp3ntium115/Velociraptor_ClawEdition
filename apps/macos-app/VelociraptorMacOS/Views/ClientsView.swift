@@ -61,6 +61,7 @@ struct ClientsView: View {
                 EmptyClientSelection()
             }
         }
+        .accessibilityIdentifier("clients.main")
         .navigationTitle("Clients")
         .toolbar {
             ToolbarItem(placement: .automatic) {
@@ -276,6 +277,53 @@ struct ClientRow: View {
                 .frame(width: 8, height: 8)
         }
         .padding(.vertical, 4)
+        .contextMenu {
+            Button {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(client.clientId, forType: .string)
+            } label: {
+                Label("Copy Client ID", systemImage: "doc.on.doc")
+            }
+            
+            Button {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(client.hostname, forType: .string)
+            } label: {
+                Label("Copy Hostname", systemImage: "doc.on.doc")
+            }
+            
+            Divider()
+            
+            Button {
+                Task {
+                    try? await VelociraptorAPIClient.shared.interrogateClient(id: client.clientId)
+                }
+            } label: {
+                Label("Interrogate", systemImage: "magnifyingglass.circle")
+            }
+            
+            Button {
+                Logger.shared.info("Show collection sheet for: \(client.clientId)", component: "Clients")
+            } label: {
+                Label("Collect Artifacts", systemImage: "square.and.arrow.down")
+            }
+            
+            Button {
+                Logger.shared.info("Open shell for: \(client.clientId)", component: "Clients")
+            } label: {
+                Label("Open Shell", systemImage: "terminal")
+            }
+            
+            Divider()
+            
+            Button(role: .destructive) {
+                Task {
+                    try? await VelociraptorAPIClient.shared.deleteClient(id: client.clientId)
+                }
+            } label: {
+                Label("Delete Client", systemImage: "trash")
+            }
+        }
     }
 }
 
@@ -618,6 +666,40 @@ struct FlowRow: View {
                 .background(Color.secondary.opacity(0.2))
                 .cornerRadius(4)
         }
+        .contextMenu {
+            Button {
+                if let flowId = flow.flowId {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(flowId, forType: .string)
+                }
+            } label: {
+                Label("Copy Flow ID", systemImage: "doc.on.doc")
+            }
+            
+            Divider()
+            
+            Button {
+                Logger.shared.info("View flow results: \(flow.flowId ?? "unknown")", component: "Clients")
+            } label: {
+                Label("View Results", systemImage: "doc.text.magnifyingglass")
+            }
+            
+            Button {
+                Logger.shared.info("Download flow results: \(flow.flowId)", component: "Clients")
+            } label: {
+                Label("Download Results", systemImage: "arrow.down.circle")
+            }
+            
+            if flow.state == .running {
+                Divider()
+                
+                Button(role: .destructive) {
+                    Logger.shared.info("Cancel flow: \(flow.flowId)", component: "Clients")
+                } label: {
+                    Label("Cancel Flow", systemImage: "xmark.circle")
+                }
+            }
+        }
     }
 }
 
@@ -850,7 +932,7 @@ class ClientsViewModel: ObservableObject {
     func interrogateClient(_ client: VelociraptorClient) async {
         do {
             let flow = try await VelociraptorAPIClient.shared.interrogateClient(id: client.clientId)
-            Logger.shared.success("Interrogation started: \(flow.flowId)", component: "Clients")
+            Logger.shared.success("Interrogation started: \(flow.flowId ?? "unknown")", component: "Clients")
         } catch {
             Logger.shared.error("Interrogation failed: \(error)", component: "Clients")
         }

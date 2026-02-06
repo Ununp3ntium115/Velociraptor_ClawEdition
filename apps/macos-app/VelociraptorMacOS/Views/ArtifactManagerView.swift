@@ -40,6 +40,7 @@ struct ArtifactManagerView: View {
                 }
             }
         }
+        .accessibilityIdentifier("artifacts.main")
         .navigationTitle("Artifact Manager")
         .toolbar {
             ArtifactManagerToolbar(viewModel: viewModel, showImportSheet: $showImportSheet, showIncidentAssistant: $showIncidentAssistant)
@@ -305,6 +306,64 @@ struct ArtifactListView: View {
                         }
                     }
                 }
+                .contextMenu {
+                    Button {
+                        viewModel.collectArtifact(artifact)
+                    } label: {
+                        Label("Run Artifact", systemImage: "play.fill")
+                    }
+                    
+                    Button {
+                        viewModel.showArtifactDetails(artifact)
+                    } label: {
+                        Label("View Details", systemImage: "info.circle")
+                    }
+                    
+                    Button {
+                        viewModel.showVQLSource(artifact)
+                    } label: {
+                        Label("View VQL Source", systemImage: "doc.text")
+                    }
+                    
+                    Divider()
+                    
+                    Button {
+                        viewModel.toggleFavorite(artifact)
+                    } label: {
+                        Label(viewModel.isFavorite(artifact) ? "Remove from Favorites" : "Add to Favorites", systemImage: viewModel.isFavorite(artifact) ? "star.slash" : "star")
+                    }
+                    
+                    Button {
+                        viewModel.addToCollection(artifact)
+                    } label: {
+                        Label("Add to Collection", systemImage: "folder.badge.plus")
+                    }
+                    
+                    Divider()
+                    
+                    Button {
+                        NSPasteboard.general.clearContents()
+                        NSPasteboard.general.setString(artifact.name, forType: .string)
+                    } label: {
+                        Label("Copy Artifact Name", systemImage: "doc.on.doc")
+                    }
+                    
+                    if !(artifact.builtIn ?? false) {
+                        Divider()
+                        
+                        Button {
+                            viewModel.editArtifact(artifact)
+                        } label: {
+                            Label("Edit Artifact", systemImage: "pencil")
+                        }
+                        
+                        Button(role: .destructive) {
+                            Logger.shared.info("Delete artifact: \(artifact.name)", component: "Artifacts")
+                        } label: {
+                            Label("Delete Artifact", systemImage: "trash")
+                        }
+                    }
+                }
             }
             .width(min: 200, ideal: 300)
             
@@ -487,6 +546,64 @@ struct ArtifactCard: View {
             viewModel.selectedArtifactId = artifact.id
         }
         .accessibilityIdentifier("artifacts.card.\(artifact.name)")
+        .contextMenu {
+            Button {
+                viewModel.collectArtifact(artifact)
+            } label: {
+                Label("Run Artifact", systemImage: "play.fill")
+            }
+            
+            Button {
+                viewModel.showArtifactDetails(artifact)
+            } label: {
+                Label("View Details", systemImage: "info.circle")
+            }
+            
+            Button {
+                viewModel.showVQLSource(artifact)
+            } label: {
+                Label("View VQL Source", systemImage: "doc.text")
+            }
+            
+            Divider()
+            
+            Button {
+                viewModel.toggleFavorite(artifact)
+            } label: {
+                Label(viewModel.isFavorite(artifact) ? "Remove from Favorites" : "Add to Favorites", systemImage: viewModel.isFavorite(artifact) ? "star.slash" : "star")
+            }
+            
+            Button {
+                viewModel.addToCollection(artifact)
+            } label: {
+                Label("Add to Collection", systemImage: "folder.badge.plus")
+            }
+            
+            Divider()
+            
+            Button {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(artifact.name, forType: .string)
+            } label: {
+                Label("Copy Artifact Name", systemImage: "doc.on.doc")
+            }
+            
+            if !(artifact.builtIn ?? false) {
+                Divider()
+                
+                Button {
+                    viewModel.editArtifact(artifact)
+                } label: {
+                    Label("Edit Artifact", systemImage: "pencil")
+                }
+                
+                Button(role: .destructive) {
+                    Logger.shared.info("Delete artifact: \(artifact.name)", component: "Artifacts")
+                } label: {
+                    Label("Delete Artifact", systemImage: "trash")
+                }
+            }
+        }
     }
 }
 

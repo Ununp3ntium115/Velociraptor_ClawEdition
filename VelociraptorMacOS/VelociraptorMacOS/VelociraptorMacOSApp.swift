@@ -149,14 +149,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.appearance = NSAppearance(named: .darkAqua)
         
         // Log startup
-        Logger.shared.info("Velociraptor macOS started", component: "App")
+        SyncLogger.shared.info("Velociraptor macOS started", component: "App")
     }
     
     /// Perform final cleanup when the application is about to terminate.
     /// - Parameter notification: The termination notification sent by the application.
     func applicationWillTerminate(_ notification: Notification) {
         // Cleanup on termination
-        Logger.shared.info("Velociraptor macOS shutting down", component: "App")
+        SyncLogger.shared.info("Velociraptor macOS shutting down", component: "App")
     }
     
     /// Allow the app to terminate when the last open window is closed.

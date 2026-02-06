@@ -73,13 +73,13 @@ class NotificationManager: ObservableObject {
             isEnabled = granted
             
             if granted {
-                Logger.shared.info("Notification authorization granted", component: "Notifications")
+                SyncLogger.shared.info("Notification authorization granted", component: "Notifications")
             } else {
-                Logger.shared.warning("Notification authorization denied", component: "Notifications")
+                SyncLogger.shared.warning("Notification authorization denied", component: "Notifications")
             }
         } catch {
             lastError = error
-            Logger.shared.error("Failed to request notification authorization: \(error)", component: "Notifications")
+            SyncLogger.shared.error("Failed to request notification authorization: \(error)", component: "Notifications")
             throw error
         }
     }
@@ -201,7 +201,7 @@ class NotificationManager: ObservableObject {
         delay: TimeInterval = 0
     ) async throws {
         guard isEnabled && isAuthorized else {
-            Logger.shared.warning("Notifications not enabled/authorized", component: "Notifications")
+            SyncLogger.shared.warning("Notifications not enabled/authorized", component: "Notifications")
             return
         }
         
@@ -226,7 +226,7 @@ class NotificationManager: ObservableObject {
         )
         
         try await center.add(request)
-        Logger.shared.debug("Sent notification: \(title)", component: "Notifications")
+        SyncLogger.shared.debug("Sent notification: \(title)", component: "Notifications")
     }
     
     // MARK: - Convenience Methods

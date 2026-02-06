@@ -19,7 +19,7 @@ The Velociraptor Claw Edition macOS native application has successfully complete
 **Requirement**: "Xcode project + schemes are authoritative (not just 'Swift files compile')"
 
 **Implementation**:
-- **File**: `apps/macos-legacy/project.yml`
+- **File**: `apps/macos-app/project.yml`
 - **Tool**: XcodeGen for authoritative project generation
 - **Schemes Defined**:
   - VelociraptorMacOS (all targets)
@@ -39,7 +39,7 @@ The Velociraptor Claw Edition macOS native application has successfully complete
 **Requirement**: "App Sandbox and entitlements are part of development correctness"
 
 **Implementation**:
-- **File**: `apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOS.entitlements`
+- **File**: `apps/macos-app/VelociraptorMacOS/VelociraptorMacOS.entitlements`
 - **Entitlements Configured**:
   - App Sandbox: `false` (required for DFIR system-level access)
   - Apple Events: `true` (process control)
@@ -105,7 +105,7 @@ The Velociraptor Claw Edition macOS native application has successfully complete
 **Requirement**: "Accessibility identifiers must exist for UI automation discoverability"
 
 **Implementation**:
-- **File**: `apps/macos-legacy/VelociraptorMacOS/Utilities/AccessibilityIdentifiers.swift`
+- **File**: `apps/macos-app/VelociraptorMacOS/Utilities/AccessibilityIdentifiers.swift`
 - **Total Identifiers**: 119 unique IDs
 - **Categories**: 15 organized categories
   - Navigation (6)
@@ -311,7 +311,7 @@ Services (async/await)
 
 ### Documentation Deliverables ✅
 
-- [x] apps/macos-legacy/README.md
+- [x] apps/macos-app/README.md
 - [x] MACOS_PRODUCTION_READINESS_GAP_ANALYSIS.md
 - [x] MACOS_MASTER_ITERATION_PLAN.md
 - [x] MACOS_IMPLEMENTATION_COMPLETE.md
@@ -374,7 +374,7 @@ Services (async/await)
 **Triggers**:
 - Push to main and cursor/* branches
 - Pull requests to main
-- Path filter: apps/macos-legacy/**
+- Path filter: apps/macos-app/**
 - Manual dispatch
 
 **Expected Result**: Clean build and tests pass on macOS 14 runner

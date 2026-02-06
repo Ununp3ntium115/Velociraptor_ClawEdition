@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/mcp-config.json",
+  "mcpServers": {
+    "velociraptor-macos": {
+      "command": "${workspaceFolder}/apps/macos-legacy/.build/release/VelociraptorMCPServer",
+      "args": [],
+      "description": "Velociraptor DFIR MCP Server (macOS Swift)",
+      "env": {}
+    },
+    "velociraptor-windows": {
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy", "Bypass",
+        "-File",
+        "${workspaceFolder}/scripts/Start-VelociraptorMCPServer.ps1"
+      ],
+      "description": "Velociraptor DFIR MCP Server (Windows PowerShell)"
+    }
+  }
+}

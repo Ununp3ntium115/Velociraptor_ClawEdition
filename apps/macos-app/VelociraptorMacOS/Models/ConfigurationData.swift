@@ -126,6 +126,216 @@ struct ConfigurationData: Codable, Equatable {
     /// Send anonymous usage telemetry
     var enableTelemetry: Bool = false
     
+    // MARK: - AI Configuration
+    
+    /// Whether AI integration is enabled
+    var aiEnabled: Bool = false
+    
+    /// Selected AI provider
+    var aiProvider: AIProvider = .none
+    
+    /// API key for the selected AI provider
+    var aiApiKey: String = ""
+    
+    /// Optional organization ID (for OpenAI)
+    var aiOrganizationId: String = ""
+    
+    /// Selected AI model (provider-specific)
+    var aiModel: String = ""
+    
+    /// AI Provider enumeration
+    enum AIProvider: String, Codable, CaseIterable, Identifiable {
+        case none = "None"
+        case openai = "OpenAI"
+        case anthropic = "Anthropic"
+        case google = "Google"
+        case azure = "Azure OpenAI"
+        case appleIntelligence = "Apple Intelligence"
+        case ollama = "Ollama (Local)"
+        
+        var id: String { rawValue }
+        
+        var displayName: String {
+            switch self {
+            case .none: return "No AI Integration"
+            case .openai: return "OpenAI (GPT-4, GPT-3.5)"
+            case .anthropic: return "Anthropic (Claude)"
+            case .google: return "Google (Gemini)"
+            case .azure: return "Azure OpenAI Service"
+            case .appleIntelligence: return "Apple Intelligence"
+            case .ollama: return "Ollama (Local Models)"
+            }
+        }
+        
+        var description: String {
+            switch self {
+            case .none:
+                return "AI features will be disabled. You can configure this later."
+            case .openai:
+                return "Use OpenAI's GPT models for AI assistance. Requires an API key from platform.openai.com."
+            case .anthropic:
+                return "Use Anthropic's Claude models for AI assistance. Requires an API key from console.anthropic.com."
+            case .google:
+                return "Use Google's Gemini models for AI assistance. Requires an API key from ai.google.dev."
+            case .azure:
+                return "Use Azure-hosted OpenAI models. Requires an Azure subscription and endpoint."
+            case .appleIntelligence:
+                return "Use Apple's on-device AI features. Requires macOS 15+ and compatible hardware."
+            case .ollama:
+                return "Use locally-hosted AI models via Ollama. No API key required but Ollama must be installed."
+            }
+        }
+        
+        var iconName: String {
+            switch self {
+            case .none: return "xmark.circle"
+            case .openai: return "brain"
+            case .anthropic: return "brain.head.profile"
+            case .google: return "g.circle.fill"
+            case .azure: return "cloud.fill"
+            case .appleIntelligence: return "apple.intelligence"
+            case .ollama: return "desktopcomputer"
+            }
+        }
+        
+        /// Available models for this provider
+        var availableModels: [String] {
+            switch self {
+            case .none: return []
+            case .openai: return ["gpt-4o", "gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"]
+            case .anthropic: return ["claude-sonnet-4-20250514", "claude-3-5-sonnet-20241022", "claude-3-opus-20240229", "claude-3-haiku-20240307"]
+            case .google: return ["gemini-2.0-flash", "gemini-1.5-pro", "gemini-1.5-flash"]
+            case .azure: return ["gpt-4", "gpt-35-turbo"]
+            case .appleIntelligence: return ["default"]
+            case .ollama: return ["llama3", "mistral", "codellama", "phi3"]
+            }
+        }
+        
+        /// Whether this provider requires an API key
+        var requiresApiKey: Bool {
+            switch self {
+            case .none, .appleIntelligence, .ollama: return false
+            default: return true
+            }
+        }
+        
+        /// Whether this provider requires an organization ID
+        var requiresOrgId: Bool {
+            self == .openai
+        }
+        
+        /// Whether this provider requires an endpoint URL
+        var requiresEndpoint: Bool {
+            self == .azure || self == .ollama
+        }
+    }
+    
+    // MARK: - MDM Integration
+    
+    /// Whether MDM integration is enabled
+    var mdmEnabled: Bool = false
+    
+    /// Selected MDM provider
+    var mdmProvider: MDMProvider = .none
+    
+    /// MDM OAuth tenant/instance URL
+    var mdmTenantUrl: String = ""
+    
+    /// MDM OAuth client ID
+    var mdmClientId: String = ""
+    
+    /// MDM OAuth client secret
+    var mdmClientSecret: String = ""
+    
+    /// MDM API scope (for OAuth)
+    var mdmApiScope: String = ""
+    
+    /// MDM Provider enumeration - Top 5 MDM providers
+    enum MDMProvider: String, Codable, CaseIterable, Identifiable {
+        case none = "None"
+        case jamf = "Jamf Pro"
+        case intune = "Microsoft Intune"
+        case kandji = "Kandji"
+        case mosyle = "Mosyle"
+        case workspaceOne = "VMware Workspace ONE"
+        
+        var id: String { rawValue }
+        
+        var displayName: String {
+            switch self {
+            case .none: return "No MDM Integration"
+            case .jamf: return "Jamf Pro"
+            case .intune: return "Microsoft Intune"
+            case .kandji: return "Kandji"
+            case .mosyle: return "Mosyle"
+            case .workspaceOne: return "VMware Workspace ONE"
+            }
+        }
+        
+        var description: String {
+            switch self {
+            case .none:
+                return "Skip MDM integration. You can configure this later in Settings."
+            case .jamf:
+                return "Enterprise Apple device management with strong macOS support. Uses OAuth 2.0 Client Credentials."
+            case .intune:
+                return "Microsoft's cloud-based MDM with Azure AD integration. Uses OAuth 2.0 with Microsoft identity platform."
+            case .kandji:
+                return "Apple-focused MDM built for Apple IT teams. Uses API tokens or OAuth."
+            case .mosyle:
+                return "Apple device management with focus on education and enterprise. Uses API token authentication."
+            case .workspaceOne:
+                return "VMware's unified endpoint management platform. Uses OAuth 2.0 or REST API tokens."
+            }
+        }
+        
+        var iconName: String {
+            switch self {
+            case .none: return "xmark.circle"
+            case .jamf: return "apple.terminal"
+            case .intune: return "shield.checkered"
+            case .kandji: return "macwindow"
+            case .mosyle: return "graduationcap"
+            case .workspaceOne: return "rectangle.stack.person.crop"
+            }
+        }
+        
+        var oauthEndpointHint: String {
+            switch self {
+            case .none: return ""
+            case .jamf: return "https://yourinstance.jamfcloud.com/api/oauth/token"
+            case .intune: return "https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token"
+            case .kandji: return "https://api.kandji.io/api/v1/"
+            case .mosyle: return "https://businessapi.mosyle.com/v1/"
+            case .workspaceOne: return "https://{tenant}.awmdm.com/api/system/admins/oauth/token"
+            }
+        }
+        
+        var defaultScope: String {
+            switch self {
+            case .none: return ""
+            case .jamf: return "read write"
+            case .intune: return "https://graph.microsoft.com/.default"
+            case .kandji: return ""
+            case .mosyle: return ""
+            case .workspaceOne: return "device_management"
+            }
+        }
+        
+        /// Whether this provider uses OAuth 2.0
+        var usesOAuth: Bool {
+            switch self {
+            case .none, .kandji, .mosyle: return false
+            case .jamf, .intune, .workspaceOne: return true
+            }
+        }
+        
+        /// Whether this provider requires a tenant URL
+        var requiresTenantUrl: Bool {
+            self != .none
+        }
+    }
+    
     // MARK: - Enums
     
     /// Encryption/certificate type options

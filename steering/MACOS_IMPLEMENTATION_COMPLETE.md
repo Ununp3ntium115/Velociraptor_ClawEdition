@@ -104,7 +104,7 @@ This document summarizes the complete line-by-line implementation of the Velocir
 |-----|----------------|--------|
 | CI/CD Pipeline | `.github/workflows/macos-build.yml` | ✅ |
 | Homebrew Formula Update | Updated `velociraptor-setup.rb` | ✅ |
-| README Documentation | `apps/macos-legacy/README.md` | ✅ |
+| README Documentation | `apps/macos-app/README.md` | ✅ |
 
 ---
 

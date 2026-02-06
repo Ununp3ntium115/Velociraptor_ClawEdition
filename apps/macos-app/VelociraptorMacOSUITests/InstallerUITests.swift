@@ -30,6 +30,8 @@ final class InstallerUITests: XCTestCase {
         try? FileManager.default.createDirectory(at: evidencePath, withIntermediateDirectories: true)
         
         app = XCUIApplication()
+        // Position window on 3rd monitor (portrait) for UI testing
+        app.launchArguments.append("-UITestMode")
         app.launch()
     }
     
@@ -163,11 +165,18 @@ final class InstallerUITests: XCTestCase {
             takeScreenshot(name: "emergency-sheet", testCase: "INS-003")
             logStep("Emergency sheet appeared", to: testCasePath)
             
-            // Find cancel button to dismiss
-            let cancelButton = app.buttons["Cancel"]
-            if cancelButton.exists {
+            // Find cancel button within the sheet to dismiss (using accessibility ID if available)
+            let cancelButton = emergencySheet.buttons[TestIDs.EmergencyMode.cancelButton].firstMatch
+            if cancelButton.exists && cancelButton.isHittable {
                 cancelButton.click()
                 logStep("Dismissed emergency sheet", to: testCasePath)
+            } else {
+                // Fallback: find Cancel button within sheet
+                let sheetCancelButton = emergencySheet.buttons.matching(NSPredicate(format: "label CONTAINS[cd] 'cancel'")).firstMatch
+                if sheetCancelButton.exists && sheetCancelButton.isHittable {
+                    sheetCancelButton.click()
+                    logStep("Dismissed emergency sheet (fallback)", to: testCasePath)
+                }
             }
         }
         
@@ -246,15 +255,30 @@ final class InstallerUITests: XCTestCase {
             // Click cancel
             cancelButton.click()
             
-            // May show confirmation dialog
-            let confirmButton = app.buttons["Cancel Configuration"]
-            if confirmButton.waitForExistence(timeout: 2) {
+            // May show confirmation dialog (as sheet or alert)
+            let confirmSheet = app.sheets.firstMatch
+            if confirmSheet.waitForExistence(timeout: 2) {
                 // Don't actually confirm in test - just verify dialog exists
                 takeScreenshot(name: "confirm-dialog", testCase: "INS-005")
                 logStep("Confirmation dialog shown", to: testCasePath)
                 
-                // Dismiss dialog
-                app.buttons["Continue Editing"].click()
+                // Dismiss dialog - look for continue button within the sheet
+                let continueButton = confirmSheet.buttons.matching(NSPredicate(format: "label CONTAINS[cd] 'continue'")).firstMatch
+                if continueButton.exists && continueButton.isHittable {
+                    continueButton.click()
+                }
+            } else {
+                // Check for alert-style dialog
+                let alertDialog = app.dialogs.firstMatch
+                if alertDialog.waitForExistence(timeout: 2) {
+                    takeScreenshot(name: "confirm-dialog-alert", testCase: "INS-005")
+                    logStep("Confirmation dialog shown (alert)", to: testCasePath)
+                    
+                    let continueButton = alertDialog.buttons.matching(NSPredicate(format: "label CONTAINS[cd] 'continue'")).firstMatch
+                    if continueButton.exists && continueButton.isHittable {
+                        continueButton.click()
+                    }
+                }
             }
         }
         

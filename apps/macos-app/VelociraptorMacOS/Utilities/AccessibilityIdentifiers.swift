@@ -34,6 +34,8 @@ enum AccessibilityIdentifiers {
         static let storageConfiguration = "wizard.step.storageConfiguration"
         static let networkConfiguration = "wizard.step.networkConfiguration"
         static let authentication = "wizard.step.authentication"
+        static let aiConfiguration = "wizard.step.aiConfiguration"
+        static let mdmConfiguration = "wizard.step.mdmConfiguration"
         static let review = "wizard.step.review"
         static let complete = "wizard.step.complete"
     }
@@ -133,6 +135,7 @@ enum AccessibilityIdentifiers {
         static let generatePasswordButton = "auth.button.generatePassword"
         static let usernameValidation = "auth.validation.username"
         static let passwordRequirements = "auth.requirements.password"
+        static let setupPasswordToggle = "auth.toggle.setupPassword"
     }
     
     // MARK: - Review Step
@@ -145,6 +148,31 @@ enum AccessibilityIdentifiers {
         static let deployButton = "review.button.deploy"
         static let deploymentProgress = "review.progress.deployment"
         static let stepIndicator = "review.indicator.step"
+    }
+    
+    // MARK: - AI Configuration Step
+    
+    enum AIConfiguration {
+        static let enableToggle = "ai.toggle.enable"
+        static let providerPicker = "ai.picker.provider"
+        static let apiKeyField = "ai.field.apiKey"
+        static let orgIdField = "ai.field.orgId"
+        static let modelPicker = "ai.picker.model"
+        static let testConnectionButton = "ai.button.testConnection"
+        static let connectionStatus = "ai.status.connection"
+    }
+    
+    // MARK: - MDM Configuration Step
+    
+    enum MDMConfiguration {
+        static let enableToggle = "mdm.toggle.enable"
+        static let providerPicker = "mdm.picker.provider"
+        static let tenantUrlField = "mdm.field.tenantUrl"
+        static let clientIdField = "mdm.field.clientId"
+        static let clientSecretField = "mdm.field.clientSecret"
+        static let apiScopeField = "mdm.field.apiScope"
+        static let testConnectionButton = "mdm.button.testConnection"
+        static let connectionStatus = "mdm.status.connection"
     }
     
     // MARK: - Complete Step
@@ -173,6 +201,14 @@ enum AccessibilityIdentifiers {
         static let successView = "emergency.view.success"
         static let errorView = "emergency.view.error"
         static let retryButton = "emergency.button.retry"
+        
+        // Lockdown View
+        static let lockdownFullscreen = "emergency.lockdown.fullscreen"
+        static let lockdownArmingPanel = "emergency.lockdown.panel.arming"
+        static let lockdownCountdownPanel = "emergency.lockdown.panel.countdown"
+        static let lockdownForensicPanel = "emergency.lockdown.panel.forensic"
+        static let lockdownCountdownRing = "emergency.lockdown.countdown.ring"
+        static let lockdownCancelButton = "emergency.lockdown.button.cancel"
     }
     
     // MARK: - Incident Response

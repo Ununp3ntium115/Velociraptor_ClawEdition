@@ -10,7 +10,7 @@
 
 When working with macOS agents, gap analysis, or test archetypes:
 
-1. **Read the CDIF catalog structure**: `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md` — start with the **CDIF Structure (read first)** section. It defines the document layout, the relationship between test archetypes (FC-*, MAC-*, etc.) and the parent/child registry (CDIF-ARCH-*, CDIF-IMPL-* in `.claude/agents/MACOS_SDLC_AGENT_PROMPTS.md`), and path resolution rules.
+1. **Read the CDIF catalog structure**: `apps/macos-app/CDIF_TEST_ARCHETYPES.md` — start with the **CDIF Structure (read first)** section. It defines the document layout, the relationship between test archetypes (FC-*, MAC-*, etc.) and the parent/child registry (CDIF-ARCH-*, CDIF-IMPL-* in `.claude/agents/MACOS_SDLC_AGENT_PROMPTS.md`), and path resolution rules.
 2. **Use the Path Reference Index** inside that catalog for all canonical repo paths (steering, gap docs, deployment, tests, build, agents).
 3. **Use the Steering KB index**: `steering/CDIF_KB_INDEX.md` to find the right schematics/workflows quickly (and to avoid searching vendor/build output).
 4. **This file** (`docs/WORKSPACE_PATH_INDEX.md`) is the workspace-wide path index; the CDIF catalog’s Path Reference Index mirrors and extends it for CDIF/agent use.
@@ -75,7 +75,7 @@ Only these belong at repository root:
 
 | Logical name | Current path | Notes |
 |--------------|--------------|-------|
-| **macOS app (canonical build + tests)** | `apps/macos-legacy/` | SwiftPM + XcodeGen app (`apps/macos-legacy/VelociraptorMacOS/`), tests (`VelociraptorMacOSTests/`, `VelociraptorMacOSUITests/`), CDIF + MCP server sources |
+| **macOS app (canonical build + tests)** | `apps/macos-app/` | SwiftPM + XcodeGen app (`apps/macos-app/VelociraptorMacOS/`), tests (`VelociraptorMacOSTests/`, `VelociraptorMacOSUITests/`), CDIF + MCP server sources |
 | **macOS app (root snapshot / lightweight copy)** | `VelociraptorMacOS/` | Non-canonical copy for reference; do not use as the primary build/test source |
 | **macOS steering / gap registry** | `Velociraptor_macOS_App/steering/` | Gap registry and implementation guide: `HEXADECIMAL-GAP-REGISTRY.md`, `MACOS-IMPLEMENTATION-GUIDE.md` |
 | **macOS code review / analysis** | `steering/MACOS_CODE_REVIEW_ANALYSIS.md` | Code review and gap analysis docs |
@@ -84,7 +84,7 @@ Only these belong at repository root:
 
 | Logical name | Current path | Referenced by |
 |--------------|--------------|---------------|
-| **CDIF catalog (read structure first)** | `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md` | Agents, macOS QA, gap analysis; contains CDIF Structure and Path Reference Index |
+| **CDIF catalog (read structure first)** | `apps/macos-app/CDIF_TEST_ARCHETYPES.md` | Agents, macOS QA, gap analysis; contains CDIF Structure and Path Reference Index |
 | **CDIF parent/child registry** | `.claude/agents/MACOS_SDLC_AGENT_PROMPTS.md` | CDIF-ARCH-*, CDIF-IMPL-* definitions |
 | **Gap registry (hex)** | `Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md` | Gap analysis agent |
 | Path index (this doc) | `docs/WORKSPACE_PATH_INDEX.md` | Code and docs that resolve paths |
@@ -134,6 +134,6 @@ Incident packages and `build/releases/` create a **flat** layout where `Deploy_*
 - **Deploy**: `.\scripts\Deploy_Velociraptor_Standalone.ps1` or `.\scripts\Deploy_Velociraptor_Server.ps1`.
 - **GUI**: `.\apps\gui\VelociraptorGUI.ps1`.
 - **Module**: `Import-Module .\lib\VelociraptorSetupScripts.psd1 -Force`.
-- **macOS app (Swift)**: App source at `VelociraptorMacOS/`; gap registry and steering at `Velociraptor_macOS_App/steering/`; CDIF and legacy bundle at `apps/macos-legacy/`.
-- **CDIF / agents**: Read `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md` (CDIF Structure section first), then use the Path Reference Index there and this file for all paths.
-- **After moving or adding files**: Update this index and `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md` Path Reference Index; update any code that referenced the old path.
+- **macOS app (Swift)**: App source at `VelociraptorMacOS/`; gap registry and steering at `Velociraptor_macOS_App/steering/`; CDIF and legacy bundle at `apps/macos-app/`.
+- **CDIF / agents**: Read `apps/macos-app/CDIF_TEST_ARCHETYPES.md` (CDIF Structure section first), then use the Path Reference Index there and this file for all paths.
+- **After moving or adding files**: Update this index and `apps/macos-app/CDIF_TEST_ARCHETYPES.md` Path Reference Index; update any code that referenced the old path.

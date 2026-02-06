@@ -35,6 +35,7 @@ struct HuntManagerView: View {
                 EmptyHuntSelection(onCreateHunt: { showingCreateHunt = true })
             }
         }
+        .accessibilityIdentifier("hunts.main")
         .navigationTitle("Hunts")
         .toolbar {
             ToolbarItem(placement: .automatic) {

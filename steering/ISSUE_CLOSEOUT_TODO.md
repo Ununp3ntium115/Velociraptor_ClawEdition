@@ -19,7 +19,7 @@ Complete these steps before closing any issues:
   - Integration Tests: `tests/integration/`
   - Security Tests: `tests/security/`
   - QA Tests: `tests/qa/`
-- [ ] **Confirm macOS build** via Xcode scheme under `apps/macos-legacy/` (XcodeGen + SwiftPM)
+- [ ] **Confirm macOS build** via Xcode scheme under `Velociraptor_macOS_App/`
 - [ ] **Confirm docs updates** under `docs/` and/or `steering/`
 - [ ] **Add close-out note** in tracking doc for each issue: `[YYYY-MM-DD] Ready to close`
 
@@ -30,10 +30,10 @@ Complete these steps before closing any issues:
 git status
 
 # Run unit tests (if available)
-cd apps/macos-legacy && swift test
+cd Velociraptor_macOS_App && swift test
 
 # Verify build
-cd apps/macos-legacy && swift build -c release
+cd Velociraptor_macOS_App && swift build -c release
 
 # Check evidence document exists
 cat steering/GITHUB_ISSUES_STATUS.md | head -50
@@ -51,11 +51,11 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#gap-001](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Models/ConfigurationData.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Models/AppState.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Models/ConfigurationData.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Models/AppState.swift`
 - [ ] **Verification step**:
   ```bash
-  grep -n "enum DeploymentType" apps/macos-legacy/VelociraptorMacOS/Models/ConfigurationData.swift
+  grep -n "enum DeploymentType" Velociraptor_macOS_App/VelociraptorMacOS/Models/ConfigurationData.swift
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
 - [ ] **Manual close command** (do not execute):
@@ -69,11 +69,11 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#gap-002](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Utilities/Strings.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Views/ContentView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Utilities/Strings.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/ContentView.swift`
 - [ ] **Verification step**:
   ```bash
-  grep -n "nameRaw\|taglineRaw" apps/macos-legacy/VelociraptorMacOS/Utilities/Strings.swift
+  grep -n "nameRaw\|taglineRaw" Velociraptor_macOS_App/VelociraptorMacOS/Utilities/Strings.swift
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
 - [ ] **Manual close command** (do not execute):
@@ -87,10 +87,10 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#gap-003](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Views/Components/CommonViews.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/Components/CommonViews.swift`
 - [ ] **Verification step**:
   ```bash
-  grep -c "struct.*View" apps/macos-legacy/VelociraptorMacOS/Views/Components/CommonViews.swift
+  grep -c "struct.*View" Velociraptor_macOS_App/VelociraptorMacOS/Views/Components/CommonViews.swift
   # Expected: 10+ view components
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
@@ -105,10 +105,10 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#gap-004](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Models/ConfigurationData.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Models/ConfigurationData.swift`
 - [ ] **Verification step**:
   ```bash
-  grep -n "inet_pton" apps/macos-legacy/VelociraptorMacOS/Models/ConfigurationData.swift
+  grep -n "inet_pton" Velociraptor_macOS_App/VelociraptorMacOS/Models/ConfigurationData.swift
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
 - [ ] **Manual close command** (do not execute):
@@ -122,11 +122,11 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#gap-005](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Utilities/Logger.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Utilities/Logger.swift`
 - [ ] **Verification step**:
   ```bash
-  grep -n "^actor Logger" apps/macos-legacy/VelociraptorMacOS/Utilities/Logger.swift
-  grep -n "class SyncLogger" apps/macos-legacy/VelociraptorMacOS/Utilities/Logger.swift
+  grep -n "^actor Logger" Velociraptor_macOS_App/VelociraptorMacOS/Utilities/Logger.swift
+  grep -n "class SyncLogger" Velociraptor_macOS_App/VelociraptorMacOS/Utilities/Logger.swift
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
 - [ ] **Manual close command** (do not execute):
@@ -140,13 +140,13 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#gap-006](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOSUITests/TestAccessibilityIdentifiers.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Utilities/AccessibilityIdentifiers.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOSUITests/TestAccessibilityIdentifiers.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Utilities/AccessibilityIdentifiers.swift`
 - [ ] **Verification step**:
   ```bash
   # Compare enum count between files
-  grep -c "static let" apps/macos-legacy/VelociraptorMacOS/Utilities/AccessibilityIdentifiers.swift
-  grep -c "static let" apps/macos-legacy/VelociraptorMacOSUITests/TestAccessibilityIdentifiers.swift
+  grep -c "static let" Velociraptor_macOS_App/VelociraptorMacOS/Utilities/AccessibilityIdentifiers.swift
+  grep -c "static let" Velociraptor_macOS_App/VelociraptorMacOSUITests/TestAccessibilityIdentifiers.swift
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
 - [ ] **Manual close command** (do not execute):
@@ -160,13 +160,13 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#gap-007](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Models/ConfigurationData.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Services/DeploymentManager.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Views/Steps/WelcomeStepView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Models/ConfigurationData.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Services/DeploymentManager.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/Steps/WelcomeStepView.swift`
 - [ ] **Verification step**:
   ```bash
-  grep -n "offlineMode" apps/macos-legacy/VelociraptorMacOS/Models/ConfigurationData.swift
-  grep -n "handleOfflineMode" apps/macos-legacy/VelociraptorMacOS/Services/DeploymentManager.swift
+  grep -n "offlineMode" Velociraptor_macOS_App/VelociraptorMacOS/Models/ConfigurationData.swift
+  grep -n "handleOfflineMode" Velociraptor_macOS_App/VelociraptorMacOS/Services/DeploymentManager.swift
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
 - [ ] **Manual close command** (do not execute):
@@ -180,12 +180,12 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#gap-008](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Resources/en.lproj/Localizable.strings`
-  - `apps/macos-legacy/VelociraptorMacOS/Utilities/Strings.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Resources/en.lproj/Localizable.strings`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Utilities/Strings.swift`
 - [ ] **Verification step**:
   ```bash
-  grep -n "format\." apps/macos-legacy/VelociraptorMacOS/Resources/en.lproj/Localizable.strings
-  grep -n "enum Format" apps/macos-legacy/VelociraptorMacOS/Utilities/Strings.swift
+  grep -n "format\." Velociraptor_macOS_App/VelociraptorMacOS/Resources/en.lproj/Localizable.strings
+  grep -n "enum Format" Velociraptor_macOS_App/VelociraptorMacOS/Utilities/Strings.swift
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
 - [ ] **Manual close command** (do not execute):
@@ -203,14 +203,14 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#issue-23](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/Package.swift`
-  - `apps/macos-legacy/project.yml`
-  - `apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOSApp.swift`
+  - `Velociraptor_macOS_App/Package.swift`
+  - `Velociraptor_macOS_App/project.yml`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/VelociraptorMacOSApp.swift`
   - `.github/workflows/macos-build.yml`
 - [ ] **Verification step**:
   ```bash
   # Verify Swift files count
-  find apps/macos-legacy -name "*.swift" | wc -l
+  find Velociraptor_macOS_App -name "*.swift" | wc -l
   # Expected: 55+
   
   # Verify CI workflow exists
@@ -228,11 +228,11 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#issue-24](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Services/DeploymentManager.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Services/DeploymentManager.swift`
 - [ ] **Verification step**:
   ```bash
   grep -n "func deploy\|func downloadVelociraptor\|func startService" \
-    apps/macos-legacy/VelociraptorMacOS/Services/DeploymentManager.swift
+    Velociraptor_macOS_App/VelociraptorMacOS/Services/DeploymentManager.swift
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
 - [ ] **Manual close command** (do not execute):
@@ -246,18 +246,18 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#issue-25](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Views/Steps/WelcomeStepView.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Views/Steps/DeploymentTypeStepView.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Views/Steps/CertificateSettingsStepView.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Views/Steps/SecuritySettingsStepView.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Views/Steps/StorageConfigurationStepView.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Views/Steps/NetworkConfigurationStepView.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Views/Steps/AuthenticationStepView.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Views/Steps/ReviewStepView.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Views/Steps/CompleteStepView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/Steps/WelcomeStepView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/Steps/DeploymentTypeStepView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/Steps/CertificateSettingsStepView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/Steps/SecuritySettingsStepView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/Steps/StorageConfigurationStepView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/Steps/NetworkConfigurationStepView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/Steps/AuthenticationStepView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/Steps/ReviewStepView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/Steps/CompleteStepView.swift`
 - [ ] **Verification step**:
   ```bash
-  ls -1 apps/macos-legacy/VelociraptorMacOS/Views/Steps/*.swift | wc -l
+  ls -1 Velociraptor_macOS_App/VelociraptorMacOS/Views/Steps/*.swift | wc -l
   # Expected: 9 wizard step files
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
@@ -272,11 +272,11 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#issue-26](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Views/IncidentResponse/IncidentResponseView.swift`
-  - `apps/macos-legacy/VelociraptorMacOSUITests/IncidentResponseUITests.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Views/IncidentResponse/IncidentResponseView.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOSUITests/IncidentResponseUITests.swift`
 - [ ] **Verification step**:
   ```bash
-  grep -c "func test" apps/macos-legacy/VelociraptorMacOSUITests/IncidentResponseUITests.swift
+  grep -c "func test" Velociraptor_macOS_App/VelociraptorMacOSUITests/IncidentResponseUITests.swift
   # Expected: 14 UI tests
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
@@ -291,11 +291,11 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#issue-27](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Services/DeploymentManager.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Services/DeploymentManager.swift`
 - [ ] **Verification step**:
   ```bash
   grep -n "generateLaunchdPlist\|startService\|stopService\|isRunning" \
-    apps/macos-legacy/VelociraptorMacOS/Services/DeploymentManager.swift
+    Velociraptor_macOS_App/VelociraptorMacOS/Services/DeploymentManager.swift
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
 - [ ] **Manual close command** (do not execute):
@@ -309,12 +309,12 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#issue-28](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/Services/DeploymentManager.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/Services/NotificationManager.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Services/DeploymentManager.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Services/NotificationManager.swift`
 - [ ] **Verification step**:
   ```bash
   grep -n "requestPermission\|checkPermissions" \
-    apps/macos-legacy/VelociraptorMacOS/Services/NotificationManager.swift
+    Velociraptor_macOS_App/VelociraptorMacOS/Services/NotificationManager.swift
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
 - [ ] **Manual close command** (do not execute):
@@ -329,11 +329,11 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#issue-29](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
   - `modules/VelociraptorDeployment/functions/Get-MacOSSystemSpecs.ps1`
-  - `apps/macos-legacy/VelociraptorMacOS/Services/DeploymentManager.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/Services/DeploymentManager.swift`
 - [ ] **Verification step**:
   ```bash
   grep -n "getSystemArchitecture\|installedVersion" \
-    apps/macos-legacy/VelociraptorMacOS/Services/DeploymentManager.swift
+    Velociraptor_macOS_App/VelociraptorMacOS/Services/DeploymentManager.swift
   cat modules/VelociraptorDeployment/functions/Get-MacOSSystemSpecs.ps1 | head -20
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
@@ -348,13 +348,13 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#issue-30](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/scripts/create-release.sh`
+  - `Velociraptor_macOS_App/scripts/create-release.sh`
   - `.github/workflows/macos-build.yml`
   - `Formula/velociraptor-gui.rb`
 - [ ] **Verification step**:
   ```bash
   # Verify release script exists
-  head -20 apps/macos-legacy/scripts/create-release.sh
+  head -20 Velociraptor_macOS_App/scripts/create-release.sh
   
   # Verify CI has signed-release job
   grep -n "signed-release\|notarize" .github/workflows/macos-build.yml
@@ -374,21 +374,21 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#issue-31](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/VelociraptorMacOS/TestingAgent/TestingAgent.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/TestingAgent/GapValidator.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/TestingAgent/TestReporter.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/TestingAgent/XcodeTestRunner.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/TestingAgent/DeterminismChecker.swift`
-  - `apps/macos-legacy/VelociraptorMacOS/TestingAgent/TestingAgentCLI.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/TestingAgent/TestingAgent.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/TestingAgent/GapValidator.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/TestingAgent/TestReporter.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/TestingAgent/XcodeTestRunner.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/TestingAgent/DeterminismChecker.swift`
+  - `Velociraptor_macOS_App/VelociraptorMacOS/TestingAgent/TestingAgentCLI.swift`
 - [ ] **Verification step**:
   ```bash
   # Count test files
-  find apps/macos-legacy -name "*Tests.swift" | wc -l
+  find Velociraptor_macOS_App -name "*Tests.swift" | wc -l
   # Expected: 19+ test files
   
   # Count test functions
-  grep -r "func test" apps/macos-legacy/VelociraptorMacOSTests/ \
-    apps/macos-legacy/VelociraptorMacOSUITests/ | wc -l
+  grep -r "func test" Velociraptor_macOS_App/VelociraptorMacOSTests/ \
+    Velociraptor_macOS_App/VelociraptorMacOSUITests/ | wc -l
   # Expected: 230+ tests
   ```
 - [ ] **Close-out comment**: `Verified as implemented`
@@ -403,7 +403,7 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 
 - [ ] **Evidence**: [steering/GITHUB_ISSUES_STATUS.md#issue-32](steering/GITHUB_ISSUES_STATUS.md)
 - [ ] **Files touched**:
-  - `apps/macos-legacy/README.md`
+  - `Velociraptor_macOS_App/README.md`
   - `docs/MACOS_CONTRIBUTING.md`
   - `docs/PARALLELS_MCP_SETUP.md`
   - `docs/QA_QUALITY_GATE.md`
@@ -414,7 +414,7 @@ cat steering/GITHUB_ISSUES_STATUS.md | head -50
 - [ ] **Verification step**:
   ```bash
   # Count documentation files
-  find docs steering Velociraptor_macOS_App apps/macos-legacy -name "*.md" | wc -l
+  find docs steering Velociraptor_macOS_App -name "*.md" | wc -l
   # Expected: 30+ documentation files
   ```
 - [ ] **Close-out comment**: `Verified as implemented`

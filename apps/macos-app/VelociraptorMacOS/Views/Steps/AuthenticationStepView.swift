@@ -14,171 +14,214 @@ struct AuthenticationStepView: View {
     @State private var showPassword = false
     @State private var showConfirmPassword = false
     @State private var saveToKeychain = true
+    @State private var setupPasswordNow = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            Text("Configure administrator credentials:")
-                .font(.body)
-            
-            // Admin Username
-            GroupBox("Administrator Account") {
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack {
-                        Text("Username:")
-                            .frame(width: 120, alignment: .trailing)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                Text("Configure administrator credentials:")
+                    .font(.body)
+                
+                // Admin Username
+                GroupBox("Administrator Account") {
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Text("Username:")
+                                .frame(width: 120, alignment: .trailing)
+                            
+                            TextField("admin", text: $configViewModel.data.adminUsername)
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 250)
+                                .textContentType(.username)
+                                .accessibilityId(AccessibilityIdentifiers.Authentication.usernameField)
+                            
+                            UsernameValidationView(username: configViewModel.data.adminUsername)
+                                .accessibilityId(AccessibilityIdentifiers.Authentication.usernameValidation)
+                        }
                         
-                        TextField("admin", text: $configViewModel.data.adminUsername)
-                            .textFieldStyle(.roundedBorder)
-                            .frame(width: 250)
-                            .textContentType(.username)
-                            .accessibilityId(AccessibilityIdentifiers.Authentication.usernameField)
-                        
-                        UsernameValidationView(username: configViewModel.data.adminUsername)
-                            .accessibilityId(AccessibilityIdentifiers.Authentication.usernameValidation)
+                        Text("The admin account has full access to all Velociraptor features.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
-                    
-                    Text("The admin account has full access to all Velociraptor features.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    .padding()
                 }
-                .padding()
-            }
-            
-            // Password
-            GroupBox("Password") {
-                VStack(alignment: .leading, spacing: 16) {
-                    // Password field
-                    HStack {
-                        Text("Password:")
-                            .frame(width: 120, alignment: .trailing)
-                        
-                        Group {
-                            if showPassword {
-                                TextField("Password", text: $configViewModel.data.adminPassword)
-                            } else {
-                                SecureField("Password", text: $configViewModel.data.adminPassword)
-                            }
-                        }
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 250)
-                        .accessibilityId(AccessibilityIdentifiers.Authentication.passwordField)
-                        
-                        Button {
-                            showPassword.toggle()
-                        } label: {
-                            Image(systemName: showPassword ? "eye.slash" : "eye")
-                        }
-                        .buttonStyle(.plain)
-                        .help(showPassword ? "Hide password" : "Show password")
-                        .accessibilityId(AccessibilityIdentifiers.Authentication.showPasswordButton)
-                    }
-                    
-                    // Password strength indicator
-                    PasswordStrengthView(password: configViewModel.data.adminPassword)
-                        .padding(.leading, 124)
-                        .accessibilityId(AccessibilityIdentifiers.Authentication.passwordStrengthIndicator)
-                    
-                    // Confirm password field
-                    HStack {
-                        Text("Confirm:")
-                            .frame(width: 120, alignment: .trailing)
-                        
-                        Group {
-                            if showConfirmPassword {
-                                TextField("Confirm password", text: $configViewModel.data.confirmPassword)
-                            } else {
-                                SecureField("Confirm password", text: $configViewModel.data.confirmPassword)
-                            }
-                        }
-                        .textFieldStyle(.roundedBorder)
-                        .frame(width: 250)
-                        .accessibilityId(AccessibilityIdentifiers.Authentication.confirmPasswordField)
-                        
-                        Button {
-                            showConfirmPassword.toggle()
-                        } label: {
-                            Image(systemName: showConfirmPassword ? "eye.slash" : "eye")
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityId(AccessibilityIdentifiers.Authentication.showConfirmButton)
-                        
-                        // Match indicator
-                        if !configViewModel.data.confirmPassword.isEmpty {
-                            if configViewModel.data.adminPassword == configViewModel.data.confirmPassword {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
-                            } else {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.red)
-                            }
-                        }
-                    }
-                    
-                    // Password requirements
-                    PasswordRequirementsView(password: configViewModel.data.adminPassword)
-                        .padding(.leading, 124)
-                        .accessibilityId(AccessibilityIdentifiers.Authentication.passwordRequirements)
-                }
-                .padding()
-            }
-            
-            // Organization
-            GroupBox("Organization") {
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack {
-                        Text("Organization Name:")
-                            .frame(width: 120, alignment: .trailing)
-                        
-                        TextField("VelociraptorOrg", text: $configViewModel.data.organizationName)
-                            .textFieldStyle(.roundedBorder)
-                            .frame(width: 300)
-                            .accessibilityId(AccessibilityIdentifiers.Authentication.organizationField)
-                    }
-                    
-                    Text("This name will appear in generated certificates and configurations.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                .padding()
-            }
-            
-            // Keychain option
-            if configViewModel.data.useKeychain {
-                GroupBox("macOS Keychain") {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Toggle("Save credentials to Keychain", isOn: $saveToKeychain)
+                
+                // Password Setup Toggle
+                GroupBox("Password Setup") {
+                    VStack(alignment: .leading, spacing: 16) {
+                        Toggle("Set password now", isOn: $setupPasswordNow)
                             .toggleStyle(.switch)
-                            .accessibilityId(AccessibilityIdentifiers.Authentication.saveToKeychainToggle)
+                            .accessibilityId(AccessibilityIdentifiers.Authentication.setupPasswordToggle)
                         
-                        if saveToKeychain {
+                        if !setupPasswordNow {
                             HStack {
-                                Image(systemName: "lock.shield.fill")
-                                    .foregroundColor(.green)
-                                Text("Your credentials will be securely stored in the macOS Keychain")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                                Image(systemName: "info.circle.fill")
+                                    .foregroundColor(.blue)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Password setup can be done later")
+                                        .font(.caption.bold())
+                                    Text("You can configure user passwords in Settings → User Management after deployment.")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                            .padding(.vertical, 8)
+                        }
+                        
+                        if setupPasswordNow {
+                            Divider()
+                            
+                            // Password field
+                            HStack {
+                                Text("Password:")
+                                    .frame(width: 120, alignment: .trailing)
+                                
+                                Group {
+                                    if showPassword {
+                                        TextField("Password", text: $configViewModel.data.adminPassword)
+                                    } else {
+                                        SecureField("Password", text: $configViewModel.data.adminPassword)
+                                    }
+                                }
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 250)
+                                .accessibilityId(AccessibilityIdentifiers.Authentication.passwordField)
+                                
+                                Button {
+                                    showPassword.toggle()
+                                } label: {
+                                    Image(systemName: showPassword ? "eye.slash" : "eye")
+                                }
+                                .buttonStyle(.plain)
+                                .help(showPassword ? "Hide password" : "Show password")
+                                .accessibilityId(AccessibilityIdentifiers.Authentication.showPasswordButton)
+                            }
+                            
+                            // Password strength indicator
+                            PasswordStrengthView(password: configViewModel.data.adminPassword)
+                                .padding(.leading, 124)
+                                .accessibilityId(AccessibilityIdentifiers.Authentication.passwordStrengthIndicator)
+                            
+                            // Confirm password field
+                            HStack {
+                                Text("Confirm:")
+                                    .frame(width: 120, alignment: .trailing)
+                                
+                                Group {
+                                    if showConfirmPassword {
+                                        TextField("Confirm password", text: $configViewModel.data.confirmPassword)
+                                    } else {
+                                        SecureField("Confirm password", text: $configViewModel.data.confirmPassword)
+                                    }
+                                }
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 250)
+                                .accessibilityId(AccessibilityIdentifiers.Authentication.confirmPasswordField)
+                                
+                                Button {
+                                    showConfirmPassword.toggle()
+                                } label: {
+                                    Image(systemName: showConfirmPassword ? "eye.slash" : "eye")
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityId(AccessibilityIdentifiers.Authentication.showConfirmButton)
+                                
+                                // Match indicator
+                                if !configViewModel.data.confirmPassword.isEmpty {
+                                    if configViewModel.data.adminPassword == configViewModel.data.confirmPassword {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundColor(.green)
+                                    } else {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .foregroundColor(.red)
+                                    }
+                                }
+                            }
+                            
+                            // Password requirements
+                            PasswordRequirementsView(password: configViewModel.data.adminPassword)
+                                .padding(.leading, 124)
+                                .accessibilityId(AccessibilityIdentifiers.Authentication.passwordRequirements)
+                            
+                            // Generate random password button
+                            HStack {
+                                Spacer()
+                                
+                                Button {
+                                    let password = generateSecurePassword()
+                                    configViewModel.data.adminPassword = password
+                                    configViewModel.data.confirmPassword = password
+                                } label: {
+                                    Label("Generate Secure Password", systemImage: "key.fill")
+                                }
+                                .accessibilityId(AccessibilityIdentifiers.Authentication.generatePasswordButton)
                             }
                         }
                     }
                     .padding()
                 }
-            }
-            
-            // Generate random password button
-            HStack {
-                Spacer()
                 
-                Button {
-                    let password = generateSecurePassword()
-                    configViewModel.data.adminPassword = password
-                    configViewModel.data.confirmPassword = password
-                } label: {
-                    Label("Generate Secure Password", systemImage: "key.fill")
+                // Organization
+                GroupBox("Organization") {
+                    VStack(alignment: .leading, spacing: 16) {
+                        HStack {
+                            Text("Organization Name:")
+                                .frame(width: 120, alignment: .trailing)
+                            
+                            TextField("VelociraptorOrg", text: $configViewModel.data.organizationName)
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 300)
+                                .accessibilityId(AccessibilityIdentifiers.Authentication.organizationField)
+                        }
+                        
+                        Text("This name will appear in generated certificates and configurations.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding()
                 }
-                .accessibilityId(AccessibilityIdentifiers.Authentication.generatePasswordButton)
+                
+                // Keychain option
+                if configViewModel.data.useKeychain && setupPasswordNow {
+                    GroupBox("macOS Keychain") {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Toggle("Save credentials to Keychain", isOn: $saveToKeychain)
+                                .toggleStyle(.switch)
+                                .accessibilityId(AccessibilityIdentifiers.Authentication.saveToKeychainToggle)
+                            
+                            if saveToKeychain {
+                                HStack {
+                                    Image(systemName: "lock.shield.fill")
+                                        .foregroundColor(.green)
+                                    Text("Your credentials will be securely stored in the macOS Keychain")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                        .padding()
+                    }
+                }
             }
         }
         .accessibilityId(AccessibilityIdentifiers.WizardStep.authentication)
+        .onAppear {
+            // Set default username if empty
+            if configViewModel.data.adminUsername.isEmpty {
+                configViewModel.data.adminUsername = "admin"
+            }
+            // Set default organization name if empty
+            if configViewModel.data.organizationName.isEmpty {
+                configViewModel.data.organizationName = "VelociraptorOrg"
+            }
+        }
+        .onChange(of: setupPasswordNow) { _, newValue in
+            if !newValue {
+                // Clear password fields when user chooses to skip
+                configViewModel.data.adminPassword = ""
+                configViewModel.data.confirmPassword = ""
+            }
+        }
     }
     
     /// Generate a 16-character secure password that includes required character classes.

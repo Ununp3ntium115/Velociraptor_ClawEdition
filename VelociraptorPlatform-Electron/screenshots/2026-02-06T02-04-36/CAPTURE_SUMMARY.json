@@ -1,0 +1,111 @@
+{
+  "timestamp": "2026-02-06T02:05:43.605Z",
+  "totalTabs": 19,
+  "successful": 7,
+  "failed": 12,
+  "screenshotDirectory": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/VelociraptorPlatform-Electron/screenshots/2026-02-06T02-04-36",
+  "results": [
+    {
+      "tab": "01-Setup-Wizard",
+      "status": "success",
+      "path": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/VelociraptorPlatform-Electron/screenshots/2026-02-06T02-04-36/01-Setup-Wizard.png",
+      "description": "Initial setup and configuration wizard"
+    },
+    {
+      "tab": "02-Dashboard",
+      "status": "success",
+      "path": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/VelociraptorPlatform-Electron/screenshots/2026-02-06T02-04-36/02-Dashboard.png",
+      "description": "System overview, status cards, activity timeline"
+    },
+    {
+      "tab": "03-Terminal",
+      "status": "success",
+      "path": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/VelociraptorPlatform-Electron/screenshots/2026-02-06T02-04-36/03-Terminal.png",
+      "description": "Integrated terminal for Velociraptor CLI"
+    },
+    {
+      "tab": "04-Management",
+      "status": "success",
+      "path": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/VelociraptorPlatform-Electron/screenshots/2026-02-06T02-04-36/04-Management.png",
+      "description": "Client management, hunts, flows"
+    },
+    {
+      "tab": "05-Labels",
+      "status": "success",
+      "path": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/VelociraptorPlatform-Electron/screenshots/2026-02-06T02-04-36/05-Labels.png",
+      "description": "Client labeling system"
+    },
+    {
+      "tab": "06-Evidence",
+      "status": "success",
+      "path": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/VelociraptorPlatform-Electron/screenshots/2026-02-06T02-04-36/06-Evidence.png",
+      "description": "Evidence collection and chain of custody"
+    },
+    {
+      "tab": "07-Hunt",
+      "status": "success",
+      "path": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/VelociraptorPlatform-Electron/screenshots/2026-02-06T02-04-36/07-Hunt.png",
+      "description": "Threat hunting interface"
+    },
+    {
+      "tab": "08-Clients",
+      "status": "error",
+      "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-tab=\"clients\"]')\n    - locator resolved to <li class=\"nav-item\" data-tab=\"clients\">…</li>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div class=\"modal\" id=\"hunt-results-modal\">…</div> from <main class=\"content\">…</main> subtree intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div class=\"modal\" id=\"hunt-results-modal\">…</div> from <main class=\"content\">…</main> subtree intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    54 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div class=\"modal\" id=\"hunt-results-modal\">…</div> from <main class=\"content\">…</main> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n    - waiting for element to be visible, enabled and stable\n"
+    },
+    {
+      "tab": "09-Notebooks",
+      "status": "error",
+      "error": "locator.click: Target page, context or browser has been closed\nCall log:\n  - waiting for locator('[data-tab=\"notebooks\"]')\n    - locator resolved to <li class=\"nav-item\" data-tab=\"notebooks\">…</li>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div class=\"modal\" id=\"hunt-results-modal\">…</div> from <main class=\"content\">…</main> subtree intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div class=\"modal\" id=\"hunt-results-modal\">…</div> from <main class=\"content\">…</main> subtree intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    15 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div class=\"modal\" id=\"hunt-results-modal\">…</div> from <main class=\"content\">…</main> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n"
+    },
+    {
+      "tab": "10-Quick-Deploy",
+      "status": "error",
+      "error": "locator.count: Target page, context or browser has been closed"
+    },
+    {
+      "tab": "11-Tools",
+      "status": "error",
+      "error": "locator.count: Target page, context or browser has been closed"
+    },
+    {
+      "tab": "12-Packages",
+      "status": "error",
+      "error": "locator.count: Target page, context or browser has been closed"
+    },
+    {
+      "tab": "13-Integrations",
+      "status": "error",
+      "error": "locator.count: Target page, context or browser has been closed"
+    },
+    {
+      "tab": "14-Orchestration",
+      "status": "error",
+      "error": "locator.count: Target page, context or browser has been closed"
+    },
+    {
+      "tab": "15-Training",
+      "status": "error",
+      "error": "locator.count: Target page, context or browser has been closed"
+    },
+    {
+      "tab": "16-Reports",
+      "status": "error",
+      "error": "locator.count: Target page, context or browser has been closed"
+    },
+    {
+      "tab": "17-Logs",
+      "status": "error",
+      "error": "locator.count: Target page, context or browser has been closed"
+    },
+    {
+      "tab": "18-VFS",
+      "status": "error",
+      "error": "locator.count: Target page, context or browser has been closed"
+    },
+    {
+      "tab": "19-Settings",
+      "status": "error",
+      "error": "locator.count: Target page, context or browser has been closed"
+    }
+  ]
+}

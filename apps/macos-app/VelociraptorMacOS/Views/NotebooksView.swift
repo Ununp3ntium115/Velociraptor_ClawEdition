@@ -24,6 +24,7 @@ struct NotebooksView: View {
             NotebookEditor(viewModel: viewModel)
                 .frame(minWidth: 500)
         }
+        .accessibilityIdentifier("notebooks.main")
         .navigationTitle("Investigation Notebooks")
         .toolbar {
             NotebooksToolbar(viewModel: viewModel)

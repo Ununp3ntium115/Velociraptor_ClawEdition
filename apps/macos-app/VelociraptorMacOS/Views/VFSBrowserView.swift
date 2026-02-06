@@ -25,6 +25,7 @@ struct VFSBrowserView: View {
             VFSContentPane(viewModel: viewModel)
                 .frame(minWidth: 500)
         }
+        .accessibilityIdentifier("vfs.main")
         .navigationTitle("VFS Browser")
         .toolbar {
             VFSToolbar(viewModel: viewModel)

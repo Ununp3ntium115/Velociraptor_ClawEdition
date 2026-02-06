@@ -230,9 +230,9 @@ class DeploymentManager: ObservableObject {
             }
             progress = 0.1
             
-            // Step 2: Download binary
+            // Step 2: Download or copy binary (supports offline mode)
             let binaryPath = try await executeStep(.download) {
-                try await self.downloadVelociraptor(to: config.datastoreDirectory)
+                try await self.downloadVelociraptor(to: config.datastoreDirectory, config: config)
             }
             progress = 0.4
             
@@ -268,12 +268,12 @@ class DeploymentManager: ObservableObject {
             
             statusMessage = "Deployment completed successfully!"
             isRunning = true
-            Logger.shared.success("Deployment completed successfully", component: "Deploy")
+            SyncLogger.shared.success("Deployment completed successfully", component: "Deploy")
             
         } catch {
             lastError = error
             statusMessage = "Deployment failed: \(error.localizedDescription)"
-            Logger.shared.error("Deployment failed: \(error)", component: "Deploy")
+            SyncLogger.shared.error("Deployment failed: \(error)", component: "Deploy")
             throw error
         }
     }
@@ -287,12 +287,12 @@ class DeploymentManager: ObservableObject {
     private func executeStep<T>(_ step: DeploymentStep, action: () async throws -> T) async throws -> T {
         stepStatus[step] = .inProgress
         statusMessage = "Step: \(step.rawValue)..."
-        Logger.shared.info("Starting step: \(step.rawValue)", component: "Deploy")
+        SyncLogger.shared.info("Starting step: \(step.rawValue)", component: "Deploy")
         
         do {
             let result = try await action()
             stepStatus[step] = .completed
-            Logger.shared.success("Completed step: \(step.rawValue)", component: "Deploy")
+            SyncLogger.shared.success("Completed step: \(step.rawValue)", component: "Deploy")
             return result
         } catch {
             stepStatus[step] = .failed(error)
@@ -323,17 +323,107 @@ class DeploymentManager: ObservableObject {
             throw DeploymentError.insufficientDiskSpace
         }
         
-        Logger.shared.info("Prerequisites check passed", component: "Deploy")
+        SyncLogger.shared.info("Prerequisites check passed", component: "Deploy")
     }
     
-    /// Downloads the latest Velociraptor macOS release, choosing an architecture-appropriate asset, and places the binary under the specified destination directory.
+    /// Downloads or copies the Velociraptor binary based on configuration.
     /// 
-    /// The method prefers an Apple Silicon (`darwin-arm64`) asset when the host reports `arm64`, falling back to `darwin-amd64` if necessary.
+    /// Supports three modes:
+    /// 1. Offline mode with local binary path - copies the specified binary
+    /// 2. Offline mode with bundled binary - uses app bundle resources
+    /// 3. Online mode - downloads from GitHub releases
+    ///
     /// - Parameters:
-    ///   - destination: Filesystem directory path where the downloaded `velociraptor` binary will be moved.
-    /// - Returns: The file URL of the downloaded `velociraptor` binary at the destination.
-    /// - Throws: `DeploymentError.binaryNotFound` if no suitable macOS release asset is available.
-    private func downloadVelociraptor(to destination: String) async throws -> URL {
+    ///   - destination: Filesystem directory path where the `velociraptor` binary will be placed.
+    ///   - config: Configuration data containing offline mode settings.
+    /// - Returns: The file URL of the installed `velociraptor` binary.
+    /// - Throws: `DeploymentError.binaryNotFound` if no suitable binary is available.
+    private func downloadVelociraptor(to destination: String, config: ConfigurationData? = nil) async throws -> URL {
+        // Check for offline mode
+        if let config = config, config.offlineMode {
+            return try await handleOfflineMode(destination: destination, config: config)
+        }
+        
+        // Online mode: download from GitHub
+        return try await downloadFromGitHub(to: destination)
+    }
+    
+    /// Handles offline mode binary deployment
+    private func handleOfflineMode(destination: String, config: ConfigurationData) async throws -> URL {
+        statusMessage = "Using offline mode..."
+        SyncLogger.shared.info("Offline mode enabled", component: "Deploy")
+        
+        let destinationDir = URL(fileURLWithPath: destination)
+        let binaryPath = destinationDir.appendingPathComponent("velociraptor")
+        
+        // Try local binary path first
+        if !config.localBinaryPath.isEmpty {
+            let localURL = URL(fileURLWithPath: config.localBinaryPath)
+            if fileManager.fileExists(atPath: localURL.path) {
+                statusMessage = "Copying local binary..."
+                SyncLogger.shared.info("Using local binary: \(config.localBinaryPath)", component: "Deploy")
+                
+                try fileManager.createDirectory(at: destinationDir, withIntermediateDirectories: true)
+                
+                if fileManager.fileExists(atPath: binaryPath.path) {
+                    try fileManager.removeItem(at: binaryPath)
+                }
+                
+                try fileManager.copyItem(at: localURL, to: binaryPath)
+                try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: binaryPath.path)
+                
+                SyncLogger.shared.success("Copied local binary", component: "Deploy")
+                return binaryPath
+            }
+        }
+        
+        // Try bundled binary
+        if config.useBundledBinary {
+            if let bundledURL = findBundledBinary() {
+                statusMessage = "Using bundled binary..."
+                SyncLogger.shared.info("Using bundled binary", component: "Deploy")
+                
+                try fileManager.createDirectory(at: destinationDir, withIntermediateDirectories: true)
+                
+                if fileManager.fileExists(atPath: binaryPath.path) {
+                    try fileManager.removeItem(at: binaryPath)
+                }
+                
+                try fileManager.copyItem(at: bundledURL, to: binaryPath)
+                try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: binaryPath.path)
+                
+                SyncLogger.shared.success("Copied bundled binary", component: "Deploy")
+                return binaryPath
+            }
+        }
+        
+        throw DeploymentError.binaryNotFound
+    }
+    
+    /// Finds bundled Velociraptor binary in app resources
+    private func findBundledBinary() -> URL? {
+        let arch = getSystemArchitecture()
+        let binaryName = arch == "arm64" ? "velociraptor-darwin-arm64" : "velociraptor-darwin-amd64"
+        
+        // Check for bundled binary in various locations
+        let searchPaths = [
+            Bundle.main.resourceURL?.appendingPathComponent(binaryName),
+            Bundle.main.resourceURL?.appendingPathComponent("velociraptor"),
+            Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/\(binaryName)"),
+            Bundle.main.bundleURL.appendingPathComponent("Contents/Resources/velociraptor")
+        ]
+        
+        for path in searchPaths {
+            if let path = path, fileManager.fileExists(atPath: path.path) {
+                return path
+            }
+        }
+        
+        return nil
+    }
+    
+    /// Downloads the latest Velociraptor macOS release from GitHub
+    private func downloadFromGitHub(to destination: String) async throws -> URL {
         statusMessage = "Fetching latest release information..."
         
         // Get latest release from GitHub API
@@ -364,7 +454,7 @@ class DeploymentManager: ObservableObject {
     /// - Returns: The file URL of the installed `velociraptor` binary.
     private func downloadAsset(_ asset: GitHubRelease.Asset, to destination: String) async throws -> URL {
         statusMessage = "Downloading \(asset.name)..."
-        Logger.shared.info("Downloading: \(asset.browserDownloadURL)", component: "Deploy")
+        SyncLogger.shared.info("Downloading: \(asset.browserDownloadURL)", component: "Deploy")
         
         let downloadURL = URL(string: asset.browserDownloadURL)!
         let (localURL, _) = try await URLSession.shared.download(from: downloadURL)
@@ -388,7 +478,7 @@ class DeploymentManager: ObservableObject {
         try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: binaryPath.path)
         
         installedVersion = getInstalledVersion(binaryPath: binaryPath.path)
-        Logger.shared.success("Downloaded and installed binary", component: "Deploy")
+        SyncLogger.shared.success("Downloaded and installed binary", component: "Deploy")
         
         return binaryPath
     }
@@ -415,7 +505,7 @@ class DeploymentManager: ObservableObject {
                     withIntermediateDirectories: true,
                     attributes: [.posixPermissions: 0o750]
                 )
-                Logger.shared.info("Created directory: \(directory)", component: "Deploy")
+                SyncLogger.shared.info("Created directory: \(directory)", component: "Deploy")
             }
         }
     }
@@ -448,7 +538,7 @@ class DeploymentManager: ObservableObject {
         // Set proper permissions
         try fileManager.setAttributes([.posixPermissions: 0o640], ofItemAtPath: configPath.path)
         
-        Logger.shared.success("Configuration generated: \(configPath.path)", component: "Deploy")
+        SyncLogger.shared.success("Configuration generated: \(configPath.path)", component: "Deploy")
         
         return configPath
     }
@@ -480,7 +570,7 @@ class DeploymentManager: ObservableObject {
         // Write new plist
         try plistContent.write(to: plistPath, atomically: true, encoding: .utf8)
         
-        Logger.shared.success("Launchd plist installed: \(plistPath.path)", component: "Deploy")
+        SyncLogger.shared.success("Launchd plist installed: \(plistPath.path)", component: "Deploy")
     }
     
     /// Creates a LaunchAgent plist XML to run the Velociraptor frontend using the provided binary and configuration.
@@ -551,7 +641,7 @@ class DeploymentManager: ObservableObject {
         // Wait for service to start
         try await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
         
-        Logger.shared.success("Service started", component: "Deploy")
+        SyncLogger.shared.success("Service started", component: "Deploy")
     }
     
     /// Verifies the deployed Velociraptor service and performs a brief GUI health check.
@@ -578,15 +668,15 @@ class DeploymentManager: ObservableObject {
         do {
             let (_, response) = try await session.data(for: request)
             if let httpResponse = response as? HTTPURLResponse {
-                Logger.shared.info("GUI responded with status: \(httpResponse.statusCode)", component: "Deploy")
+                SyncLogger.shared.info("GUI responded with status: \(httpResponse.statusCode)", component: "Deploy")
             }
         } catch {
-            Logger.shared.warning("Could not connect to GUI (may still be starting): \(error)", component: "Deploy")
+            SyncLogger.shared.warning("Could not connect to GUI (may still be starting): \(error)", component: "Deploy")
             // Don't throw - service might still be initializing
         }
         
         isRunning = true
-        Logger.shared.success("Deployment verified", component: "Deploy")
+        SyncLogger.shared.success("Deployment verified", component: "Deploy")
     }
     
     // MARK: - Service Management
@@ -607,7 +697,7 @@ class DeploymentManager: ObservableObject {
         process.waitUntilExit()
         
         isRunning = false
-        Logger.shared.info("Service stopped", component: "Deploy")
+        SyncLogger.shared.info("Service stopped", component: "Deploy")
     }
     
     /// Attempts to unload the user LaunchAgent plist for Velociraptor using `launchctl`.

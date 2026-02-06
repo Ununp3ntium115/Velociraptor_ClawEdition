@@ -27,6 +27,8 @@ final class ConfigurationWizardUITests: XCTestCase {
         try? FileManager.default.createDirectory(at: evidencePath, withIntermediateDirectories: true)
         
         app = XCUIApplication()
+        // Position window on 3rd monitor (portrait) for UI testing
+        app.launchArguments.append("-UITestMode")
         app.launch()
     }
     
@@ -47,9 +49,8 @@ final class ConfigurationWizardUITests: XCTestCase {
     func testCertificateSettingsStep() throws {
         navigateToStep(2) // Certificate is step 3 (0-indexed: 2)
         
-        // Verify we're on certificate step
-        let stepView = app.otherElements[TestIDs.WizardStep.certificateSettings]
-        XCTAssertTrue(stepView.waitForExistence(timeout: 5), "Certificate settings step should be visible")
+        // Verify we're on certificate step (search all element types)
+        XCTAssertTrue(elementExists(withId: TestIDs.WizardStep.certificateSettings), "Certificate settings step should be visible")
         
         takeScreenshot(name: "certificate-settings-initial")
     }
@@ -105,8 +106,8 @@ final class ConfigurationWizardUITests: XCTestCase {
     func testSecuritySettingsStep() throws {
         navigateToStep(3) // Security is step 4
         
-        let stepView = app.otherElements[TestIDs.WizardStep.securitySettings]
-        XCTAssertTrue(stepView.waitForExistence(timeout: 5), "Security settings step should be visible")
+        // Verify we're on security step (search all element types)
+        XCTAssertTrue(elementExists(withId: TestIDs.WizardStep.securitySettings), "Security settings step should be visible")
         
         takeScreenshot(name: "security-settings-initial")
     }
@@ -151,8 +152,8 @@ final class ConfigurationWizardUITests: XCTestCase {
     func testNetworkConfigurationStep() throws {
         navigateToStep(5) // Network is step 6
         
-        let stepView = app.otherElements[TestIDs.WizardStep.networkConfiguration]
-        XCTAssertTrue(stepView.waitForExistence(timeout: 5), "Network configuration step should be visible")
+        // Verify we're on network step (search all element types)
+        XCTAssertTrue(elementExists(withId: TestIDs.WizardStep.networkConfiguration), "Network configuration step should be visible")
         
         takeScreenshot(name: "network-config-initial")
     }
@@ -201,8 +202,8 @@ final class ConfigurationWizardUITests: XCTestCase {
     func testStorageConfigurationStep() throws {
         navigateToStep(4) // Storage is step 5
         
-        let stepView = app.otherElements[TestIDs.WizardStep.storageConfiguration]
-        XCTAssertTrue(stepView.waitForExistence(timeout: 5), "Storage configuration step should be visible")
+        // Verify we're on storage step (search all element types)
+        XCTAssertTrue(elementExists(withId: TestIDs.WizardStep.storageConfiguration), "Storage configuration step should be visible")
         
         takeScreenshot(name: "storage-config-initial")
     }
@@ -227,8 +228,8 @@ final class ConfigurationWizardUITests: XCTestCase {
     func testAuthenticationStep() throws {
         navigateToStep(6) // Authentication is step 7
         
-        let stepView = app.otherElements[TestIDs.WizardStep.authentication]
-        XCTAssertTrue(stepView.waitForExistence(timeout: 5), "Authentication step should be visible")
+        // Verify we're on authentication step (search all element types)
+        XCTAssertTrue(elementExists(withId: TestIDs.WizardStep.authentication), "Authentication step should be visible")
         
         takeScreenshot(name: "authentication-initial")
     }
@@ -255,9 +256,8 @@ final class ConfigurationWizardUITests: XCTestCase {
             passwordField.typeText("TestPassword123!")
         }
         
-        // Verify password strength indicator
-        let strengthIndicator = app.otherElements[TestIDs.Authentication.passwordStrengthIndicator]
-        XCTAssertTrue(strengthIndicator.waitForExistence(timeout: 2), "Password strength indicator should appear")
+        // Verify password strength indicator (search all element types)
+        XCTAssertTrue(elementExists(withId: TestIDs.Authentication.passwordStrengthIndicator, timeout: 2), "Password strength indicator should appear")
         
         takeScreenshot(name: "authentication-password-entered")
     }
@@ -275,16 +275,16 @@ final class ConfigurationWizardUITests: XCTestCase {
     // MARK: - Review Step Tests
     
     func testReviewStep() throws {
-        navigateToStep(7) // Review is step 8
+        navigateToStep(9) // Review is step 9 (MDM Configuration is step 8)
         
-        let stepView = app.otherElements[TestIDs.WizardStep.review]
-        XCTAssertTrue(stepView.waitForExistence(timeout: 5), "Review step should be visible")
+        // Verify we're on review step (search all element types)
+        XCTAssertTrue(elementExists(withId: TestIDs.WizardStep.review), "Review step should be visible")
         
         takeScreenshot(name: "review-step-initial")
     }
     
     func testReviewActionButtons() throws {
-        navigateToStep(7)
+        navigateToStep(9) // Review is step 9
         
         // Verify Preview YAML button
         let previewButton = app.buttons[TestIDs.Review.previewYAMLButton]
@@ -371,8 +371,16 @@ final class ConfigurationWizardUITests: XCTestCase {
         takeScreenshot(name: "workflow-07-authentication")
         clickNext()
         
-        // Step 8: Review
-        takeScreenshot(name: "workflow-08-review")
+        // Step 8: AI Configuration (can skip or configure)
+        takeScreenshot(name: "workflow-08-ai-configuration")
+        clickNext()
+        
+        // Step 9: MDM Configuration (can skip or configure)
+        takeScreenshot(name: "workflow-09-mdm-configuration")
+        clickNext()
+        
+        // Step 10: Review
+        takeScreenshot(name: "workflow-10-review")
         
         // Verify we can see the review page
         let deployButton = app.buttons[TestIDs.Review.deployButton]
@@ -386,17 +394,55 @@ final class ConfigurationWizardUITests: XCTestCase {
             let nextButton = app.buttons[TestIDs.Navigation.nextButton]
             if nextButton.waitForExistence(timeout: 3) && nextButton.isEnabled {
                 nextButton.click()
-                Thread.sleep(forTimeInterval: 0.3)
+                Thread.sleep(forTimeInterval: 0.5)
             }
         }
+        // Allow UI to settle
+        Thread.sleep(forTimeInterval: 0.5)
     }
     
     private func clickNext() {
         let nextButton = app.buttons[TestIDs.Navigation.nextButton]
         if nextButton.waitForExistence(timeout: 3) && nextButton.isEnabled {
             nextButton.click()
-            Thread.sleep(forTimeInterval: 0.3)
+            Thread.sleep(forTimeInterval: 0.5)
         }
+    }
+    
+    /// Find an element with accessibility identifier regardless of element type
+    /// SwiftUI views can render as various element types, so we search all descendants
+    private func findElement(withId id: String) -> XCUIElement {
+        // First try otherElements (most common for SwiftUI views)
+        let other = app.otherElements[id]
+        if other.exists { return other }
+        
+        // Try groups
+        let group = app.groups[id]
+        if group.exists { return group }
+        
+        // Try scrollViews
+        let scroll = app.scrollViews[id]
+        if scroll.exists { return scroll }
+        
+        // Try generic descendants
+        return app.descendants(matching: .any)[id].firstMatch
+    }
+    
+    /// Check if element with ID exists (searching all element types)
+    private func elementExists(withId id: String, timeout: TimeInterval = 5) -> Bool {
+        // Try multiple element types since SwiftUI can render differently
+        let types: [XCUIElement.ElementType] = [.other, .group, .scrollView, .staticText, .button]
+        
+        for type in types {
+            let element = app.descendants(matching: type)[id].firstMatch
+            if element.waitForExistence(timeout: 0.5) {
+                return true
+            }
+        }
+        
+        // Final fallback - any type
+        let anyElement = app.descendants(matching: .any)[id].firstMatch
+        return anyElement.waitForExistence(timeout: timeout)
     }
     
     private func takeScreenshot(name: String) {

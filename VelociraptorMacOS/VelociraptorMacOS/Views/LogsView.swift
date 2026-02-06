@@ -456,7 +456,7 @@ class LogsViewModel: ObservableObject {
     
     /// Deletes log files older than 30 days and refreshes the list of available log files.
     func clearLogs() {
-        Logger.shared.clearOldLogs(olderThanDays: 30)
+        SyncLogger.shared.clearOldLogs(olderThanDays: 30)
         refreshLogFiles()
     }
 }

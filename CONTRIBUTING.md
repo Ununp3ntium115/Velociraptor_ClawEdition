@@ -1,10 +1,10 @@
-# Contributing to Velociraptor Setup Scripts
+# Contributing to Velociraptor Claw Edition
 
-Thank you for your interest in contributing to the Velociraptor Setup Scripts project! This guide will help you get started with contributing to our enterprise-grade DFIR infrastructure automation platform.
+Thank you for your interest in contributing to the Velociraptor Claw Edition project! This guide will help you get started with contributing to our enterprise-grade DFIR infrastructure automation platform.
 
 ## 🎯 **Project Overview**
 
-The Velociraptor Setup Scripts project provides comprehensive automation for deploying, managing, and scaling Velociraptor DFIR infrastructure across traditional, cloud-native, and edge computing environments.
+The Velociraptor Claw Edition project provides comprehensive automation for deploying, managing, and scaling Velociraptor DFIR infrastructure across traditional, cloud-native, and edge computing environments.
 
 ## 🚀 **Getting Started**
 

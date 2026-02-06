@@ -80,7 +80,7 @@ Re-run Gap Analysis → Repeat until convergence
 
 ### CDIF/CEDIF (read structure first)
 CryptEx Intelligence Document Framework - canonical patterns and implementations.
-- **Location**: `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md`
+- **Location**: `apps/macos-app/CDIF_TEST_ARCHETYPES.md`
 - **Read first**: Open that file and read the **CDIF Structure (read first)** section. It defines the document layout, test archetypes (FC-*, MAC-*), parent/child registry (in `MACOS_SDLC_AGENT_PROMPTS.md`), and path resolution. Use the **Path Reference Index** in the catalog and `docs/WORKSPACE_PATH_INDEX.md` for all canonical paths.
 - **KB entrypoint**: `steering/CDIF_KB_INDEX.md` (curated index + exclusions like `tests/results/` and `node_modules/`)
 
@@ -125,7 +125,7 @@ To reach MVP (functional DFIR platform), close these 6 P0 gaps:
 ## Repository Structure
 
 ```
-apps/macos-legacy/
+apps/macos-app/
 ├── VelociraptorMacOS/
 │   ├── Models/          # Data models
 │   ├── Views/           # SwiftUI views

@@ -11,18 +11,18 @@ metadata:
 # Repository Anchors (shared across all agents)
 repository:
   root: "/Velociraptor_ClawEdition"
-  # Canonical macOS build + tests live under apps/macos-legacy (SPM + Xcodegen).
+  # Canonical macOS build + tests live under apps/macos-app (SPM + Xcodegen).
   # A lightweight copy also exists at VelociraptorMacOS/ (not canonical for SPM builds).
-  app_source: "apps/macos-legacy/VelociraptorMacOS"
+  app_source: "apps/macos-app/VelociraptorMacOS"
   app_source_root_snapshot: "VelociraptorMacOS/VelociraptorMacOS"
-  unit_tests: "apps/macos-legacy/VelociraptorMacOSTests"
-  ui_tests: "apps/macos-legacy/VelociraptorMacOSUITests"
-  mcp_source: "apps/macos-legacy/Sources/VelociraptorMCP"
+  unit_tests: "apps/macos-app/VelociraptorMacOSTests"
+  ui_tests: "apps/macos-app/VelociraptorMacOSUITests"
+  mcp_source: "apps/macos-app/Sources/VelociraptorMCP"
   
   steering:
     gap_registry: "Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md"
     implementation_guide: "Velociraptor_macOS_App/steering/MACOS-IMPLEMENTATION-GUIDE.md"
-    cdif_archetypes: "apps/macos-legacy/CDIF_TEST_ARCHETYPES.md"
+    cdif_archetypes: "apps/macos-app/CDIF_TEST_ARCHETYPES.md"
     kb_index: "steering/CDIF_KB_INDEX.md"
     kb_manifest: "steering/CDIF_KB_MANIFEST.yaml"
     workspace_path_index: "docs/WORKSPACE_PATH_INDEX.md"
@@ -44,12 +44,12 @@ constraints:
   
   build_system:
     type: "swift_package_manager"
-    manifest: "apps/macos-legacy/Package.swift"
-    xcodegen: "apps/macos-legacy/project.yml"
+    manifest: "apps/macos-app/Package.swift"
+    xcodegen: "apps/macos-app/project.yml"
   
   sandbox:
     enabled: true
-    entitlements: "apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOS.entitlements"
+    entitlements: "apps/macos-app/VelociraptorMacOS/VelociraptorMacOS.entitlements"
   
   hardened_runtime:
     enabled: true
@@ -88,8 +88,8 @@ agents:
       - grep_search
     
     allowed_paths:
-      - "apps/macos-legacy/VelociraptorMacOS/**"
-      - "apps/macos-legacy/Package.swift"
+      - "apps/macos-app/VelociraptorMacOS/**"
+      - "apps/macos-app/Package.swift"
     
     status_transitions:
       input: "OPEN"
@@ -118,8 +118,8 @@ agents:
       - xcode_test_runner
     
     allowed_paths:
-      - "apps/macos-legacy/VelociraptorMacOSTests/**"
-      - "apps/macos-legacy/VelociraptorMacOSUITests/**"
+      - "apps/macos-app/VelociraptorMacOSTests/**"
+      - "apps/macos-app/VelociraptorMacOSUITests/**"
     
     status_transitions:
       input: "Implemented – Pending Test"
@@ -147,7 +147,7 @@ agents:
       - performance_profiler
     
     allowed_paths:
-      - "apps/macos-legacy/**"  # Read-only analysis
+      - "apps/macos-app/**"  # Read-only analysis
     
     status_transitions:
       input: "Tested – Pending QA"
@@ -365,7 +365,7 @@ convergence:
 
 # CDIF Integration
 cdif:
-  registry_location: "apps/macos-legacy/CDIF_TEST_ARCHETYPES.md"
+  registry_location: "apps/macos-app/CDIF_TEST_ARCHETYPES.md"
   
   archetype_categories:
     - FC: "Functional Correctness"

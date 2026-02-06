@@ -10,7 +10,7 @@
 |------|------------|------|
 | **Canonical paths (repo-wide)** | `docs/WORKSPACE_PATH_INDEX.md` | Single source of truth for “where things live now” |
 | **KB manifest (machine-readable)** | `steering/CDIF_KB_MANIFEST.yaml` | YAML manifest with anchors, exclusions, and doc IDs |
-| **CDIF test archetypes (catalog + path index)** | `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md` | Defines FC/MAC/DET/ACC/PERF/SEC archetypes + CDIF path rules |
+| **CDIF test archetypes (catalog + path index)** | `apps/macos-app/CDIF_TEST_ARCHETYPES.md` | Defines FC/MAC/DET/ACC/PERF/SEC archetypes + CDIF path rules |
 | **Gap registry (hex)** | `Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md` | Gap IDs, priorities, closure criteria |
 | **macOS implementation guide (hex)** | `Velociraptor_macOS_App/steering/MACOS-IMPLEMENTATION-GUIDE.md` | Master plan for gap-driven delivery |
 | **macOS implementation guide (steering copy)** | `steering/macos-app/macOS-Implementation-Guide.md` | Steering-layer copy used by iteration workflows |
@@ -22,7 +22,7 @@
 - **Primary steering**: `steering/`
 - **Kiro steering**: `.kiro/steering/`
 - **macOS steering**: `Velociraptor_macOS_App/steering/`
-- **CDIF catalog + Testing Agent docs**: `apps/macos-legacy/` (CDIF catalog + TestingAgent sources/docs)
+- **CDIF catalog + Testing Agent docs**: `apps/macos-app/` (CDIF catalog + TestingAgent sources/docs)
 
 ---
 
@@ -41,7 +41,7 @@ If you need evidence from a run, attach/link it from the GitHub issue (or CI art
 
 - **Gap registry** → `Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md`
 - **Implementation plan / phases** → `Velociraptor_macOS_App/steering/MACOS-IMPLEMENTATION-GUIDE.md` and `steering/macos-app/macOS-Implementation-Guide.md`
-- **Test archetypes / validation language** → `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md`
+- **Test archetypes / validation language** → `apps/macos-app/CDIF_TEST_ARCHETYPES.md`
 - **Automation expectations** → `steering/MACOS_QA_TEST_PLAN.md` and `steering/MACOS_UI_CONTROL_INVENTORY.md`
 - **Closeout evidence** → GitHub issues + CI artifacts (avoid committing `tests/results/`)
 
@@ -59,10 +59,10 @@ If you need evidence from a run, attach/link it from the GitHub issue (or CI art
 
 ### CDIF + macOS Testing Agent (implementation)
 
-- `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md` — CDIF archetype catalog + path reference index
-- `apps/macos-legacy/TESTING_AGENT_CI_CD_GUIDE.md` — CI/CD + evidence conventions for TestingAgent
-- `apps/macos-legacy/TESTING_AGENT_EXAMPLES.md` — example runs and report formats
-- `apps/macos-legacy/VelociraptorMacOS/TestingAgent/README.md` — TestingAgent architecture (within macos-legacy)
+- `apps/macos-app/CDIF_TEST_ARCHETYPES.md` — CDIF archetype catalog + path reference index
+- `apps/macos-app/TESTING_AGENT_CI_CD_GUIDE.md` — CI/CD + evidence conventions for TestingAgent
+- `apps/macos-app/TESTING_AGENT_EXAMPLES.md` — example runs and report formats
+- `apps/macos-app/VelociraptorMacOS/TestingAgent/README.md` — TestingAgent architecture (within macos-app)
 - `.claude/agents/mcp/agent-configs.yaml` — MCP/CDIF agent anchor paths (must match `docs/WORKSPACE_PATH_INDEX.md`)
 - `.github/agents/macos-development-agent.md` — GitHub agent playbook (development conventions + commands)
 

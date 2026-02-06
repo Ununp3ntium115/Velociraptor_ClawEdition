@@ -228,6 +228,51 @@ struct LogFileRow: View {
                 .foregroundColor(.secondary)
         }
         .padding(.vertical, 4)
+        .contextMenu {
+            Button {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(file.path, forType: .string)
+            } label: {
+                Label("Copy File Path", systemImage: "doc.on.doc")
+            }
+            
+            Divider()
+            
+            Button {
+                NSWorkspace.shared.activateFileViewerSelecting([file])
+            } label: {
+                Label("Show in Finder", systemImage: "folder")
+            }
+            
+            Button {
+                NSWorkspace.shared.open(file)
+            } label: {
+                Label("Open in Default App", systemImage: "arrow.up.forward.app")
+            }
+            
+            Divider()
+            
+            Button {
+                let panel = NSSavePanel()
+                panel.allowedContentTypes = [.plainText]
+                panel.nameFieldStringValue = file.lastPathComponent
+                panel.begin { response in
+                    if response == .OK, let url = panel.url {
+                        try? FileManager.default.copyItem(at: file, to: url)
+                    }
+                }
+            } label: {
+                Label("Export Log File", systemImage: "square.and.arrow.up")
+            }
+            
+            Divider()
+            
+            Button(role: .destructive) {
+                try? FileManager.default.removeItem(at: file)
+            } label: {
+                Label("Delete Log File", systemImage: "trash")
+            }
+        }
     }
     
     private var fileDate: String {
@@ -275,6 +320,55 @@ struct LogEntryRow: View {
                 .textSelection(.enabled)
         }
         .padding(.vertical, 2)
+        .contextMenu {
+            Button {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(entry, forType: .string)
+            } label: {
+                Label("Copy Log Entry", systemImage: "doc.on.doc")
+            }
+            
+            Button {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(extractMessage(), forType: .string)
+            } label: {
+                Label("Copy Message Only", systemImage: "text.bubble")
+            }
+            
+            Divider()
+            
+            if entry.contains("[ERROR]") || entry.contains("❌") {
+                Button {
+                    Logger.shared.info("Filter to ERROR level", component: "Logs")
+                } label: {
+                    Label("Filter: Errors Only", systemImage: "exclamationmark.circle")
+                }
+            }
+            
+            if entry.contains("[WARN]") || entry.contains("⚠️") {
+                Button {
+                    Logger.shared.info("Filter to WARN level", component: "Logs")
+                } label: {
+                    Label("Filter: Warnings Only", systemImage: "exclamationmark.triangle")
+                }
+            }
+            
+            if entry.contains("[INFO]") {
+                Button {
+                    Logger.shared.info("Filter to INFO level", component: "Logs")
+                } label: {
+                    Label("Filter: Info Only", systemImage: "info.circle")
+                }
+            }
+            
+            if entry.contains("[DEBUG]") || entry.contains("🔍") {
+                Button {
+                    Logger.shared.info("Filter to DEBUG level", component: "Logs")
+                } label: {
+                    Label("Filter: Debug Only", systemImage: "ladybug")
+                }
+            }
+        }
     }
     
     private var levelColor: Color {

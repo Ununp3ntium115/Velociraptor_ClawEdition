@@ -91,13 +91,14 @@ struct DashboardView: View {
     @EnvironmentObject private var webSocket: WebSocketService
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                // Connection Status Banner
-                if !apiClient.connectionState.isConnected {
-                    ConnectionBanner(state: apiClient.connectionState)
-                        .accessibilityIdentifier(AccessibilityID.connectionBanner)
-                }
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Connection Status Banner
+                    if !apiClient.connectionState.isConnected {
+                        ConnectionBanner(state: apiClient.connectionState)
+                            .accessibilityIdentifier(AccessibilityID.connectionBanner)
+                    }
                 
                 // Quick Stats Bar
                 QuickStatsBar(stats: viewModel.stats)
@@ -124,10 +125,12 @@ struct DashboardView: View {
                 }
                 
                 Spacer()
+                }
+                .padding()
             }
-            .padding()
+            .background(Color(NSColor.windowBackgroundColor))
         }
-        .background(Color(NSColor.windowBackgroundColor))
+        .accessibilityIdentifier("dashboard.main")
         .navigationTitle("Dashboard")
         .toolbar {
             ToolbarItem(placement: .automatic) {
@@ -506,6 +509,29 @@ struct DashboardStatusCard: View {
         .background(Color(NSColor.controlBackgroundColor))
         .cornerRadius(12)
         .accessibilityIdentifier(accessibilityId)
+        .contextMenu {
+            Button {
+                let detailsText = details.map { "\($0.label): \($0.value)" }.joined(separator: "\n")
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString("\(title)\n\(detailsText)", forType: .string)
+            } label: {
+                Label("Copy Details", systemImage: "doc.on.doc")
+            }
+            
+            Divider()
+            
+            Button {
+                Logger.shared.info("Refresh \(title) status", component: "Dashboard")
+            } label: {
+                Label("Refresh", systemImage: "arrow.clockwise")
+            }
+            
+            Button {
+                Logger.shared.info("View \(title) details", component: "Dashboard")
+            } label: {
+                Label("View Details", systemImage: "info.circle")
+            }
+        }
     }
 }
 
@@ -581,6 +607,47 @@ struct ActivityRow: View {
             }
         }
         .padding(.vertical, 4)
+        .contextMenu {
+            Button {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(event.message, forType: .string)
+            } label: {
+                Label("Copy Message", systemImage: "doc.on.doc")
+            }
+            
+            Button {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(event.id, forType: .string)
+            } label: {
+                Label("Copy Event ID", systemImage: "number")
+            }
+            
+            Divider()
+            
+            if let clientId = event.clientId {
+                Button {
+                    Logger.shared.info("Navigate to client: \(clientId)", component: "Dashboard")
+                } label: {
+                    Label("View Client", systemImage: "desktopcomputer")
+                }
+            }
+            
+            if let huntId = event.huntId {
+                Button {
+                    Logger.shared.info("Navigate to hunt: \(huntId)", component: "Dashboard")
+                } label: {
+                    Label("View Hunt", systemImage: "scope")
+                }
+            }
+            
+            Divider()
+            
+            Button {
+                Logger.shared.info("Filter by event type: \(event.type.rawValue)", component: "Dashboard")
+            } label: {
+                Label("Filter by Type", systemImage: "line.3.horizontal.decrease.circle")
+            }
+        }
     }
     
     private var iconColor: Color {
@@ -903,32 +970,32 @@ class DashboardViewModel: ObservableObject {
     
     func createNewHunt() {
         Logger.shared.info("Create new hunt action triggered", component: "Dashboard")
-        // TODO: Navigate to hunt creation
+        NotificationCenter.default.post(name: .navigateToView, object: nil, userInfo: ["view": "incidentResponse"])
     }
     
     func addClient() {
         Logger.shared.info("Add client action triggered", component: "Dashboard")
-        // TODO: Navigate to client addition
+        NotificationCenter.default.post(name: .navigateToView, object: nil, userInfo: ["view": "clients"])
     }
     
     func openVQLTerminal() {
         Logger.shared.info("Open VQL terminal action triggered", component: "Dashboard")
-        // TODO: Navigate to VQL terminal
+        NotificationCenter.default.post(name: .navigateToView, object: nil, userInfo: ["view": "terminal"])
     }
     
     func viewLogs() {
         Logger.shared.info("View logs action triggered", component: "Dashboard")
-        // TODO: Navigate to logs view
+        NotificationCenter.default.post(name: .navigateToView, object: nil, userInfo: ["view": "logs"])
     }
     
     func exportReport() {
         Logger.shared.info("Export report action triggered", component: "Dashboard")
-        // TODO: Implement export
+        NotificationCenter.default.post(name: .navigateToView, object: nil, userInfo: ["view": "reports"])
     }
     
     func openSettings() {
         Logger.shared.info("Open settings action triggered", component: "Dashboard")
-        // TODO: Navigate to settings
+        NotificationCenter.default.post(name: .openSettings, object: nil)
     }
 }
 

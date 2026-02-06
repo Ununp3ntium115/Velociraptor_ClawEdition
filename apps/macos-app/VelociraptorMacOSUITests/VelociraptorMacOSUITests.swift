@@ -14,6 +14,8 @@ final class VelociraptorMacOSUITests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = XCUIApplication()
+        // Position window on 3rd monitor (portrait) for UI testing
+        app.launchArguments.append("-UITestMode")
         app.launch()
     }
     

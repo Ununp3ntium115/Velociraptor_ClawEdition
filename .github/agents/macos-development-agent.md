@@ -64,7 +64,7 @@ A native macOS application for the Velociraptor DFIR (Digital Forensics and Inci
 
 ```bash
 # Always regenerate project after structural changes
-cd apps/macos-legacy
+cd apps/macos-app
 xcodegen generate
 ```
 
@@ -77,7 +77,7 @@ xcodegen generate
 
 **File Structure**:
 ```
-apps/macos-legacy/
+apps/macos-app/
 ├── Package.swift              # Swift Package manifest
 ├── project.yml                # XcodeGen configuration (SOURCE OF TRUTH)
 ├── VelociraptorMacOS/        # Main application target
@@ -110,7 +110,7 @@ targets:
 
 **Critical**: Only request entitlements required by the gap. Never add temporary exceptions.
 
-**Current Entitlements** (`apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOS.entitlements`):
+**Current Entitlements** (`apps/macos-app/VelociraptorMacOS/VelociraptorMacOS.entitlements`):
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -574,14 +574,14 @@ func downloadBinary(version: String, to destination: URL) async throws -> URL {
 ## Files Modified
 
 ### Created
-- `apps/macos-legacy/VelociraptorMacOS/Services/BinaryDownloader.swift` (150 lines)
+- `apps/macos-app/VelociraptorMacOS/Services/BinaryDownloader.swift` (150 lines)
   - Class: `BinaryDownloader`
   - Methods: `downloadBinary(version:to:)`, `fetchReleaseURL(version:)`
 
 ### Modified
-- `apps/macos-legacy/VelociraptorMacOS/Services/DeploymentManager.swift` (+20 lines)
+- `apps/macos-app/VelociraptorMacOS/Services/DeploymentManager.swift` (+20 lines)
   - Method: `deployVelociraptor()` - Added binary download step
-- `apps/macos-legacy/project.yml` (+3 lines)
+- `apps/macos-app/project.yml` (+3 lines)
   - Added BinaryDownloader.swift to VelociraptorMacOS target
 ```
 
@@ -864,7 +864,7 @@ After implementing each gap, provide this output:
 
 ```bash
 # Run from the macOS Swift package workspace
-cd apps/macos-legacy
+cd apps/macos-app
 
 # Regenerate Xcode project
 xcodegen generate

@@ -34,11 +34,11 @@ prlctl stop "Windows 11"
 
 ### 2. Build & Run MCP Server
 
-**CRITICAL**: Always build from the canonical location `apps/macos-legacy/`
+**CRITICAL**: Always build from the canonical location `apps/macos-app/`
 
 ```bash
 # Navigate to canonical macOS Swift root
-cd /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-legacy
+cd /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-app
 
 # Build the MCP server
 swift build --product VelociraptorMCPServer
@@ -60,7 +60,7 @@ Add to `.cursor/mcp.json`:
 {
   "mcpServers": {
     "velociraptor-dfir": {
-      "command": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-legacy/.build/debug/VelociraptorMCPServer",
+      "command": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-app/.build/debug/VelociraptorMCPServer",
       "args": ["--log-level", "info"],
       "env": {}
     }
@@ -75,7 +75,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 {
   "mcpServers": {
     "velociraptor": {
-      "command": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-legacy/.build/debug/VelociraptorMCPServer",
+      "command": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-app/.build/debug/VelociraptorMCPServer",
       "args": []
     }
   }
@@ -95,16 +95,16 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 repo_root: /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/
 
 # Canonical macOS Swift root (SwiftPM + XcodeGen)
-macos_canonical: apps/macos-legacy/
+macos_canonical: apps/macos-app/
 
 # Canonical paths (absolute from repo root)
-swift_package:       apps/macos-legacy/Package.swift
-xcodegen_config:     apps/macos-legacy/project.yml
-app_source:          apps/macos-legacy/VelociraptorMacOS/
-unit_tests:          apps/macos-legacy/VelociraptorMacOSTests/
-ui_tests:            apps/macos-legacy/VelociraptorMacOSUITests/
-mcp_server_source:   apps/macos-legacy/Sources/VelociraptorMCPServer/
-mcp_library_source:  apps/macos-legacy/Sources/VelociraptorMCP/
+swift_package:       apps/macos-app/Package.swift
+xcodegen_config:     apps/macos-app/project.yml
+app_source:          apps/macos-app/VelociraptorMacOS/
+unit_tests:          apps/macos-app/VelociraptorMacOSTests/
+ui_tests:            apps/macos-app/VelociraptorMacOSUITests/
+mcp_server_source:   apps/macos-app/Sources/VelociraptorMCPServer/
+mcp_library_source:  apps/macos-app/Sources/VelociraptorMCP/
 ```
 
 ### Steering + Knowledge Base Entrypoints
@@ -116,7 +116,7 @@ kb_manifest:         steering/CDIF_KB_MANIFEST.yaml
 workspace_paths:     docs/WORKSPACE_PATH_INDEX.md
 
 # CDIF catalog & test archetypes
-cdif_catalog:        apps/macos-legacy/CDIF_TEST_ARCHETYPES.md
+cdif_catalog:        apps/macos-app/CDIF_TEST_ARCHETYPES.md
 
 # Agent prompt corpus
 agent_prompts:       .claude/agents/MACOS_SDLC_AGENT_PROMPTS.md
@@ -142,10 +142,10 @@ mcp_agent_config:    .claude/agents/mcp/agent-configs.yaml
 **Example Aliases** (from KB manifest):
 ```yaml
 # FROM (legacy)                          → TO (canonical)
-VelociraptorMacOS/README.md              → apps/macos-legacy/README.md
-VelociraptorMacOS/project.yml            → apps/macos-legacy/project.yml
-VelociraptorMacOS/VelociraptorMacOS/     → apps/macos-legacy/VelociraptorMacOS/
-Velociraptor_macOS_App/VelociraptorMacOS/ → apps/macos-legacy/VelociraptorMacOS/
+VelociraptorMacOS/README.md              → apps/macos-app/README.md
+VelociraptorMacOS/project.yml            → apps/macos-app/project.yml
+VelociraptorMacOS/VelociraptorMacOS/     → apps/macos-app/VelociraptorMacOS/
+Velociraptor_macOS_App/VelociraptorMacOS/ → apps/macos-app/VelociraptorMacOS/
 ```
 
 ---
@@ -165,7 +165,7 @@ roots:
   - steering/
   - .kiro/steering/
   - Velociraptor_macOS_App/steering/
-  - apps/macos-legacy/          # CDIF catalog + TestingAgent + MCP sources
+  - apps/macos-app/          # CDIF catalog + TestingAgent + MCP sources
   - docs/
   - .claude/agents/
   - .github/agents/
@@ -195,20 +195,20 @@ rg -n --hidden --no-ignore-vcs \
   --glob='!**/TestResults/**' \
   --glob='!**/tests/results/**' \
   "SEARCH_TERM" \
-  steering docs apps/macos-legacy Velociraptor_macOS_App .kiro/steering .claude/agents .github/agents
+  steering docs apps/macos-app Velociraptor_macOS_App .kiro/steering .claude/agents .github/agents
 ```
 
 ---
 
 ## Build / Test / Run Commands (CANONICAL PATHS ONLY)
 
-**CRITICAL**: All macOS Swift build/test/run commands **MUST** be anchored to `apps/macos-legacy/`.
+**CRITICAL**: All macOS Swift build/test/run commands **MUST** be anchored to `apps/macos-app/`.
 
 ### Build Commands
 
 ```bash
 # Always cd to canonical root first
-cd /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-legacy
+cd /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-app
 
 # Build all products (app + MCP server)
 swift build
@@ -227,7 +227,7 @@ swift package clean
 ### Test Commands
 
 ```bash
-cd /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-legacy
+cd /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-app
 
 # Run all tests
 swift test
@@ -243,7 +243,7 @@ swift test --enable-code-coverage
 ### XcodeGen (if using Xcode)
 
 ```bash
-cd /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-legacy
+cd /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-app
 
 # Generate Xcode project from project.yml
 xcodegen generate
@@ -322,17 +322,17 @@ When an agent needs to locate documentation or resolve paths:
 - Confirmed canonical path using KB manifest
 
 ## Impact on Workflow
-- CDIF test archetypes are maintained in apps/macos-legacy/CDIF_TEST_ARCHETYPES.md
+- CDIF test archetypes are maintained in apps/macos-app/CDIF_TEST_ARCHETYPES.md
 - This is the authoritative source for FC-*, MAC-*, DET-*, ACC-*, PERF-*, SEC-* archetypes
 
 ## Canonical Path
-apps/macos-legacy/CDIF_TEST_ARCHETYPES.md
+apps/macos-app/CDIF_TEST_ARCHETYPES.md
 
 ## Verification Gate
-rg "CDIF-ARCH-" steering/CDIF_KB_MANIFEST.yaml apps/macos-legacy/CDIF_TEST_ARCHETYPES.md
+rg "CDIF-ARCH-" steering/CDIF_KB_MANIFEST.yaml apps/macos-app/CDIF_TEST_ARCHETYPES.md
 
 ## Alias Mapping
-VelociraptorMacOS/CDIF_TEST_ARCHETYPES.md → apps/macos-legacy/CDIF_TEST_ARCHETYPES.md (legacy snapshot → canonical)
+VelociraptorMacOS/CDIF_TEST_ARCHETYPES.md → apps/macos-app/CDIF_TEST_ARCHETYPES.md (legacy snapshot → canonical)
 ```
 
 ---
@@ -368,7 +368,7 @@ If you discover untracked KB/CDIF changes:
 swift --version
 
 # Rebuild from clean state
-cd apps/macos-legacy
+cd apps/macos-app
 swift package clean
 swift build --product VelociraptorMCPServer
 
@@ -407,7 +407,7 @@ If an agent outputs a legacy path:
 - **KB Index**: `steering/CDIF_KB_INDEX.md`
 - **KB Manifest**: `steering/CDIF_KB_MANIFEST.yaml`
 - **Workspace Paths**: `docs/WORKSPACE_PATH_INDEX.md`
-- **CDIF Archetypes**: `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md`
+- **CDIF Archetypes**: `apps/macos-app/CDIF_TEST_ARCHETYPES.md`
 - **Agent Prompts**: `.claude/agents/MACOS_SDLC_AGENT_PROMPTS.md`
 - **MCP Config**: `.claude/agents/mcp/agent-configs.yaml`
 

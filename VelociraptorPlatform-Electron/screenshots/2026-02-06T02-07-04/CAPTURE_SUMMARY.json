@@ -1,0 +1,104 @@
+{
+  "timestamp": "2026-02-06T02:07:14.239Z",
+  "totalTabs": 19,
+  "successful": 0,
+  "failed": 19,
+  "screenshotDirectory": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/VelociraptorPlatform-Electron/screenshots/2026-02-06T02-07-04",
+  "results": [
+    {
+      "tab": "01-Setup-Wizard",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "02-Dashboard",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "03-Terminal",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "04-Management",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "05-Labels",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "06-Evidence",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "07-Hunt",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "08-Clients",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "09-Notebooks",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "10-Quick-Deploy",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "11-Tools",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "12-Packages",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "13-Integrations",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "14-Orchestration",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "15-Training",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "16-Reports",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "17-Logs",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "18-VFS",
+      "status": "not_found",
+      "error": "Nav item not found"
+    },
+    {
+      "tab": "19-Settings",
+      "status": "not_found",
+      "error": "Nav item not found"
+    }
+  ]
+}

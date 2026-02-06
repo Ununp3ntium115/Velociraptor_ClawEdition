@@ -33,6 +33,7 @@ struct TimelineView: View {
                     .frame(minWidth: 300, maxWidth: 400)
             }
         }
+        .accessibilityIdentifier("timeline.main")
         .navigationTitle("Timeline Analysis")
         .toolbar {
             TimelineToolbar(viewModel: viewModel)

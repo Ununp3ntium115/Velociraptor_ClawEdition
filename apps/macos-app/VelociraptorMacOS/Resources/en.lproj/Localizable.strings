@@ -144,6 +144,46 @@
 "auth.requirement.lowercase" = "Contains lowercase letter";
 "auth.requirement.number" = "Contains number";
 
+// MARK: - AI Configuration Step
+"wizard.step.aiConfiguration" = "AI Configuration";
+"ai.title" = "AI Configuration";
+"ai.description" = "Configure AI assistant integration for enhanced DFIR capabilities:";
+"ai.enable" = "Enable AI Integration";
+"ai.enable.description" = "Use AI to assist with VQL queries, artifact analysis, and incident response.";
+"ai.provider" = "AI Provider:";
+"ai.provider.none" = "No AI Integration";
+"ai.provider.openai" = "OpenAI (GPT-4, GPT-3.5)";
+"ai.provider.anthropic" = "Anthropic (Claude)";
+"ai.provider.google" = "Google (Gemini)";
+"ai.provider.azure" = "Azure OpenAI Service";
+"ai.provider.apple" = "Apple Intelligence";
+"ai.provider.ollama" = "Ollama (Local Models)";
+"ai.apiKey" = "API Key:";
+"ai.apiKey.placeholder" = "Enter your API key";
+"ai.apiKey.help.openai" = "Get your API key from platform.openai.com/api-keys";
+"ai.apiKey.help.anthropic" = "Get your API key from console.anthropic.com";
+"ai.apiKey.help.google" = "Get your API key from ai.google.dev";
+"ai.apiKey.help.azure" = "Get your API key from your Azure OpenAI deployment";
+"ai.orgId" = "Organization ID:";
+"ai.orgId.optional" = "(Optional)";
+"ai.model" = "Model:";
+"ai.model.description" = "Select the AI model to use. More capable models may have higher costs.";
+"ai.testConnection" = "Test Connection";
+"ai.connection.success" = "Connection successful!";
+"ai.connection.failed" = "Connection failed";
+"ai.connection.invalidKey" = "Invalid API key format";
+"ai.features" = "AI Features";
+"ai.feature.emergency" = "Emergency Mode";
+"ai.feature.emergency.description" = "AI-assisted rapid response during incidents";
+"ai.feature.vql" = "VQL Assistant";
+"ai.feature.vql.description" = "Generate and explain VQL queries with AI help";
+"ai.feature.analysis" = "Artifact Analysis";
+"ai.feature.analysis.description" = "AI-powered analysis of collected artifacts";
+"ai.feature.recommendations" = "Recommendations";
+"ai.feature.recommendations.description" = "Smart suggestions for investigation steps";
+"ai.privacy" = "API keys are stored securely in your macOS Keychain and never transmitted to Velociraptor servers.";
+"ai.skippable" = "This step is optional. You can configure AI integration later in Settings.";
+
 // MARK: - Review Step
 "review.title" = "Review Configuration";
 "review.description" = "Review your configuration before deploying:";

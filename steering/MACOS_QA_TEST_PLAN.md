@@ -285,14 +285,14 @@
 ```bash
 # Run all unit tests
 xcodebuild test \
-    -project apps/macos-legacy/VelociraptorMacOS.xcodeproj \
+    -project apps/macos-app/VelociraptorMacOS.xcodeproj \
     -scheme VelociraptorMacOS \
     -destination 'platform=macOS' \
     -resultBundlePath TestResults/UnitTests.xcresult
 
 # Run specific test class
 xcodebuild test \
-    -project apps/macos-legacy/VelociraptorMacOS.xcodeproj \
+    -project apps/macos-app/VelociraptorMacOS.xcodeproj \
     -scheme VelociraptorMacOS \
     -destination 'platform=macOS' \
     -only-testing:VelociraptorMacOSTests/KeychainManagerTests
@@ -306,14 +306,14 @@ xcrun xccov view --report TestResults/UnitTests.xcresult
 ```bash
 # Run all UI tests
 xcodebuild test \
-    -project apps/macos-legacy/VelociraptorMacOS.xcodeproj \
+    -project apps/macos-app/VelociraptorMacOS.xcodeproj \
     -scheme VelociraptorMacOS \
     -destination 'platform=macOS' \
     -only-testing:VelociraptorMacOSUITests
 
 # Run specific UI test
 xcodebuild test \
-    -project apps/macos-legacy/VelociraptorMacOS.xcodeproj \
+    -project apps/macos-app/VelociraptorMacOS.xcodeproj \
     -scheme VelociraptorMacOS \
     -destination 'platform=macOS' \
     -only-testing:VelociraptorMacOSUITests/ConfigurationWizardUITests/testWizardNavigation
@@ -503,14 +503,14 @@ jobs:
     - name: Build
       run: |
         xcodebuild build \
-          -project apps/macos-legacy/VelociraptorMacOS.xcodeproj \
+          -project apps/macos-app/VelociraptorMacOS.xcodeproj \
           -scheme VelociraptorMacOS \
           -destination 'platform=macOS'
     
     - name: Unit Tests
       run: |
         xcodebuild test \
-          -project apps/macos-legacy/VelociraptorMacOS.xcodeproj \
+          -project apps/macos-app/VelociraptorMacOS.xcodeproj \
           -scheme VelociraptorMacOS \
           -destination 'platform=macOS' \
           -resultBundlePath TestResults/UnitTests.xcresult

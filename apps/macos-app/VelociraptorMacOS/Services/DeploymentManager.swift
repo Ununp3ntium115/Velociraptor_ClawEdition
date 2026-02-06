@@ -12,6 +12,15 @@ import Combine
 /// Handles downloading, configuring, and managing the Velociraptor service
 @MainActor
 class DeploymentManager: ObservableObject {
+    // MARK: - Mock Mode Support
+    
+    /// Whether mock mode is enabled (for UI testing - no actual deployment)
+    static var isMockMode: Bool {
+        ProcessInfo.processInfo.arguments.contains("-MockDeployment") ||
+        ProcessInfo.processInfo.arguments.contains("-MockEmergencyMode") ||
+        ProcessInfo.processInfo.environment["MOCK_DEPLOYMENT"] == "1"
+    }
+    
     // MARK: - Published Properties
     
     /// Whether deployment is in progress
@@ -214,6 +223,13 @@ class DeploymentManager: ObservableObject {
     /// - Throws: An error if any deployment step fails (propagates errors from preparation, download, configuration,
     ///   service installation, startup, or verification).
     func deploy(config: ConfigurationData) async throws {
+        // Check for mock mode - used during UI testing to prevent actual deployment
+        if Self.isMockMode {
+            Logger.shared.info("Deployment running in MOCK mode - no actual deployment will occur", component: "Deployment")
+            try await performMockDeployment()
+            return
+        }
+        
         isDeploying = true
         progress = 0.0
         lastError = nil
@@ -637,8 +653,17 @@ class DeploymentManager: ObservableObject {
     /// 
     /// The configuration uses a user-home subdirectory "EmergencyVelociraptor" for datastore and logs, sets the deployment type to "Standalone",
     /// and the encryption type to `.selfSigned`. An admin user "admin" is created with a short random password.
+    /// 
+    /// In mock mode (for UI testing), no actual deployment occurs - the method simulates progress and completes successfully.
     /// - Throws: Any error thrown by `deploy(config:)` when the emergency deployment fails.
     func emergencyDeploy() async throws {
+        // Check for mock mode - used during UI testing to prevent actual deployment
+        if Self.isMockMode {
+            Logger.shared.info("Emergency deployment running in MOCK mode - no actual deployment will occur", component: "Deployment")
+            try await performMockDeployment()
+            return
+        }
+        
         var config = ConfigurationData()
         config.deploymentType = "Standalone"
         config.encryptionType = .selfSigned
@@ -650,6 +675,253 @@ class DeploymentManager: ObservableObject {
         config.adminPassword = "emergency_\(UUID().uuidString.prefix(8))"
         
         try await deploy(config: config)
+    }
+    
+    /// Performs a mock deployment for UI testing purposes.
+    /// Simulates progress through all deployment steps without actually doing anything.
+    private func performMockDeployment() async throws {
+        isDeploying = true
+        progress = 0.0
+        lastError = nil
+        resetStepStatus()
+        
+        defer {
+            isDeploying = false
+        }
+        
+        let steps = DeploymentStep.allCases
+        let stepDuration: UInt64 = 200_000_000 // 0.2 seconds per step
+        
+        for (index, step) in steps.enumerated() {
+            statusMessage = "Mock: \(step.rawValue)..."
+            stepStatus[step] = .inProgress
+            
+            try await Task.sleep(nanoseconds: stepDuration)
+            
+            stepStatus[step] = .completed
+            progress = Double(index + 1) / Double(steps.count)
+        }
+        
+        statusMessage = "Mock deployment complete"
+        isRunning = true
+        installedVersion = "5.0.5-mock"
+        
+        Logger.shared.info("Mock emergency deployment completed successfully", component: "Deployment")
+    }
+    
+    // MARK: - Binary Lifecycle Management
+    
+    /// Result of a spin-down operation
+    struct SpinDownResult: Sendable {
+        let success: Bool
+        let processKilled: Bool
+        let launchAgentUnloaded: Bool
+        let message: String
+    }
+    
+    /// Result of an uninstall operation
+    struct UninstallResult: Sendable {
+        let success: Bool
+        let binaryRemoved: Bool
+        let configRemoved: Bool
+        let launchAgentRemoved: Bool
+        let message: String
+    }
+    
+    /// Spins down the Velociraptor binary gracefully
+    /// Stops the service and ensures no processes are running
+    func spinDown() async throws -> SpinDownResult {
+        Logger.shared.info("Spinning down Velociraptor binary...", component: "Lifecycle")
+        
+        // Check for mock mode
+        if Self.isMockMode {
+            Logger.shared.info("Spin down running in MOCK mode", component: "Lifecycle")
+            try await Task.sleep(nanoseconds: 500_000_000)
+            isRunning = false
+            return SpinDownResult(
+                success: true,
+                processKilled: true,
+                launchAgentUnloaded: true,
+                message: "Mock spin-down completed"
+            )
+        }
+        
+        var processKilled = false
+        var launchAgentUnloaded = false
+        
+        // Step 1: Unload the launch agent
+        do {
+            try await stopService()
+            launchAgentUnloaded = true
+        } catch {
+            Logger.shared.warning("Failed to unload launch agent: \(error.localizedDescription)", component: "Lifecycle")
+        }
+        
+        // Step 2: Kill any remaining Velociraptor processes
+        let killProcess = Process()
+        killProcess.executableURL = URL(fileURLWithPath: "/usr/bin/pkill")
+        killProcess.arguments = ["-f", "velociraptor"]
+        
+        do {
+            try killProcess.run()
+            killProcess.waitUntilExit()
+            processKilled = killProcess.terminationStatus == 0
+        } catch {
+            Logger.shared.warning("pkill command failed: \(error.localizedDescription)", component: "Lifecycle")
+        }
+        
+        // Update state
+        isRunning = false
+        statusMessage = "Velociraptor spun down"
+        
+        return SpinDownResult(
+            success: launchAgentUnloaded || processKilled,
+            processKilled: processKilled,
+            launchAgentUnloaded: launchAgentUnloaded,
+            message: "Velociraptor binary stopped successfully"
+        )
+    }
+    
+    /// Uninstalls the Velociraptor binary completely
+    /// Removes the binary, configuration, and launch agent
+    func uninstall(keepConfig: Bool = false, keepData: Bool = false) async throws -> UninstallResult {
+        Logger.shared.info("Uninstalling Velociraptor binary...", component: "Lifecycle")
+        
+        // Check for mock mode
+        if Self.isMockMode {
+            Logger.shared.info("Uninstall running in MOCK mode", component: "Lifecycle")
+            try await Task.sleep(nanoseconds: 500_000_000)
+            isRunning = false
+            installedVersion = nil
+            return UninstallResult(
+                success: true,
+                binaryRemoved: true,
+                configRemoved: !keepConfig,
+                launchAgentRemoved: true,
+                message: "Mock uninstall completed"
+            )
+        }
+        
+        // First spin down
+        _ = try await spinDown()
+        
+        var binaryRemoved = false
+        var configRemoved = false
+        var launchAgentRemoved = false
+        
+        let homeDir = fileManager.homeDirectoryForCurrentUser
+        
+        // Step 1: Remove the binary
+        let binaryPath = homeDir.appendingPathComponent(".velocidex/velociraptor")
+        if fileManager.fileExists(atPath: binaryPath.path) {
+            do {
+                try fileManager.removeItem(at: binaryPath)
+                binaryRemoved = true
+                Logger.shared.info("Removed Velociraptor binary", component: "Lifecycle")
+            } catch {
+                Logger.shared.error("Failed to remove binary: \(error.localizedDescription)", component: "Lifecycle")
+            }
+        } else {
+            binaryRemoved = true // Already not there
+        }
+        
+        // Step 2: Remove configuration (if requested)
+        if !keepConfig {
+            let configPaths = [
+                homeDir.appendingPathComponent(".velocidex/server.config.yaml"),
+                homeDir.appendingPathComponent(".velocidex/client.config.yaml")
+            ]
+            
+            for configPath in configPaths {
+                if fileManager.fileExists(atPath: configPath.path) {
+                    do {
+                        try fileManager.removeItem(at: configPath)
+                        configRemoved = true
+                    } catch {
+                        Logger.shared.warning("Failed to remove config \(configPath.lastPathComponent): \(error.localizedDescription)", component: "Lifecycle")
+                    }
+                }
+            }
+        }
+        
+        // Step 3: Remove launch agent
+        let launchAgentPath = homeDir.appendingPathComponent("Library/LaunchAgents/com.velocidex.velociraptor.plist")
+        if fileManager.fileExists(atPath: launchAgentPath.path) {
+            do {
+                try fileManager.removeItem(at: launchAgentPath)
+                launchAgentRemoved = true
+                Logger.shared.info("Removed launch agent", component: "Lifecycle")
+            } catch {
+                Logger.shared.error("Failed to remove launch agent: \(error.localizedDescription)", component: "Lifecycle")
+            }
+        } else {
+            launchAgentRemoved = true // Already not there
+        }
+        
+        // Step 4: Clean up data directory (if requested)
+        if !keepData {
+            let dataPaths = [
+                homeDir.appendingPathComponent(".velocidex/datastore"),
+                homeDir.appendingPathComponent(".velocidex/logs")
+            ]
+            
+            for dataPath in dataPaths {
+                if fileManager.fileExists(atPath: dataPath.path) {
+                    do {
+                        try fileManager.removeItem(at: dataPath)
+                    } catch {
+                        Logger.shared.warning("Failed to remove data at \(dataPath.lastPathComponent): \(error.localizedDescription)", component: "Lifecycle")
+                    }
+                }
+            }
+        }
+        
+        // Update state
+        isRunning = false
+        installedVersion = nil
+        statusMessage = "Velociraptor uninstalled"
+        
+        let success = binaryRemoved && launchAgentRemoved
+        
+        return UninstallResult(
+            success: success,
+            binaryRemoved: binaryRemoved,
+            configRemoved: configRemoved || keepConfig,
+            launchAgentRemoved: launchAgentRemoved,
+            message: success ? "Velociraptor uninstalled successfully" : "Partial uninstall - some components could not be removed"
+        )
+    }
+    
+    /// Checks if Velociraptor is currently installed
+    func checkInstallation() -> (installed: Bool, version: String?) {
+        let binaryPath = fileManager.homeDirectoryForCurrentUser
+            .appendingPathComponent(".velocidex/velociraptor")
+        
+        guard fileManager.fileExists(atPath: binaryPath.path) else {
+            return (false, nil)
+        }
+        
+        // Try to get version
+        let process = Process()
+        process.executableURL = binaryPath
+        process.arguments = ["version"]
+        
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        
+        do {
+            try process.run()
+            process.waitUntilExit()
+            
+            let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            if let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) {
+                return (true, output)
+            }
+        } catch {
+            Logger.shared.warning("Failed to get version: \(error.localizedDescription)", component: "Lifecycle")
+        }
+        
+        return (true, nil)
     }
     
     /// Checks whether the machine can reach the GitHub API.

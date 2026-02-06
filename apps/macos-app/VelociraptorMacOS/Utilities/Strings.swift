@@ -48,8 +48,22 @@ enum Strings {
         nonisolated(unsafe) static let storageConfiguration = LocalizedStringKey("wizard.step.storageConfiguration")
         nonisolated(unsafe) static let networkConfiguration = LocalizedStringKey("wizard.step.networkConfiguration")
         nonisolated(unsafe) static let authentication = LocalizedStringKey("wizard.step.authentication")
+        nonisolated(unsafe) static let aiConfiguration = LocalizedStringKey("wizard.step.aiConfiguration")
         nonisolated(unsafe) static let review = LocalizedStringKey("wizard.step.review")
         nonisolated(unsafe) static let complete = LocalizedStringKey("wizard.step.complete")
+    }
+    
+    // MARK: - AI Configuration
+    enum AIConfiguration {
+        nonisolated(unsafe) static let title = LocalizedStringKey("ai.title")
+        nonisolated(unsafe) static let description = LocalizedStringKey("ai.description")
+        nonisolated(unsafe) static let enableToggle = LocalizedStringKey("ai.enable")
+        nonisolated(unsafe) static let provider = LocalizedStringKey("ai.provider")
+        nonisolated(unsafe) static let apiKey = LocalizedStringKey("ai.apiKey")
+        nonisolated(unsafe) static let model = LocalizedStringKey("ai.model")
+        nonisolated(unsafe) static let testConnection = LocalizedStringKey("ai.testConnection")
+        nonisolated(unsafe) static let connectionSuccess = LocalizedStringKey("ai.connection.success")
+        nonisolated(unsafe) static let connectionFailed = LocalizedStringKey("ai.connection.failed")
     }
     
     // MARK: - Welcome Step

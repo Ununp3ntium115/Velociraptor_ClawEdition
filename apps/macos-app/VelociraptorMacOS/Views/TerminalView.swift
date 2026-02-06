@@ -38,6 +38,9 @@ final class TerminalViewModel: ObservableObject {
     @Published var isConnected: Bool = false
     @Published var isExecuting: Bool = false
     @Published var selectedCommand: String = "status"
+    @Published var commandHistory: [String] = []
+    @Published var historyIndex: Int = -1
+    @Published var suggestions: [String] = []
     
     let quickCommands = [
         "status",
@@ -49,12 +52,56 @@ final class TerminalViewModel: ObservableObject {
         "server info"
     ]
     
+    private let allCommands = [
+        "status", "config show", "config set", "client list", "client info",
+        "query", "artifact list", "artifact run", "artifact describe",
+        "hunt create", "hunt list", "hunt status", "hunt pause", "hunt resume",
+        "server info", "server restart", "help", "clear", "exit", "quit",
+        "SELECT * FROM info()", "SELECT * FROM clients()", "SELECT * FROM pslist()",
+        "SELECT * FROM glob(globs=\"/tmp/*\")", "SELECT * FROM netstat()"
+    ]
+    
     private var process: Process?
     
     init() {
         addSystemLine("Welcome to Velociraptor Claw Edition Terminal")
         addSystemLine("Type 'help' for available commands or use the Quick Commands menu")
+        addSystemLine("Use ↑/↓ arrows for command history, Tab for auto-complete")
         addSystemLine("")
+    }
+    
+    // MARK: - Command History
+    
+    func navigateHistory(direction: Int) {
+        guard !commandHistory.isEmpty else { return }
+        
+        let newIndex = historyIndex + direction
+        
+        if newIndex < 0 {
+            historyIndex = -1
+            inputText = ""
+        } else if newIndex < commandHistory.count {
+            historyIndex = newIndex
+            inputText = commandHistory[commandHistory.count - 1 - newIndex]
+        }
+    }
+    
+    func updateSuggestions() {
+        guard !inputText.isEmpty else {
+            suggestions = []
+            return
+        }
+        
+        let input = inputText.lowercased()
+        suggestions = allCommands
+            .filter { $0.lowercased().hasPrefix(input) }
+            .prefix(5)
+            .map { $0 }
+    }
+    
+    func applySuggestion(_ suggestion: String) {
+        inputText = suggestion
+        suggestions = []
     }
     
     func connect() {
@@ -88,6 +135,17 @@ final class TerminalViewModel: ObservableObject {
         
         let command = inputText
         inputText = ""
+        suggestions = []
+        historyIndex = -1
+        
+        // Add to history (avoid duplicates at the end)
+        if commandHistory.last != command {
+            commandHistory.append(command)
+            // Keep only last 100 commands
+            if commandHistory.count > 100 {
+                commandHistory.removeFirst()
+            }
+        }
         
         addInputLine("$ \(command)")
         isExecuting = true
@@ -351,27 +409,76 @@ struct TerminalView: View {
     // MARK: - Input
     
     private var terminalInput: some View {
-        HStack(spacing: 8) {
-            Text("$")
-                .font(.system(.body, design: .monospaced))
-                .foregroundStyle(.green)
-            
-            TextField("Enter command...", text: $viewModel.inputText)
-                .textFieldStyle(.plain)
-                .font(.system(.body, design: .monospaced))
-                .onSubmit {
-                    viewModel.executeCommand()
+        VStack(spacing: 0) {
+            // Auto-complete suggestions
+            if !viewModel.suggestions.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(viewModel.suggestions, id: \.self) { suggestion in
+                            Button(action: { viewModel.applySuggestion(suggestion) }) {
+                                Text(suggestion)
+                                    .font(.system(.caption, design: .monospaced))
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(Color.gray.opacity(0.3))
+                                    .cornerRadius(4)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 4)
                 }
-                .disabled(!viewModel.isConnected)
-                .accessibilityIdentifier("terminal.input")
-            
-            if viewModel.isExecuting {
-                ProgressView()
-                    .scaleEffect(0.7)
+                .background(Color.black.opacity(0.9))
             }
+            
+            // Command input
+            HStack(spacing: 8) {
+                Text("$")
+                    .font(.system(.body, design: .monospaced))
+                    .foregroundStyle(.green)
+                
+                TextField("Enter command...", text: $viewModel.inputText)
+                    .textFieldStyle(.plain)
+                    .font(.system(.body, design: .monospaced))
+                    .onSubmit {
+                        viewModel.executeCommand()
+                    }
+                    .onChange(of: viewModel.inputText) { _, _ in
+                        viewModel.updateSuggestions()
+                    }
+                    .onKeyPress(.upArrow) {
+                        viewModel.navigateHistory(direction: 1)
+                        return .handled
+                    }
+                    .onKeyPress(.downArrow) {
+                        viewModel.navigateHistory(direction: -1)
+                        return .handled
+                    }
+                    .onKeyPress(.tab) {
+                        if let first = viewModel.suggestions.first {
+                            viewModel.applySuggestion(first)
+                        }
+                        return .handled
+                    }
+                    .disabled(!viewModel.isConnected)
+                    .accessibilityIdentifier("terminal.input")
+                
+                // History indicator
+                if !viewModel.commandHistory.isEmpty {
+                    Text("(\(viewModel.commandHistory.count))")
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(.gray)
+                }
+                
+                if viewModel.isExecuting {
+                    ProgressView()
+                        .scaleEffect(0.7)
+                }
+            }
+            .padding()
+            .background(Color.black.opacity(0.8))
         }
-        .padding()
-        .background(Color.black.opacity(0.8))
     }
 }
 
@@ -381,10 +488,16 @@ struct TerminalLineView: View {
     let line: TerminalLine
     
     var body: some View {
-        Text(line.content)
-            .font(.system(.body, design: .monospaced))
-            .foregroundStyle(lineColor)
-            .textSelection(.enabled)
+        if line.type == .output {
+            SyntaxHighlightedText(content: line.content)
+        } else if line.type == .input {
+            SyntaxHighlightedVQL(content: line.content, isInput: true)
+        } else {
+            Text(line.content)
+                .font(.system(.body, design: .monospaced))
+                .foregroundStyle(lineColor)
+                .textSelection(.enabled)
+        }
     }
     
     private var lineColor: Color {
@@ -398,6 +511,207 @@ struct TerminalLineView: View {
         case .system:
             return .cyan
         }
+    }
+}
+
+// MARK: - Syntax Highlighted Text
+
+/// Provides syntax highlighting for terminal output
+struct SyntaxHighlightedText: View {
+    let content: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(content.components(separatedBy: "\n").enumerated()), id: \.offset) { index, line in
+                highlightedLine(line)
+            }
+        }
+        .textSelection(.enabled)
+    }
+    
+    @ViewBuilder
+    private func highlightedLine(_ line: String) -> some View {
+        let trimmed = line.trimmingCharacters(in: .whitespaces)
+        
+        if trimmed.hasPrefix("─") || trimmed.hasPrefix("-") && trimmed.count > 10 {
+            // Separator line
+            Text(line)
+                .font(.system(.body, design: .monospaced))
+                .foregroundStyle(Color.gray.opacity(0.6))
+        } else if trimmed.contains(":") && !trimmed.hasPrefix("C.") && !trimmed.hasPrefix("H.") {
+            // Key-value pair
+            keyValueLine(line)
+        } else if trimmed.hasPrefix("C.") || trimmed.hasPrefix("H.") {
+            // Client ID or Hunt ID
+            entityLine(line)
+        } else if isTableHeader(trimmed) {
+            // Table header
+            Text(line)
+                .font(.system(.body, design: .monospaced).bold())
+                .foregroundStyle(Color.cyan)
+        } else if isStatusLine(trimmed) {
+            // Status line
+            statusHighlightedLine(line)
+        } else {
+            Text(line)
+                .font(.system(.body, design: .monospaced))
+                .foregroundStyle(Color.white)
+        }
+    }
+    
+    @ViewBuilder
+    private func keyValueLine(_ line: String) -> some View {
+        if let colonIndex = line.firstIndex(of: ":") {
+            let key = String(line[..<colonIndex])
+            let value = String(line[line.index(after: colonIndex)...])
+            
+            HStack(spacing: 0) {
+                Text(key + ":")
+                    .font(.system(.body, design: .monospaced))
+                    .foregroundStyle(Color.yellow)
+                Text(value)
+                    .font(.system(.body, design: .monospaced))
+                    .foregroundStyle(valueColor(for: value))
+            }
+        } else {
+            Text(line)
+                .font(.system(.body, design: .monospaced))
+                .foregroundStyle(Color.white)
+        }
+    }
+    
+    @ViewBuilder
+    private func entityLine(_ line: String) -> some View {
+        Text(line)
+            .font(.system(.body, design: .monospaced))
+            .foregroundStyle(Color.orange)
+    }
+    
+    @ViewBuilder
+    private func statusHighlightedLine(_ line: String) -> some View {
+        let lowercased = line.lowercased()
+        if lowercased.contains("running") || lowercased.contains("active") || lowercased.contains("enabled") || lowercased.contains("completed") {
+            Text(line)
+                .font(.system(.body, design: .monospaced))
+                .foregroundStyle(Color.green)
+        } else if lowercased.contains("stopped") || lowercased.contains("paused") || lowercased.contains("disabled") {
+            Text(line)
+                .font(.system(.body, design: .monospaced))
+                .foregroundStyle(Color.orange)
+        } else if lowercased.contains("error") || lowercased.contains("failed") {
+            Text(line)
+                .font(.system(.body, design: .monospaced))
+                .foregroundStyle(Color.red)
+        } else {
+            Text(line)
+                .font(.system(.body, design: .monospaced))
+                .foregroundStyle(Color.white)
+        }
+    }
+    
+    private func isTableHeader(_ line: String) -> Bool {
+        let headers = ["Client ID", "Hostname", "OS", "Last Seen", "Progress", "Started", "Commands"]
+        return headers.contains { line.contains($0) }
+    }
+    
+    private func isStatusLine(_ line: String) -> Bool {
+        let statusKeywords = ["Status", "Running", "Stopped", "Active", "Enabled", "Disabled", "Completed", "Error"]
+        return statusKeywords.contains { line.contains($0) }
+    }
+    
+    private func valueColor(for value: String) -> Color {
+        let trimmed = value.trimmingCharacters(in: .whitespaces).lowercased()
+        
+        if trimmed.contains("running") || trimmed.contains("active") || trimmed.contains("enabled") || trimmed.contains("true") {
+            return .green
+        } else if trimmed.contains("stopped") || trimmed.contains("paused") || trimmed.contains("disabled") || trimmed.contains("false") {
+            return .orange
+        } else if trimmed.contains("error") || trimmed.contains("failed") {
+            return .red
+        } else if trimmed.hasPrefix("http") || trimmed.hasPrefix("/") {
+            return .blue
+        } else if let _ = Int(trimmed.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) {
+            return .purple
+        }
+        
+        return .white
+    }
+}
+
+// MARK: - VQL Syntax Highlighting
+
+/// Provides syntax highlighting for VQL queries
+struct SyntaxHighlightedVQL: View {
+    let content: String
+    let isInput: Bool
+    
+    // VQL Keywords
+    private let keywords = ["SELECT", "FROM", "WHERE", "LET", "LIMIT", "ORDER", "BY", "GROUP", "AS", "AND", "OR", "NOT", "IN", "LIKE"]
+    
+    // VQL Functions
+    private let functions = ["info", "clients", "pslist", "glob", "execve", "yara", "hunt", "artifact", "upload", "hash", "timestamp", "count", "len", "format"]
+    
+    var body: some View {
+        if content.uppercased().contains("SELECT") || content.uppercased().contains("LET") {
+            highlightedVQL
+        } else {
+            Text(content)
+                .font(.system(.body, design: .monospaced))
+                .foregroundStyle(isInput ? Color.green : Color.white)
+                .textSelection(.enabled)
+        }
+    }
+    
+    private var highlightedVQL: some View {
+        var attributedString = AttributedString(content)
+        
+        // Highlight keywords
+        for keyword in keywords {
+            if let range = attributedString.range(of: keyword, options: .caseInsensitive) {
+                attributedString[range].foregroundColor = .cyan
+                attributedString[range].font = .system(.body, design: .monospaced).bold()
+            }
+        }
+        
+        // Highlight functions
+        for function in functions {
+            let pattern = "\(function)\\("
+            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+                let nsRange = NSRange(content.startIndex..., in: content)
+                for match in regex.matches(in: content, options: [], range: nsRange) {
+                    if let swiftRange = Range(match.range, in: content),
+                       let attrRange = Range(swiftRange, in: attributedString) {
+                        attributedString[attrRange].foregroundColor = .yellow
+                    }
+                }
+            }
+        }
+        
+        // Highlight strings
+        let stringPattern = "\"[^\"]*\""
+        if let regex = try? NSRegularExpression(pattern: stringPattern, options: []) {
+            let nsRange = NSRange(content.startIndex..., in: content)
+            for match in regex.matches(in: content, options: [], range: nsRange) {
+                if let swiftRange = Range(match.range, in: content),
+                   let attrRange = Range(swiftRange, in: attributedString) {
+                    attributedString[attrRange].foregroundColor = .orange
+                }
+            }
+        }
+        
+        // Highlight operators
+        let operators = ["*", "=", ">", "<", ">=", "<=", "!="]
+        for op in operators {
+            var searchStart = attributedString.startIndex
+            while let range = attributedString[searchStart...].range(of: op) {
+                attributedString[range].foregroundColor = .purple
+                searchStart = range.upperBound
+            }
+        }
+        
+        return Text(attributedString)
+            .font(.system(.body, design: .monospaced))
+            .textSelection(.enabled)
     }
 }
 

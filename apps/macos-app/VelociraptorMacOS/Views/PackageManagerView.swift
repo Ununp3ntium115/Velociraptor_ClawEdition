@@ -297,6 +297,7 @@ struct PackageManagerView: View {
                 EmptyPackageView(viewModel: viewModel)
             }
         }
+        .accessibilityIdentifier("packages.main")
         .task {
             await viewModel.loadPackages()
         }

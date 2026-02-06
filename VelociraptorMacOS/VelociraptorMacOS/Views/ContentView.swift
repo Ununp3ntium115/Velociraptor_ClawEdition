@@ -171,10 +171,10 @@ struct HeaderView: View {
                 .foregroundColor(.accentColor)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text("VELOCIRAPTOR")
+                Text(Strings.App.nameRaw)
                     .font(.title.bold())
                 
-                Text("DFIR Framework Configuration Wizard")
+                Text(Strings.App.taglineRaw)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
@@ -183,7 +183,7 @@ struct HeaderView: View {
             
             // Current step info
             VStack(alignment: .trailing, spacing: 4) {
-                Text("Step \(appState.currentStep.rawValue + 1) of \(AppState.WizardStep.allCases.count)")
+                Text(Strings.Format.stepProgress(current: appState.currentStep.rawValue + 1, total: AppState.WizardStep.allCases.count))
                     .font(.caption)
                     .foregroundColor(.secondary)
                 
@@ -399,28 +399,28 @@ struct AboutView: View {
                 .font(.system(size: 64))
                 .foregroundColor(.accentColor)
             
-            Text("Velociraptor")
+            Text(Strings.App.name)
                 .font(.largeTitle.bold())
             
-            Text("DFIR Framework for macOS")
+            Text(Strings.App.dfirMacOS)
                 .font(.title3)
                 .foregroundColor(.secondary)
             
-            Text("Version 5.0.5")
+            Text("Version \(Strings.App.versionNumber)")
                 .font(.caption)
                 .foregroundColor(.secondary)
             
             Divider()
             
-            Text("Free For All First Responders")
+            Text(Strings.App.freeForAllRaw)
                 .font(.headline)
                 .foregroundColor(.accentColor)
             
-            Text("© 2026 Velocidex Enterprises")
+            Text(Strings.App.copyrightRaw)
                 .font(.caption)
                 .foregroundColor(.secondary)
             
-            Button("Close") {
+            Button(Strings.Action.close) {
                 dismiss()
             }
             .buttonStyle(.borderedProminent)

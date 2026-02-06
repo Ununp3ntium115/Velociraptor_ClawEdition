@@ -28,7 +28,7 @@ All agents MUST use these exact paths when navigating the codebase:
 
 ```
 /Velociraptor_ClawEdition/
-├── apps/macos-legacy/                      # Active macOS app (Swift Package)
+├── apps/macos-app/                      # Active macOS app (Swift Package)
 │   ├── Package.swift                       # Swift Package manifest
 │   ├── project.yml                         # XcodeGen project configuration
 │   ├── VelociraptorMacOS/                  # Main app source
@@ -238,7 +238,7 @@ Development work is NEVER freeform. It is driven by:
    - Format: Hexadecimal IDs (0x01-0x12)
 
 2. **CDIF/CEDIF Registry** (canonical patterns)
-   - Source: `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md`
+   - Source: `apps/macos-app/CDIF_TEST_ARCHETYPES.md`
    - Contains: Test patterns, implementation conventions
 
 3. **Master Iteration Document** (line-by-line tasks)
@@ -246,19 +246,19 @@ Development work is NEVER freeform. It is driven by:
    - Format: Per-gap task breakdown with line counts
 
 4. **MCP Server** (task orchestration)
-   - Source: `apps/macos-legacy/Sources/VelociraptorMCP/`
+   - Source: `apps/macos-app/Sources/VelociraptorMCP/`
 
 ## macOS Structure Expectations
 
 All implementations MUST respect these constraints:
 
 ### Build System
-- Swift Package Manager manifest: `apps/macos-legacy/Package.swift`
-- XcodeGen configuration: `apps/macos-legacy/project.yml`
+- Swift Package Manager manifest: `apps/macos-app/Package.swift`
+- XcodeGen configuration: `apps/macos-app/project.yml`
 - New files MUST be added to appropriate targets
 
 ### App Sandbox
-- Entitlements file: `apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOS.entitlements`
+- Entitlements file: `apps/macos-app/VelociraptorMacOS/VelociraptorMacOS.entitlements`
 - Only request entitlements required by the gap
 - NEVER add temporary exceptions in production paths
 
@@ -297,7 +297,7 @@ You are a **macOS Development Agent** in a HiQ swarm. You implement one gap at a
 
 **Product**: Velociraptor Claw Edition – macOS Native App  
 **Repository Root**: `/Velociraptor_ClawEdition/`  
-**App Source**: `apps/macos-legacy/VelociraptorMacOS/`
+**App Source**: `apps/macos-app/VelociraptorMacOS/`
 
 **Toolchain**:
 - Swift 6 (strict concurrency)
@@ -321,13 +321,13 @@ When implementing gaps, files go in these locations:
 
 | Component Type | Directory | Example |
 |----------------|-----------|---------|
-| Models | `apps/macos-legacy/VelociraptorMacOS/Models/` | `Client.swift`, `Hunt.swift` |
-| Views | `apps/macos-legacy/VelociraptorMacOS/Views/` | `ClientsView.swift` |
-| View Models | `apps/macos-legacy/VelociraptorMacOS/Models/` | `ClientsViewModel.swift` (current pattern; create `ViewModels/` only if required) |
-| Services | `apps/macos-legacy/VelociraptorMacOS/Services/` | `VelociraptorAPIClient.swift` |
-| Utilities | `apps/macos-legacy/VelociraptorMacOS/Utilities/` | `VQLSyntaxHighlighter.swift` |
-| Tests | `apps/macos-legacy/VelociraptorMacOSTests/` | `VelociraptorAPIClientTests.swift` |
-| UI Tests | `apps/macos-legacy/VelociraptorMacOSUITests/` | `ClientsViewUITests.swift` |
+| Models | `apps/macos-app/VelociraptorMacOS/Models/` | `Client.swift`, `Hunt.swift` |
+| Views | `apps/macos-app/VelociraptorMacOS/Views/` | `ClientsView.swift` |
+| View Models | `apps/macos-app/VelociraptorMacOS/Models/` | `ClientsViewModel.swift` (current pattern; create `ViewModels/` only if required) |
+| Services | `apps/macos-app/VelociraptorMacOS/Services/` | `VelociraptorAPIClient.swift` |
+| Utilities | `apps/macos-app/VelociraptorMacOS/Utilities/` | `VQLSyntaxHighlighter.swift` |
+| Tests | `apps/macos-app/VelociraptorMacOSTests/` | `VelociraptorAPIClientTests.swift` |
+| UI Tests | `apps/macos-app/VelociraptorMacOSUITests/` | `ClientsViewUITests.swift` |
 
 ## macOS Rules You MUST Follow
 
@@ -343,7 +343,7 @@ Before creating new files, verify they're supported in `Package.swift`:
 ```
 
 ### 2. App Sandbox Boundaries
-- Read entitlements: `apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOS.entitlements`
+- Read entitlements: `apps/macos-app/VelociraptorMacOS/VelociraptorMacOS.entitlements`
 - Only request entitlements the gap requires
 - Use Security-Scoped Bookmarks for user-selected files
 - Allowed storage locations:
@@ -400,10 +400,10 @@ enum AccessibilityID {
 
 ## CDIF/CEDIF Integration
 
-**Read first**: Open `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md` and read the **CDIF Structure (read first)** section. It defines the document layout, test archetypes (FC-*, MAC-*), parent/child registry (CDIF-ARCH-*, CDIF-IMPL-* in this file), and path resolution. Use the Path Reference Index in that catalog and `docs/WORKSPACE_PATH_INDEX.md` for all canonical paths.
+**Read first**: Open `apps/macos-app/CDIF_TEST_ARCHETYPES.md` and read the **CDIF Structure (read first)** section. It defines the document layout, test archetypes (FC-*, MAC-*), parent/child registry (CDIF-ARCH-*, CDIF-IMPL-* in this file), and path resolution. Use the Path Reference Index in that catalog and `docs/WORKSPACE_PATH_INDEX.md` for all canonical paths.
 
 ### Before Coding
-1. Check `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md` for existing patterns
+1. Check `apps/macos-app/CDIF_TEST_ARCHETYPES.md` for existing patterns
 2. Locate relevant CDIF parent/child objects
 3. Prefer CDIF-defined patterns over inventing new ones
 
@@ -438,7 +438,7 @@ closure_criteria:
 1. Create the specified files
 2. Implement according to line-by-line breakdown
 3. Add to Package.swift if needed
-4. Build to verify: `cd apps/macos-legacy && swift build`
+4. Build to verify: `cd apps/macos-app && swift build`
 5. Document what changed and why
 
 ### Output
@@ -486,10 +486,10 @@ You receive implemented gaps from the Master Iteration Framework, each represent
 
 ## Testing Context
 
-**Test Location**: `apps/macos-legacy/VelociraptorMacOSTests/` (unit)  
-**UI Test Location**: `apps/macos-legacy/VelociraptorMacOSUITests/`  
-**CDIF Archetypes**: `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md`  
-**Testing Agent Framework**: `apps/macos-legacy/VelociraptorMacOS/TestingAgent/`
+**Test Location**: `apps/macos-app/VelociraptorMacOSTests/` (unit)  
+**UI Test Location**: `apps/macos-app/VelociraptorMacOSUITests/`  
+**CDIF Archetypes**: `apps/macos-app/CDIF_TEST_ARCHETYPES.md`  
+**Testing Agent Framework**: `apps/macos-app/VelociraptorMacOS/TestingAgent/`
 
 ## What You Test
 
@@ -613,7 +613,7 @@ func testIsRepeatableOverThreeRuns() async throws {
 
 ```bash
 # Unit tests
-cd apps/macos-legacy
+cd apps/macos-app
 swift test
 
 # With Xcode (for UI tests)
@@ -703,7 +703,7 @@ You receive gaps that have passed Development and Testing.
 
 **Gap Registry**: `Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md`  
 **Implementation Guide**: `Velociraptor_macOS_App/steering/MACOS-IMPLEMENTATION-GUIDE.md`  
-**Quality Tests**: `apps/macos-legacy/VelociraptorMacOSTests/QAValidationTests.swift`
+**Quality Tests**: `apps/macos-app/VelociraptorMacOSTests/QAValidationTests.swift`
 
 ## What QA Means Here
 
@@ -778,7 +778,7 @@ files_changed:
 
 1. **Regression Check**
    ```bash
-   cd apps/macos-legacy
+   cd apps/macos-app
    swift test  # Full suite must pass
    ```
 
@@ -1043,7 +1043,7 @@ Your mission: Validate that the application behaves correctly **because** it is 
 
 **Target Platform**: macOS 14.0+  
 **Distribution**: Direct (notarized) + App Store (if planned)  
-**Entitlements**: `apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOS.entitlements`
+**Entitlements**: `apps/macos-app/VelociraptorMacOS/VelociraptorMacOS.entitlements`
 
 ## Focus Areas
 
@@ -1248,7 +1248,7 @@ You operate as the **final gate** before production eligibility.
 
 ## Security Context
 
-**Entitlements**: `apps/macos-legacy/VelociraptorMacOS/VelociraptorMacOS.entitlements`  
+**Entitlements**: `apps/macos-app/VelociraptorMacOS/VelociraptorMacOS.entitlements`  
 **Keychain Service**: `Services/KeychainManager.swift`  
 **CDIF Security Archetypes**: `CDIF_TEST_ARCHETYPES.md` (SEC-* patterns)
 
@@ -1552,9 +1552,9 @@ constraints:
 current_state_sources:
   gap_registry: Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md
   implementation_guide: Velociraptor_macOS_App/steering/MACOS-IMPLEMENTATION-GUIDE.md
-  cdif_archetypes: apps/macos-legacy/CDIF_TEST_ARCHETYPES.md
-  existing_tests: apps/macos-legacy/VelociraptorMacOSTests/
-  existing_ui_tests: apps/macos-legacy/VelociraptorMacOSUITests/
+  cdif_archetypes: apps/macos-app/CDIF_TEST_ARCHETYPES.md
+  existing_tests: apps/macos-app/VelociraptorMacOSTests/
+  existing_ui_tests: apps/macos-app/VelociraptorMacOSUITests/
 ```
 
 ## Gap Discovery Process
@@ -1562,11 +1562,11 @@ current_state_sources:
 ### Step 1: Code Audit
 ```bash
 # Check for missing components
-ls -la apps/macos-legacy/VelociraptorMacOS/Services/
+ls -la apps/macos-app/VelociraptorMacOS/Services/
 # Expected: VelociraptorAPIClient.swift (likely missing)
 # Expected: WebSocketService.swift (likely missing)
 
-ls -la apps/macos-legacy/VelociraptorMacOS/Views/
+ls -la apps/macos-app/VelociraptorMacOS/Views/
 # Expected: ClientsView.swift (likely missing)
 # Expected: HuntManagerView.swift (likely missing)
 # Expected: VQLEditorView.swift (likely missing)
@@ -1601,10 +1601,10 @@ macos_missing:
 ### Step 3: Accessibility Audit
 ```bash
 # Count controls with identifiers
-grep -r "accessibilityIdentifier" apps/macos-legacy/VelociraptorMacOS/ | wc -l
+grep -r "accessibilityIdentifier" apps/macos-app/VelociraptorMacOS/ | wc -l
 
 # Count total interactive controls
-grep -rE "Button|TextField|Picker|Toggle" apps/macos-legacy/VelociraptorMacOS/Views/ | wc -l
+grep -rE "Button|TextField|Picker|Toggle" apps/macos-app/VelociraptorMacOS/Views/ | wc -l
 ```
 
 ## Gap Classification
@@ -1704,11 +1704,11 @@ gap:
   
   verification_steps:
     - step: "Check file exists"
-      command: "test -f apps/macos-legacy/VelociraptorMacOS/Services/VelociraptorAPIClient.swift"
+      command: "test -f apps/macos-app/VelociraptorMacOS/Services/VelociraptorAPIClient.swift"
     - step: "Build succeeds"
-      command: "cd apps/macos-legacy && swift build"
+      command: "cd apps/macos-app && swift build"
     - step: "Tests pass"
-      command: "cd apps/macos-legacy && swift test"
+      command: "cd apps/macos-app && swift test"
   
   effort_estimate:
     hours: "18-22"
@@ -1908,8 +1908,8 @@ Each gap is assigned to a specialized HiQ agent:
 ```yaml
 inputs:
   gap_registry: "Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md"
-  cdif_registry: "apps/macos-legacy/CDIF_TEST_ARCHETYPES.md"
-  repo_knowledge: "apps/macos-legacy/"
+  cdif_registry: "apps/macos-app/CDIF_TEST_ARCHETYPES.md"
+  repo_knowledge: "apps/macos-app/"
   
   constraints:
     xcode:
@@ -2022,8 +2022,8 @@ master_iteration_document:
       
       verification_gate:
         commands:
-          - "cd apps/macos-legacy && swift build"
-          - "cd apps/macos-legacy && swift test"
+          - "cd apps/macos-app && swift build"
+          - "cd apps/macos-app && swift test"
         criteria:
           - "Build succeeds"
           - "All 50+ unit tests pass"
@@ -2079,8 +2079,8 @@ agent_payload:
     - file: "CDIF_TEST_ARCHETYPES.md"
       patterns: ["FC-001", "MAC-001", "DET-002"]
   repo_anchors:
-    services_dir: "apps/macos-legacy/VelociraptorMacOS/Services/"
-    models_dir: "apps/macos-legacy/VelociraptorMacOS/Models/"
+    services_dir: "apps/macos-app/VelociraptorMacOS/Services/"
+    models_dir: "apps/macos-app/VelociraptorMacOS/Models/"
   verification_gate:
     must_pass: ["swift build", "swift test"]
 ```
@@ -2450,13 +2450,13 @@ foreman_cycle:
 
 ```yaml
 anchors:
-  app_source: "apps/macos-legacy/VelociraptorMacOS/"
-  unit_tests: "apps/macos-legacy/VelociraptorMacOSTests/"
-  ui_tests: "apps/macos-legacy/VelociraptorMacOSUITests/"
+  app_source: "apps/macos-app/VelociraptorMacOS/"
+  unit_tests: "apps/macos-app/VelociraptorMacOSTests/"
+  ui_tests: "apps/macos-app/VelociraptorMacOSUITests/"
   gap_registry: "Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md"
   implementation_guide: "Velociraptor_macOS_App/steering/MACOS-IMPLEMENTATION-GUIDE.md"
-  cdif_archetypes: "apps/macos-legacy/CDIF_TEST_ARCHETYPES.md"
-  mcp_source: "apps/macos-legacy/Sources/VelociraptorMCP/"
+  cdif_archetypes: "apps/macos-app/CDIF_TEST_ARCHETYPES.md"
+  mcp_source: "apps/macos-app/Sources/VelociraptorMCP/"
 ```
 
 ## Convergence Criteria

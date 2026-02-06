@@ -1,0 +1,317 @@
+{
+  "name": "velociraptor-platform-electron",
+  "version": "1.0.0-beta.2",
+  "description": "Cross-platform Electron GUI for Velociraptor DFIR Platform with PowerShell integration",
+  "main": "electron.js",
+  "author": "Velociraptor Platform Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ununp3ntium115/Velociraptor_scripts.git",
+    "directory": "VelociraptorPlatform-Electron"
+  },
+  "scripts": {
+    "start": "electron .",
+    "start:modular": "electron src/main/index.js",
+    "dev": "cross-env NODE_ENV=development electron .",
+    "build": "webpack --mode production",
+    "build:dev": "webpack --mode development",
+    "watch": "webpack --mode development --watch",
+    "lint": "eslint . --ext .js --ignore-pattern node_modules/ --ignore-pattern dist/",
+    "lint:fix": "eslint . --ext .js --fix --ignore-pattern node_modules/ --ignore-pattern dist/",
+    "security:scan": "node agents/security-audit-agent.js --full",
+    "security:deps": "npm audit --json > npm-audit-report.json",
+    "security:quick": "node agents/security-audit-agent.js --deps --secrets",
+    "qa:full": "npm run lint && npm run security:scan && npm run test:ua && npm run test:e2e",
+    "qa:quick": "npm run lint && npm run security:quick && npm test",
+    "test": "node test-electron-app.js",
+    "test:powershell": "node test-powershell-bridge.js",
+    "test:macos": "node test-macos-deployment.js",
+    "test:ua": "node test/ua-test-suite.js",
+    "test:ua:full": "node test/ua-test-suite.js --full",
+    "test:tools": "node test/tool-deployment-verification.js",
+    "test:interactions": "node test/user-interaction-tests.js",
+    "test:interactions:verbose": "node test/user-interaction-tests.js --verbose",
+    "test:all": "npm run test:ua && npm run test:tools && npm run test:interactions",
+    "test:buttons": "node test/complete-button-test.js",
+    "test:buttons:coverage": "node test/complete-button-test.js --coverage",
+    "test:validation": "node test/form-validation-tests.js",
+    "test:validation:quick": "node test/form-validation-tests.js --quick",
+    "test:deployment": "node test/deployment-scenario-test.js --verbose",
+    "test:deployment:quick": "node test/deployment-scenario-test.js",
+    "test:offline-ui": "node test/offline-package-ui-test.js --verbose",
+    "test:offline-ui:quick": "node test/offline-package-ui-test.js",
+    "test:dfir-ui": "node test/dfir-tools-ui-test.js --verbose",
+    "test:dfir-ui:quick": "node test/dfir-tools-ui-test.js",
+    "test:logging": "node test/logging-telemetry-test.js --verbose",
+    "test:logging:quick": "node test/logging-telemetry-test.js",
+    "test:ci": "node test/ci-integration-test.js --verbose",
+    "test:ci:validate": "node test/ci-integration-test.js --validate",
+    "test:iteration-suite": "npm run test:buttons && npm run test:validation:quick && npm run test:deployment:quick && npm run test:dfir-ui:quick && npm run test:logging:quick",
+    "test:comprehensive": "node test/comprehensive-ua-test.js",
+    "test:comprehensive:quick": "node test/comprehensive-ua-test.js --quick",
+    "test:comprehensive:no-install": "node test/comprehensive-ua-test.js --no-install",
+    "test:execute": "node test/tool-execution-test.js",
+    "test:execute:dry": "node test/tool-execution-test.js --dry-run",
+    "test:velociraptor": "node test/velociraptor-core-test.js",
+    "test:velociraptor:gui": "node test/velociraptor-core-test.js --launch-gui",
+    "test:velociraptor:e2e": "node test/velociraptor-integration-test.js",
+    "test:velociraptor:e2e:dry": "node test/velociraptor-integration-test.js --dry",
+    "test:velociraptor:e2e:verbose": "node test/velociraptor-integration-test.js --verbose",
+    "test:macos-complete": "node test/macos-amd64-complete-test.js",
+    "test:macos-complete:skip-gui": "node test/macos-amd64-complete-test.js --skip-gui",
+    "test:e2e": "node test/e2e-integration-test.js",
+    "test:real-world": "node test/real-world-deployment-test.js",
+    "test:real-world:dry": "node test/real-world-deployment-test.js --dry",
+    "test:dfir-tools": "node test/dfir-tools-test.js",
+    "test:incident-sim": "node test/incident-simulation-framework.js",
+    "test:incident-sim:ransomware": "node test/incident-simulation-framework.js --scenario=ransomware",
+    "test:incident-sim:lateral": "node test/incident-simulation-framework.js --scenario=lateralMovement",
+    "test:incident-sim:cleanup": "node test/incident-simulation-framework.js --cleanup",
+    "test:all-macos": "npm run test:macos-complete && npm run test:e2e && npm run test:dfir-tools",
+    "build:offline": "node scripts/build-offline-package.js",
+    "build:offline:dry": "node scripts/build-offline-package.js --dry-run",
+    "build:offline:darwin": "node scripts/build-offline-package.js --platform=darwin",
+    "build:offline:win32": "node scripts/build-offline-package.js --platform=win32",
+    "build:offline:linux": "node scripts/build-offline-package.js --platform=linux",
+    "build:offline:verify": "node scripts/build-offline-package.js --verify",
+    "build:worker": "node scripts/build-offline-worker.js",
+    "build:worker:dry": "node scripts/build-offline-worker.js --dry-run",
+    "build:worker:darwin": "node scripts/build-offline-worker.js --platform=darwin",
+    "build:worker:all": "node scripts/build-offline-worker.js --platform=all",
+    "build:worker:iso": "node scripts/build-offline-worker.js --format=iso",
+    "build:worker:tar": "node scripts/build-offline-worker.js --format=tar.gz",
+    "test:worker": "node test/offline-worker-validation-test.js",
+    "test:training": "npm run test:incident-sim && npm run test:worker",
+    "test:api": "node test/velociraptor-api-test.js",
+    "test:orchestration": "node test/orchestration-gui-test.js",
+    "test:orchestration-playbook": "node test/orchestration-playbook-test.js",
+    "example:orchestration": "node test/orchestration/example-usage.js",
+    "test:training-scenarios": "node test/incident-simulation-test.js",
+    "test:reports": "node test/report-generation-test.js",
+    "test:dashboard": "node test/dashboard-monitor-test.js",
+    "test:settings": "node test/settings-theme-test.js",
+    "test:iterations": "node test/velociraptor-integration-test.js && node test/orchestration-gui-test.js && node test/incident-simulation-test.js && node test/report-generation-test.js && node test/dashboard-monitor-test.js && node test/settings-theme-test.js",
+    "test:visual": "node test/visual-automation-test.js",
+    "test:visual:slow": "SLOW_MOTION=1500 node test/visual-automation-test.js",
+    "capture:screenshots": "node scripts/capture-screenshots.js",
+    "capture:screenshots:verbose": "DEBUG=1 node scripts/capture-screenshots.js",
+    "test:e2e:mock": "E2E_MODE=mock node test/e2e/core/E2ETestRunner.js",
+    "test:e2e:real": "E2E_MODE=real node test/e2e/core/E2ETestRunner.js",
+    "test:e2e:scenario": "node test/e2e/core/E2ETestRunner.js --mode=mock",
+    "test:e2e:workflow": "node test/e2e/core/E2ETestRunner.js --workflow",
+    "test:e2e:all": "npm run test:e2e:mock && npm run test:orchestration:engine",
+    "test:orchestration:engine": "node test/orchestration/core/PlaybookEngine.js --test",
+    "orchestration:run": "node test/orchestration/core/PlaybookEngine.js --playbook",
+    "orchestration:webhook": "node test/orchestration/triggers/WebhookServer.js",
+    "orchestration:schedule": "node test/orchestration/triggers/ScheduleManager.js",
+    "orchestration:manual": "node test/orchestration/triggers/ManualTrigger.js --interactive",
+    "api:server": "node backend/velociraptor-api-server.js",
+    "api:server:dev": "node backend/velociraptor-api-server.js --port 8890",
+    "api:terminal": "node backend/velociraptor-terminal.js",
+    "cleanup": "node scripts/test-cleanup-orchestrator.js",
+    "cleanup:dry": "node scripts/test-cleanup-orchestrator.js --dry-run",
+    "cleanup:full": "node scripts/test-cleanup-orchestrator.js --full",
+    "cleanup:inventory": "node scripts/test-cleanup-orchestrator.js --inventory",
+    "cleanup:tools": "node scripts/cleanup-test-environment.js --tools-only",
+    "cleanup:logs": "node scripts/cleanup-test-environment.js --logs-only --force",
+    "cleanup:pre-test": "node test/test-helpers.js --pre",
+    "cleanup:post-test": "node test/test-helpers.js --post",
+    "test:button-actions": "node test/button-action-verification-test.js",
+    "test:button-actions:dry": "node test/button-action-verification-test.js --dry",
+    "test:button-actions:no-cleanup": "node test/button-action-verification-test.js --no-cleanup",
+    "test:tool-repo": "node test/tool-repository-test.js",
+    "test:full-with-cleanup": "npm run test:all && npm run cleanup:full",
+    "tracker:list": "node scripts/tool-install-tracker.js list",
+    "tracker:commands": "node scripts/tool-install-tracker.js commands",
+    "tracker:clear": "node scripts/tool-install-tracker.js clear",
+    "tools:download": "node scripts/download-tools.js",
+    "tools:local": "node scripts/deploy-from-local-repo.js",
+    "package:win": "electron-builder --win",
+    "package:win-x64": "electron-builder --win --x64",
+    "package:win-ia32": "electron-builder --win --ia32",
+    "package:win-arm64": "electron-builder --win --arm64",
+    "package:linux": "electron-builder --linux",
+    "package:linux-x64": "electron-builder --linux --x64",
+    "package:linux-arm64": "electron-builder --linux --arm64",
+    "package:mac": "electron-builder --mac",
+    "package:mac-x64": "electron-builder --mac --x64",
+    "package:mac-arm64": "electron-builder --mac --arm64",
+    "package:mac-universal": "electron-builder --mac --universal",
+    "package:all": "electron-builder -mwl",
+    "package:all-x64": "electron-builder -mwl --x64"
+  },
+  "build": {
+    "appId": "com.velociraptor.platform",
+    "productName": "Velociraptor Platform",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "files": [
+      "electron.js",
+      "preload.js",
+      "backend/**/*",
+      "public/**/*",
+      "assets/**/*",
+      "node_modules/**/*",
+      "!node_modules/**/test/**",
+      "!node_modules/**/tests/**",
+      "!node_modules/**/*.md",
+      "!node_modules/**/LICENSE*",
+      "!node_modules/**/.git*"
+    ],
+    "extraResources": [
+      {
+        "from": "../lib",
+        "to": "lib",
+        "filter": [
+          "**/*.psm1",
+          "**/*.psd1",
+          "**/*.ps1"
+        ]
+      },
+      {
+        "from": "resources/binaries",
+        "to": "binaries",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32",
+            "arm64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "legalTrademarks": "Velociraptor Platform Team"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "Security",
+      "maintainer": "Velociraptor Platform Team",
+      "desktop": {
+        "entry": {
+          "Name": "Velociraptor Platform",
+          "Comment": "DFIR Platform with Velociraptor Integration",
+          "Categories": "Security;System;Utility"
+        }
+      }
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.developer-tools",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
+    },
+    "dmg": {
+      "title": "${productName} ${version}",
+      "iconSize": 80,
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "electron-log": "^5.4.3",
+    "electron-store": "^11.0.2",
+    "js-yaml": "^4.1.1",
+    "node-powershell": "^5.0.1",
+    "uuid": "^13.0.0",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "electron": "^39.2.6",
+    "electron-builder": "^26.0.12",
+    "eslint": "^8.57.1",
+    "playwright": "^1.57.0",
+    "webpack": "^5.103.0",
+    "webpack-cli": "^6.0.1"
+  },
+  "keywords": [
+    "velociraptor",
+    "dfir",
+    "incident-response",
+    "forensics",
+    "security",
+    "electron",
+    "powershell"
+  ]
+}

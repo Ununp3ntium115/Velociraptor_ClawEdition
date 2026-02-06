@@ -322,7 +322,7 @@ class IncidentResponseViewModel: ObservableObject {
         buildProgress = 1.0
         buildStatus = "Collector package created successfully!"
         
-        Logger.shared.success("Collector built for: \(incident.name)", component: "IR")
+        SyncLogger.shared.success("Collector built for: \(incident.name)", component: "IR")
     }
     
     /// Generate a YAML collector configuration for the given incident.

@@ -23,7 +23,7 @@ The agent will:
 ### Running Tests Manually
 
 ```bash
-cd apps/macos-legacy
+cd apps/macos-app
 
 # Run only QA validation tests
 swift test --filter QAValidationTests

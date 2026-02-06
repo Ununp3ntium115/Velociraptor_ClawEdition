@@ -24,6 +24,7 @@ struct ReportsView: View {
             ReportContentPane(viewModel: viewModel)
                 .frame(minWidth: 500)
         }
+        .accessibilityIdentifier("reports.main")
         .navigationTitle("Reports")
         .toolbar {
             ReportsToolbar(viewModel: viewModel)

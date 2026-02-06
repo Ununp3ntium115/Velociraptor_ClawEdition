@@ -34,7 +34,7 @@ The macOS application codebase is **well-structured and production-ready**, foll
 
 ### 1. CRITICAL: MCP SDK Import Needs Conditional Compilation
 
-**Files**: `apps/macos-legacy/Sources/VelociraptorMCP/VelociraptorMCP.swift`, `apps/macos-legacy/Sources/VelociraptorMCPServer/main.swift`
+**Files**: `apps/macos-app/Sources/VelociraptorMCP/VelociraptorMCP.swift`, `apps/macos-app/Sources/VelociraptorMCPServer/main.swift`
 
 **Issue**: The MCP import will fail if the package hasn't been resolved yet.
 

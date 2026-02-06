@@ -14,8 +14,8 @@
 - **Current Status**: Running and ready for testing
 
 ### 2. ✅ MCP Server Built Successfully
-- **Build Location**: `apps/macos-legacy/` (canonical Swift root)
-- **Binary Path**: `apps/macos-legacy/.build/debug/VelociraptorMCPServer`
+- **Build Location**: `apps/macos-app/` (canonical Swift root)
+- **Binary Path**: `apps/macos-app/.build/debug/VelociraptorMCPServer`
 - **Build Tool**: Swift Package Manager 6.0
 - **Build Time**: ~17.8 seconds
 
@@ -34,7 +34,7 @@ Plus **4 interactive prompts** and **3 documentation resources**.
 
 Created `.cursor/commands/mcp.md` with:
 - Absolute canonical path rules (no exceptions)
-- Build/test/run command templates (always from `apps/macos-legacy/`)
+- Build/test/run command templates (always from `apps/macos-app/`)
 - KB search contract with exclusions
 - Legacy → canonical path translation rules
 - Windows VM management commands
@@ -46,7 +46,7 @@ Created `.cursor/commands/mcp.md` with:
 
 ### Start MCP Server (stdio transport for Cursor/Claude)
 ```bash
-cd /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-legacy
+cd /Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-app
 ./.build/debug/VelociraptorMCPServer
 ```
 
@@ -56,7 +56,7 @@ Add to `.cursor/mcp.json`:
 {
   "mcpServers": {
     "velociraptor-dfir": {
-      "command": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-legacy/.build/debug/VelociraptorMCPServer",
+      "command": "/Users/brodynielsen/GitRepos/Velociraptor_ClawEdition/apps/macos-app/.build/debug/VelociraptorMCPServer",
       "args": ["--log-level", "info"]
     }
   }
@@ -75,17 +75,17 @@ prlctl list "Windows 11"        # Check status
 
 ## Canonical Path Summary
 
-**CRITICAL**: All macOS Swift operations must anchor to `apps/macos-legacy/`
+**CRITICAL**: All macOS Swift operations must anchor to `apps/macos-app/`
 
 | Component | Canonical Path |
 |-----------|----------------|
-| Swift Package | `apps/macos-legacy/Package.swift` |
-| XcodeGen | `apps/macos-legacy/project.yml` |
-| App Source | `apps/macos-legacy/VelociraptorMacOS/` |
-| MCP Server | `apps/macos-legacy/Sources/VelociraptorMCPServer/` |
-| MCP Library | `apps/macos-legacy/Sources/VelociraptorMCP/` |
-| Unit Tests | `apps/macos-legacy/VelociraptorMacOSTests/` |
-| UI Tests | `apps/macos-legacy/VelociraptorMacOSUITests/` |
+| Swift Package | `apps/macos-app/Package.swift` |
+| XcodeGen | `apps/macos-app/project.yml` |
+| App Source | `apps/macos-app/VelociraptorMacOS/` |
+| MCP Server | `apps/macos-app/Sources/VelociraptorMCPServer/` |
+| MCP Library | `apps/macos-app/Sources/VelociraptorMCP/` |
+| Unit Tests | `apps/macos-app/VelociraptorMacOSTests/` |
+| UI Tests | `apps/macos-app/VelociraptorMacOSUITests/` |
 
 **Legacy snapshot** (non-canonical): `VelociraptorMacOS/` ← DO NOT use for build/test/run
 
@@ -98,7 +98,7 @@ prlctl list "Windows 11"        # Check status
 | KB Index (human) | `steering/CDIF_KB_INDEX.md` |
 | KB Manifest (machine) | `steering/CDIF_KB_MANIFEST.yaml` |
 | Workspace Paths | `docs/WORKSPACE_PATH_INDEX.md` |
-| CDIF Catalog | `apps/macos-legacy/CDIF_TEST_ARCHETYPES.md` |
+| CDIF Catalog | `apps/macos-app/CDIF_TEST_ARCHETYPES.md` |
 | Gap Registry | `Velociraptor_macOS_App/steering/HEXADECIMAL-GAP-REGISTRY.md` |
 | Agent Prompts | `.claude/agents/MACOS_SDLC_AGENT_PROMPTS.md` |
 | MCP Agent Config | `.claude/agents/mcp/agent-configs.yaml` |
@@ -110,7 +110,7 @@ prlctl list "Windows 11"        # Check status
 ### 1. Test MCP Server Integration
 ```bash
 # In one terminal: start the server
-cd apps/macos-legacy
+cd apps/macos-app
 ./.build/debug/VelociraptorMCPServer --verbose
 
 # In another terminal or Cursor: test a tool call
@@ -140,7 +140,7 @@ The Windows 11 VM is running and ready for:
 
 ### Confirm MCP Server Build
 ```bash
-cd apps/macos-legacy
+cd apps/macos-app
 ls -lh .build/debug/VelociraptorMCPServer
 # Should show ~1-2MB executable with today's timestamp
 ```
@@ -154,8 +154,8 @@ prlctl list "Windows 11"
 ### Confirm Canonical Paths Intact
 ```bash
 # From repo root
-ls -d apps/macos-legacy/Package.swift \
-      apps/macos-legacy/Sources/VelociraptorMCPServer/ \
+ls -d apps/macos-app/Package.swift \
+      apps/macos-app/Sources/VelociraptorMCPServer/ \
       steering/CDIF_KB_INDEX.md
 # All should exist
 ```
@@ -165,7 +165,7 @@ ls -d apps/macos-legacy/Package.swift \
 ## Troubleshooting
 
 **Issue**: MCP server won't build  
-**Solution**: `cd apps/macos-legacy && swift package clean && swift build`
+**Solution**: `cd apps/macos-app && swift package clean && swift build`
 
 **Issue**: Windows VM won't start  
 **Solution**: Check Parallels Desktop is running; try `prlctl list -a` to see all VMs
@@ -183,7 +183,7 @@ ls -d apps/macos-legacy/Package.swift \
 - **Full Runbook**: `.cursor/commands/mcp.md`
 - **KB Index**: `steering/CDIF_KB_INDEX.md`
 - **Workspace Paths**: `docs/WORKSPACE_PATH_INDEX.md`
-- **MCP Source**: `apps/macos-legacy/Sources/VelociraptorMCP/`
+- **MCP Source**: `apps/macos-app/Sources/VelociraptorMCP/`
 
 ---
 
@@ -191,7 +191,7 @@ ls -d apps/macos-legacy/Package.swift \
 
 1. `.cursor/commands/mcp.md` — Comprehensive MCP + path enforcement runbook
 2. `.cursor/commands/MCP_SETUP_SUMMARY.md` — This summary
-3. `apps/macos-legacy/.build/debug/VelociraptorMCPServer` — Built MCP server binary
+3. `apps/macos-app/.build/debug/VelociraptorMCPServer` — Built MCP server binary
 
 **Git Status**: These are new/modified files. Consider committing:
 ```bash
@@ -204,7 +204,7 @@ git commit -m "Add MCP server runbook and canonical path enforcement guide"
 ## Success Criteria Met ✅
 
 - [x] Located and documented Windows VM control (`prlctl`)
-- [x] Built MCP server from canonical location (`apps/macos-legacy/`)
+- [x] Built MCP server from canonical location (`apps/macos-app/`)
 - [x] Verified MCP server capabilities (5 tools, 4 prompts, 3 resources)
 - [x] Created comprehensive runbook enforcing canonical paths
 - [x] Documented KB search strategy with exclusions

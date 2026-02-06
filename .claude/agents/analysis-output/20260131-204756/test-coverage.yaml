@@ -1,0 +1,7 @@
+unit_tests:
+  files: 11
+  functions: 188
+ui_tests:
+  files: 8
+  functions: 99
+total_test_functions: 287

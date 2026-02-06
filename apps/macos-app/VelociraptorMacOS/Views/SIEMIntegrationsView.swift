@@ -235,6 +235,7 @@ struct SIEMIntegrationsView: View {
                 EmptyIntegrationView(viewModel: viewModel)
             }
         }
+        .accessibilityIdentifier("siem.main")
         .task {
             await viewModel.loadIntegrations()
         }
