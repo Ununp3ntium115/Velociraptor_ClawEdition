@@ -199,18 +199,45 @@ class AppState: ObservableObject {
         }
     }
     
-    /// Sidebar navigation items
+    /// Sidebar navigation items - matches Electron app feature set
     enum SidebarItem: String, CaseIterable, Identifiable {
+        // Core
         case wizard = "Configuration Wizard"
         case dashboard = "Control Panel"
+        case terminal = "Terminal"
+        
+        // Investigation
+        case clients = "Clients"
+        case hunt = "Hunt"
+        case artifacts = "Artifacts"
+        case notebooks = "Notebooks"
+        case vfs = "VFS Browser"
+        case evidence = "Evidence"
+        case labels = "Labels"
+        
+        // Operations
         case incidentResponse = "Incident Response"
         case health = "Health Monitor"
-        case integrations = "Integrations"
+        case orchestration = "Orchestration"
+        case training = "Training"
+        
+        // Tools & Packages
+        case tools = "Tools"
+        case packages = "Packages"
         case offlinePackages = "Offline Packages"
+        
+        // Integrations & AI
+        case integrations = "Integrations"
         case aiChat = "AI Assistant"
-        case terminal = "Terminal"
-        case binaryLifecycle = "Binary Manager"
+        
+        // Reports & Logs
+        case reports = "Reports"
         case logs = "Logs"
+        case timeline = "Timeline"
+        
+        // System
+        case binaryLifecycle = "Binary Manager"
+        case settings = "Settings"
         
         var id: String { rawValue }
         
@@ -218,14 +245,48 @@ class AppState: ObservableObject {
             switch self {
             case .wizard: return "wand.and.stars"
             case .dashboard: return "rectangle.3.group.fill"
+            case .terminal: return "terminal"
+            case .clients: return "person.2.fill"
+            case .hunt: return "magnifyingglass.circle.fill"
+            case .artifacts: return "doc.on.doc.fill"
+            case .notebooks: return "book.closed.fill"
+            case .vfs: return "folder.fill"
+            case .evidence: return "externaldrive.badge.checkmark"
+            case .labels: return "tag.fill"
             case .incidentResponse: return "exclamationmark.shield.fill"
             case .health: return "heart.text.square.fill"
-            case .integrations: return "link.circle"
+            case .orchestration: return "gearshape.2.fill"
+            case .training: return "graduationcap.fill"
+            case .tools: return "wrench.and.screwdriver.fill"
+            case .packages: return "shippingbox.fill"
             case .offlinePackages: return "externaldrive.connected.to.line.below"
+            case .integrations: return "link.circle"
             case .aiChat: return "brain.head.profile"
-            case .terminal: return "terminal"
-            case .binaryLifecycle: return "cpu"
+            case .reports: return "doc.richtext.fill"
             case .logs: return "doc.text.magnifyingglass"
+            case .timeline: return "clock.arrow.circlepath"
+            case .binaryLifecycle: return "cpu"
+            case .settings: return "gearshape.fill"
+            }
+        }
+        
+        /// Group category for sidebar organization
+        var category: String {
+            switch self {
+            case .wizard, .dashboard, .terminal:
+                return "Core"
+            case .clients, .hunt, .artifacts, .notebooks, .vfs, .evidence, .labels:
+                return "Investigation"
+            case .incidentResponse, .health, .orchestration, .training:
+                return "Operations"
+            case .tools, .packages, .offlinePackages:
+                return "Tools & Packages"
+            case .integrations, .aiChat:
+                return "Integrations"
+            case .reports, .logs, .timeline:
+                return "Reports & Logs"
+            case .binaryLifecycle, .settings:
+                return "System"
             }
         }
     }

@@ -21,36 +21,91 @@ struct ContentView: View {
             SidebarView()
                 .accessibilityId(AccessibilityIdentifiers.Navigation.sidebar)
         } detail: {
-            // Switch between wizard mode and other views
+            // Switch between wizard mode and other views - matches Electron feature set
             switch appState.selectedSidebarItem {
+            // Core
+            case .wizard:
+                wizardContent
             case .dashboard:
                 DashboardView()
                     .environmentObject(configViewModel)
                     .environmentObject(apiClient)
                     .environmentObject(webSocketService)
-            case .wizard:
-                wizardContent
-            case .health:
-                HealthMonitorView()
-            case .incidentResponse:
-                IncidentResponseView()
-            case .integrations:
-                IntegrationsSettingsView()
-                    .accessibilityIdentifier("integrations.main")
-            case .offlinePackages:
-                OfflinePackageBuilderView()
-                    .accessibilityIdentifier("offlinePackages.main")
-            case .aiChat:
-                AIChatView()
-                    .accessibilityIdentifier("aiChat.main")
             case .terminal:
                 TerminalView()
                     .accessibilityIdentifier("terminal.main")
+            
+            // Investigation
+            case .clients:
+                ClientsView()
+                    .accessibilityIdentifier("clients.main")
+            case .hunt:
+                HuntManagerView()
+                    .accessibilityIdentifier("hunt.main")
+            case .artifacts:
+                ArtifactManagerView()
+                    .accessibilityIdentifier("artifacts.main")
+            case .notebooks:
+                NotebooksView()
+                    .accessibilityIdentifier("notebooks.main")
+            case .vfs:
+                VFSBrowserView()
+                    .accessibilityIdentifier("vfs.main")
+            case .evidence:
+                EvidenceView()
+                    .accessibilityIdentifier("evidence.main")
+            case .labels:
+                LabelsView()
+                    .accessibilityIdentifier("labels.main")
+            
+            // Operations
+            case .incidentResponse:
+                IncidentResponseView()
+            case .health:
+                HealthMonitorView()
+            case .orchestration:
+                OrchestrationView()
+                    .accessibilityIdentifier("orchestration.main")
+            case .training:
+                TrainingView()
+                    .accessibilityIdentifier("training.main")
+            
+            // Tools & Packages
+            case .tools:
+                ToolsManagerView()
+                    .accessibilityIdentifier("tools.main")
+            case .packages:
+                PackageManagerView()
+                    .accessibilityIdentifier("packages.main")
+            case .offlinePackages:
+                OfflinePackageBuilderView()
+                    .accessibilityIdentifier("offlinePackages.main")
+            
+            // Integrations & AI
+            case .integrations:
+                IntegrationsSettingsView()
+                    .accessibilityIdentifier("integrations.main")
+            case .aiChat:
+                AIChatView()
+                    .accessibilityIdentifier("aiChat.main")
+            
+            // Reports & Logs
+            case .reports:
+                ReportsView()
+                    .accessibilityIdentifier("reports.main")
+            case .logs:
+                LogsView()
+            case .timeline:
+                TimelineView()
+                    .accessibilityIdentifier("timeline.main")
+            
+            // System
             case .binaryLifecycle:
                 BinaryLifecycleView()
                     .accessibilityIdentifier("binaryLifecycle.main")
-            case .logs:
-                LogsView()
+            case .settings:
+                SettingsView()
+                    .accessibilityIdentifier("settings.main")
             }
         }
         .navigationTitle("")

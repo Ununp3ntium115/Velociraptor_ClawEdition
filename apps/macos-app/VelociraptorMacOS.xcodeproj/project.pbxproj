@@ -25,6 +25,7 @@
 		194BCB199D356DE71F1E1A1F /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C7F355344D2F124DF1AE14 /* DashboardView.swift */; };
 		1977077BA5068ED85258E9C0 /* ArtifactManagerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88DC5559649214A431D99498 /* ArtifactManagerViewModel.swift */; };
 		1AB46FDE37893482755F75ED /* LogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE38670AA0811FFD6B67F1E /* LogsView.swift */; };
+		LABELS1BUILD2REF345678901 /* LabelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = LABELS1FILE2REF3456789012 /* LabelsView.swift */; };
 		229B9163F02D66EDA2025547 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450EB1698C4C0B4F5CAC2EDD /* SettingsView.swift */; };
 		INTSETTINGS1BUILD2REF3456 /* IntegrationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = INTSETTINGS1FILE2REFABC /* IntegrationsSettingsView.swift */; };
 		OFFPKGBUILDER1BUILDREF12 /* OfflinePackageBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = OFFPKGBUILDER1FILEREF12 /* OfflinePackageBuilderView.swift */; };
@@ -234,6 +235,7 @@
 		F9E80506E363B20873060DC3 /* NetworkConfigurationStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfigurationStepView.swift; sourceTree = "<group>"; };
 		FA399B43261032A3E81514E6 /* VelociraptorMacOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VelociraptorMacOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBE38670AA0811FFD6B67F1E /* LogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsView.swift; sourceTree = "<group>"; };
+		LABELS1FILE2REF3456789012 /* LabelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelsView.swift; sourceTree = "<group>"; };
 		FC6FA9C721B2A993DCCC3702 /* DeploymentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeploymentManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -418,6 +420,7 @@
 				03BBEBB4F842B201CC5DD9C2 /* HealthMonitorView.swift */,
 				458E9952DC284961E4050E77 /* HuntManagerView.swift */,
 				586B186DDF5B752EA698720D /* IntegrationsView.swift */,
+				LABELS1FILE2REF3456789012 /* LabelsView.swift */,
 				FBE38670AA0811FFD6B67F1E /* LogsView.swift */,
 				2EC0E5886F2B181802FEB976 /* NotebooksView.swift */,
 				2C55AD74EFA48A6856821EF0 /* OfflineCollectorView.swift */,
@@ -648,6 +651,7 @@
 				56D07E97686B9DEF004B68E7 /* IntegrationsView.swift in Sources */,
 				B57C05F3AA9686ACFABE9777 /* KeychainManager.swift in Sources */,
 				749CE8D84F2DF5B49ED70060 /* Logger.swift in Sources */,
+				LABELS1BUILD2REF345678901 /* LabelsView.swift in Sources */,
 				1AB46FDE37893482755F75ED /* LogsView.swift in Sources */,
 				61799688D7252FA19AA05C23 /* MCPArtifactRecommender.swift in Sources */,
 				E92DEC22540FBB3F4E9A0E2F /* NetworkConfigurationStepView.swift in Sources */,
