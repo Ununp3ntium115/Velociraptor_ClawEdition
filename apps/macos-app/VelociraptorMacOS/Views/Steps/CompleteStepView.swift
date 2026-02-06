@@ -297,9 +297,18 @@ struct AccessInfoRow: View {
                 .font(.subheadline)
                 .frame(width: 100, alignment: .trailing)
             
-            if isLink {
-                Link(value, destination: URL(string: value)!)
+            if isLink, let url = URL(string: value) {
+                Link(value, destination: url)
                     .font(.subheadline.monospaced())
+            } else if isLink {
+                // Invalid URL - show as text with warning
+                HStack(spacing: 4) {
+                    Text(value)
+                        .font(.subheadline.monospaced())
+                    Image(systemName: "exclamationmark.triangle")
+                        .foregroundColor(.orange)
+                        .help("Invalid URL format")
+                }
             } else {
                 Text(value)
                     .font(.subheadline.monospaced())

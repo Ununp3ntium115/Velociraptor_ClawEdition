@@ -38,6 +38,10 @@ final class EmergencyTouchBarProvider: NSObject, NSTouchBarDelegate, ObservableO
     var onEmergencyTap: (() -> Void)?
     var onQuickActionTap: ((QuickAction) -> Void)?
     
+    // MARK: - Observers
+    
+    var phaseObserver: Any?
+    
     // MARK: - Quick Actions
     
     enum QuickAction: String, CaseIterable {
@@ -379,37 +383,51 @@ final class TouchBarWindowController: NSWindowController {
 
 extension AppDelegate {
     
-    /// Configures the application Touch Bar
+    /// Configures the application Touch Bar with Emergency Mode integration
     @MainActor
     func configureTouchBar() {
-        // Set up Touch Bar provider callbacks
-        EmergencyTouchBarProvider.shared.onEmergencyTap = { [weak self] in
-            self?.handleEmergencyTap()
+        let controller = AppDelegate.sharedEmergencyController
+        let touchBarProvider = EmergencyTouchBarProvider.shared
+        
+        // Wire Touch Bar tap to EmergencyController
+        touchBarProvider.onEmergencyTap = { [weak controller] in
+            Task { @MainActor in
+                controller?.handleTap()
+            }
         }
         
-        EmergencyTouchBarProvider.shared.onQuickActionTap = { [weak self] action in
-            self?.handleQuickAction(action)
+        // Wire quick actions
+        touchBarProvider.onQuickActionTap = { action in
+            Task { @MainActor in
+                // Post notification for quick actions to be handled by appropriate views
+                NotificationCenter.default.post(
+                    name: Notification.Name("QuickActionTriggered"),
+                    object: action
+                )
+                Logger.shared.info("Quick action triggered: \(action.rawValue)", component: "TouchBar")
+            }
         }
+        
+        // Subscribe to EmergencyController phase changes
+        touchBarProvider.phaseObserver = NotificationCenter.default.addObserver(
+            forName: Notification.Name("EmergencyPhaseChanged"),
+            object: nil,
+            queue: .main
+        ) { [weak touchBarProvider] notification in
+            if let phase = notification.userInfo?["phase"] as? EmergencyPhase {
+                Task { @MainActor in
+                    touchBarProvider?.updatePhase(phase)
+                }
+            }
+        }
+        
+        // Initial sync
+        touchBarProvider.updatePhase(controller.phase)
         
         // Start idle pulse animation
-        EmergencyTouchBarProvider.shared.startPulse()
-    }
-    
-    @MainActor
-    private func handleEmergencyTap() {
-        // Post notification to trigger emergency mode
-        NotificationCenter.default.post(
-            name: Notification.Name("EmergencyModeTriggered"),
-            object: nil
-        )
-    }
-    
-    @MainActor
-    private func handleQuickAction(_ action: EmergencyTouchBarProvider.QuickAction) {
-        NotificationCenter.default.post(
-            name: Notification.Name("QuickActionTriggered"),
-            object: action
-        )
+        touchBarProvider.startPulse()
+        
+        Logger.shared.info("Touch Bar wired to EmergencyController", component: "TouchBar")
     }
 }
 

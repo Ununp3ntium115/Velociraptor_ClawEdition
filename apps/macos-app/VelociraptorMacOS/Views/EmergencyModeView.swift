@@ -19,7 +19,7 @@ import SwiftUI
 
 struct EmergencyModeView: View {
     @EnvironmentObject var appState: AppState
-    @StateObject private var controller = EmergencyController()
+    @EnvironmentObject var controller: EmergencyController
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -618,6 +618,7 @@ struct BackupPromptView: View {
 #Preview {
     EmergencyModeView()
         .environmentObject(AppState())
+        .environmentObject(EmergencyController(config: EmergencyConfig(mockMode: true)))
         .frame(width: 600, height: 500)
 }
 #endif

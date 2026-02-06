@@ -432,8 +432,38 @@ struct HuntResultsSection: View {
     
     var body: some View {
         GroupBox("Results") {
-            if viewModel.huntResults.isEmpty {
+            if viewModel.isLoadingResults {
                 VStack(spacing: 8) {
+                    ProgressView()
+                    Text("Loading results...")
+                        .foregroundColor(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+            } else if let error = viewModel.resultsError {
+                VStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.title2)
+                        .foregroundColor(.orange)
+                    Text("Failed to load results")
+                        .font(.headline)
+                    Text(error.localizedDescription)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                    
+                    Button("Retry") {
+                        Task { await viewModel.loadResults(for: hunt) }
+                    }
+                    .buttonStyle(.bordered)
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+            } else if viewModel.huntResults.isEmpty {
+                VStack(spacing: 8) {
+                    Image(systemName: "doc.text.magnifyingglass")
+                        .font(.title2)
+                        .foregroundColor(.secondary)
                     Text("No results yet")
                         .foregroundColor(.secondary)
                     
@@ -442,17 +472,44 @@ struct HuntResultsSection: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                    
+                    Button("Refresh") {
+                        Task { await viewModel.loadResults(for: hunt) }
+                    }
+                    .buttonStyle(.bordered)
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
             } else {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("\(viewModel.huntResults.count) rows")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    HStack {
+                        Text("\(viewModel.huntResults.count) artifact(s), \(totalRowCount) row(s)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        
+                        Spacer()
+                        
+                        Button {
+                            Task { await viewModel.loadResults(for: hunt) }
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
+                        }
+                        .buttonStyle(.borderless)
+                        .help("Refresh results")
+                        
+                        Button("Export Results") {
+                            viewModel.exportResults(hunt)
+                        }
+                        .buttonStyle(.bordered)
+                    }
                     
-                    // Simple table view of results
-                    // TODO: Full results table with export
+                    // Display results in table
+                    ScrollView([.horizontal, .vertical]) {
+                        HuntResultsTableView(results: viewModel.huntResults)
+                    }
+                    .frame(maxHeight: 400)
+                    .background(Color(.textBackgroundColor).opacity(0.5))
+                    .cornerRadius(8)
                 }
             }
         }
@@ -460,6 +517,94 @@ struct HuntResultsSection: View {
         .onAppear {
             Task { await viewModel.loadResults(for: hunt) }
         }
+        .onChange(of: hunt.huntId) { _, _ in
+            Task { await viewModel.loadResults(for: hunt) }
+        }
+    }
+    
+    private var totalRowCount: Int {
+        viewModel.huntResults.reduce(0) { $0 + ($1.rows?.count ?? 0) }
+    }
+}
+
+// MARK: - Hunt Results Table View
+
+/// Table displaying hunt results from VQL queries
+struct HuntResultsTableView: View {
+    let results: [VQLResult]
+    
+    private var allRows: [[VQLValue]] {
+        results.compactMap { $0.rows }.flatMap { $0 }
+    }
+    
+    private var columns: [String] {
+        results.first?.columns ?? []
+    }
+    
+    var body: some View {
+        if !allRows.isEmpty && !columns.isEmpty {
+            LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [.sectionHeaders]) {
+                Section {
+                    ForEach(0..<allRows.count, id: \.self) { rowIndex in
+                        rowView(at: rowIndex)
+                        Divider()
+                    }
+                } header: {
+                    headerView
+                }
+            }
+        } else {
+            Text("No data to display")
+                .foregroundColor(.secondary)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding()
+        }
+    }
+    
+    private var headerView: some View {
+        HStack(spacing: 0) {
+            ForEach(columns, id: \.self) { column in
+                Text(column)
+                    .font(.headline)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 6)
+                    .frame(minWidth: 120, alignment: .leading)
+                    .background(Color(.controlBackgroundColor))
+                Divider()
+            }
+        }
+        .background(Color(.controlBackgroundColor))
+    }
+    
+    @ViewBuilder
+    private func rowView(at rowIndex: Int) -> some View {
+        HStack(spacing: 0) {
+            ForEach(columns.indices, id: \.self) { colIndex in
+                cellView(rowIndex: rowIndex, colIndex: colIndex)
+                Divider()
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func cellView(rowIndex: Int, colIndex: Int) -> some View {
+        let value = getValue(rowIndex: rowIndex, colIndex: colIndex)
+        let bgColor: Color = rowIndex % 2 == 0 ? Color.clear : Color.secondary.opacity(0.05)
+        
+        Text(value.stringValue)
+            .font(.system(.body, design: .monospaced))
+            .lineLimit(3)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .frame(minWidth: 120, alignment: .leading)
+            .background(bgColor)
+    }
+    
+    private func getValue(rowIndex: Int, colIndex: Int) -> VQLValue {
+        guard rowIndex < allRows.count, colIndex < allRows[rowIndex].count else {
+            return .null
+        }
+        return allRows[rowIndex][colIndex]
     }
 }
 
@@ -769,6 +914,9 @@ class HuntManagerViewModel: ObservableObject {
     
     @Published var huntProgress: [String: Double] = [:]
     @Published var huntResults: [VQLResult] = []
+    @Published var resultsError: Error?
+    @Published var isLoadingResults = false
+    @Published var currentHuntId: String?
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -861,22 +1009,91 @@ class HuntManagerViewModel: ObservableObject {
     }
     
     func exportResults(_ hunt: Hunt) {
-        // TODO: Implement
+        // Create save panel for CSV export
+        let savePanel = NSSavePanel()
+        savePanel.title = "Export Hunt Results"
+        savePanel.nameFieldStringValue = "hunt_\(hunt.huntId)_results.csv"
+        savePanel.allowedContentTypes = [.commaSeparatedText]
+        
+        guard savePanel.runModal() == .OK, let url = savePanel.url else { return }
+        
+        do {
+            let csvContent = generateCSV(from: huntResults)
+            try csvContent.write(to: url, atomically: true, encoding: .utf8)
+            Logger.shared.info("Exported hunt results to \(url.path)", component: "Hunts")
+        } catch {
+            self.error = error
+            Logger.shared.error("Failed to export results: \(error)", component: "Hunts")
+        }
+    }
+    
+    private func generateCSV(from results: [VQLResult]) -> String {
+        guard let first = results.first,
+              let columns = first.columns else { return "" }
+        
+        var csv = columns.joined(separator: ",") + "\n"
+        
+        for result in results {
+            guard let rows = result.rows else { continue }
+            for row in rows {
+                let values = row.map { value -> String in
+                    let str = value.stringValue
+                    // Escape commas and quotes
+                    if str.contains(",") || str.contains("\"") {
+                        return "\"\(str.replacingOccurrences(of: "\"", with: "\"\""))\""
+                    }
+                    return str
+                }
+                csv += values.joined(separator: ",") + "\n"
+            }
+        }
+        
+        return csv
     }
     
     // MARK: - Results
     
     func loadResults(for hunt: Hunt) async {
-        guard let artifact = hunt.artifacts.first else { return }
+        // Clear results when switching hunts
+        if currentHuntId != hunt.huntId {
+            huntResults = []
+            resultsError = nil
+            currentHuntId = hunt.huntId
+        }
         
-        do {
-            let result = try await VelociraptorAPIClient.shared.getHuntResults(
-                huntId: hunt.huntId,
-                artifact: artifact
-            )
-            huntResults = [result]
-        } catch {
-            Logger.shared.error("Failed to load hunt results: \(error)", component: "Hunts")
+        guard !hunt.artifacts.isEmpty else {
+            resultsError = NSError(domain: "HuntManager", code: 1, userInfo: [
+                NSLocalizedDescriptionKey: "No artifacts configured for this hunt"
+            ])
+            return
+        }
+        
+        isLoadingResults = true
+        defer { isLoadingResults = false }
+        
+        var allResults: [VQLResult] = []
+        var lastError: Error?
+        
+        // Load results for all artifacts
+        for artifact in hunt.artifacts {
+            do {
+                let result = try await VelociraptorAPIClient.shared.getHuntResults(
+                    huntId: hunt.huntId,
+                    artifact: artifact
+                )
+                allResults.append(result)
+            } catch {
+                Logger.shared.error("Failed to load results for \(artifact): \(error)", component: "Hunts")
+                lastError = error
+            }
+        }
+        
+        huntResults = allResults
+        
+        if huntResults.isEmpty && lastError != nil {
+            resultsError = lastError
+        } else {
+            resultsError = nil
         }
     }
 }

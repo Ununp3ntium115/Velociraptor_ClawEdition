@@ -63,7 +63,16 @@ struct EmergencyConfig {
 final class EmergencyController: ObservableObject {
     // MARK: - Published State
     
-    @Published private(set) var phase: EmergencyPhase = .idle
+    @Published private(set) var phase: EmergencyPhase = .idle {
+        didSet {
+            // Post notification for Touch Bar and other observers
+            NotificationCenter.default.post(
+                name: Notification.Name("EmergencyPhaseChanged"),
+                object: self,
+                userInfo: ["phase": phase]
+            )
+        }
+    }
     @Published private(set) var isAnimating: Bool = false
     @Published private(set) var pulseAnimation: Bool = false
     @Published private(set) var collectionProgress: Double = 0.0

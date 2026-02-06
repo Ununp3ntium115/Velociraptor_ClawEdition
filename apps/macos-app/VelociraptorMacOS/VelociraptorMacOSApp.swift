@@ -57,6 +57,7 @@ struct VelociraptorMacOSApp: App {
                 .environmentObject(incidentResponseViewModel)
                 .environmentObject(apiClient)
                 .environmentObject(webSocketService)
+                .environmentObject(AppDelegate.sharedEmergencyController)
                 .frame(minWidth: 900, minHeight: 700)
                 .onAppear {
                     NSWindow.allowsAutomaticWindowTabbing = false
@@ -312,6 +313,15 @@ struct VelociraptorMacOSApp: App {
 
 /// Application delegate for handling macOS-specific lifecycle events
 class AppDelegate: NSObject, NSApplicationDelegate {
+    /// Shared EmergencyController for Touch Bar integration
+    @MainActor
+    static var sharedEmergencyController: EmergencyController = {
+        // Use mock mode when not connected to a real Velociraptor server
+        var config = EmergencyConfig()
+        config.mockMode = true // Safe for development
+        return EmergencyController(config: config)
+    }()
+    
     /// Performs startup initialization when the application finishes launching.
     /// 
     /// Sets the app's appearance to Dark Aqua and records a startup log entry.
